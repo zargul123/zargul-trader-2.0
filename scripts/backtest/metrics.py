@@ -3,8 +3,16 @@ import pandas as pd
 
 def safe_round(value, decimals=2):
     try:
-        return round(float(value), decimals)  # Convert to number first
-    except:
+        if isinstance(value, str):
+            # Handle string values that might be empty or non-numeric
+            if not value or value.strip() == '':
+                return 0.0
+            # Try to convert string to float
+            numeric_value = float(value.strip())
+        else:
+            numeric_value = float(value)
+        return round(numeric_value, decimals)
+    except (ValueError, TypeError, AttributeError):
         return 0.0  # If conversion fails
 
 def get_empty_metrics():
