@@ -1,23 +1,32 @@
+
 from scripts.backtest.backtest_engine import BacktestEngine
 from scripts.config import ASSETS
 
 def main():
-    print("🚀 Starting Zargul Trader Backtest")
-
-    # Initialize backtester
+    print("🚀 Starting Zargul Trader Backtest\n")
     backtester = BacktestEngine()
-
-    # Run backtest for each asset
+    
     for asset in ASSETS:
-        print(f"\n🔍 Backtesting {asset}...")
-        metrics = backtester.run_backtest(asset, strategy="main", days=90)
+        # Test all strategies
+        for strategy in ['main', 'swing', 'scalp']:
+            try:
+                print(f"\n🔍 Testing {asset} - {strategy.upper()} Strategy")
+                metrics = backtester.run_backtest(
+                    symbol=asset,
+                    strategy_type=strategy,  # Changed from 'strategy'
+                    days=30
+                )
+                
+                print(f"\n📊 Results for {asset} ({strategy.upper()}):")
+                for k, v in metrics.items():
+                    print(f"{k.replace('_', ' ').title()}: {round(v, 2)}")
 
-        print("\n📊 Results:")
-        for k, v in metrics.items():
-            print(f"{k.replace('_', ' ').title()}: {round(v, 2)}")
-
-        # Generate report
-        backtester.generate_report(asset)
+                # Generate report
+                backtester.generate_report(asset)
+                
+            except Exception as e:
+                print(f"❌ Error testing {asset} with {strategy} strategy: {str(e)}")
+                continue
 
     print("\n✅ All backtests completed! Check the backtest_reports folder")
 
