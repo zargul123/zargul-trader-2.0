@@ -6,6 +6,20 @@ from scripts.config import (
 )
 
 class BaseStrategy:
+    def __init__(self):
+        self.long_threshold = 0.5
+        self.short_threshold = 0.5
+        self.min_confidence = 0.65
+        
+    def set_thresholds(self, long=None, short=None, confidence=None):
+        """Set strategy-specific thresholds"""
+        if long is not None:
+            self.long_threshold = long
+        if short is not None:
+            self.short_threshold = short
+        if confidence is not None:
+            self.min_confidence = confidence
+    
     def get_signal(self, df):
         """Should return 1 (long), -1 (short), or 0 (no trade)"""
         raise NotImplementedError
@@ -16,6 +30,7 @@ class BaseStrategy:
 
 class MainStrategy(BaseStrategy):
     def __init__(self):
+        super().__init__()
         self.open_trades = []
         
     def get_signal(self, df):

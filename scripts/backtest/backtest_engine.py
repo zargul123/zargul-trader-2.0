@@ -16,15 +16,25 @@ class BacktestEngine:
 
     def load_data(self, symbol, days=180, timeframe="1h"):
         df = self.data.get_data(symbol, timeframe)
-        print(f"✅ Loaded {len(df)} rows for {symbol}. Columns: {list(df.columns)}")  # DEBUG LINE
+        print(f"✅ Loaded {len(df)} rows for {symbol} ({timeframe}). Columns: {list(df.columns)}")  # DEBUG LINE
         print(f"📅 Date Range: {df.index[0]} to {df.index[-1]}")  # DEBUG LINE
         return df[df['volume'] > 0].copy()
 
-    def run_backtest(self, symbol, strategy="main", days=180):
+    def run_backtest(self, symbol, strategy_type="main", days=180):
         """Run complete backtest for one asset"""
+        from scripts.config import STRATEGIES
+        
         self.open_trades = []  # Track open trades
         
-        df = self.load_data(symbol, days)
+        # Load strategy config
+        if strategy_type in STRATEGIES:
+            config = STRATEGIES[strategy_type]
+        else:
+            # Fallback to main strategy config
+            config = STRATEGIES['main']
+        
+        # Get data with correct timeframe
+        df = self.load_data(symbol, days, config['timeframe'])
         
         # FORCE TEST TRADES - DELETE AFTER VERIFICATION
         df.at[df.index[50], 'signal'] = 1  # Force long at row 50
@@ -36,8 +46,16 @@ class BacktestEngine:
         df['pnl'] = 0.0  # Profit/loss per trade
 
         # Get strategy rules
-        strategy_rules = self.get_strategy(strategy)
+        strategy_rules = self.get_strategy(strategy_type)
         strategy_rules.open_trades = self.open_trades  # Share trade tracking
+        
+        # Set strategy-specific thresholds
+        if hasattr(strategy_rules, 'set_thresholds'):
+            strategy_rules.set_thresholds(
+                long=config['long_threshold'],
+                short=config['short_threshold'],
+                confidence=config['min_confidence']
+            )
 
         # Simulate trading
         for i in range(1, len(df)):
@@ -106,7 +124,7 @@ class BacktestEngine:
         metrics = self.calculate_metrics(df)
         self.results.append({
             'symbol': symbol,
-            'strategy': strategy,
+            'strategy': strategy_type,
             'metrics': metrics,
             'trades': [t for t in self.trade_history if t['symbol'] == symbol]
         })
