@@ -1,6 +1,12 @@
 import numpy as np
 import pandas as pd
 
+def safe_round(value, decimals=2):
+    try:
+        return round(float(value), decimals)
+    except:
+        return 0.0  # Default if conversion fails
+
 def get_empty_metrics():
     """Return empty metrics structure when no trades occur"""
     return {
