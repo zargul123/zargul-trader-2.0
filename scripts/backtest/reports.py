@@ -207,26 +207,35 @@ def create_equity_curve_plot(trades, symbol):
     return fig
 
 def create_monthly_heatmap(trades, symbol):
-    """Create monthly performance heatmap"""
-    if not trades:
-        return ""
+    """Simplified monthly heatmap without date column dependency"""
+    try:
+        closed_trades = [t for t in trades if t.get('status') == 'closed']
+        if not closed_trades:
+            fig = go.Figure()
+            fig.add_annotation(text="No trades to display", showarrow=False)
+            return fig
 
-    df = pd.DataFrame(trades)
-    df['date'] = pd.to_datetime(df['date'])
-    df['month'] = df['date'].dt.strftime('%Y-%m')
+        # Create simple monthly returns bar chart instead of heatmap
+        monthly_data = {}
+        for trade in closed_trades:
+            month_key = trade['exit_time'].strftime('%Y-%m')
+            monthly_data[month_key] = monthly_data.get(month_key, 0) + trade.get('pnl', 0)
 
-    monthly = df.groupby('month')['pnl'].sum().reset_index()
-
-    plt.figure(figsize=(10, 5))
-    sns.heatmap(
-        data=monthly.set_index('month').T,
-        annot=True, fmt=".1f", cmap="RdYlGn",
-        center=0, linewidths=0.5
-    )
-    plt.title(f"{symbol} Monthly Performance (%)")
-
-    plot_file = f"backtest_reports/{symbol}_monthly.png"
-    plt.savefig(plot_file)
-    plt.close()
-
-    return plot_file
+        fig = go.Figure(go.Bar(
+            x=list(monthly_data.keys()),
+            y=list(monthly_data.values()),
+            marker_color=['green' if val > 0 else 'red' for val in monthly_data.values()]
+        ))
+        
+        fig.update_layout(
+            title=f"{symbol} Monthly Performance",
+            xaxis_title="Month",
+            yaxis_title="PnL (%)"
+        )
+        return fig
+        
+    except Exception as e:
+        print(f"⚠️ Simplified monthly chart error: {str(e)}")
+        fig = go.Figure()
+        fig.add_annotation(text="Chart error", showarrow=False)
+        return fig
