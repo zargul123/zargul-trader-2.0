@@ -39,6 +39,10 @@ class MainStrategy(BaseStrategy):
         
         current = df.iloc[-1]
         
+        # Skip low-volume periods
+        if current['volume'] < df['volume'].mean():
+            return 0
+        
         # Stronger confirmation for longs
         long_cond = (current['rsi'] < 30) and \
                     (current['close'] < current['bollinger_lower']) and \
@@ -131,12 +135,17 @@ class SwingStrategy(MainStrategy):
         if len(df) < 50:  # Need more data for swing
             return 0
 
+        current = df.iloc[-1]
+        
+        # Skip low-volume periods
+        if current['volume'] < df['volume'].mean():
+            return 0
+
         signal = super().get_signal(df)
         if signal == 0:
             return 0
 
         # Additional swing filters
-        current = df.iloc[-1]
         if current['close'] > df['close'].rolling(20).mean().iloc[-1]:  # Above 20MA
             return 1 if signal == 1 else 0
         elif current['close'] < df['close'].rolling(20).mean().iloc[-1]:  # Below 20MA
@@ -164,6 +173,10 @@ class ScalpStrategy(MainStrategy):
 
         current = df.iloc[-1]
         prev = df.iloc[-2]
+
+        # Skip low-volume periods
+        if current['volume'] < df['volume'].mean():
+            return 0
 
         # More sensitive thresholds
         long_thresh = SCALP_THRESHOLD / 100
