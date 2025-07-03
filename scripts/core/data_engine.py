@@ -36,7 +36,7 @@ class DataMaster:
         }
 
     def _ensure_required_columns(self, df, symbol):
-        """Guarantee all required columns exist with realistic values"""
+        """More lenient data validation"""
         if not isinstance(df, pd.DataFrame) or df.empty:
             return self._generate_synthetic_data(symbol)
 
@@ -44,12 +44,16 @@ class DataMaster:
         for col in required_cols:
             if col not in df.columns:
                 if col == 'volume':
-                    base_volume = self.asset_parameters.get(symbol, {}).get("base_volume", 100000)
-                    df['volume'] = np.random.lognormal(np.log(base_volume), 0.5, len(df))
+                    df['volume'] = df.get('volume', 100000)  # Default volume
                 else:
-                    base_price = self.asset_parameters.get(symbol, {}).get("base_price", 100)
-                    close_prices = df.get('close', np.random.normal(base_price, 10, len(df)))
-                    df[col] = close_prices
+                    df[col] = df.get('close', 100)  # Use close price as fallback
+        
+        # Ensure we have basic technical indicators
+        if 'rsi' not in df.columns:
+            df = self._calculate_rsi(df)
+        if 'macd' not in df.columns:
+            df = self._calculate_macd(df)
+            
         return df
 
     def _convert_timeframe(self, tf):
