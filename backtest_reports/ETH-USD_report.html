@@ -29,32 +29,32 @@
     </head>
     <body>
         <h1>Backtest Report - ETH-USD</h1>
-        <p>Generated on 2025-07-02 11:20:07</p>
+        <p>Generated on 2025-07-03 12:20:20</p>
 
         <h2>Key Metrics</h2>
         <div class="metrics">
             
         <div class="metric-card bad">
             <h3>Win Rate</h3>
-            <p>0.0</p>
+            <p>0.25</p>
         </div>
         
 
         <div class="metric-card neutral">
             <h3>Sharpe Ratio</h3>
-            <p>-5</p>
+            <p>-8.22</p>
         </div>
         
 
         <div class="metric-card bad">
             <h3>Max Drawdown</h3>
-            <p>-1.06</p>
+            <p>0.01</p>
         </div>
         
 
         <div class="metric-card bad">
             <h3>Profit Factor</h3>
-            <p>0.0</p>
+            <p>0.35</p>
         </div>
         
         </div>
@@ -65,63 +65,84 @@
                 📊 View Interactive Equity Curve
             </a>
             <br>
-            <img src="backtest_reports/ETH-USD_equity.png" alt="Static Equity Curve">
+            <img src="Figure({
+    'data': [{'mode': 'lines',
+              'name': 'Equity Curve',
+              'type': 'scatter',
+              'x': array([datetime.datetime(2025, 6, 29, 2, 0),
+                          datetime.datetime(2025, 6, 29, 15, 0),
+                          datetime.datetime(2025, 6, 30, 20, 0),
+                          datetime.datetime(2025, 7, 2, 7, 0)], dtype=object),
+              'y': array([-0.66753954, -1.23930319, -0.32622337, -0.33292251])}],
+    'layout': {'template': '...'}
+})" alt="Static Equity Curve">
         </div>
 
         <h2>Monthly Performance</h2>
-        <img src="backtest_reports/ETH-USD_monthly.png" alt="Monthly Heatmap">
+        <img src="Figure({
+    'data': [{'marker': {'color': ['red', 'red']},
+              'type': 'bar',
+              'x': [2025-06, 2025-07],
+              'y': [-0.3262233739580872, -0.006699136742489568]}],
+    'layout': {'template': '...',
+               'title': {'text': 'ETH-USD Monthly Performance'},
+               'xaxis': {'title': {'text': 'Month'}},
+               'yaxis': {'title': {'text': 'PnL (%)'}}}
+})" alt="Monthly Heatmap">
 
         <h2>Trade History</h2>
         
     <table>
         <tr>
-            <th>Date</th>
+            <th>Entry Time</th>
+            <th>Exit Time</th>
             <th>Type</th>
-            <th>Entry</th>
-            <th>Exit</th>
+            <th>Entry Price</th>
+            <th>Exit Price</th>
             <th>PnL %</th>
+            <th>Duration</th>
         </tr>
         
-        <tr>
-            <td>2025-06-26 04:00:00</td>
-            <td>long</td>
-            <td>2494.14</td>
-            <td>-</td>
-            <td class="bad">0.0%</td>
-        </tr>
-        
-        <tr>
-            <td>2025-06-27 19:00:00</td>
-            <td>short</td>
-            <td>2390.46</td>
-            <td>2415.82</td>
-            <td class="bad">-1.06%</td>
-        </tr>
-        
-        <tr>
-            <td>2025-06-30 02:00:00</td>
-            <td>long</td>
-            <td>2513.05</td>
-            <td>-</td>
-            <td class="bad">0.0%</td>
-        </tr>
-        
-        <tr>
-            <td>2025-07-01 00:00:00</td>
-            <td>long</td>
-            <td>2488.95</td>
-            <td>-</td>
-            <td class="bad">0.0%</td>
-        </tr>
-        
-        <tr>
-            <td>2025-07-01 15:00:00</td>
-            <td>short</td>
-            <td>2416.02</td>
-            <td>-</td>
-            <td class="bad">0.0%</td>
-        </tr>
-        
+                <tr>
+                    <td>2025-06-29 01:00:00</td>
+                    <td>2025-06-29 02:00:00</td>
+                    <td>long</td>
+                    <td>$2442.06</td>
+                    <td>$2425.76</td>
+                    <td class="negative">-0.67%</td>
+                    <td>0 days 01:00:00</td>
+                </tr>
+            
+                <tr>
+                    <td>2025-06-29 14:00:00</td>
+                    <td>2025-06-29 15:00:00</td>
+                    <td>long</td>
+                    <td>$2450.28</td>
+                    <td>$2436.27</td>
+                    <td class="negative">-0.57%</td>
+                    <td>0 days 01:00:00</td>
+                </tr>
+            
+                <tr>
+                    <td>2025-06-30 19:00:00</td>
+                    <td>2025-06-30 20:00:00</td>
+                    <td>long</td>
+                    <td>$2489.19</td>
+                    <td>$2511.92</td>
+                    <td class="positive">0.91%</td>
+                    <td>0 days 01:00:00</td>
+                </tr>
+            
+                <tr>
+                    <td>2025-07-02 06:00:00</td>
+                    <td>2025-07-02 07:00:00</td>
+                    <td>long</td>
+                    <td>$2448.08</td>
+                    <td>$2447.91</td>
+                    <td class="negative">-0.01%</td>
+                    <td>0 days 01:00:00</td>
+                </tr>
+            
     </table>
     
     </body>

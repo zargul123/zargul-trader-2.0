@@ -29,32 +29,32 @@
     </head>
     <body>
         <h1>Backtest Report - SOL-USD</h1>
-        <p>Generated on 2025-07-02 11:20:15</p>
+        <p>Generated on 2025-07-03 12:20:28</p>
 
         <h2>Key Metrics</h2>
         <div class="metrics">
             
         <div class="metric-card bad">
             <h3>Win Rate</h3>
-            <p>0.0</p>
+            <p>0.27</p>
         </div>
         
 
         <div class="metric-card neutral">
             <h3>Sharpe Ratio</h3>
-            <p>-5</p>
+            <p>-6.65</p>
         </div>
         
 
         <div class="metric-card bad">
             <h3>Max Drawdown</h3>
-            <p>-1.06</p>
+            <p>0.01</p>
         </div>
         
 
         <div class="metric-card bad">
             <h3>Profit Factor</h3>
-            <p>0.0</p>
+            <p>0.45</p>
         </div>
         
         </div>
@@ -65,47 +65,73 @@
                 📊 View Interactive Equity Curve
             </a>
             <br>
-            <img src="backtest_reports/SOL-USD_equity.png" alt="Static Equity Curve">
+            <img src="Figure({
+    'data': [{'mode': 'lines',
+              'name': 'Equity Curve',
+              'type': 'scatter',
+              'x': array([datetime.datetime(2025, 6, 28, 5, 0),
+                          datetime.datetime(2025, 6, 30, 2, 0),
+                          datetime.datetime(2025, 7, 2, 14, 0)], dtype=object),
+              'y': array([-0.41074593, -1.06951867, -0.31632329])}],
+    'layout': {'template': '...'}
+})" alt="Static Equity Curve">
         </div>
 
         <h2>Monthly Performance</h2>
-        <img src="backtest_reports/SOL-USD_monthly.png" alt="Monthly Heatmap">
+        <img src="Figure({
+    'data': [{'marker': {'color': ['red', 'green']},
+              'type': 'bar',
+              'x': [2025-06, 2025-07],
+              'y': [-1.0695186650693358, 0.753195372772709]}],
+    'layout': {'template': '...',
+               'title': {'text': 'SOL-USD Monthly Performance'},
+               'xaxis': {'title': {'text': 'Month'}},
+               'yaxis': {'title': {'text': 'PnL (%)'}}}
+})" alt="Monthly Heatmap">
 
         <h2>Trade History</h2>
         
     <table>
         <tr>
-            <th>Date</th>
+            <th>Entry Time</th>
+            <th>Exit Time</th>
             <th>Type</th>
-            <th>Entry</th>
-            <th>Exit</th>
+            <th>Entry Price</th>
+            <th>Exit Price</th>
             <th>PnL %</th>
+            <th>Duration</th>
         </tr>
         
-        <tr>
-            <td>2025-06-26 23:00:00</td>
-            <td>short</td>
-            <td>138.89</td>
-            <td>-</td>
-            <td class="bad">0.0%</td>
-        </tr>
-        
-        <tr>
-            <td>2025-06-27 01:00:00</td>
-            <td>short</td>
-            <td>137.73</td>
-            <td>-</td>
-            <td class="bad">0.0%</td>
-        </tr>
-        
-        <tr>
-            <td>2025-06-28 23:00:00</td>
-            <td>long</td>
-            <td>151.13</td>
-            <td>-</td>
-            <td class="bad">0.0%</td>
-        </tr>
-        
+                <tr>
+                    <td>2025-06-28 04:00:00</td>
+                    <td>2025-06-28 05:00:00</td>
+                    <td>long</td>
+                    <td>$143.68</td>
+                    <td>$143.09</td>
+                    <td class="negative">-0.41%</td>
+                    <td>0 days 01:00:00</td>
+                </tr>
+            
+                <tr>
+                    <td>2025-06-30 01:00:00</td>
+                    <td>2025-06-30 02:00:00</td>
+                    <td>long</td>
+                    <td>$152.88</td>
+                    <td>$151.87</td>
+                    <td class="negative">-0.66%</td>
+                    <td>0 days 01:00:00</td>
+                </tr>
+            
+                <tr>
+                    <td>2025-07-02 13:00:00</td>
+                    <td>2025-07-02 14:00:00</td>
+                    <td>long</td>
+                    <td>$147.96</td>
+                    <td>$149.08</td>
+                    <td class="positive">0.75%</td>
+                    <td>0 days 01:00:00</td>
+                </tr>
+            
     </table>
     
     </body>
