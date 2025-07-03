@@ -106,7 +106,7 @@ def generate_html_report(result):
         <img src="{plot_files[1]}" alt="Monthly Heatmap">
 
         <h2>Trade History</h2>
-        {generate_trade_table(trades)}
+        {generate_trade_table(result['trades'])}
     </body>
     </html>
     """
