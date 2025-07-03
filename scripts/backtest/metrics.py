@@ -1,6 +1,23 @@
 import numpy as np
 import pandas as pd
 
+def get_empty_metrics():
+    """Return empty metrics structure when no trades occur"""
+    return {
+        'total_trades': 0,
+        'winning_trades': 0,
+        'losing_trades': 0,
+        'win_rate': 0,
+        'total_pnl': 0,
+        'avg_win': 0,
+        'avg_loss': 0,
+        'max_drawdown': 0,
+        'sharpe_ratio': 0,
+        'profit_factor': 0,
+        'gross_profit': 0,
+        'gross_loss': 0
+    }
+
 def calculate_all_metrics(trades):
     assert all('symbol' in t for t in trades), "Missing symbol in trade records!"
     trades = [t for t in trades if t.get('status') == 'closed']
