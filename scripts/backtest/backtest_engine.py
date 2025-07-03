@@ -115,10 +115,23 @@ class BacktestEngine:
                         for trade in reversed(self.trade_history):
                             if trade['status'] == 'open' and trade['symbol'] == symbol:  # Add symbol check
                                 pnl_percent = ((exit_price - trade['entry_price']) / trade['entry_price']) * 100
+                                final_pnl = pnl_percent if trade['type'] == 'long' else -pnl_percent
+                                
+                                # Skip trades with < 0.1% PnL
+                                if abs(final_pnl) < 0.1:
+                                    # Mark as closed but don't record for metrics
+                                    trade.update({
+                                        'exit_time': df.index[i],
+                                        'exit_price': exit_price,
+                                        'pnl': final_pnl,
+                                        'status': 'filtered'  # Different status for filtered trades
+                                    })
+                                    break
+                                
                                 trade.update({
                                     'exit_time': df.index[i],
                                     'exit_price': exit_price,
-                                    'pnl': pnl_percent if trade['type'] == 'long' else -pnl_percent,
+                                    'pnl': final_pnl,
                                     'status': 'closed'
                                 })
                                 break
