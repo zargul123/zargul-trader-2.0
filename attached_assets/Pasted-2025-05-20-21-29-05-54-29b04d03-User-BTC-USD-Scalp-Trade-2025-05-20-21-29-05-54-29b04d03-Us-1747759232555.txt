@@ -1,0 +1,111 @@
+2025-05-20 21:29:05.54
+29b04d03
+User
+⚡ BTC-USD Scalp Trade:
+2025-05-20 21:29:05.54
+29b04d03
+User
+│ No trade signal
+2025-05-20 21:29:05.54
+29b04d03
+User
+⚠️ Invalid prediction
+2025-05-20 21:29:05.54
+29b04d03
+User
+BTC Prediction Sample: None
+2025-05-20 21:29:05.54
+29b04d03
+User
+✅ System Connection Verified
+2025-05-20 21:29:05.54
+29b04d03
+User
+2025-05-20 21:29:05.54
+29b04d03
+User
+2025-05-20 21:29:05.54
+29b04d03
+User
+⚡ Initializing Dashboard with Live Trading Data
+2025-05-20 21:29:05.54
+29b04d03
+User
+2025-05-20 21:29:05.54
+29b04d03
+User
+🤖 Initializing Trading System...
+2025-05-20 21:29:05.54
+29b04d03
+User
+2025-05-20 21:29:05.54
+29b04d03
+User
+🤖 Initializing Quantum AI Models
+2025-05-20 21:29:05.54
+29b04d03
+User
+🔧 Loading BTC-USD Model
+2025-05-20 21:29:05.54
+29b04d03
+User
+🔧 Loading ETH-USD Model
+2025-05-20 21:29:05.54
+29b04d03
+User
+🔧 Loading SOL-USD Model
+2025-05-20 21:29:05.54
+29b04d03
+User
+✅ System ready for trading
+2025-05-20 21:29:05.54
+29b04d03
+User
+✅ Dashboard ready to connect to trading engine
+2025-05-20 21:29:05.54
+29b04d03
+User
+2025-05-20 21:29:05.54
+29b04d03
+User
+🔥 DASHBOARD READY AT: http://0.0.0.0:5001
+2025-05-20 21:29:05.54
+29b04d03
+User
+⚠️ Keep the main trading system running in another terminal
+2025-05-20 21:29:05.54
+29b04d03
+User
+Dash is running on http://0.0.0.0:5000/
+2025-05-20 21:29:05.58
+29b04d03
+User
+Python-dotenv could not parse statement starting at line 3
+2025-05-20 21:29:05.58
+29b04d03
+User
+* Serving Flask app 'dashboard'
+2025-05-20 21:29:05.58
+29b04d03
+User
+* Debug mode: off
+2025-05-20 21:29:05.63
+29b04d03
+User
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+2025-05-20 21:29:05.63
+29b04d03
+User
+* Running on all addresses (0.0.0.0)
+2025-05-20 21:29:05.63
+29b04d03
+User
+* Running on http://127.0.0.1:5000
+2025-05-20 21:29:05.63
+29b04d03
+User
+* Running on http://10.0.31.223:5000
+2025-05-20 21:29:05.63
+29b04d03
+User
+Press CTRL+C to quit

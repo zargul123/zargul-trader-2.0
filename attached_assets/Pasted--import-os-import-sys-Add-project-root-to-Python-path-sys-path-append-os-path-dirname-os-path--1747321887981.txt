@@ -1,0 +1,217 @@
+
+import os
+import sys
+# Add project root to Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+# Now import your modules
+from scripts.config import ASSETS
+from scripts.core.data_engine import DataMaster
+from scripts.core.analysis_engine import AIAnalyst
+
+import dash
+from dash import dcc, html, Input, Output
+import plotly.graph_objs as go
+import pandas as pd
+from scripts.config import ASSETS
+import threading
+import time
+
+class QuantumDashboard:
+    def __init__(self, trader):
+        self.trader = trader
+        self.app = dash.Dash(__name__, title="Zargul Trader 2.0")
+        self.setup_layout()
+        self.setup_callbacks()
+        self._running = False
+
+    def setup_layout(self):
+        self.app.layout = html.Div([
+            html.H1("🚀 Zargul Quantum Trading Dashboard", style={'textAlign': 'center'}),
+            dcc.Tabs([
+                dcc.Tab(label='Market Pulse', children=[
+                    dcc.Graph(id='live-confidence'),
+                    dcc.Interval(id='confidence-update', interval=30000)
+                ]),
+                dcc.Tab(label='Swing Signals', children=[
+                    dcc.Graph(id='swing-signals'),
+                    dcc.Interval(id='swing-update', interval=300000)
+                ]),
+                dcc.Tab(label='Scalp Signals', children=[
+                    dcc.Graph(id='scalp-signals'),
+                    dcc.Interval(id='scalp-update', interval=60000)
+                ]),
+                dcc.Tab(label='Asset Analytics', children=[
+                    dcc.Dropdown(id='asset-selector',
+                                options=[{'label': asset, 'value': asset} for asset in ASSETS],
+                                value='BTC-USD'),
+                    dcc.Graph(id='asset-details'),
+                    dcc.Interval(id='asset-update', interval=60000)
+                ])
+            ])
+        ])
+
+    def _create_swing_signals_figure(self):
+        signals = []
+        for asset in ASSETS:
+            try:
+                pred = self.trader.ai.predict_swing(asset)
+                if pred:
+                    signals.append({
+                        'asset': asset,
+                        'direction': pred['direction'],
+                        'change': pred['pct_change'],
+                        'confidence': pred['confidence'],
+                        'hold_time': pred.get('hold_time', 0)
+                    })
+            except Exception as e:
+                print(f"Swing signal error for {asset}: {str(e)}")
+                continue
+
+        if not signals:
+            return go.Figure()
+
+        df = pd.DataFrame(signals)
+        return {
+            'data': [
+                go.Bar(
+                    x=df['asset'],
+                    y=abs(df['change']),
+                    name='Price Change %',
+                    marker_color=df['direction'].map({'long': '#00cc96', 'short': '#ef553b'})
+                )
+            ],
+            'layout': go.Layout(
+                title='Active Swing Trade Signals',
+                yaxis={'title': 'Expected Price Change %'},
+                xaxis={'title': 'Assets'},
+                showlegend=False
+            )
+        }
+
+    def _create_scalp_signals_figure(self):
+        signals = []
+        for asset in ASSETS:
+            try:
+                pred = self.trader.ai.predict_scalp(asset)
+                if pred:
+                    signals.append({
+                        'asset': asset,
+                        'direction': pred['direction'],
+                        'change': pred['pct_change'],
+                        'confidence': pred['confidence'],
+                        'hold_time': pred.get('hold_time', 0)
+                    })
+            except Exception as e:
+                print(f"Scalp signal error for {asset}: {str(e)}")
+                continue
+
+        if not signals:
+            return go.Figure()
+
+        df = pd.DataFrame(signals)
+        return {
+            'data': [
+                go.Scatter(
+                    x=df['asset'],
+                    y=abs(df['change']),
+                    mode='markers',
+                    marker=dict(
+                        size=df['confidence']*30,
+                        color=df['direction'].map({'long': '#00cc96', 'short': '#ef553b'})
+                    ),
+                    text=df.apply(lambda x: f"{x['direction']} {abs(x['change']):.2f}%", axis=1)
+                )
+            ],
+            'layout': go.Layout(
+                title='Active Scalp Trade Signals',
+                yaxis={'title': 'Expected Price Change %'},
+                xaxis={'title': 'Assets'},
+                showlegend=False
+            )
+        }
+
+    def setup_callbacks(self):
+        @self.app.callback(
+            Output('live-confidence', 'figure'),
+            Input('confidence-update', 'n_intervals')
+        )
+        def update_confidence(n):
+            data = []
+            for asset in ASSETS:
+                try:
+                    pred = self.trader.ai.predict(asset)
+                    data.append(go.Bar(
+                        x=[asset],
+                        y=[pred['confidence']],
+                        name=asset,
+                        marker_color='#00cc96' if pred['direction'] == 'long' else '#ef553b'
+                    ))
+                except Exception as e:
+                    print(f"Confidence update error for {asset}: {str(e)}")
+                    continue
+
+            return {
+                'data': data,
+                'layout': go.Layout(
+                    title='Live Trade Confidence',
+                    yaxis={'range': [0, 1], 'title': 'Confidence Score'},
+                    xaxis={'title': 'Assets'},
+                    showlegend=False
+                )
+            }
+
+        @self.app.callback(
+            Output('swing-signals', 'figure'),
+            Input('swing-update', 'n_intervals')
+        )
+        def update_swing(n):
+            return self._create_swing_signals_figure()
+
+        @self.app.callback(
+            Output('scalp-signals', 'figure'),
+            Input('scalp-update', 'n_intervals')
+        )
+        def update_scalp(n):
+            return self._create_scalp_signals_figure()
+
+        @self.app.callback(
+            Output('asset-details', 'figure'),
+            [Input('asset-selector', 'value'),
+             Input('asset-update', 'n_intervals')]
+        )
+        def update_asset(selected_asset, n):
+            df = self.trader.data.get_data(selected_asset)
+            return {
+                'data': [
+                    go.Candlestick(
+                        x=df.index,
+                        open=df['open'],
+                        high=df['high'],
+                        low=df['low'],
+                        close=df['close'],
+                        name='Price'
+                    ),
+                    go.Scatter(
+                        x=df.index,
+                        y=df['vwap'],
+                        name='VWAP',
+                        line={'color': '#00cc96'}
+                    )
+                ],
+                'layout': go.Layout(
+                    title=f'{selected_asset} Market Structure',
+                    xaxis={'rangeslider': {'visible': False}},
+                    yaxis={'title': 'Price (USD)'}
+                )
+            }
+
+    def run(self):
+        print("\n🔥 Starting dashboard...")
+        print(f"📡 Access at: https://{os.environ.get('REPL_SLUG')}.{os.environ.get('REPL_OWNER')}.repl.co")
+        self.app.run_server(
+            host='0.0.0.0',
+            port=5000,
+            debug=True,
+            use_reloader=False
+        )

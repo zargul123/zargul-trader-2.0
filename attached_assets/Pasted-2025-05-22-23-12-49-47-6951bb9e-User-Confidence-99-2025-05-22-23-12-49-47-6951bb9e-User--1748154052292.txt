@@ -1,0 +1,111 @@
+2025-05-22 23:12:49.47
+6951bb9e
+User
+│ Confidence: 99%
+2025-05-22 23:12:49.47
+6951bb9e
+User
+│ Predicted Move: +2.65%
+2025-05-22 23:12:49.47
+6951bb9e
+User
+│ Hold Time: ~0.4 hours
+2025-05-22 23:12:49.47
+6951bb9e
+User
+└ ✅ TRADE SIGNAL! LONG 2.65% (Confidence: 99%)
+2025-05-22 23:12:49.47
+6951bb9e
+User
+BTC Prediction Sample: None
+2025-05-22 23:12:49.47
+6951bb9e
+User
+✅ System Connection Verified
+2025-05-22 23:12:49.47
+6951bb9e
+User
+2025-05-22 23:12:49.47
+6951bb9e
+User
+2025-05-22 23:12:49.47
+6951bb9e
+User
+⚡ Initializing Dashboard with Live Trading Data
+2025-05-22 23:12:49.47
+6951bb9e
+User
+2025-05-22 23:12:49.47
+6951bb9e
+User
+🤖 Initializing Trading System...
+2025-05-22 23:12:49.47
+6951bb9e
+User
+2025-05-22 23:12:49.47
+6951bb9e
+User
+🤖 Initializing Quantum AI Models
+2025-05-22 23:12:49.47
+6951bb9e
+User
+🔧 Loading BTC-USD Model
+2025-05-22 23:12:49.47
+6951bb9e
+User
+🔧 Loading ETH-USD Model
+2025-05-22 23:12:49.47
+6951bb9e
+User
+🔧 Loading SOL-USD Model
+2025-05-22 23:12:49.47
+6951bb9e
+User
+✅ System ready for trading
+2025-05-22 23:12:49.47
+6951bb9e
+User
+✅ Dashboard ready to connect to trading engine
+2025-05-22 23:12:49.47
+6951bb9e
+User
+2025-05-22 23:12:49.47
+6951bb9e
+User
+🔥 DASHBOARD READY AT: http://0.0.0.0:5000
+2025-05-22 23:12:49.47
+6951bb9e
+User
+⚠️ Keep the main trading system running in another terminal
+2025-05-22 23:12:49.47
+6951bb9e
+User
+Dash is running on http://0.0.0.0:5000/
+2025-05-22 23:12:49.48
+6951bb9e
+User
+* Serving Flask app 'dashboard'
+2025-05-22 23:12:49.48
+6951bb9e
+User
+* Debug mode: off
+2025-05-22 23:12:49.52
+6951bb9e
+User
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+2025-05-22 23:12:49.52
+6951bb9e
+User
+* Running on all addresses (0.0.0.0)
+2025-05-22 23:12:49.52
+6951bb9e
+User
+* Running on http://127.0.0.1:5000
+2025-05-22 23:12:49.52
+6951bb9e
+User
+* Running on http://10.0.15.77:5000
+2025-05-22 23:12:49.52
+6951bb9e
+User
+Press CTRL+C to quit

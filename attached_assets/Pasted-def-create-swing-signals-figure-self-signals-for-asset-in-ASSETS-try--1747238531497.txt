@@ -1,0 +1,77 @@
+def _create_swing_signals_figure(self):
+    signals = []
+    for asset in ASSETS:
+        try:
+            pred = self.trader.ai.predict_swing(asset)
+            if pred:
+                signals.append({
+                    'asset': asset,
+                    'direction': pred['direction'],
+                    'change': pred['pct_change'],
+                    'confidence': pred['confidence'],
+                    'hold_time': pred.get('hold_time', 0)
+                })
+        except:
+            continue
+
+    if not signals:
+        return go.Figure()
+
+    df = pd.DataFrame(signals)
+    return {
+        'data': [
+            go.Bar(
+                x=df['asset'],
+                y=df['change'],
+                name='Price Change %',
+                marker_color=df['direction'].map({'long': '#00cc96', 'short': '#ef553b'})
+            )
+        ],
+        'layout': go.Layout(
+            title='Active Swing Trade Signals',
+            yaxis={'title': 'Expected Price Change %'},
+            xaxis={'title': 'Assets'},
+            showlegend=False
+        )
+    }
+
+def _create_scalp_signals_figure(self):
+    signals = []
+    for asset in ASSETS:
+        try:
+            pred = self.trader.ai.predict_scalp(asset)
+            if pred:
+                signals.append({
+                    'asset': asset,
+                    'direction': pred['direction'],
+                    'change': pred['pct_change'],
+                    'confidence': pred['confidence'],
+                    'hold_time': pred.get('hold_time', 0)
+                })
+        except:
+            continue
+
+    if not signals:
+        return go.Figure()
+
+    df = pd.DataFrame(signals)
+    return {
+        'data': [
+            go.Scatter(
+                x=df['asset'],
+                y=df['change'],
+                mode='markers',
+                marker=dict(
+                    size=df['confidence']*30,
+                    color=df['direction'].map({'long': '#00cc96', 'short': '#ef553b'})
+                ),
+                text=df.apply(lambda x: f"{x['direction']} {abs(x['change']):.2f}%", axis=1)
+            )
+        ],
+        'layout': go.Layout(
+            title='Active Scalp Trade Signals',
+            yaxis={'title': 'Expected Price Change %'},
+            xaxis={'title': 'Assets'},
+            showlegend=False
+        )
+    }

@@ -1,0 +1,61 @@
+    def analyze_asset(self, asset):
+        try:
+            # Get market data
+            df = self.data.get_data(asset, "1h")
+            self.data_monitor.log_result(self.data.last_used_source, not df.empty)
+
+            if df.empty or len(df) < 60:
+                print(f"⚠️ {asset}: Using synthetic data")
+                df = self.data._generate_synthetic_data(asset)
+
+            # Get all prediction types
+            main_pred = self.ai.predict(asset, df)
+            swing_pred = self.ai.predict_swing(asset)
+            scalp_pred = self.ai.predict_scalp(asset)
+
+            # Display main analysis
+            print(f"\n📊 {asset} Main Strategy:")
+            self._print_prediction(main_pred)
+            
+            # Display swing analysis if available
+            if swing_pred:
+                print(f"\n📈 {asset} Swing Trade:")
+                self._print_prediction(swing_pred)
+                self._evaluate_trade(swing_pred)
+            
+            # Display scalp analysis if available
+            if scalp_pred:
+                print(f"\n⚡ {asset} Scalp Trade:")
+                self._print_prediction(scalp_pred)
+                self._evaluate_trade(scalp_pred)
+
+        except Exception as e:
+            print(f"\n❌ {asset} error: {str(e)}")
+
+    def _print_prediction(self, prediction):
+        """Helper to format prediction output"""
+        if not prediction:
+            print("│ No trade signal")
+            return
+            
+        print(f"│ Current: ${prediction.get('current_price', 'N/A'):.2f}")
+        print(f"│ Prediction: {prediction['direction'].upper()} {abs(prediction['pct_change']):.2f}%")
+        print(f"│ Confidence: {prediction['confidence']:.2%} ★")
+        
+        if prediction.get('type'):
+            print(f"│ Type: {prediction['type'].upper()}")
+            if prediction.get('hold_time'):
+                hrs = prediction['hold_time'] / 3600
+                print(f"│ Hold Time: ~{hrs:.1f} hours")
+
+    def _evaluate_trade(self, prediction):
+        """Evaluate if trade meets thresholds"""
+        if prediction['confidence'] >= MIN_CONFIDENCE:
+            if (prediction['direction'] == 'long' and prediction['pct_change'] >= LONG_THRESHOLD) or \
+               (prediction['direction'] == 'short' and prediction['pct_change'] <= -SHORT_THRESHOLD):
+                print(f"└ 🚨 TRADE SIGNAL!")
+                self.log_trade(prediction)
+            else:
+                print(f"└ ⚠️ Needs bigger price move")
+        else:
+            print(f"└ ⚠️ Needs more confidence")

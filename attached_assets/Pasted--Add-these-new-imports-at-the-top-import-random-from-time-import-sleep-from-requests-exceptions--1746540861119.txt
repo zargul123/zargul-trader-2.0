@@ -1,0 +1,91 @@
+# Add these new imports at the top
+import random
+from time import sleep
+from requests.exceptions import RequestException
+
+# Add this right after BINANCE_MAPPING in config
+BINANCE_PROXIES = [
+    "https://rotating-proxy.example.com",  # Replace with actual proxies
+    "https://backup-proxy.example.com"     # Or leave empty if no proxies
+]
+
+class DataMaster:
+    def __init__(self):
+        self.session = requests.Session()
+        self.session.headers.update({
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Accept': 'application/json'
+        })
+        self.request_delay = (0.1, 0.5)  # Random delay range
+        self.max_retries = 3
+
+    def _binance_data(self, symbol, timeframe):
+        """Bulletproof Binance data fetcher"""
+        for attempt in range(self.max_retries):
+            try:
+                sleep(random.uniform(*self.request_delay))
+                
+                params = {
+                    'symbol': BINANCE_MAPPING[symbol],
+                    'interval': self._convert_timeframe(timeframe),
+                    'limit': 200
+                }
+
+                # Rotate proxies if available
+                proxies = None
+                if BINANCE_PROXIES:
+                    proxies = {'https': random.choice(BINANCE_PROXIES)}
+
+                response = self.session.get(
+                    BINANCE_API_URL,
+                    params=params,
+                    proxies=proxies,
+                    timeout=20
+                )
+
+                # Validate response
+                if not response.text.strip():
+                    raise ValueError("Empty response")
+                if '<html>' in response.text.lower():
+                    raise ValueError("Got HTML page instead of JSON")
+
+                data = response.json()
+                if not isinstance(data, list):
+                    raise ValueError(f"Unexpected response format: {data}")
+
+                df = pd.DataFrame(data, columns=[
+                    'timestamp', 'open', 'high', 'low', 'close', 'volume',
+                    'close_time', 'quote_volume', 'trades', 
+                    'taker_buy_base', 'taker_buy_quote', 'ignore'
+                ])
+                
+                df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms', utc=True)
+                return df.set_index('timestamp')[['open','high','low','close','volume']].astype(float).tz_convert(None)
+
+            except (RequestException, ValueError, KeyError) as e:
+                if attempt == self.max_retries - 1:
+                    print(f"❌ Binance failed for {symbol} after {self.max_retries} attempts: {str(e)}")
+                    return self._yahoo_fallback(symbol, timeframe)
+                sleep(2 ** attempt)  # Exponential backoff
+
+    def _yahoo_fallback(self, symbol, timeframe):
+        """Enhanced Yahoo fallback"""
+        print(f"⚠️ Using Yahoo fallback for {symbol}")
+        try:
+            df = yf.download(
+                symbol,
+                period="30d",
+                interval=self._convert_timeframe(timeframe),
+                prepost=True,
+                progress=False
+            )
+            return df.rename(columns={
+                'Open': 'open',
+                'High': 'high',
+                'Low': 'low',
+                'Close': 'close',
+                'Volume': 'volume'
+            })[['open','high','low','close','volume']]
+        except Exception as e:
+            print(f"❌ Yahoo fallback failed for {symbol}: {str(e)}")
+            return pd.DataFrame()  # Return empty frame as last resort

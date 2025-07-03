@@ -1,0 +1,89 @@
+def get_training_data(self, symbol):
+    """Fetch extended historical data for training"""
+    try:
+        # Try Binance first with extended history
+        df = self._binance_historical_data(symbol, '15m', days=180)
+        if not df.empty:
+            return self._process_data(df, symbol)
+        
+        # Fallback to Yahoo
+        df = self._yahoo_historical_data(symbol, '15m', days=180)
+        if not df.empty:
+            return self._process_data(df, symbol)
+            
+        # Final fallback to synthetic
+        return self._generate_extended_training_data(symbol)
+        
+    except Exception as e:
+        print(f"❌ Training data acquisition failed: {str(e)}")
+        return self._generate_extended_training_data(symbol)
+
+def _binance_historical_data(self, symbol, timeframe='15m', days=180):
+    """Fetch extended Binance historical data"""
+    try:
+        binance_symbol = BINANCE_MAPPING[symbol]
+        limit = int((days * 24 * 60) / int(timeframe[:-1]))  # Convert days to intervals
+        
+        params = {
+            'symbol': binance_symbol,
+            'interval': self._convert_timeframe(timeframe),
+            'limit': limit
+        }
+        
+        response = self.session.get(BINANCE_API_URL, params=params, timeout=30)
+        response.raise_for_status()
+        
+        df = pd.DataFrame(response.json(), columns=[
+            'timestamp', 'open', 'high', 'low', 'close', 'volume',
+            'close_time', 'quote_volume', 'trades', 
+            'taker_buy_base', 'taker_buy_quote', 'ignore'
+        ])
+        
+        df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+        return df.set_index('timestamp')[['open','high','low','close','volume']].astype(float)
+    except Exception as e:
+        print(f"❌ Binance historical failed: {str(e)}")
+        return pd.DataFrame()
+
+def _yahoo_historical_data(self, symbol, timeframe='15m', days=180):
+    """Fetch extended Yahoo historical data"""
+    try:
+        df = yf.download(
+            symbol,
+            period=f"{days}d",
+            interval=self._convert_timeframe(timeframe),
+            prepost=True
+        )
+        return df.rename(columns={
+            'Open': 'open',
+            'High': 'high',
+            'Low': 'low',
+            'Close': 'close',
+            'Volume': 'volume'
+        })[['open','high','low','close','volume']]
+    except Exception as e:
+        print(f"❌ Yahoo historical failed: {str(e)}")
+        return pd.DataFrame()
+
+def _generate_extended_training_data(self, symbol):
+    """Generate synthetic training data with more volatility"""
+    base_price = {
+        "BTC-USD": 95000,
+        "ETH-USD": 1800,
+        "SOL-USD": 150,
+        "BNB-USD": 600
+    }.get(symbol, 100)
+
+    dates = pd.date_range(end=pd.Timestamp.now(), periods=180*96, freq='15min')  # 15m data for 180 days
+    noise = np.random.normal(0, 0.005, len(dates)).cumsum()  # More volatility for training
+    close_prices = base_price * (1 + noise)
+    
+    df = pd.DataFrame({
+        'open': close_prices * 0.998,
+        'high': close_prices * 1.002,
+        'low': close_prices * 0.995,
+        'close': close_prices,
+        'volume': np.random.lognormal(5, 1, len(dates))
+    }, index=dates)
+    
+    return self._process_data(df, symbol)

@@ -1,0 +1,221 @@
+import os
+import time
+import random
+import pandas as pd
+import numpy as np
+import requests
+import yfinance as yf
+from datetime import datetime
+from scripts.config import (
+    BINANCE_API_URL,
+    BINANCE_MAPPING,
+    TWELVEDATA_API_KEY,
+    TWELVEDATA_URL,
+    TWELVEDATA_MAPPING,
+    TECHNICAL_INDICATORS,
+    TWELVEDATA_COOLDOWN,
+    SEQUENCE_LENGTH
+)
+
+class DataMaster:
+    def __init__(self):
+        self.session = requests.Session()
+        self.session.headers.update({
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Accept': 'application/json'
+        })
+        self.cache = {}
+        self.last_request_time = 0
+        self.last_used_source = None
+        self.historical_days = 60
+        self.request_delay = (0.1, 0.5)  # Random delay between requests
+
+    # Timeframe conversion
+    def _convert_timeframe(self, tf):
+        return {
+            '15m': '15min',
+            '1h': '1h',
+            '4h': '4h',
+            '1d': '1day'
+        }.get(tf, '1h')
+
+    # Binance API data fetcher
+    def _binance_data(self, symbol, timeframe):
+        for attempt in range(3):  # Retry up to 3 times
+            try:
+                time.sleep(random.uniform(*self.request_delay))
+                
+                params = {
+                    'symbol': BINANCE_MAPPING[symbol],
+                    'interval': self._convert_timeframe(timeframe),
+                    'limit': SEQUENCE_LENGTH * 3  # Get enough data
+                }
+
+                response = self.session.get(
+                    BINANCE_API_URL,
+                    params=params,
+                    timeout=15
+                )
+                response.raise_for_status()
+
+                data = response.json()
+                if not isinstance(data, list):
+                    raise ValueError("Invalid Binance response format")
+
+                df = pd.DataFrame(data, columns=[
+                    'timestamp', 'open', 'high', 'low', 'close', 'volume',
+                    'close_time', 'quote_volume', 'trades', 
+                    'taker_buy_base', 'taker_buy_quote', 'ignore'
+                ])
+                
+                df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+                df = df.set_index('timestamp')[['open','high','low','close','volume']]
+                df = df.astype(float)
+                self.last_used_source = 'binance'
+                return df
+
+            except Exception as e:
+                if attempt == 2:  # Final attempt failed
+                    print(f"❌ Binance failed for {symbol}: {str(e)}")
+                    return pd.DataFrame()
+                time.sleep(2 ** attempt)  # Exponential backoff
+
+    # TwelveData API fetcher
+    def _twelvedata_fallback(self, symbol, timeframe):
+        try:
+            current_time = time.time()
+            elapsed = current_time - self.last_request_time
+            
+            # Respect rate limits
+            if elapsed < TWELVEDATA_COOLDOWN:
+                time.sleep(TWELVEDATA_COOLDOWN - elapsed)
+            
+            params = {
+                'symbol': TWELVEDATA_MAPPING[symbol],
+                'interval': self._convert_timeframe(timeframe),
+                'outputsize': SEQUENCE_LENGTH * 3,
+                'apikey': TWELVEDATA_API_KEY
+            }
+            
+            response = self.session.get(
+                TWELVEDATA_URL,
+                params=params,
+                timeout=15
+            )
+            response.raise_for_status()
+            
+            data = response.json()
+            if data.get('status') != 'ok':
+                raise ValueError(data.get('message', 'Unknown error'))
+            
+            df = pd.DataFrame(data['values'])
+            df = df.iloc[::-1]  # Reverse to chronological order
+            
+            df['datetime'] = pd.to_datetime(df['datetime'])
+            df = df.rename(columns={
+                'datetime': 'timestamp',
+                'open': 'open',
+                'high': 'high',
+                'low': 'low',
+                'close': 'close',
+                'volume': 'volume'
+            }).set_index('timestamp')
+            
+            numeric_cols = ['open', 'high', 'low', 'close', 'volume']
+            df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric, errors='coerce')
+            
+            self.last_used_source = 'twelvedata'
+            self.last_request_time = time.time()
+            return df
+            
+        except Exception as e:
+            print(f"❌ TwelveData failed for {symbol}: {str(e)}")
+            return pd.DataFrame()
+
+    # Yahoo Finance fallback
+    def _yahoo_fallback(self, symbol, timeframe):
+        try:
+            df = yf.download(
+                symbol,
+                period="30d",
+                interval=self._convert_timeframe(timeframe),
+                prepost=True,
+                progress=False
+            )
+            self.last_used_source = 'yahoo'
+            return df.rename(columns={
+                'Open': 'open',
+                'High': 'high',
+                'Low': 'low',
+                'Close': 'close',
+                'Volume': 'volume'
+            })[['open','high','low','close','volume']]
+        except Exception as e:
+            print(f"❌ Yahoo failed for {symbol}: {str(e)}")
+            return pd.DataFrame()
+
+    # Generate synthetic data when all APIs fail
+    def _generate_synthetic_data(self, symbol):
+        base_price = {
+            "BTC-USD": 95000,
+            "ETH-USD": 1800,
+            "SOL-USD": 150,
+            "BNB-USD": 600
+        }.get(symbol, 100)
+
+        dates = pd.date_range(end=pd.Timestamp.now(), periods=SEQUENCE_LENGTH*3, freq='1h')
+        noise = np.random.normal(0, 0.002, len(dates)).cumsum()
+        close_prices = base_price * (1 + noise)
+        
+        df = pd.DataFrame({
+            'open': close_prices * 0.998,
+            'high': close_prices * 1.002,
+            'low': close_prices * 0.995,
+            'close': close_prices,
+            'volume': np.random.lognormal(5, 1, len(dates))
+        }, index=dates)
+        
+        self.last_used_source = 'synthetic'
+        return df
+
+    # Main data fetching method
+    def get_data(self, symbol, timeframe='1h'):
+        """Smart data fetcher with automatic failover"""
+        sources = [
+            self._binance_data,
+            self._twelvedata_fallback,
+            self._yahoo_fallback
+        ]
+        
+        for source in sources:
+            df = source(symbol, timeframe)
+            if not df.empty:
+                processed = self._process_data(df, symbol)
+                self.cache[symbol] = processed
+                return processed
+        
+        # Final fallback to cached or synthetic data
+        return self.cache.get(symbol, self._generate_synthetic_data(symbol))
+
+    # Data processing with technical indicators
+    def _process_data(self, df, symbol=None):
+        """Add technical indicators and clean data"""
+        if df.empty:
+            return df
+            
+        # Clean data
+        df = df.dropna()
+        df = df[~df.index.duplicated(keep='last')]
+        
+        # Add technical indicators
+        df = self._add_technical_indicators(df)
+        df = self._add_volume_analysis(df)
+        df = self._add_advanced_indicators(df)
+        
+        return df
+
+    # [Include all your existing technical indicator methods here]
+    # _add_technical_indicators()
+    # _add_volume_analysis() 
+    # _add_advanced_indicators()
+    # etc...

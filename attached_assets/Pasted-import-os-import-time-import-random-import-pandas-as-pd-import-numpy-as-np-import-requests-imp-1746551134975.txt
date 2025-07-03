@@ -1,0 +1,101 @@
+import os
+import time
+import random
+import pandas as pd
+import numpy as np
+import requests
+import yfinance as yf
+from datetime import datetime
+from scripts.config import (
+    BINANCE_API_URL,
+    BINANCE_MAPPING,
+    TWELVEDATA_API_KEY,
+    TWELVEDATA_URL,
+    TWELVEDATA_MAPPING,
+    TECHNICAL_INDICATORS,
+    TWELVEDATA_COOLDOWN
+)
+
+class DataMaster:
+    def __init__(self):
+        self.session = requests.Session()
+        self.session.headers.update({
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Accept': 'application/json'
+        })
+        self.cache = {}
+        self.last_request_time = 0
+        self.last_used_source = None
+        self.historical_days = 60
+
+    def _convert_timeframe(self, tf):
+        return {
+            '15m': '15min',
+            '1h': '1h',
+            '4h': '4h',
+            '1d': '1day'
+        }.get(tf, '1h')
+
+    def _parse_twelvedata(self, data):
+        """Parse TwelveData API response"""
+        try:
+            if not data or 'values' not in data:
+                return pd.DataFrame()
+            
+            df = pd.DataFrame(data['values'])
+            df = df.iloc[::-1]  # Reverse to chronological order
+            
+            df['datetime'] = pd.to_datetime(df['datetime'])
+            df = df.rename(columns={
+                'datetime': 'timestamp',
+                'open': 'open',
+                'high': 'high',
+                'low': 'low',
+                'close': 'close',
+                'volume': 'volume'
+            })
+            
+            numeric_cols = ['open', 'high', 'low', 'close', 'volume']
+            df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric, errors='coerce')
+            
+            return df.set_index('timestamp')
+        except Exception as e:
+            print(f"❌ Failed to parse TwelveData: {str(e)}")
+            return pd.DataFrame()
+
+    def _twelvedata_fallback(self, symbol, timeframe):
+        """Rate-limited TwelveData implementation with complete error handling"""
+        try:
+            current_time = time.time()
+            elapsed = current_time - self.last_request_time
+            
+            if elapsed < TWELVEDATA_COOLDOWN:
+                sleep_time = TWELVEDATA_COOLDOWN - elapsed
+                time.sleep(sleep_time)
+                
+            params = {
+                'symbol': TWELVEDATA_MAPPING[symbol],
+                'interval': self._convert_timeframe(timeframe),
+                'outputsize': 200,
+                'apikey': TWELVEDATA_API_KEY
+            }
+            
+            response = self.session.get(
+                TWELVEDATA_URL,
+                params=params,
+                timeout=15
+            )
+            self.last_request_time = time.time()
+            
+            data = response.json()
+            if data.get('status') != 'ok':
+                raise ValueError(f"TwelveData error: {data.get('message', 'Unknown error')}")
+                
+            self.last_used_source = 'twelvedata'
+            return self._parse_twelvedata(data)
+            
+        except Exception as e:
+            print(f"❌ TwelveData failed for {symbol}: {str(e)}")
+            return pd.DataFrame()
+
+    # ... [keep all your other existing methods]

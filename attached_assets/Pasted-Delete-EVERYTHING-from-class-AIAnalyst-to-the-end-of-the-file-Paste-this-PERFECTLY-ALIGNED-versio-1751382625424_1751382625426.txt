@@ -1,0 +1,87 @@
+Delete EVERYTHING from class AIAnalyst to the end of the file
+
+Paste this PERFECTLY ALIGNED version (I've checked the spaces):
+
+python
+class AIAnalyst:
+    def __init__(self, train_all=False):
+        self.models = {}
+        self.scalers = {}
+        self.train_all = train_all
+        self.data = DataMaster()
+        self._initialize_models()
+
+    def _initialize_models(self):
+        print("\n🤖 Initializing Quantum AI Models")
+        os.makedirs('trained_models', exist_ok=True)
+
+        for symbol in ASSETS:
+            try:
+                model_path = f'trained_models/{symbol}_model.keras'
+                scaler_path = f'trained_models/{symbol}_scaler.joblib'
+
+                if self.train_all or not os.path.exists(model_path):
+                    print(f"🚀 Training initiated for {symbol}")
+                    self._train_model(symbol)
+                else:
+                    print(f"🔧 Loading {symbol} Model")
+                    
+                    # NEW SAFE LOADING SYSTEM
+                    try:
+                        self.models[symbol] = load_model(
+                            model_path,
+                            custom_objects={'AttentionLayer': AttentionLayer},
+                            compile=False
+                        )
+                    except:
+                        print("⚠️ Using emergency load procedure")
+                        model = Sequential([
+                            Conv1D(64, 5, activation='relu', input_shape=(60, 14)),
+                            Bidirectional(LSTM(128, return_sequences=True)),
+                            AttentionLayer(),
+                            Dense(256, activation='swish'),
+                            Dropout(0.2),
+                            Dense(3)
+                        ])
+                        model.load_weights(model_path)
+                        self.models[symbol] = model
+                    
+                    self.scalers[symbol] = load(scaler_path)
+
+            except Exception as e:
+                print(f"❌ Model init failed for {symbol}: {str(e)}")
+                # Emergency simple model
+                model = Sequential([
+                    Conv1D(32, 3, activation='relu', input_shape=(60, 14)),
+                    LSTM(64),
+                    Dense(3, activation='linear')
+                ])
+                model.compile(optimizer='adam', loss='huber')
+                self.models[symbol] = model
+                continue
+
+    # --- PASTE YOUR ORIGINAL METHODS BELOW THIS LINE ---
+    # (Keep all other methods EXACTLY as they were)
+    def _create_advanced_model(self, input_shape, symbol):
+        """Enhanced model architecture"""
+        model = Sequential()
+        model.add(Conv1D(64, 5, activation='relu', input_shape=input_shape))
+
+        if symbol in ["BTC-USD", "ETH-USD"]:
+            model.add(Bidirectional(LSTM(128, return_sequences=True)))
+            model.add(AttentionLayer())
+            model.add(Dense(256, activation='swish'))
+        else:
+            model.add(LSTM(64, return_sequences=False))
+            model.add(Dense(128, activation='relu'))
+
+        model.add(Dropout(0.2))
+        model.add(Dense(3))
+
+        lr = 0.0001 if symbol in ["BTC-USD", "ETH-USD"] else 0.0002
+        model.compile(optimizer=AdamW(learning_rate=lr), 
+                    loss='huber', 
+                    metrics=['mae'])
+        return model
+
+    # (Continue with ALL your other original methods below...)

@@ -1,0 +1,285 @@
+🚀 Starting Trading Core...
+🕒 Starting Auto Trainer (daily at 3 AM UTC)...
+Traceback (most recent call last):
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+Traceback (most recent call last):
+  File "/home/runner/workspace/auto_trainer.py", line 11, in <module>
+    from scripts.main import ZargulTrader
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+
+💥 TRADING SYSTEM CRASHED! Restarting in 10s...
+✅ Trading system restarted
+
+💥 AUTO TRAINER CRASHED! Restarting in 10s...
+Traceback (most recent call last):
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+✅ Auto trainer restarted
+Traceback (most recent call last):
+  File "/home/runner/workspace/auto_trainer.py", line 11, in <module>
+    from scripts.main import ZargulTrader
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+
+💥 TRADING SYSTEM CRASHED! Restarting in 10s...
+✅ Trading system restarted
+
+💥 AUTO TRAINER CRASHED! Restarting in 10s...
+Traceback (most recent call last):
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+✅ Auto trainer restarted
+Traceback (most recent call last):
+  File "/home/runner/workspace/auto_trainer.py", line 11, in <module>
+    from scripts.main import ZargulTrader
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+
+💥 TRADING SYSTEM CRASHED! Restarting in 10s...
+✅ Trading system restarted
+
+💥 AUTO TRAINER CRASHED! Restarting in 10s...
+Traceback (most recent call last):
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+✅ Auto trainer restarted
+Traceback (most recent call last):
+  File "/home/runner/workspace/auto_trainer.py", line 11, in <module>
+    from scripts.main import ZargulTrader
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+
+💥 TRADING SYSTEM CRASHED! Restarting in 10s...
+✅ Trading system restarted
+
+💥 AUTO TRAINER CRASHED! Restarting in 10s...
+Traceback (most recent call last):
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+✅ Auto trainer restarted
+Traceback (most recent call last):
+  File "/home/runner/workspace/auto_trainer.py", line 11, in <module>
+    from scripts.main import ZargulTrader
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+
+💥 TRADING SYSTEM CRASHED! Restarting in 10s...
+✅ Trading system restarted
+
+💥 AUTO TRAINER CRASHED! Restarting in 10s...
+Traceback (most recent call last):
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+✅ Auto trainer restarted
+Traceback (most recent call last):
+  File "/home/runner/workspace/auto_trainer.py", line 11, in <module>
+    from scripts.main import ZargulTrader
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+
+💥 TRADING SYSTEM CRASHED! Restarting in 10s...
+✅ Trading system restarted
+
+💥 AUTO TRAINER CRASHED! Restarting in 10s...
+Traceback (most recent call last):
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+✅ Auto trainer restarted
+Traceback (most recent call last):
+  File "/home/runner/workspace/auto_trainer.py", line 11, in <module>
+    from scripts.main import ZargulTrader
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+
+💥 TRADING SYSTEM CRASHED! Restarting in 10s...
+✅ Trading system restarted
+
+💥 AUTO TRAINER CRASHED! Restarting in 10s...
+Traceback (most recent call last):
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+✅ Auto trainer restarted
+Traceback (most recent call last):
+  File "/home/runner/workspace/auto_trainer.py", line 11, in <module>
+    from scripts.main import ZargulTrader
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+
+💥 TRADING SYSTEM CRASHED! Restarting in 10s...
+✅ Trading system restarted
+
+💥 AUTO TRAINER CRASHED! Restarting in 10s...
+Traceback (most recent call last):
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+✅ Auto trainer restarted
+Traceback (most recent call last):
+  File "/home/runner/workspace/auto_trainer.py", line 11, in <module>
+    from scripts.main import ZargulTrader
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+
+💥 TRADING SYSTEM CRASHED! Restarting in 10s...
+✅ Trading system restarted
+
+💥 AUTO TRAINER CRASHED! Restarting in 10s...
+Traceback (most recent call last):
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+✅ Auto trainer restarted
+Traceback (most recent call last):
+  File "/home/runner/workspace/auto_trainer.py", line 11, in <module>
+    from scripts.main import ZargulTrader
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+
+💥 TRADING SYSTEM CRASHED! Restarting in 10s...
+✅ Trading system restarted
+
+💥 AUTO TRAINER CRASHED! Restarting in 10s...
+Traceback (most recent call last):
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+✅ Auto trainer restarted
+Traceback (most recent call last):
+  File "/home/runner/workspace/auto_trainer.py", line 11, in <module>
+    from scripts.main import ZargulTrader
+  File "/home/runner/workspace/scripts/main.py", line 5, in <module>
+    import pandas as pd
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/__init__.py", line 19, in <module>
+    raise ImportError(
+ImportError: Unable to import required dependencies:
+numpy: Error importing numpy: you should not try to import numpy from
+        its source directory; please exit the numpy source tree, and relaunch
+        your python interpreter from there.
+
+💥 TRADING SYSTEM CRASHED! Restarting in 10s...
+✅ Trading system restarted

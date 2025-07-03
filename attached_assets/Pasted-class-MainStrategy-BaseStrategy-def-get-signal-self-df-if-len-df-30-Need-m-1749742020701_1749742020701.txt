@@ -1,0 +1,52 @@
+class MainStrategy(BaseStrategy):
+    def get_signal(self, df):
+        if len(df) < 30:  # Need more data
+            return 0
+            
+        current = df.iloc[-1]
+        prev = df.iloc[-2]
+        
+        # Volume filter - must be above average
+        if current['volume'] < df['volume'].rolling(20).mean().iloc[-1]:
+            return 0
+            
+        # Trend filter - price above 50EMA for long, below for short
+        ema50 = df['close'].ewm(span=50).mean().iloc[-1]
+        
+        # Long signal - with stronger confirmation
+        if (current['close'] > prev['close'] * (1 + LONG_THRESHOLD/100) and \
+           current['close'] > ema50 and \
+           current['rsi'] < 65 and \
+           current['macd'] > current['macd_signal']:
+            return 1
+            
+        # Short signal - with stronger confirmation  
+        elif (current['close'] < prev['close'] * (1 - SHORT_THRESHOLD/100) and \
+             current['close'] < ema50 and \
+             current['rsi'] > 35 and \
+             current['macd'] < current['macd_signal']:
+            return -1
+            
+        return 0
+        
+    def get_exit_signal(self, df, current_position):
+        current = df.iloc[-1]
+        
+        # Fixed stop loss at 1.5%
+        entry_price = self.get_current_entry_price(df, current_position)
+        if current_position == 1 and current['close'] < entry_price * 0.985:
+            return True
+        elif current_position == -1 and current['close'] > entry_price * 1.015:
+            return True
+            
+        # Profit target at 3% (2:1 risk-reward)
+        if current_position == 1 and current['close'] > entry_price * 1.03:
+            return True
+        elif current_position == -1 and current['close'] < entry_price * 0.97:
+            return True
+            
+        # Time-based exit if no target hit in 12 periods
+        if len(self.open_trades) > 0 and (df.index[-1] - self.open_trades[0]['entry_time']) >= pd.Timedelta(hours=12):
+            return True
+            
+        return False

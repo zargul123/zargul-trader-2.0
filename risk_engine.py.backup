@@ -1,0 +1,99 @@
+
+import numpy as np
+import pandas as pd
+from scripts.config import RISK_REWARD_RATIO, MIN_CONFIDENCE, LONG_THRESHOLD, SHORT_THRESHOLD
+from scripts.core.safety import armor_get
+
+def super_safe_get(obj, key, default=None):
+    """Legacy wrapper for armor_get"""
+    return armor_get(obj, key, default)
+
+class RiskManager:
+    def calculate_levels(self, df, prediction):
+        """Advanced futures risk calculation"""
+        if not isinstance(df, pd.DataFrame) or df.empty or not isinstance(prediction, dict):
+            return {}
+            
+        current_price = df['close'].iloc[-1]
+        stop_loss = {
+            'sl': armor_get(prediction, 'sl_price', current_price * 0.99),
+            'tp': armor_get(prediction, 'tp_price', current_price * 1.01)
+        }
+        
+        # 1. Base Volatility (ATR)
+        atr = self._calculate_atr(df)
+        base_risk_pct = min(4.0, max(1.5, (atr / current_price) * 100 * 1.5))
+
+        # 2. Volume Analysis
+        vol_spike = df['vol_spike'].iloc[-1]
+        cmf = df['cmf'].iloc[-1]
+        vol_trend = armor_get(df, 'vol_trend', 0)
+
+        # 3. Smart Money Multiplier
+        strategy_multiplier = 1.0
+        if cmf > 0.2 and vol_spike > 1.8:
+            strategy_multiplier = 1.3  # Strong accumulation
+        elif cmf < -0.2 and vol_spike > 2.0:
+            strategy_multiplier = 0.7  # Distribution phase
+
+        # 4. Final Risk Calculation
+        final_risk_pct = base_risk_pct * strategy_multiplier
+
+        # 5. Position Sizing
+        position_size = self._get_position_size(vol_trend)
+
+        if prediction['direction'] == 'long':
+            return {
+                'entry': round(current_price, 2),
+                'sl': round(current_price * (1 - final_risk_pct/100), 2),
+                'tp': round(current_price * (1 + (final_risk_pct * RISK_REWARD_RATIO)/100), 2),
+                'size': position_size
+            }
+        else:
+            return {
+                'entry': round(current_price, 2),
+                'sl': round(current_price * (1 + final_risk_pct/100), 2),
+                'tp': round(current_price * (1 - (final_risk_pct * RISK_REWARD_RATIO)/100), 2),
+                'size': position_size
+            }
+
+    def _calculate_atr(self, df, period=14):
+        """Average True Range calculation"""
+        high_low = df['high'] - df['low']
+        high_close = np.abs(df['high'] - df['close'].shift())
+        low_close = np.abs(df['low'] - df['close'].shift())
+        true_range = np.maximum(high_low, np.maximum(high_close, low_close))
+        return true_range.rolling(period).mean().iloc[-1]
+
+    def _get_position_size(self, df):
+        vol_trend = armor_get(df, 'vol_trend', 0)  # Use 0 if missing
+        """Volume-trend based sizing"""
+        if vol_trend > 0.1: return 'Large'
+        if vol_trend < -0.1: return 'Small'
+        return 'Medium'
+
+
+class RiskManagerPro(RiskManager):
+    def __init__(self):
+        super().__init__()
+        self.portfolio_heat = 1.0  # Start neutral
+
+    def dynamic_position_sizing(self, volatility):
+        """Kelly Criterion-inspired sizing"""
+        optimal = (volatility ** 2) / (self.portfolio_heat * 0.1)  # 0.1 = estimated Sharpe
+        return min(max(optimal, 0.01), 0.1)  # Cap between 1-10%
+
+    def update_portfolio_heat(self, recent_performance):
+        """Adjust exposure based on performance"""
+        self.portfolio_heat *= 0.9 if recent_performance > 0 else 1.1
+
+
+    def should_execute(self, prediction):
+        """Validate if a trade should be executed based on confidence and price movement thresholds"""
+        if armor_get(prediction, 'confidence', 0) < MIN_CONFIDENCE:
+            return False
+        if prediction['direction'] == 'long' and armor_get(prediction, 'pct_change', 0) < LONG_THRESHOLD:
+            return False
+        if prediction['direction'] == 'short' and armor_get(prediction, 'pct_change', 0) > -SHORT_THRESHOLD:
+            return False
+        return True

@@ -1,0 +1,122 @@
+entrypoint = "main.py"
+modules = ["python-3.11"]
+
+[nix]
+channel = "stable-24_05"
+packages = ["glibcLocales"]
+
+[unitTest]
+language = "python3"
+
+[gitHubImport]
+requiredFiles = [".replit", "replit.nix"]
+
+[deployment]
+run = ["sh", "-c", "bash start.sh"]
+deploymentTarget = "gce"
+ignorePorts = true
+
+[workflows]
+runButton = "Run Trading System"
+
+[[workflows.workflow]]
+name = "Train Models"
+author = 39690101
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "PYTHONPATH=$PYTHONPATH:$PWD python scripts/main.py --train-all"
+
+[[workflows.workflow]]
+name = "Run Trading System"
+author = 39690101
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "bash start.sh"
+
+[[workflows.workflow]]
+name = "Monitor Win Rate"
+author = 39690101
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = '''watch -n 60 "tail -n 20 trading_journal.csv | awk -F',' '{win+=\$4; total++} END {print \"Win Rate:\", win/total*100,\"%\"}'"'''
+
+[[workflows.workflow]]
+name = "Start Dashboard"
+author = 39690101
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python scripts/core/dashboard.py"
+
+[[workflows.workflow]]
+name = "Run Dashboard"
+author = 39690101
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python scripts/core/dashboard.py"
+
+[[workflows.workflow]]
+name = "Run"
+author = 39690101
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "PYTHONPATH=$PYTHONPATH:$PWD python scripts/main.py"
+
+[[workflows.workflow]]
+name = "Full System"
+author = 39690101
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "bash start.sh"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python scripts/core/dashboard.py"
+
+[[workflows.workflow]]
+name = "Trading System Only"
+author = 39690101
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "bash start.sh"
+
+[[workflows.workflow]]
+name = "Trading Only"
+author = 39690101
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "bash start.sh"
+
+[[workflows.workflow]]
+name = "Dashboard"
+author = 39690101
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python scripts/core/dashboard.py"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[[ports]]
+localPort = 5001
+externalPort = 3000

@@ -1,0 +1,49 @@
+    def _add_technical_indicators(self, df):
+        """Add all technical indicators with proper error handling"""
+        try:
+            # Calculate returns first
+            df['returns'] = df['close'].pct_change()
+            
+            # 1. RSI
+            delta = df['close'].diff()
+            gain = delta.where(delta > 0, 0)
+            loss = -delta.where(delta < 0, 0)
+            avg_gain = gain.rolling(14).mean()
+            avg_loss = loss.rolling(14).mean()
+            rs = avg_gain / avg_loss.replace(0, 0.001)
+            df['rsi'] = 100 - (100 / (1 + rs))
+            
+            # 2. MACD
+            ema12 = df['close'].ewm(span=12, adjust=False).mean()
+            ema26 = df['close'].ewm(span=26, adjust=False).mean()
+            df['macd'] = ema12 - ema26
+            df['macd_signal'] = df['macd'].ewm(span=9, adjust=False).mean()
+            
+            # 3. Bollinger Bands
+            sma20 = df['close'].rolling(20).mean()
+            std20 = df['close'].rolling(20).std()
+            df['bollinger_upper'] = sma20 + (std20 * 2)
+            df['bollinger_lower'] = sma20 - (std20 * 2)
+            
+            # 4. Volume Analysis
+            df['vol_ma_10'] = df['volume'].rolling(10).mean()
+            df['vol_spike'] = (df['volume'] / df['vol_ma_10']).round(2)
+            
+            # 5. CMF
+            mf_multiplier = ((df['close'] - df['low']) - (df['high'] - df['close'])) / (df['high'] - df['low']).replace(0, 0.0001)
+            mf_volume = mf_multiplier * df['volume']
+            df['cmf'] = mf_volume.rolling(20).sum() / df['volume'].rolling(20).sum()
+            
+            # 6. VWAP
+            typical_price = (df['high'] + df['low'] + df['close']) / 3
+            df['vwap'] = (typical_price * df['volume']).cumsum() / df['volume'].cumsum()
+            
+            # 7. OBV
+            df['obv'] = (np.sign(df['close'].diff()) * df['volume']).cumsum()
+            
+            return df.dropna()
+            
+        except Exception as e:
+            print(f"⚠️ Indicator calculation failed: {str(e)}")
+            # Return minimal set if indicators fail
+            return df[['open','high','low','close','volume']].dropna()

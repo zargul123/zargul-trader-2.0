@@ -1,0 +1,2 @@
+timestamp,asset,direction,confidence,pct_change,strategy_type,stop_loss,take_profit
+2025-05-18T20:10:55+00:00,BTC-USD,test_long,99.00,1.50,test,100000.00,105000.00

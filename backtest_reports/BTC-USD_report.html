@@ -1,0 +1,123 @@
+
+    <html>
+    <head>
+        <title>Backtest Report - BTC-USD</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            h1, h2 { color: #333; }
+            .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+            .metric-card { border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
+            .good { background-color: #e6f7e6; }
+            .bad { background-color: #ffe6e6; }
+            .neutral { background-color: #e6f3ff; }
+            img { max-width: 100%; height: auto; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            tr:nth-child(even) { background-color: #f2f2f2; }
+            .chart-container { margin: 20px 0; }
+            .interactive-link { 
+                display: inline-block; 
+                margin: 10px 0; 
+                padding: 10px 20px; 
+                background-color: #2E86AB; 
+                color: white; 
+                text-decoration: none; 
+                border-radius: 5px; 
+            }
+            .interactive-link:hover { background-color: #1a5a7a; }
+        </style>
+    </head>
+    <body>
+        <h1>Backtest Report - BTC-USD</h1>
+        <p>Generated on 2025-07-02 11:20:01</p>
+
+        <h2>Key Metrics</h2>
+        <div class="metrics">
+            
+        <div class="metric-card bad">
+            <h3>Win Rate</h3>
+            <p>0</p>
+        </div>
+        
+
+        <div class="metric-card neutral">
+            <h3>Sharpe Ratio</h3>
+            <p>0</p>
+        </div>
+        
+
+        <div class="metric-card bad">
+            <h3>Max Drawdown</h3>
+            <p>0</p>
+        </div>
+        
+        </div>
+
+        <h2>Equity Curve</h2>
+        <div class="chart-container">
+            <a href="BTC-USD_interactive_equity.html" class="interactive-link" target="_blank">
+                📊 View Interactive Equity Curve
+            </a>
+            <br>
+            <img src="backtest_reports/BTC-USD_equity.png" alt="Static Equity Curve">
+        </div>
+
+        <h2>Monthly Performance</h2>
+        <img src="backtest_reports/BTC-USD_monthly.png" alt="Monthly Heatmap">
+
+        <h2>Trade History</h2>
+        
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Entry</th>
+            <th>Exit</th>
+            <th>PnL %</th>
+        </tr>
+        
+        <tr>
+            <td>2025-06-28 05:00:00</td>
+            <td>long</td>
+            <td>107408.94</td>
+            <td>-</td>
+            <td class="bad">0.0%</td>
+        </tr>
+        
+        <tr>
+            <td>2025-06-30 04:00:00</td>
+            <td>long</td>
+            <td>108716.43</td>
+            <td>-</td>
+            <td class="bad">0.0%</td>
+        </tr>
+        
+        <tr>
+            <td>2025-06-30 15:00:00</td>
+            <td>short</td>
+            <td>106675.71</td>
+            <td>107768.72</td>
+            <td class="bad">-1.02%</td>
+        </tr>
+        
+        <tr>
+            <td>2025-07-01 15:00:00</td>
+            <td>short</td>
+            <td>105791.76</td>
+            <td>-</td>
+            <td class="bad">0.0%</td>
+        </tr>
+        
+        <tr>
+            <td>2025-07-01 20:00:00</td>
+            <td>short</td>
+            <td>105245.17</td>
+            <td>-</td>
+            <td class="bad">0.0%</td>
+        </tr>
+        
+    </table>
+    
+    </body>
+    </html>
+    

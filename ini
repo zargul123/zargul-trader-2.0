@@ -1,0 +1,2 @@
+[run]
+command = "python scripts/main.py & python scripts/core/dashboard.py"

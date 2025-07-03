@@ -1,0 +1,129 @@
+
+    <html>
+    <head>
+        <title>Backtest Report - ETH-USD</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            h1, h2 { color: #333; }
+            .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+            .metric-card { border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
+            .good { background-color: #e6f7e6; }
+            .bad { background-color: #ffe6e6; }
+            .neutral { background-color: #e6f3ff; }
+            img { max-width: 100%; height: auto; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            tr:nth-child(even) { background-color: #f2f2f2; }
+            .chart-container { margin: 20px 0; }
+            .interactive-link { 
+                display: inline-block; 
+                margin: 10px 0; 
+                padding: 10px 20px; 
+                background-color: #2E86AB; 
+                color: white; 
+                text-decoration: none; 
+                border-radius: 5px; 
+            }
+            .interactive-link:hover { background-color: #1a5a7a; }
+        </style>
+    </head>
+    <body>
+        <h1>Backtest Report - ETH-USD</h1>
+        <p>Generated on 2025-07-02 11:20:07</p>
+
+        <h2>Key Metrics</h2>
+        <div class="metrics">
+            
+        <div class="metric-card bad">
+            <h3>Win Rate</h3>
+            <p>0.0</p>
+        </div>
+        
+
+        <div class="metric-card neutral">
+            <h3>Sharpe Ratio</h3>
+            <p>-5</p>
+        </div>
+        
+
+        <div class="metric-card bad">
+            <h3>Max Drawdown</h3>
+            <p>-1.06</p>
+        </div>
+        
+
+        <div class="metric-card bad">
+            <h3>Profit Factor</h3>
+            <p>0.0</p>
+        </div>
+        
+        </div>
+
+        <h2>Equity Curve</h2>
+        <div class="chart-container">
+            <a href="ETH-USD_interactive_equity.html" class="interactive-link" target="_blank">
+                📊 View Interactive Equity Curve
+            </a>
+            <br>
+            <img src="backtest_reports/ETH-USD_equity.png" alt="Static Equity Curve">
+        </div>
+
+        <h2>Monthly Performance</h2>
+        <img src="backtest_reports/ETH-USD_monthly.png" alt="Monthly Heatmap">
+
+        <h2>Trade History</h2>
+        
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Entry</th>
+            <th>Exit</th>
+            <th>PnL %</th>
+        </tr>
+        
+        <tr>
+            <td>2025-06-26 04:00:00</td>
+            <td>long</td>
+            <td>2494.14</td>
+            <td>-</td>
+            <td class="bad">0.0%</td>
+        </tr>
+        
+        <tr>
+            <td>2025-06-27 19:00:00</td>
+            <td>short</td>
+            <td>2390.46</td>
+            <td>2415.82</td>
+            <td class="bad">-1.06%</td>
+        </tr>
+        
+        <tr>
+            <td>2025-06-30 02:00:00</td>
+            <td>long</td>
+            <td>2513.05</td>
+            <td>-</td>
+            <td class="bad">0.0%</td>
+        </tr>
+        
+        <tr>
+            <td>2025-07-01 00:00:00</td>
+            <td>long</td>
+            <td>2488.95</td>
+            <td>-</td>
+            <td class="bad">0.0%</td>
+        </tr>
+        
+        <tr>
+            <td>2025-07-01 15:00:00</td>
+            <td>short</td>
+            <td>2416.02</td>
+            <td>-</td>
+            <td class="bad">0.0%</td>
+        </tr>
+        
+    </table>
+    
+    </body>
+    </html>
+    

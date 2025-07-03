@@ -1,0 +1,79 @@
+[
+  {
+    "source": "Ray Dalio",
+    "topic": "Long-Term Debt Cycle",
+    "trigger_keywords": ["interest rates", "tightening", "yield curve", "debt ceiling"],
+    "market_effect": "Stocks fall, gold rises, crypto mixed",
+    "strategy": "Shift to defensive assets, reduce leverage"
+  },
+  {
+    "source": "Mark Minervini",
+    "topic": "Volatility Contraction Pattern",
+    "trigger_keywords": ["volatility contraction", "base breakout", "volume spike"],
+    "market_effect": "Explosive rally in selected assets",
+    "strategy": "Enter on breakout with stop below base"
+  },
+  {
+    "source": "Peter Lynch",
+    "topic": "Buy What You Know",
+    "trigger_keywords": ["consumer trend", "retail buzz", "product adoption"],
+    "market_effect": "Gradual rally in strong brands",
+    "strategy": "Invest early in brands with real-world traction"
+  },
+  {
+    "source": "Jesse Livermore",
+    "topic": "Market Cycles & Big Moves",
+    "trigger_keywords": ["distribution", "accumulation", "panic selling"],
+    "market_effect": "Reversals or strong trends emerging",
+    "strategy": "Ride big moves, stay out of chop"
+  },
+  {
+    "source": "Richard Wyckoff",
+    "topic": "Accumulation/Distribution Phases",
+    "trigger_keywords": ["supply test", "spring", "breakout", "volume climax"],
+    "market_effect": "Phase change in market direction",
+    "strategy": "Buy spring, sell upthrust, trade with volume"
+  },
+  {
+    "source": "Nassim Taleb",
+    "topic": "Black Swan Events",
+    "trigger_keywords": ["unexpected", "crisis", "chaos", "tail risk"],
+    "market_effect": "Extreme volatility, breakdown of norms",
+    "strategy": "Hedge using asymmetric bets, reduce exposure"
+  },
+  {
+    "source": "Steve Nison",
+    "topic": "Candlestick Psychology",
+    "trigger_keywords": ["doji", "hammer", "engulfing", "morning star", "shooting star"],
+    "market_effect": "Short-term sentiment shift or reversal",
+    "strategy": "Confirm with volume and support/resistance zones"
+  },
+  {
+    "source": "Tom DeMark",
+    "topic": "TD Sequential Timing",
+    "trigger_keywords": ["td 9", "td 13", "trend exhaustion", "flip"],
+    "market_effect": "High probability of reversal",
+    "strategy": "Trade in opposite direction after TD9 or TD13 setup confirms"
+  },
+  {
+    "source": "Martin Pring",
+    "topic": "Momentum and Cycles",
+    "trigger_keywords": ["momentum crossover", "cycle shift", "KST"],
+    "market_effect": "Trend shift or cycle stage change",
+    "strategy": "Align with dominant momentum, avoid range-bound zones"
+  },
+  {
+    "source": "John Murphy",
+    "topic": "Intermarket Flow",
+    "trigger_keywords": ["gold up", "usd down", "oil spike", "bonds rising"],
+    "market_effect": "Sector rotation and asset class shifts",
+    "strategy": "Use cross-market signals to confirm bias"
+  },
+  {
+    "source": "Linda Raschke",
+    "topic": "Volatility Traps and Mean Reversion",
+    "trigger_keywords": ["turtle soup", "failed breakout", "opening range breakout"],
+    "market_effect": "Short-term reversals or breakout traps",
+    "strategy": "Fade failed moves or trade ORB with tight stop"
+  }
+]

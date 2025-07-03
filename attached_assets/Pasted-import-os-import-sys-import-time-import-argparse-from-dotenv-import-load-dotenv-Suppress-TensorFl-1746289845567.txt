@@ -1,0 +1,82 @@
+import os
+import sys
+import time
+import argparse
+from dotenv import load_dotenv
+
+# Suppress TensorFlow warnings
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from core.data_engine import DataMaster
+from core.analysis_engine import AIAnalyst
+from core.risk_engine import RiskManager
+from core.guru_wisdom import GuruDetector
+from config import ASSETS, LONG_THRESHOLD, SHORT_THRESHOLD, MIN_CONFIDENCE
+
+load_dotenv()
+
+class ZargulTrader:
+    def __init__(self):
+        self.data = DataMaster()
+        self.ai = AIAnalyst()
+        self.risk = RiskManager()
+        self.guru = GuruDetector()
+        self.update_interval = 300  # 5 minutes
+
+    def analyze_asset(self, asset):
+        try:
+            df = self.data.get_data(asset, "1h")
+            if len(df) < 60:
+                print(f"❌ {asset}: Insufficient data")
+                return
+
+            current_price = df['close'].iloc[-1]
+            prediction = self.ai.predict(asset, df)
+
+            if prediction and prediction['confidence'] >= MIN_CONFIDENCE:
+                pct_change = ((prediction['price'] - current_price) / current_price) * 100
+
+                print(f"\n📈 {asset} Current: ${current_price:.2f}")
+                print(f"🔮 Predicted: {prediction['direction'].upper()} {abs(pct_change):.2f}%")
+                print(f"🔒 Confidence: {prediction['confidence']:.2%}")
+
+                if (prediction['direction'] == 'long' and pct_change >= LONG_THRESHOLD) or \
+                   (prediction['direction'] == 'short' and pct_change <= -SHORT_THRESHOLD):
+
+            levels =
+            self.risk.calculate_levels(df, prediction)
+            print(f"\n🚀 {prediction['direction'].upper()} SIGNAL: {asset}")
+            print(f"🎯 Entry: ${levels['entry']:.2f}")
+            print(f"⛔ Stop Loss: ${levels['sl']:.2f}")
+            print(f"🎯 Take Profit: ${levels['tp']:.2f}")
+            print(f"📈 Position Size: {levels['size']}")
+
+        except Exception as e:
+            print(f"❌ {asset} error: {str(e)}")
+
+    def run(self):
+        print("\n🚀 Zargul Trader 2.0 - AI Futures Trading System 🚀")
+        while True:
+            print("\n" + "="*50)
+            for asset in ASSETS:
+                self.analyze_asset(asset)
+            print(f"\n⏳ Next update in {self.update_interval//60} minutes...")
+            time.sleep(self.update_interval)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--train-all', action='store_true')
+    args = parser.parse_args()
+
+    try:
+        print("\n🛠️ Initializing trading system...")
+        trader = ZargulTrader()
+        if args.train_all:
+            print("🔥 Training all models...")
+            trader.ai._initialize_models()
+        print("\n✅ System initialized successfully")
+        trader.run()
+    except Exception as e:
+        print(f"\n🔥 Critical failure: {str(e)}")

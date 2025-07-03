@@ -1,0 +1,54 @@
+class DataMaster:
+    def __init__(self):
+        self.cache = {}  # Add this line
+        # ... rest of existing __init__
+
+    def get_data(self, symbol, timeframe='1h'):
+        """Triple-layer fallback system"""
+        try:
+            # 1. Try Binance first
+            df = self._binance_data(symbol, timeframe)
+            if not df.empty:
+                return self._process_data(df, symbol)
+
+            # 2. Try Yahoo Fallback
+            df = self._yahoo_fallback(symbol, timeframe)
+            if not df.empty:
+                return self._process_data(df, symbol)
+
+            # 3. Use cached data if available
+            if symbol in self.cache:
+                print(f"⚠️ Using cached data for {symbol}")
+                return self.cache[symbol]
+
+            # 4. Generate synthetic data as last resort
+            print(f"🚨 Generating synthetic data for {symbol}")
+            return self._generate_synthetic_data(symbol)
+            
+        except Exception as e:
+            print(f"💥 Data acquisition failed: {str(e)}")
+            return self._generate_synthetic_data(symbol)
+
+    def _generate_synthetic_data(self, symbol):
+        """Create realistic fake data when APIs fail"""
+        base_price = {
+            "BTC-USD": 95000,
+            "ETH-USD": 1800,
+            "SOL-USD": 150,
+            "BNB-USD": 600
+        }.get(symbol, 100)
+
+        dates = pd.date_range(end=pd.Timestamp.now(), periods=200, freq='1h')
+        noise = np.random.normal(0, 0.002, len(dates)).cumsum()
+        close_prices = base_price * (1 + noise)
+        
+        df = pd.DataFrame({
+            'open': close_prices * 0.998,
+            'high': close_prices * 1.002,
+            'low': close_prices * 0.995,
+            'close': close_prices,
+            'volume': np.random.lognormal(5, 1, len(dates))
+        }, index=dates)
+        
+        self.cache[symbol] = df  # Cache for future use
+        return self._process_data(df, symbol)

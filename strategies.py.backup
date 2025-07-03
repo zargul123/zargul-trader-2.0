@@ -1,0 +1,156 @@
+import numpy as np
+from scripts.config import (
+    LONG_THRESHOLD, SHORT_THRESHOLD, MIN_CONFIDENCE,
+    SWING_THRESHOLD, SCALP_THRESHOLD
+)
+
+class BaseStrategy:
+    def get_signal(self, df):
+        """Should return 1 (long), -1 (short), or 0 (no trade)"""
+        raise NotImplementedError
+
+    def get_exit_signal(self, df, current_position):
+        """Should return True if should exit, False otherwise"""
+        raise NotImplementedError
+
+class MainStrategy(BaseStrategy):
+    def __init__(self):
+        self.open_trades = []
+        
+    def get_signal(self, df):
+        if len(df) < 30:
+            return 0
+            
+        current = df.iloc[-1]
+        prev = df.iloc[-2]
+        ema50 = df['close'].ewm(span=50).mean().iloc[-1]
+        vol_avg = df['volume'].rolling(10).mean().iloc[-1]  # More sensitive to spikes
+        
+        # Debug output
+        debug_info = {
+            'price_above_ema': current['close'] > ema50,
+            'volume_ok': current['volume'] > (vol_avg * 0.8),  # Now 80% of avg is enough
+            'rsi_ok': current['rsi'] < 65 if current['close'] > prev['close'] else current['rsi'] > 35,
+            'macd_ok': current['macd'] > current['macd_signal'] if current['close'] > prev['close'] else current['macd'] < current['macd_signal']
+        }
+        print("DEBUG:", debug_info)  # <-- This will show in console
+        
+        # Proposed change - make conditions more flexible:
+        if not (debug_info['price_above_ema'] and 
+                (debug_info['volume_ok'] or debug_info['rsi_ok'] or debug_info['macd_ok'])):
+            return 0
+        
+        # Long signal - enhanced with multiple confirmations
+        if (current['close'] > prev['close'] * (1 + LONG_THRESHOLD/100) and
+            current['close'] > ema50 and
+            current['rsi'] < 65 and
+            current['macd'] > current['macd_signal']):
+            return 1
+            
+        # Short signal - enhanced with multiple confirmations  
+        elif (current['close'] < prev['close'] * (1 - SHORT_THRESHOLD/100) and
+              current['close'] < ema50 and
+              current['rsi'] > 35 and
+              current['macd'] < current['macd_signal']):
+            return -1
+            
+        return 0
+        
+    def get_exit_signal(self, df, current_position):
+        current = df.iloc[-1]
+        
+        # Get entry price for stop/target calculations
+        entry_price = self.get_current_entry_price(df, current_position)
+        
+        # More realistic stop loss at 1.5% for crypto volatility
+        if current_position == 1 and current['close'] <= entry_price * 0.985:
+            return True
+        elif current_position == -1 and current['close'] >= entry_price * 1.015:
+            return True
+            
+        # Profit target at 0.9% (3:1 risk-reward with tight stop)
+        if current_position == 1 and current['close'] > entry_price * 1.009:
+            return True
+        elif current_position == -1 and current['close'] < entry_price * 0.991:
+            return True
+            
+        # Time-based exit if no target hit in 12 hours
+        if len(self.open_trades) > 0:
+            import pandas as pd
+            entry_time = self.open_trades[0]['entry_time']
+            if (df.index[-1] - entry_time) >= pd.Timedelta(hours=12):
+                return True
+            
+        return False
+    
+    def get_current_entry_price(self, df, current_position):
+        """Get entry price for current position"""
+        if len(self.open_trades) > 0:
+            return self.open_trades[0]['entry_price']
+        return df['close'].iloc[-1]  # Fallback to current price
+
+class SwingStrategy(MainStrategy):
+    def get_signal(self, df):
+        if len(df) < 50:  # Need more data for swing
+            return 0
+
+        signal = super().get_signal(df)
+        if signal == 0:
+            return 0
+
+        # Additional swing filters
+        current = df.iloc[-1]
+        if current['close'] > df['close'].rolling(20).mean().iloc[-1]:  # Above 20MA
+            return 1 if signal == 1 else 0
+        elif current['close'] < df['close'].rolling(20).mean().iloc[-1]:  # Below 20MA
+            return -1 if signal == -1 else 0
+        return 0
+
+    def get_exit_signal(self, df, current_position):
+        # Hold longer than main strategy
+        if super().get_exit_signal(df, current_position):
+            return True
+
+        # Additional exit conditions
+        current = df.iloc[-1]
+        if current_position == 1 and current['close'] < df['close'].rolling(10).mean().iloc[-1]:
+            return True
+        elif current_position == -1 and current['close'] > df['close'].rolling(10).mean().iloc[-1]:
+            return True
+
+        return False
+
+class ScalpStrategy(MainStrategy):
+    def get_signal(self, df):
+        if len(df) < 5:  # Need less data for scalp
+            return 0
+
+        current = df.iloc[-1]
+        prev = df.iloc[-2]
+
+        # More sensitive thresholds
+        long_thresh = SCALP_THRESHOLD / 100
+        short_thresh = SCALP_THRESHOLD / 100
+
+        # Long signal
+        if (current['close'] > prev['close'] * (1 + long_thresh) and
+            current['macd'] > current['macd_signal']):
+            return 1
+
+        # Short signal
+        elif (current['close'] < prev['close'] * (1 - short_thresh) and
+              current['macd'] < current['macd_signal']):
+            return -1
+
+        return 0
+
+    def get_exit_signal(self, df, current_position):
+        # Quick exits for scalp
+        current = df.iloc[-1]
+        if current_position == 1:
+            return (current['close'] < df['close'].iloc[-2] or  # Price drops
+                    current['macd'] < current['macd_signal'])  # MACD crosses
+        elif current_position == -1:
+            return (current['close'] > df['close'].iloc[-2] or  # Price rises
+                    current['macd'] > current['macd_signal'])  # MACD crosses
+        return False

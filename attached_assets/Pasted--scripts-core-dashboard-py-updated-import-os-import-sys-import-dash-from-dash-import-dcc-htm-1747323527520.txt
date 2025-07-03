@@ -1,0 +1,95 @@
+# scripts/core/dashboard.py (updated)
+import os
+import sys
+import dash
+from dash import dcc, html, Input, Output
+import plotly.graph_objs as go
+import pandas as pd
+from datetime import datetime
+
+# Fix imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from scripts.config import ASSETS
+from scripts.main import ZargulTrader
+
+class QuantumDashboard:
+    def __init__(self):
+        self.trader = ZargulTrader()  # Initialize trader instance
+        self.app = dash.Dash(__name__, title="Zargul Trader 2.0")
+        self.setup_layout()
+        self.setup_callbacks()
+
+    def setup_layout(self):
+        self.app.layout = html.Div([
+            html.H1("🚀 Zargul Quantum Trading Dashboard", style={'textAlign': 'center'}),
+            dcc.Tabs([
+                dcc.Tab(label='Live Signals', children=[
+                    dcc.Graph(id='live-predictions'),
+                    dcc.Interval(id='update-interval', interval=30000)
+                ]),
+                dcc.Tab(label='Trade Journal', children=[
+                    html.Div(id='journal-display'),
+                    dcc.Interval(id='journal-interval', interval=60000)
+                ])
+            ])
+        ])
+
+    def setup_callbacks(self):
+        @self.app.callback(
+            Output('live-predictions', 'figure'),
+            Input('update-interval', 'n_intervals')
+        )
+        def update_predictions(n):
+            data = []
+            for asset in ASSETS:
+                try:
+                    pred = self.trader.analyze_asset(asset)
+                    if pred:
+                        data.append(go.Bar(
+                            x=[asset],
+                            y=[abs(pred['pct_change'])],
+                            name=asset,
+                            marker_color='#00cc96' if pred['direction'] == 'long' else '#ef553b',
+                            text=[
+                                f"{pred['direction'].upper()} {pred['pct_change']:.2f}%<br>"
+                                f"Confidence: {pred['confidence']:.0%}"
+                            ]
+                        ))
+                except Exception as e:
+                    print(f"Dashboard error for {asset}: {str(e)}")
+                    continue
+
+            return {
+                'data': data,
+                'layout': go.Layout(
+                    title='Live Trading Signals',
+                    yaxis={'title': 'Predicted Change %'},
+                    showlegend=False
+                )
+            }
+
+        @self.app.callback(
+            Output('journal-display', 'children'),
+            Input('journal-interval', 'n_intervals')
+        )
+        def update_journal(n):
+            try:
+                if os.path.exists('trading_journal.csv'):
+                    df = pd.read_csv('trading_journal.csv')
+                    if not df.empty:
+                        return html.Table([
+                            html.Thead(html.Tr([html.Th(col) for col in df.columns])] +
+                            [html.Tr([html.Td(df.iloc[i][col]) for col in df.columns])
+                            for i in range(min(len(df), 10))  # Show last 10 trades
+                        ])
+                return html.P("No trades yet - waiting for signals...")
+            except Exception as e:
+                return html.P(f"Error loading journal: {str(e)}")
+
+    def run(self):
+        print("\n🔥 Starting enhanced dashboard...")
+        self.app.run_server(host='0.0.0.0', port=5000, debug=False)
+
+if __name__ == "__main__":
+    dashboard = QuantumDashboard()
+    dashboard.run()

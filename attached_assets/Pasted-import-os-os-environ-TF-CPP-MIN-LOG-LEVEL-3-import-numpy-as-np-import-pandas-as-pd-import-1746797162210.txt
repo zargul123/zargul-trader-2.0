@@ -1,0 +1,65 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from tensorflow.keras.models import load_model
+from sklearn.preprocessing import MinMaxScaler
+from joblib import load
+from scripts.config import ASSETS, TECHNICAL_INDICATORS, SEQUENCE_LENGTH
+
+class AIAnalyst:
+    def __init__(self, train_all=False):
+        self.models = {}
+        self.scalers = {}
+        self._initialize_models(train_all)
+
+    def _initialize_models(self, train_all):
+        os.makedirs('trained_models', exist_ok=True)
+        for symbol in ASSETS:
+            try:
+                model_path = f'trained_models/{symbol}_model.keras'
+                scaler_path = f'trained_models/{symbol}_scaler.joblib'
+
+                if train_all or not os.path.exists(model_path):
+                    self._train_model(symbol)
+                else:
+                    self.models[symbol] = load_model(model_path)
+                    self.scalers[symbol] = load(scaler_path)
+            except Exception as e:
+                print(f"💥 Model loading failed for {symbol}: {str(e)}")
+
+    def predict(self, symbol, df=None):
+        """Returns prediction with price, direction and confidence"""
+        try:
+            if symbol not in self.models:
+                return None
+
+            if df is None:
+                return None
+
+            features = ['open','high','low','close','volume'] + TECHNICAL_INDICATORS
+            last_sequence = df[features].values[-SEQUENCE_LENGTH:]
+
+            scaled_data = self.scalers[symbol].transform(
+                pd.DataFrame(last_sequence, columns=features)
+            )
+
+            input_data = scaled_data.reshape(1, SEQUENCE_LENGTH, len(features))
+            prediction = self.models[symbol].predict(input_data, verbose=0)[0]
+
+            # Get predicted price
+            dummy_row = np.zeros((1, len(features)))
+            dummy_row[0, 3] = prediction[0]
+            predicted_price = self.scalers[symbol].inverse_transform(dummy_row)[0, 3]
+
+            return {
+                'asset': symbol,
+                'price': predicted_price,
+                'direction': 'long' if prediction[1] > 0.5 else 'short',
+                'confidence': min(0.99, prediction[2] * 1.1)  # Simple confidence calibration
+            }
+
+        except Exception as e:
+            print(f"💥 Prediction failed for {symbol}: {str(e)}")
+            return None
