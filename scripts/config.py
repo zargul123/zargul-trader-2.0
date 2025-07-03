@@ -12,8 +12,8 @@ STRATEGIES = {
         'min_confidence': 0.68,      # 68%+ AI confidence
         'min_hold': 14400,           # 4 hours minimum (in seconds)
         'max_hold': 86400,           # Max 24 hours hold
-        'sl_multiplier': 1.8,        # 1.8x ATR for stop loss
-        'tp_multiplier': 3.0,        # 3.0x ATR for take profit
+        'sl_multiplier': 2.5,        # 2.5x ATR for stop loss (increased from 1.8)
+        'tp_multiplier': 4.0,        # 4.0x ATR for take profit (increased from 3.0)
         'rsi_limits': (28, 72)       # Oversold/overbought levels
     },
     'swing': {
@@ -23,8 +23,8 @@ STRATEGIES = {
         'min_confidence': 0.72,      # 72%+ AI confidence
         'min_hold': 43200,           # 12 hours minimum
         'max_hold': 259200,          # Max 3 days hold
-        'sl_multiplier': 1.5,        # 1.5x ATR
-        'tp_multiplier': 4.0,        # 4.0x ATR 
+        'sl_multiplier': 3.0,        # 3.0x ATR (increased from 1.5)
+        'tp_multiplier': 5.0,        # 5.0x ATR (increased from 4.0)
         'rsi_limits': (25, 75)       # Wider bands for swings
     },
     'scalp': {
