@@ -132,7 +132,7 @@ class BacktestEngine:
                 print(f"Trade {i+1}: {trade['type']}@{trade['entry_price']:.2f} | PnL: {trade.get('pnl',0):.2f}% | Duration: {duration}")
 
             # Calculate metrics
-            metrics = self.calculate_metrics(df)
+            metrics = self.calculate_metrics([t for t in self.trade_history if t['symbol'] == symbol])
             self.results.append({
                 'symbol': symbol,
                 'strategy': strategy_type,
@@ -173,16 +173,27 @@ class BacktestEngine:
         true_range = np.maximum(high_low, np.maximum(high_close, low_close))
         return true_range.rolling(period).mean().iloc[-1]
 
-    def calculate_metrics(self, df):
-        """Calculate performance metrics"""
-        from .metrics import calculate_all_metrics
-        
-        # Ensure all PnL values are properly converted to float
-        for trade in self.trade_history:
-            if 'pnl' in trade:
-                trade['pnl'] = float(trade['pnl'])
-        
-        return calculate_all_metrics(self.trade_history)
+    def calculate_metrics(self, trades):
+        """Safe metric calculation with type checking"""
+        try:
+            # Convert all PnL values to float first
+            pnl_values = [float(trade.get('pnl', 0)) for trade in trades if trade.get('status') == 'closed']
+            
+            if not pnl_values:
+                from .metrics import get_empty_metrics
+                return get_empty_metrics()
+                
+            # Ensure all PnL values are properly converted to float
+            for trade in self.trade_history:
+                if 'pnl' in trade:
+                    trade['pnl'] = float(trade['pnl'])
+            
+            from .metrics import calculate_all_metrics
+            return calculate_all_metrics(self.trade_history)
+        except Exception as e:
+            print(f"❌ Metric calculation failed: {str(e)}")
+            from .metrics import get_empty_metrics
+            return get_empty_metrics()
 
     def generate_report(self, symbol):
         """Create visual report"""
