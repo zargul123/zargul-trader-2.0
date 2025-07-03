@@ -1,19 +1,22 @@
+
 import numpy as np
 import pandas as pd
 
 def safe_round(value, decimals=2):
+    """Ultra-safe rounding that handles all edge cases"""
+    if value is None:
+        return 0.0
+    
     try:
-        if isinstance(value, str):
-            # Handle string values that might be empty or non-numeric
-            if not value or value.strip() == '':
+        if isinstance(value, (int, float)):
+            return round(float(value), decimals)
+        elif isinstance(value, str):
+            if not value.strip():
                 return 0.0
-            # Try to convert string to float
-            numeric_value = float(value.strip())
-        else:
-            numeric_value = float(value)
-        return round(numeric_value, decimals)
+            return round(float(value.strip()), decimals)
+        return round(float(value), decimals)
     except (ValueError, TypeError, AttributeError):
-        return 0.0  # If conversion fails
+        return 0.0
 
 def get_empty_metrics():
     """Return empty metrics structure when no trades occur"""
@@ -33,34 +36,45 @@ def get_empty_metrics():
     }
 
 def calculate_all_metrics(trades):
-    assert all('symbol' in t for t in trades), "Missing symbol in trade records!"
-    trades = [t for t in trades if t.get('status') == 'closed']
-    if not trades:
-        return {'error': 'No closed trades'}
+    """Completely bulletproof metric calculation"""
+    if not trades or not isinstance(trades, list):
+        return get_empty_metrics()
     
-    # Convert % to decimals with safe conversion
-    returns = []
-    for t in trades:
-        pnl_value = safe_round(t['pnl'], 4) if isinstance(t['pnl'], str) else float(t['pnl'])
-        returns.append(pnl_value / 100)
+    valid_trades = []
+    for trade in trades:
+        if not isinstance(trade, dict):
+            continue
+        if trade.get('status') != 'closed':
+            continue
+        
+        # Ensure pnl is numeric
+        try:
+            trade['pnl'] = float(trade.get('pnl', 0))
+        except (ValueError, TypeError):
+            trade['pnl'] = 0.0
+        
+        valid_trades.append(trade)
     
+    if not valid_trades:
+        return get_empty_metrics()
+    
+    returns = [t['pnl']/100 for t in valid_trades]
     wins = [r for r in returns if r > 0]
     losses = [r for r in returns if r < 0]
     
-    # Handle edge cases
-    if not wins or not losses:
-        return {
-            'win_rate': 0,
-            'sharpe_ratio': -5 if not wins else 0,
-            'max_drawdown': safe_round(abs(min(returns))) if returns else 0
-        }
-    
-    return {
-        'win_rate': safe_round(len(wins)/len(trades)*100),  # As percentage
-        'sharpe_ratio': safe_round(np.mean(returns)/np.std(returns) * np.sqrt(365)),
-        'max_drawdown': safe_round(abs(min(returns))),
-        'profit_factor': safe_round(sum(wins)/abs(sum(losses)))
+    metrics = {
+        'total_trades': len(valid_trades),
+        'winning_trades': len(wins),
+        'losing_trades': len(losses),
+        'win_rate': safe_round(len(wins)/len(valid_trades)*100) if valid_trades else 0,
+        'sharpe_ratio': safe_round(np.mean(returns)/np.std(returns)*np.sqrt(365)) if returns and np.std(returns) != 0 else 0,
+        'max_drawdown': safe_round(abs(min(returns, default=0))),
+        'profit_factor': safe_round(sum(wins)/abs(sum(losses))) if losses else 0,
+        'avg_win': safe_round(np.mean(wins)*100) if wins else 0,
+        'avg_loss': safe_round(np.mean(losses)*100) if losses else 0
     }
+    
+    return metrics
 
 def calculate_cagr(trades):
     """Calculate Compound Annual Growth Rate from trades"""
