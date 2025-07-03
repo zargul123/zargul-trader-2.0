@@ -96,6 +96,17 @@ TECHNICAL_INDICATORS = [
     'vol_spike', 'cmf', 'vwap'
 ]
 
+# Asset-Specific Optimization
+BTC_SETTINGS = {
+    'long_threshold': 0.9,  # BTC needs bigger moves
+    'rsi_limits': (30, 70)
+}
+
+ETH_SETTINGS = {
+    'long_threshold': 0.7,  # ETH reacts quicker
+    'rsi_limits': (35, 65)
+}
+
 # System Optimization
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress TensorFlow logs
 os.environ['OMP_NUM_THREADS'] = '6'  # Match CPU cores
