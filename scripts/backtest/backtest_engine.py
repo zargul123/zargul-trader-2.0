@@ -191,23 +191,29 @@ class BacktestEngine:
         return true_range.rolling(period).mean().iloc[-1]
 
     def calculate_metrics(self, trades):
-        """Safe metric calculation with type checking"""
-        try:
-            # Convert all PnL values to float first
-            pnl_values = [float(trade.get('pnl', 0)) for trade in trades if trade.get('status') == 'closed']
-            
-            if not pnl_values:
-                return get_empty_metrics()
+        """Wrapper for metrics calculation with data validation"""
+        from .metrics import calculate_all_metrics
+        
+        if not trades or not isinstance(trades, list):
+            return calculate_all_metrics([])
+        
+        # Ensure all trades have required fields
+        validated_trades = []
+        for trade in trades:
+            if not isinstance(trade, dict):
+                continue
                 
-            # Ensure all PnL values are properly converted to float
-            for trade in self.trade_history:
-                if 'pnl' in trade:
-                    trade['pnl'] = float(trade['pnl'])
-            
-            return calculate_all_metrics(self.trade_history)
-        except Exception as e:
-            print(f"❌ Metric calculation failed: {str(e)}")
-            return get_empty_metrics()
+            validated = {
+                'symbol': str(trade.get('symbol', '')),
+                'status': str(trade.get('status', 'closed')),
+                'pnl': float(trade.get('pnl', 0)),
+                'entry_time': trade.get('entry_time'),
+                'exit_time': trade.get('exit_time'),
+                'type': str(trade.get('type', ''))
+            }
+            validated_trades.append(validated)
+        
+        return calculate_all_metrics(validated_trades)
 
     def generate_report(self, symbol):
         """Create visual report"""
