@@ -78,27 +78,31 @@ class BacktestEngine:
 
                 # Execute trade with realistic conditions
                 if signal != 0 and prev['position'] == 0:
-                    # Enhanced trade execution with slippage (0.15%)
-                    entry_price = current['open'] * (1.0015 if signal == 1 else 0.9985)
-                    df.at[df.index[i], 'position'] = signal
-                    
-                    # Track open trades for strategy
-                    self.open_trades.append({
-                        'entry_time': df.index[i],
-                        'entry_price': entry_price
-                    })
-                    
-                    # When opening a trade (updated format):
-                    self.trade_history.append({
-                        'symbol': symbol,
-                        'entry_time': df.index[i],
-                        'entry_price': entry_price,
-                        'type': 'long' if signal == 1 else 'short',
-                        'exit_time': None,  # Will be set when trade closes
-                        'exit_price': None,
-                        'pnl': 0.0,
-                        'status': 'open'
-                    })
+                    # Remove the volume filter completely for now
+                    # Keep price change filter but make it much smaller
+                    price_change = abs((current['close'] - current['open']) / current['open'] * 100)
+                    if price_change > 0.1:  # Reduced from 0.5%
+                        # Enhanced trade execution with slippage (0.15%)
+                        entry_price = current['open'] * (1.0015 if signal == 1 else 0.9985)
+                        df.at[df.index[i], 'position'] = signal
+                        
+                        # Track open trades for strategy
+                        self.open_trades.append({
+                            'entry_time': df.index[i],
+                            'entry_price': entry_price
+                        })
+                        
+                        # When opening a trade (updated format):
+                        self.trade_history.append({
+                            'symbol': symbol,
+                            'entry_time': df.index[i],
+                            'entry_price': entry_price,
+                            'type': 'long' if signal == 1 else 'short',
+                            'exit_time': None,  # Will be set when trade closes
+                            'exit_price': None,
+                            'pnl': 0.0,
+                            'status': 'open'
+                        })
 
                 # Exit logic
                 elif prev['position'] != 0:
