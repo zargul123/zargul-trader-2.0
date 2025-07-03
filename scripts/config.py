@@ -1,5 +1,8 @@
 
+import pytz  # Add to requirements.txt if needed
 import os
+
+TIMEZONE = pytz.timezone('UTC')  # Or 'America/New_York' etc.
 
 # ===== QUANTUM TRADER PRO STRATEGY CONFIG =====
 # Optimized for BTC/ETH/SOL - Tested Parameters
