@@ -13,8 +13,8 @@ STRATEGIES = {
         'long_threshold': 0.85,      # 0.85% target upside
         'short_threshold': 0.65,     # 0.65% target downside
         'min_confidence': 0.68,      # 68%+ AI confidence
-        'min_hold': 14400,           # 4 hours minimum (was 1 hour)
-        'max_hold': 86400,           # 24 hours maximum (was 12 hours)
+        'min_hold': 28800,           # 8 hours minimum (was 4 hours)
+        'max_hold': 172800,          # 48 hours maximum (was 24 hours)
         'sl_multiplier': 2.5,        # 2.5x ATR for stop loss (increased from 1.8)
         'tp_multiplier': 4.0,        # 4.0x ATR for take profit (increased from 3.0)
         'rsi_limits': (28, 72),      # Oversold/overbought levels
@@ -39,8 +39,8 @@ STRATEGIES = {
         'long_threshold': 0.35,      # 0.35% quick gain
         'short_threshold': 0.3,      # 0.3% quick drop
         'min_confidence': 0.78,      # 78%+ AI confidence
-        'min_hold': 600,             # 10 minutes minimum (was 5)
-        'max_hold': 3600,            # 1 hour maximum (was 30 minutes)
+        'min_hold': 900,             # 15 minutes minimum (was 10)
+        'max_hold': 3600,            # 1 hour maximum (unchanged)
         'sl_multiplier': 0.5,        # Tight 0.5x ATR stop
         'tp_multiplier': 1.5,        # 1.5x ATR target
         'rsi_limits': (32, 68),      # Tight bands for scalping
