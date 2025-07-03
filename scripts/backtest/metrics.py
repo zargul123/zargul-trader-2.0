@@ -44,7 +44,7 @@ def calculate_all_metrics(trades):
         }
     
     return {
-        'win_rate': safe_round(len(wins)/len(trades)),
+        'win_rate': safe_round(len(wins)/len(trades)*100),  # As percentage
         'sharpe_ratio': safe_round(np.mean(returns)/np.std(returns) * np.sqrt(365)),
         'max_drawdown': safe_round(abs(min(returns))),
         'profit_factor': safe_round(sum(wins)/abs(sum(losses)))
