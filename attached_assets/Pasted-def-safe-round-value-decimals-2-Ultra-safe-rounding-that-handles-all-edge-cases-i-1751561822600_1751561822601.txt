@@ -1,0 +1,56 @@
+def safe_round(value, decimals=2):
+    """Ultra-safe rounding that handles all edge cases"""
+    if value is None:
+        return 0.0
+    
+    try:
+        if isinstance(value, (int, float)):
+            return round(float(value), decimals)
+        elif isinstance(value, str):
+            if not value.strip():
+                return 0.0
+            return round(float(value.strip()), decimals)
+        return round(float(value), decimals)
+    except (ValueError, TypeError, AttributeError):
+        return 0.0
+
+def calculate_all_metrics(trades):
+    """Completely bulletproof metric calculation"""
+    if not trades or not isinstance(trades, list):
+        return get_empty_metrics()
+    
+    valid_trades = []
+    for trade in trades:
+        if not isinstance(trade, dict):
+            continue
+        if trade.get('status') != 'closed':
+            continue
+        
+        # Ensure pnl is numeric
+        try:
+            trade['pnl'] = float(trade.get('pnl', 0))
+        except (ValueError, TypeError):
+            trade['pnl'] = 0.0
+        
+        valid_trades.append(trade)
+    
+    if not valid_trades:
+        return get_empty_metrics()
+    
+    returns = [t['pnl']/100 for t in valid_trades]
+    wins = [r for r in returns if r > 0]
+    losses = [r for r in returns if r < 0]
+    
+    metrics = {
+        'total_trades': len(valid_trades),
+        'winning_trades': len(wins),
+        'losing_trades': len(losses),
+        'win_rate': safe_round(len(wins)/len(valid_trades)*100) if valid_trades else 0,
+        'sharpe_ratio': safe_round(np.mean(returns)/np.std(returns)*np.sqrt(365)) if returns and np.std(returns) != 0 else 0,
+        'max_drawdown': safe_round(abs(min(returns, default=0))),
+        'profit_factor': safe_round(sum(wins)/abs(sum(losses))) if losses else 0,
+        'avg_win': safe_round(np.mean(wins)*100) if wins else 0,
+        'avg_loss': safe_round(np.mean(losses)*100) if losses else 0
+    }
+    
+    return metrics
