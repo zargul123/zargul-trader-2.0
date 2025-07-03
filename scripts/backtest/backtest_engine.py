@@ -21,26 +21,17 @@ class BacktestEngine:
         return df[df['volume'] > 0].copy()
 
     def run_backtest(self, symbol, strategy_type="main", days=30):
-        """Updated to handle strategy parameter"""
+        """Run complete backtest for one asset"""
         try:
-            print(f"\n🔍 Backtesting {symbol} ({strategy_type.upper()} Strategy)...")
+            self.open_trades = []  # Track open trades
             
             # Load strategy config
             config = STRATEGIES[strategy_type]
-            
-            # Get data with correct timeframe
             df = self.data.get_data(symbol, config['timeframe'])
-            df = df.iloc[-days*24:]  # Get requested days (converted to hours)
-            
-            # Initialize strategy
-            strategy = self.get_strategy(strategy_type)
-            strategy.set_parameters(config)
-            
-            self.open_trades = []  # Track open trades
             
             # FORCE TEST TRADES - DELETE AFTER VERIFICATION
             df.at[df.index[50], 'signal'] = 1  # Force long at row 50
-        df.at[df.index[100], 'signal'] = -1  # Force short at row 100
+            df.at[df.index[100], 'signal'] = -1  # Force short at row 100
 
         # Prepare empty columns for our signals
         df['signal'] = 0  # 0=no trade, 1=long, -1=short
@@ -132,6 +123,11 @@ class BacktestEngine:
         })
 
         return metrics
+        
+    except Exception as e:
+        print(f"❌ Backtest failed for {symbol}: {str(e)}")
+        from .metrics import empty_metrics
+        return empty_metrics()
 
     def get_strategy(self, name):
         """Get strategy rules"""
