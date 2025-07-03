@@ -34,32 +34,22 @@ class MainStrategy(BaseStrategy):
         self.open_trades = []
         
     def get_signal(self, df):
-        if len(df) < 20: 
+        if len(df) < 30: 
             return 0
         
-        # Get current values
         current = df.iloc[-1]
-        rsi = current['rsi']
-        macd_bullish = current['macd'] > current['macd_signal']
-        above_vwap = current['close'] > current['vwap']
         
-        # Long conditions:
-        # - RSI not overbought (<60)
-        # - MACD bullish crossover
-        # - Price above VWAP (institutional buying)
-        if all([rsi < 60, macd_bullish, above_vwap]):
-            return 1
-            
-        # Short conditions:
-        # - RSI overbought (>70)
-        # - Price below Bollinger Upper Band
-        # - High volume (1.5x average)
-        if (current['rsi'] > 70 and 
-            current['close'] < current['bollinger_upper'] and
-            df['volume'].iloc[-1] > df['volume'].mean() * 1.5):
-            return -1  # Short signal
-            
-        return 0
+        # Stronger confirmation for longs
+        long_cond = (current['rsi'] < 30) and \
+                    (current['close'] < current['bollinger_lower']) and \
+                    (current['volume'] > df['volume'].rolling(20).mean().iloc[-1])
+        
+        # Stronger confirmation for shorts
+        short_cond = (current['rsi'] > 70) and \
+                     (current['close'] > current['bollinger_upper']) and \
+                     (current['volume'] > df['volume'].rolling(20).mean().iloc[-1])
+        
+        return 1 if long_cond else (-1 if short_cond else 0)
 
     def _get_ai_signal(self, df):
         """Replace this with your actual AI model call"""
