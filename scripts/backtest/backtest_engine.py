@@ -132,7 +132,12 @@ class BacktestEngine:
                 print(f"Trade {i+1}: {trade['type']}@{trade['entry_price']:.2f} | PnL: {trade.get('pnl',0):.2f}% | Duration: {duration}")
 
             # Calculate metrics
-            metrics = self.calculate_metrics([t for t in self.trade_history if t['symbol'] == symbol])
+            try:
+                metrics = calculate_all_metrics([t for t in self.trade_history if t['symbol'] == symbol])
+            except Exception as e:
+                print(f"❌ Metric calculation failed: {str(e)}")
+                metrics = get_empty_metrics()
+            
             self.results.append({
                 'symbol': symbol,
                 'strategy': strategy_type,
