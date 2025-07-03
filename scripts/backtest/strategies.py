@@ -22,23 +22,27 @@ class MainStrategy(BaseStrategy):
         if len(df) < 20: 
             return 0
         
-        # SMART ENTRY RULES
-        rsi = df['rsi'].iloc[-1]
-        macd_bullish = df['macd'].iloc[-1] > df['macd_signal'].iloc[-1]
-        above_vwap = df['close'].iloc[-1] > df['vwap'].iloc[-1]
+        # Get current values
+        current = df.iloc[-1]
+        rsi = current['rsi']
+        macd_bullish = current['macd'] > current['macd_signal']
+        above_vwap = current['close'] > current['vwap']
         
-        # Long only when:
+        # Long conditions:
         # - RSI not overbought (<60)
         # - MACD bullish crossover
         # - Price above VWAP (institutional buying)
         if all([rsi < 60, macd_bullish, above_vwap]):
             return 1
             
-        # Short only when:
-        # - RSI > 40 (avoid oversold traps)
-        # - Price below Bollinger Lower Band
-        elif df['close'].iloc[-1] < df['bollinger_lower'].iloc[-1] and rsi > 40:
-            return -1
+        # Short conditions:
+        # - RSI overbought (>70)
+        # - Price below Bollinger Upper Band
+        # - High volume (1.5x average)
+        if (current['rsi'] > 70 and 
+            current['close'] < current['bollinger_upper'] and
+            df['volume'].iloc[-1] > df['volume'].mean() * 1.5):
+            return -1  # Short signal
             
         return 0
 
