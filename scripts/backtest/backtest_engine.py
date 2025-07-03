@@ -45,9 +45,11 @@ class BacktestEngine:
                 return get_empty_metrics()
                 
             # Prepare dataframe columns
-            df['signal'] = 0  # 0=no trade, 1=long, -1=short
-            df['position'] = 0  # Current position
-            df['pnl'] = 0.0  # Profit/loss per trade
+            df = df.assign(
+                signal=0,      # 0=no trade, 1=long, -1=short
+                position=0,    # Current position
+                pnl=0.0        # Profit/loss per trade
+            )
             
             # DEBUG: Force test trades (remove after verification)
             if len(df) > 100:
