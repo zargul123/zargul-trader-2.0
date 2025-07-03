@@ -53,7 +53,22 @@ class MainStrategy(BaseStrategy):
                      (current['close'] > current['bollinger_upper']) and \
                      (current['volume'] > df['volume'].rolling(20).mean().iloc[-1])
         
-        return 1 if long_cond else (-1 if short_cond else 0)
+        signal = 1 if long_cond else (-1 if short_cond else 0)
+        
+        # Trade filters - only trade if conditions met
+        if signal != 0:
+            current_volume = current['volume']
+            average_volume = df['volume'].mean()
+            price_change = abs((current['close'] - current['open']) / current['open'] * 100)
+            
+            # Only trade if high volume and meaningful move
+            if (current_volume > average_volume * 1.5 and   # High volume
+                price_change > 0.5):                        # Meaningful move
+                return signal
+            else:
+                return 0  # Skip trade
+        
+        return signal
 
     def _get_ai_signal(self, df):
         """Replace this with your actual AI model call"""
@@ -146,11 +161,26 @@ class SwingStrategy(MainStrategy):
             return 0
 
         # Additional swing filters
+        swing_signal = 0
         if current['close'] > df['close'].rolling(20).mean().iloc[-1]:  # Above 20MA
-            return 1 if signal == 1 else 0
+            swing_signal = 1 if signal == 1 else 0
         elif current['close'] < df['close'].rolling(20).mean().iloc[-1]:  # Below 20MA
-            return -1 if signal == -1 else 0
-        return 0
+            swing_signal = -1 if signal == -1 else 0
+        
+        # Trade filters - only trade if conditions met
+        if swing_signal != 0:
+            current_volume = current['volume']
+            average_volume = df['volume'].mean()
+            price_change = abs((current['close'] - current['open']) / current['open'] * 100)
+            
+            # Only trade if high volume and meaningful move
+            if (current_volume > average_volume * 1.5 and   # High volume
+                price_change > 0.5):                        # Meaningful move
+                return swing_signal
+            else:
+                return 0  # Skip trade
+        
+        return swing_signal
 
     def get_exit_signal(self, df, current_position):
         # Hold longer than main strategy
@@ -182,17 +212,32 @@ class ScalpStrategy(MainStrategy):
         long_thresh = SCALP_THRESHOLD / 100
         short_thresh = SCALP_THRESHOLD / 100
 
+        signal = 0
+        
         # Long signal
         if (current['close'] > prev['close'] * (1 + long_thresh) and
             current['macd'] > current['macd_signal']):
-            return 1
+            signal = 1
 
         # Short signal
         elif (current['close'] < prev['close'] * (1 - short_thresh) and
               current['macd'] < current['macd_signal']):
-            return -1
+            signal = -1
 
-        return 0
+        # Trade filters - only trade if conditions met
+        if signal != 0:
+            current_volume = current['volume']
+            average_volume = df['volume'].mean()
+            price_change = abs((current['close'] - current['open']) / current['open'] * 100)
+            
+            # Only trade if high volume and meaningful move
+            if (current_volume > average_volume * 1.5 and   # High volume
+                price_change > 0.5):                        # Meaningful move
+                return signal
+            else:
+                return 0  # Skip trade
+        
+        return signal
 
     def get_exit_signal(self, df, current_position):
         # Quick exits for scalp
