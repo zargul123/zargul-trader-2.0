@@ -1,0 +1,72 @@
+🔍 Testing BTC-USD - MAIN Strategy
+✅ Got clean BTC-USD data from TwelveData
+
+🔍 TRADE LOG (BTC-USD):
+
+📊 Results for BTC-USD (MAIN):
+❌ Error testing BTC-USD with main strategy: type str doesn't define __round__ method
+
+🔍 Testing BTC-USD - SWING Strategy
+✅ Got clean BTC-USD data from TwelveData
+
+🔍 TRADE LOG (BTC-USD):
+
+📊 Results for BTC-USD (SWING):
+❌ Error testing BTC-USD with swing strategy: type str doesn't define __round__ method
+
+🔍 Testing BTC-USD - SCALP Strategy
+✅ Got clean BTC-USD data from TwelveData
+
+🔍 TRADE LOG (BTC-USD):
+
+📊 Results for BTC-USD (SCALP):
+❌ Error testing BTC-USD with scalp strategy: type str doesn't define __round__ method
+
+🔍 Testing ETH-USD - MAIN Strategy
+✅ Got clean ETH-USD data from TwelveData
+
+🔍 TRADE LOG (ETH-USD):
+
+📊 Results for ETH-USD (MAIN):
+❌ Error testing ETH-USD with main strategy: type str doesn't define __round__ method
+
+🔍 Testing ETH-USD - SWING Strategy
+✅ Got clean ETH-USD data from TwelveData
+
+🔍 TRADE LOG (ETH-USD):
+
+📊 Results for ETH-USD (SWING):
+❌ Error testing ETH-USD with swing strategy: type str doesn't define __round__ method
+
+🔍 Testing ETH-USD - SCALP Strategy
+✅ Got clean ETH-USD data from TwelveData
+
+🔍 TRADE LOG (ETH-USD):
+Trade 1: long@2568.85 | PnL: 0.00% | Duration: N/A
+
+📊 Results for ETH-USD (SCALP):
+❌ Error testing ETH-USD with scalp strategy: type str doesn't define __round__ method
+
+🔍 Testing SOL-USD - MAIN Strategy
+✅ Got clean SOL-USD data from TwelveData
+
+🔍 TRADE LOG (SOL-USD):
+
+📊 Results for SOL-USD (MAIN):
+❌ Error testing SOL-USD with main strategy: type str doesn't define __round__ method
+
+🔍 Testing SOL-USD - SWING Strategy
+✅ Got clean SOL-USD data from TwelveData
+
+🔍 TRADE LOG (SOL-USD):
+
+📊 Results for SOL-USD (SWING):
+❌ Error testing SOL-USD with swing strategy: type str doesn't define __round__ method
+
+🔍 Testing SOL-USD - SCALP Strategy
+✅ Got clean SOL-USD data from TwelveData
+
+🔍 TRADE LOG (SOL-USD):
+
+📊 Results for SOL-USD (SCALP):
+❌ Error testing SOL-USD with scalp strategy: type str doesn't define __round__ method
