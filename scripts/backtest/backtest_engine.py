@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import numpy as np
 from scripts.core.data_engine import DataMaster
 from scripts.config import ASSETS, TECHNICAL_INDICATORS, STRATEGIES
+from scripts.backtest.metrics import calculate_all_metrics, get_empty_metrics
 from .strategies import MainStrategy, SwingStrategy, ScalpStrategy
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -41,7 +42,6 @@ class BacktestEngine:
             # Add minimum data threshold check
             if len(df) < 10:  # Minimum data threshold
                 print(f"⚠️ Insufficient data after time filtering for {symbol}")
-                from .metrics import get_empty_metrics
                 return get_empty_metrics()
                 
             # Prepare dataframe columns
@@ -144,7 +144,6 @@ class BacktestEngine:
             
         except Exception as e:
             print(f"🔥 Backtest failed for {symbol}: {str(e)}")
-            from .metrics import get_empty_metrics
             return get_empty_metrics()
 
     def get_strategy(self, name):
@@ -180,7 +179,6 @@ class BacktestEngine:
             pnl_values = [float(trade.get('pnl', 0)) for trade in trades if trade.get('status') == 'closed']
             
             if not pnl_values:
-                from .metrics import get_empty_metrics
                 return get_empty_metrics()
                 
             # Ensure all PnL values are properly converted to float
@@ -188,11 +186,9 @@ class BacktestEngine:
                 if 'pnl' in trade:
                     trade['pnl'] = float(trade['pnl'])
             
-            from .metrics import calculate_all_metrics
             return calculate_all_metrics(self.trade_history)
         except Exception as e:
             print(f"❌ Metric calculation failed: {str(e)}")
-            from .metrics import get_empty_metrics
             return get_empty_metrics()
 
     def generate_report(self, symbol):
