@@ -35,6 +35,15 @@ class BacktestEngine:
             if df.empty:
                 raise ValueError(f"No data for {symbol}")
                 
+            # Filter by trading hours
+            df = self.data._filter_trading_hours(df, config['trading_hours'])
+            
+            # Add minimum data threshold check
+            if len(df) < 10:  # Minimum data threshold
+                print(f"⚠️ Insufficient data after time filtering for {symbol}")
+                from .metrics import get_empty_metrics
+                return get_empty_metrics()
+                
             # Prepare dataframe columns
             df['signal'] = 0  # 0=no trade, 1=long, -1=short
             df['position'] = 0  # Current position
