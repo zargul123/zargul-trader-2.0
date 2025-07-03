@@ -61,11 +61,12 @@ class BacktestEngine:
                 
                 # When opening a trade (updated format):
                 self.trade_history.append({
-                    'symbol': symbol,  # MUST ADD THIS LINE
+                    'symbol': symbol,
                     'entry_time': df.index[i],
                     'entry_price': entry_price,
                     'type': 'long' if signal == 1 else 'short',
-                    'exit_time': None,  # Initialize exit_time
+                    'exit_time': None,  # Will be set when trade closes
+                    'exit_price': None,
                     'pnl': 0.0,
                     'status': 'open'
                 })
