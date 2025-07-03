@@ -123,7 +123,7 @@ class BacktestEngine:
                                     trade.update({
                                         'exit_time': df.index[i],
                                         'exit_price': exit_price,
-                                        'pnl': final_pnl,
+                                        'pnl': float(final_pnl),  # Ensure PnL is stored as float
                                         'status': 'filtered'  # Different status for filtered trades
                                     })
                                     break
@@ -131,7 +131,7 @@ class BacktestEngine:
                                 trade.update({
                                     'exit_time': df.index[i],
                                     'exit_price': exit_price,
-                                    'pnl': final_pnl,
+                                    'pnl': float(final_pnl),  # Ensure PnL is stored as float
                                     'status': 'closed'
                                 })
                                 break

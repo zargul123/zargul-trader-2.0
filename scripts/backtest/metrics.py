@@ -38,8 +38,12 @@ def calculate_all_metrics(trades):
     if not trades:
         return {'error': 'No closed trades'}
     
-    # Convert % to decimals
-    returns = [t['pnl']/100 for t in trades]  
+    # Convert % to decimals with safe conversion
+    returns = []
+    for t in trades:
+        pnl_value = safe_round(t['pnl'], 4) if isinstance(t['pnl'], str) else float(t['pnl'])
+        returns.append(pnl_value / 100)
+    
     wins = [r for r in returns if r > 0]
     losses = [r for r in returns if r < 0]
     
@@ -48,7 +52,7 @@ def calculate_all_metrics(trades):
         return {
             'win_rate': 0,
             'sharpe_ratio': -5 if not wins else 0,
-            'max_drawdown': abs(min(returns)) if returns else 0
+            'max_drawdown': safe_round(abs(min(returns))) if returns else 0
         }
     
     return {
@@ -76,7 +80,7 @@ def calculate_cagr(trades):
         return 0
     
     start_equity = 10000  # Starting with $10k for simulation
-    total_pnl = sum(trade['pnl'] for trade in trades)
+    total_pnl = sum(safe_round(trade['pnl']) for trade in trades)
     end_equity = start_equity + (total_pnl * start_equity / 100)  # Convert % to dollar amount
     
     return safe_round(((end_equity / start_equity) ** (365/days) - 1) * 100)
@@ -86,7 +90,7 @@ def calculate_sortino(trades):
     if not trades:
         return 0
     
-    returns = [trade['pnl'] / 100 for trade in trades]  # Convert from % to decimal
+    returns = [safe_round(trade['pnl']) / 100 for trade in trades]  # Convert from % to decimal
     downside_returns = [r for r in returns if r < 0]
     
     if not downside_returns:
@@ -108,7 +112,8 @@ def calculate_ulcer(trades):
     equity_values = [equity]
     
     for trade in trades:
-        equity += (trade['pnl'] / 100) * equity_values[0]  # Apply percentage return
+        pnl_value = safe_round(trade['pnl'])
+        equity += (pnl_value / 100) * equity_values[0]  # Apply percentage return
         equity_values.append(equity)
     
     equity_series = pd.Series(equity_values)
@@ -122,12 +127,12 @@ def calculate_expectancy(trades):
     if not trades:
         return 0
     
-    wins = [trade for trade in trades if trade['pnl'] > 0]
-    losses = [trade for trade in trades if trade['pnl'] <= 0]
+    wins = [trade for trade in trades if safe_round(trade['pnl']) > 0]
+    losses = [trade for trade in trades if safe_round(trade['pnl']) <= 0]
     
     win_rate = len(wins) / len(trades) if trades else 0
-    avg_win = np.mean([trade['pnl'] for trade in wins]) if wins else 0
-    avg_loss = np.mean([trade['pnl'] for trade in losses]) if losses else 0
+    avg_win = np.mean([safe_round(trade['pnl']) for trade in wins]) if wins else 0
+    avg_loss = np.mean([safe_round(trade['pnl']) for trade in losses]) if losses else 0
     
     return safe_round((win_rate * avg_win) - ((1 - win_rate) * abs(avg_loss)))
 
