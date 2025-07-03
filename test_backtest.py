@@ -1,4 +1,5 @@
 from scripts.backtest.backtest_engine import BacktestEngine
+from scripts.config import ASSETS
 
 def main():
     print("🚀 Starting Zargul Trader Backtest")
@@ -7,7 +8,7 @@ def main():
     backtester = BacktestEngine()
 
     # Run backtest for each asset
-    for asset in ["BTC-USD", "ETH-USD", "SOL-USD"]:
+    for asset in ASSETS:
         print(f"\n🔍 Backtesting {asset}...")
         metrics = backtester.run_backtest(asset, strategy="main", days=90)
 
