@@ -193,21 +193,18 @@ class BacktestEngine:
     def calculate_metrics(self, trades):
         """Safe metric calculation with type checking"""
         try:
-            # Convert all PnL values to float first using safe_round
-            from scripts.backtest.metrics import safe_round
+            # Convert all PnL values to float first
+            pnl_values = [float(trade.get('pnl', 0)) for trade in trades if trade.get('status') == 'closed']
             
-            # Process trades to ensure proper PnL conversion
-            processed_trades = []
-            for trade in trades:
-                if trade.get('status') == 'closed':
-                    processed_trade = trade.copy()
-                    processed_trade['pnl'] = safe_round(trade.get('pnl', 0))
-                    processed_trades.append(processed_trade)
-            
-            if not processed_trades:
+            if not pnl_values:
                 return get_empty_metrics()
+                
+            # Ensure all PnL values are properly converted to float
+            for trade in self.trade_history:
+                if 'pnl' in trade:
+                    trade['pnl'] = float(trade['pnl'])
             
-            return calculate_all_metrics(processed_trades)
+            return calculate_all_metrics(self.trade_history)
         except Exception as e:
             print(f"❌ Metric calculation failed: {str(e)}")
             return get_empty_metrics()

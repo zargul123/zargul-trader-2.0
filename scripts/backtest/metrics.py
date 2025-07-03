@@ -41,8 +41,7 @@ def calculate_all_metrics(trades):
     # Convert % to decimals with safe conversion
     returns = []
     for t in trades:
-        # Use safe_round to convert string to float first
-        pnl_value = safe_round(t['pnl'], 4)
+        pnl_value = safe_round(t['pnl'], 4) if isinstance(t['pnl'], str) else float(t['pnl'])
         returns.append(pnl_value / 100)
     
     wins = [r for r in returns if r > 0]
