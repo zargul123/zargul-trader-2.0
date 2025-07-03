@@ -116,6 +116,13 @@ ETH_SETTINGS = {
     'rsi_limits': (35, 65)
 }
 
+# Scalp Trading Settings
+SCALP_SETTINGS = {
+    'min_confidence': 0.82,  # Increase from 0.75
+    'min_hold': 300,         # 5 minutes minimum
+    'max_hold': 900          # 15 minutes maximum (reduced from 30)
+}
+
 # System Optimization
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress TensorFlow logs
 os.environ['OMP_NUM_THREADS'] = '6'  # Match CPU cores
