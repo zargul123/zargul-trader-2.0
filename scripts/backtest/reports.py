@@ -152,33 +152,40 @@ def generate_metric_cards(metrics):
     return '\n'.join(cards)
 
 def generate_trade_table(trades):
-    """Generate HTML table of trades"""
-    if not trades:
-        return "<p>No trades executed</p>"
-
-    rows = []
-    for trade in trades:
-        pnl_class = "good" if trade.get('pnl', 0) > 0 else "bad"
-        rows.append(f"""
-        <tr>
-            <td>{trade['date']}</td>
-            <td>{trade['type']}</td>
-            <td>{round(trade['entry_price'], 2)}</td>
-            <td>{round(trade['exit_price'], 2) if trade['exit_price'] else '-'}</td>
-            <td class="{pnl_class}">{round(trade.get('pnl', 0), 2)}%</td>
-        </tr>
-        """)
-
+    """Generate HTML table for trades using our actual field names"""
+    table_html = []
+    for trade in trades[-20:]:  # Show last 20 trades
+        if trade.get('status') == 'closed':
+            duration = "N/A"
+            if trade.get('exit_time') and trade.get('entry_time'):
+                duration = str(trade['exit_time'] - trade['entry_time']).split('.')[0]
+            
+            pnl_class = 'positive' if trade.get('pnl', 0) > 0 else 'negative'
+            
+            table_html.append(f"""
+                <tr>
+                    <td>{trade.get('entry_time', 'N/A')}</td>
+                    <td>{trade.get('exit_time', 'N/A')}</td>
+                    <td>{trade.get('type', 'N/A')}</td>
+                    <td>${trade.get('entry_price', 0):.2f}</td>
+                    <td>${trade.get('exit_price', 0):.2f}</td>
+                    <td class="{pnl_class}">{trade.get('pnl', 0):.2f}%</td>
+                    <td>{duration}</td>
+                </tr>
+            """)
+    
     return f"""
     <table>
         <tr>
-            <th>Date</th>
+            <th>Entry Time</th>
+            <th>Exit Time</th>
             <th>Type</th>
-            <th>Entry</th>
-            <th>Exit</th>
+            <th>Entry Price</th>
+            <th>Exit Price</th>
             <th>PnL %</th>
+            <th>Duration</th>
         </tr>
-        {''.join(rows)}
+        {''.join(table_html)}
     </table>
     """
 
