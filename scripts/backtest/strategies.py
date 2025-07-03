@@ -111,31 +111,27 @@ class MainStrategy(BaseStrategy):
         return 0
         
     def get_exit_signal(self, df, current_position):
+        current = df.iloc[-1]
         if len(self.open_trades) == 0:
             return False
             
         entry = self.open_trades[0]
-        current = df.iloc[-1]
         hours_held = (current.name - entry['entry_time']).total_seconds() / 3600
         
-        # Dynamic exits
+        # More generous exit conditions
         if current_position == 1:  # Long
-            # Take profit at 1.5% or after 6 hours
-            take_profit = entry['entry_price'] * 1.015
-            if current['close'] >= take_profit or hours_held >= 6:
-                return True
-            # Stop loss at 1% or if RSI > 70
-            if current['close'] <= entry['entry_price'] * 0.99 or df['rsi'].iloc[-1] > 70:
-                return True
-                
+            take_profit = entry['entry_price'] * 1.02  # 2% TP (was 1.5%)
+            stop_loss = entry['entry_price'] * 0.985   # 1.5% SL (was 1%)
+            return (current['close'] >= take_profit or 
+                    current['close'] <= stop_loss or 
+                    hours_held >= 8)  # Increased from 6h
+                    
         elif current_position == -1:  # Short
-            # Take profit at 1% or after 4 hours
-            take_profit = entry['entry_price'] * 0.99
-            if current['close'] <= take_profit or hours_held >= 4:
-                return True
-            # Stop loss at 1.5% or if RSI < 30
-            if current['close'] >= entry['entry_price'] * 1.015 or df['rsi'].iloc[-1] < 30:
-                return True
+            take_profit = entry['entry_price'] * 0.98  # 2% TP (was 1%)
+            stop_loss = entry['entry_price'] * 1.015   # 1.5% SL (was 1.5%)
+            return (current['close'] <= take_profit or 
+                    current['close'] >= stop_loss or 
+                    hours_held >= 6)  # Increased from 4h
         
         return False
     
@@ -183,17 +179,28 @@ class SwingStrategy(MainStrategy):
         return swing_signal
 
     def get_exit_signal(self, df, current_position):
-        # Hold longer than main strategy
-        if super().get_exit_signal(df, current_position):
-            return True
-
-        # Additional exit conditions
         current = df.iloc[-1]
-        if current_position == 1 and current['close'] < df['close'].rolling(10).mean().iloc[-1]:
-            return True
-        elif current_position == -1 and current['close'] > df['close'].rolling(10).mean().iloc[-1]:
-            return True
-
+        if len(self.open_trades) == 0:
+            return False
+            
+        entry = self.open_trades[0]
+        hours_held = (current.name - entry['entry_time']).total_seconds() / 3600
+        
+        # More generous swing exit conditions
+        if current_position == 1:  # Long
+            take_profit = entry['entry_price'] * 1.03  # 3% TP for swings
+            stop_loss = entry['entry_price'] * 0.975   # 2.5% SL
+            return (current['close'] >= take_profit or 
+                    current['close'] <= stop_loss or 
+                    hours_held >= 12)  # Longer hold for swings
+                    
+        elif current_position == -1:  # Short
+            take_profit = entry['entry_price'] * 0.97  # 3% TP for swings
+            stop_loss = entry['entry_price'] * 1.025   # 2.5% SL
+            return (current['close'] <= take_profit or 
+                    current['close'] >= stop_loss or 
+                    hours_held >= 10)  # Longer hold for shorts
+        
         return False
 
 class ScalpStrategy(MainStrategy):
@@ -240,12 +247,26 @@ class ScalpStrategy(MainStrategy):
         return signal
 
     def get_exit_signal(self, df, current_position):
-        # Quick exits for scalp
         current = df.iloc[-1]
-        if current_position == 1:
-            return (current['close'] < df['close'].iloc[-2] or  # Price drops
-                    current['macd'] < current['macd_signal'])  # MACD crosses
-        elif current_position == -1:
-            return (current['close'] > df['close'].iloc[-2] or  # Price rises
-                    current['macd'] > current['macd_signal'])  # MACD crosses
+        if len(self.open_trades) == 0:
+            return False
+            
+        entry = self.open_trades[0]
+        hours_held = (current.name - entry['entry_time']).total_seconds() / 3600
+        
+        # More generous scalp exit conditions
+        if current_position == 1:  # Long
+            take_profit = entry['entry_price'] * 1.008  # 0.8% TP (was tighter)
+            stop_loss = entry['entry_price'] * 0.994    # 0.6% SL
+            return (current['close'] >= take_profit or 
+                    current['close'] <= stop_loss or 
+                    hours_held >= 1)  # Max 1 hour hold
+                    
+        elif current_position == -1:  # Short
+            take_profit = entry['entry_price'] * 0.992  # 0.8% TP
+            stop_loss = entry['entry_price'] * 1.006    # 0.6% SL
+            return (current['close'] <= take_profit or 
+                    current['close'] >= stop_loss or 
+                    hours_held >= 0.75)  # Max 45 minutes hold
+        
         return False
