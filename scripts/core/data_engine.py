@@ -349,6 +349,12 @@ class DataMaster:
         self.cache[symbol] = df
         return df
 
+    def _filter_trading_hours(self, df, hours):
+        """Filter DataFrame to only include specified trading hours"""
+        if not hours:  # No filter if empty
+            return df
+        return df[df.index.hour.isin(hours)]
+
     def get_training_data(self, symbol):
         """Get training data with guaranteed structure"""
         # Try TwelveData first with extended history
