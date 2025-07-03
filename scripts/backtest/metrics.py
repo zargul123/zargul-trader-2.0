@@ -3,9 +3,14 @@ import pandas as pd
 
 def safe_round(value, decimals=2):
     try:
-        return round(float(value), decimals)  # Convert to number first
-    except:
-        return 0.0  # If conversion fails
+        if isinstance(value, str):
+            # Handle percentage strings like "1.23%"
+            if value.endswith('%'):
+                value = value.rstrip('%')
+            value = float(value)
+        return round(float(value), decimals)
+    except (ValueError, TypeError, AttributeError):
+        return 0.0
 
 def get_empty_metrics():
     """Return empty metrics structure when no trades occur"""
@@ -30,8 +35,17 @@ def calculate_all_metrics(trades):
     if not trades:
         return {'error': 'No closed trades'}
     
-    # Convert % to decimals
-    returns = [t['pnl']/100 for t in trades]  
+    # Convert % to decimals, handle both numeric and string values
+    returns = []
+    for t in trades:
+        pnl = t['pnl']
+        if isinstance(pnl, str):
+            if pnl.endswith('%'):
+                pnl = float(pnl.rstrip('%'))
+            else:
+                pnl = float(pnl)
+        returns.append(pnl/100)
+    
     wins = [r for r in returns if r > 0]
     losses = [r for r in returns if r < 0]
     
@@ -40,7 +54,7 @@ def calculate_all_metrics(trades):
         return {
             'win_rate': 0,
             'sharpe_ratio': -5 if not wins else 0,
-            'max_drawdown': abs(min(returns)) if returns else 0
+            'max_drawdown': safe_round(abs(min(returns))) if returns else 0
         }
     
     return {
