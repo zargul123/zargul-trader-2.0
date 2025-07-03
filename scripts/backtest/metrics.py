@@ -3,9 +3,9 @@ import pandas as pd
 
 def safe_round(value, decimals=2):
     try:
-        return round(float(value), decimals)
+        return round(float(value), decimals)  # Convert to number first
     except:
-        return 0.0  # Default if conversion fails
+        return 0.0  # If conversion fails
 
 def get_empty_metrics():
     """Return empty metrics structure when no trades occur"""
@@ -44,10 +44,10 @@ def calculate_all_metrics(trades):
         }
     
     return {
-        'win_rate': len(wins)/len(trades),
-        'sharpe_ratio': np.mean(returns)/np.std(returns) * np.sqrt(365),
-        'max_drawdown': abs(min(returns)),
-        'profit_factor': sum(wins)/abs(sum(losses))
+        'win_rate': safe_round(len(wins)/len(trades)),
+        'sharpe_ratio': safe_round(np.mean(returns)/np.std(returns) * np.sqrt(365)),
+        'max_drawdown': safe_round(abs(min(returns))),
+        'profit_factor': safe_round(sum(wins)/abs(sum(losses)))
     }
 
 def calculate_cagr(trades):
@@ -71,7 +71,7 @@ def calculate_cagr(trades):
     total_pnl = sum(trade['pnl'] for trade in trades)
     end_equity = start_equity + (total_pnl * start_equity / 100)  # Convert % to dollar amount
     
-    return ((end_equity / start_equity) ** (365/days) - 1) * 100
+    return safe_round(((end_equity / start_equity) ** (365/days) - 1) * 100)
 
 def calculate_sortino(trades):
     """Calculate Sortino Ratio from trades"""
@@ -88,7 +88,7 @@ def calculate_sortino(trades):
     if downside_std == 0:
         return 0
     
-    return np.mean(returns) / downside_std
+    return safe_round(np.mean(returns) / downside_std)
 
 def calculate_ulcer(trades):
     """Calculate Ulcer Index from trades"""
@@ -107,7 +107,7 @@ def calculate_ulcer(trades):
     max_equity = equity_series.cummax()
     drawdown = ((max_equity - equity_series) / max_equity) * 100
     
-    return np.sqrt((drawdown ** 2).mean())
+    return safe_round(np.sqrt((drawdown ** 2).mean()))
 
 def calculate_expectancy(trades):
     """Calculate trading expectancy from trades"""
@@ -121,7 +121,7 @@ def calculate_expectancy(trades):
     avg_win = np.mean([trade['pnl'] for trade in wins]) if wins else 0
     avg_loss = np.mean([trade['pnl'] for trade in losses]) if losses else 0
     
-    return (win_rate * avg_win) - ((1 - win_rate) * abs(avg_loss))
+    return safe_round((win_rate * avg_win) - ((1 - win_rate) * abs(avg_loss)))
 
 def empty_metrics():
     """Return empty metrics when no trades"""
@@ -139,7 +139,7 @@ def _calculate_sharpe(returns, risk_free_rate=0.0):
     excess_returns = np.array(returns) - risk_free_rate
     if np.std(excess_returns) == 0:
         return 0
-    return np.mean(excess_returns) / np.std(excess_returns) * np.sqrt(365)
+    return safe_round(np.mean(excess_returns) / np.std(excess_returns) * np.sqrt(365))
 
 def _calculate_max_drawdown(returns):
     """Calculate max drawdown from a list of returns (in %)"""
@@ -149,4 +149,4 @@ def _calculate_max_drawdown(returns):
     cumulative = 100 * (1 + np.array(returns)).cumprod()  # Start with $100
     peak = cumulative.max()
     trough = cumulative[cumulative.argmax():].min()
-    return (trough - peak) / peak * 100  # Return as percentage
+    return safe_round((trough - peak) / peak * 100)  # Return as percentage
