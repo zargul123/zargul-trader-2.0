@@ -14,7 +14,9 @@ STRATEGIES = {
         'max_hold': 86400,           # Max 24 hours hold
         'sl_multiplier': 2.5,        # 2.5x ATR for stop loss (increased from 1.8)
         'tp_multiplier': 4.0,        # 4.0x ATR for take profit (increased from 3.0)
-        'rsi_limits': (28, 72)       # Oversold/overbought levels
+        'rsi_limits': (28, 72),      # Oversold/overbought levels
+        'trading_hours': [2, 5, 8, 14, 20],  # UTC hours to trade (2AM, 5AM etc.)
+        'timezone': 'UTC'            # Important for alignment
     },
     'swing': {
         'timeframe': '4h',
@@ -25,7 +27,9 @@ STRATEGIES = {
         'max_hold': 259200,          # Max 3 days hold
         'sl_multiplier': 3.0,        # 3.0x ATR (increased from 1.5)
         'tp_multiplier': 5.0,        # 5.0x ATR (increased from 4.0)
-        'rsi_limits': (25, 75)       # Wider bands for swings
+        'rsi_limits': (25, 75),      # Wider bands for swings
+        'trading_hours': [4, 12, 18],  # Fewer but higher-impact times
+        'timezone': 'UTC'            # Important for alignment
     },
     'scalp': {
         'timeframe': '15m',          # 15m gives better signals than 5m
@@ -36,7 +40,9 @@ STRATEGIES = {
         'max_hold': 1800,            # Max 30 minutes hold
         'sl_multiplier': 0.5,        # Tight 0.5x ATR stop
         'tp_multiplier': 1.5,        # 1.5x ATR target
-        'rsi_limits': (32, 68)       # Tight bands for scalping
+        'rsi_limits': (32, 68),      # Tight bands for scalping
+        'trading_hours': [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22],  # More frequent scalping hours
+        'timezone': 'UTC'            # Important for alignment
     }
 }
 
