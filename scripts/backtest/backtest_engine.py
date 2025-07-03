@@ -165,6 +165,12 @@ class BacktestEngine:
     def calculate_metrics(self, df):
         """Calculate performance metrics"""
         from .metrics import calculate_all_metrics
+        
+        # Ensure all PnL values are properly converted to float
+        for trade in self.trade_history:
+            if 'pnl' in trade:
+                trade['pnl'] = float(trade['pnl'])
+        
         return calculate_all_metrics(self.trade_history)
 
     def generate_report(self, symbol):
