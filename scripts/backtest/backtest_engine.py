@@ -20,24 +20,26 @@ class BacktestEngine:
         print(f"📅 Date Range: {df.index[0]} to {df.index[-1]}")  # DEBUG LINE
         return df[df['volume'] > 0].copy()
 
-    def run_backtest(self, symbol, strategy_type="main", days=180):
-        """Run complete backtest for one asset"""
-        from scripts.config import STRATEGIES
-        
-        self.open_trades = []  # Track open trades
-        
-        # Load strategy config
-        if strategy_type in STRATEGIES:
+    def run_backtest(self, symbol, strategy_type="main", days=30):
+        """Updated to handle strategy parameter"""
+        try:
+            print(f"\n🔍 Backtesting {symbol} ({strategy_type.upper()} Strategy)...")
+            
+            # Load strategy config
             config = STRATEGIES[strategy_type]
-        else:
-            # Fallback to main strategy config
-            config = STRATEGIES['main']
-        
-        # Get data with correct timeframe
-        df = self.load_data(symbol, days, config['timeframe'])
-        
-        # FORCE TEST TRADES - DELETE AFTER VERIFICATION
-        df.at[df.index[50], 'signal'] = 1  # Force long at row 50
+            
+            # Get data with correct timeframe
+            df = self.data.get_data(symbol, config['timeframe'])
+            df = df.iloc[-days*24:]  # Get requested days (converted to hours)
+            
+            # Initialize strategy
+            strategy = self.get_strategy(strategy_type)
+            strategy.set_parameters(config)
+            
+            self.open_trades = []  # Track open trades
+            
+            # FORCE TEST TRADES - DELETE AFTER VERIFICATION
+            df.at[df.index[50], 'signal'] = 1  # Force long at row 50
         df.at[df.index[100], 'signal'] = -1  # Force short at row 100
 
         # Prepare empty columns for our signals
