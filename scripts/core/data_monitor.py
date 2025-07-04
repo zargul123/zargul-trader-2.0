@@ -12,7 +12,16 @@ class DataHealthMonitor:
         self._start_monitor()
 
     def log_result(self, source, success):
-        self.source_stats[source]['success' if success else 'fail'] += 1
+        """Completely bulletproof logging"""
+        try:
+            source = str(source) if source is not None else 'unknown'
+            if source not in self.source_stats:
+                self.source_stats[source] = {'success': 0, 'failure': 0}
+                
+            key = 'success' if success else 'failure'
+            self.source_stats[source][key] += 1
+        except Exception as e:
+            print(f"⚠️ Monitoring error: {str(e)}")
 
     def _start_monitor(self):
         def monitor_loop():
