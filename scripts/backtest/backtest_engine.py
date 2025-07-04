@@ -186,6 +186,22 @@ class BacktestEngine:
         else:
             raise ValueError(f"Unknown strategy: {name}")
 
+    def should_execute_trade(self, prediction):
+        """More lenient trade execution criteria"""
+        if not prediction:
+            return False
+            
+        # Convert confidence to percentage (0.55 → 55)
+        confidence_percent = prediction.get('confidence', 0) * 100
+        
+        # Lowered thresholds further
+        min_confidence = 45  # 45% instead of 55%
+        min_move = 0.5  # 0.5% instead of 1%
+        
+        return (confidence_percent >= min_confidence and 
+                ((prediction['direction'] == 'long' and prediction['pct_change'] >= min_move) or
+                 (prediction['direction'] == 'short' and prediction['pct_change'] <= -min_move)))
+
     def calculate_position_size(self, volatility, df):
         """Better position sizing based on volatility"""
         atr = self._calculate_atr(df)
