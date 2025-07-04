@@ -67,9 +67,15 @@ class ZargulTrader:
                 df = self.data._generate_synthetic_data(asset)
 
             # --- Predictions ---
+            print(f"🔍 Calling AI predict for {asset}...")
             main_pred = self.ai.predict(asset, df)
+            print(f"🔍 Main prediction result: {type(main_pred)} - {main_pred}")
+            
             swing_pred = self.ai.predict_swing(asset)
+            print(f"🔍 Swing prediction result: {type(swing_pred)} - {swing_pred}")
+            
             scalp_pred = self.ai.predict_scalp(asset)
+            print(f"🔍 Scalp prediction result: {type(scalp_pred)} - {scalp_pred}")
 
             # --- Sentiment Boost ---
             if isinstance(main_pred, dict) and armor_get(main_pred, 'confidence'):
@@ -85,15 +91,24 @@ class ZargulTrader:
 
             # --- Display Predictions ---
             print(f"\n📊 {asset} Main Strategy:")
-            self._print_prediction(main_pred)
+            if main_pred is not None:
+                self._print_prediction(main_pred)
+            else:
+                print("│ ⚠️ No main prediction available")
 
             print(f"\n📈 {asset} Swing Trade:")
-            self._print_prediction(swing_pred)
-            self._evaluate_trade(swing_pred)
+            if swing_pred is not None:
+                self._print_prediction(swing_pred)
+                self._evaluate_trade(swing_pred)
+            else:
+                print("│ ⚠️ No swing prediction available")
 
             print(f"\n⚡ {asset} Scalp Trade:")
-            self._print_prediction(scalp_pred)
-            self._evaluate_trade(scalp_pred)
+            if scalp_pred is not None:
+                self._print_prediction(scalp_pred)
+                self._evaluate_trade(scalp_pred)
+            else:
+                print("│ ⚠️ No scalp prediction available")
 
         except Exception as e:
             print(f"\n❌ {asset} error: {str(e)}")
