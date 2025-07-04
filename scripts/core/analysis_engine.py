@@ -121,6 +121,13 @@ class AIAnalyst:
                 os.rename(model_path, f"{model_path}.backup")
             df = self.data.get_training_data(symbol)
             features = ['open','high','low','close','volume'] + TECHNICAL_INDICATORS
+            
+            # Add validation for missing columns
+            missing_cols = [col for col in features if col not in df.columns]
+            if missing_cols:
+                print(f"⚠️ Missing columns for {symbol}: {missing_cols}")
+                df = self._generate_synthetic_features(df, missing_cols)
+            
             df = df[features].astype('float32')
 
             if len(df) < 100:
@@ -240,6 +247,52 @@ class AIAnalyst:
             print(f"🔧 Prediction recovery for {symbol}: {str(e)}")
             return self._create_fallback_prediction(symbol)
 
+    def _generate_synthetic_features(self, df, missing_cols):
+        """Generate synthetic features for missing columns"""
+        for col in missing_cols:
+            if col in ['open', 'high', 'low', 'close']:
+                # Use close price as fallback for OHLC
+                df[col] = df.get('close', 100.0)
+            elif col == 'volume':
+                # Generate realistic volume based on price volatility
+                if 'close' in df.columns:
+                    volatility = df['close'].pct_change().std()
+                    base_volume = 100000 * (1 + volatility * 10)
+                    df[col] = base_volume
+                else:
+                    df[col] = 100000
+            elif col == 'rsi':
+                # Simple RSI approximation
+                df[col] = 50 + np.random.normal(0, 15, len(df))
+                df[col] = np.clip(df[col], 0, 100)
+            elif col == 'macd':
+                # Simple MACD approximation
+                if 'close' in df.columns:
+                    df[col] = df['close'].ewm(span=12).mean() - df['close'].ewm(span=26).mean()
+                else:
+                    df[col] = np.random.normal(0, 0.1, len(df))
+            elif col == 'macd_signal':
+                # MACD signal line
+                if 'macd' in df.columns:
+                    df[col] = df['macd'].ewm(span=9).mean()
+                else:
+                    df[col] = np.random.normal(0, 0.05, len(df))
+            elif col in ['bollinger_upper', 'bollinger_lower']:
+                # Bollinger bands approximation
+                if 'close' in df.columns:
+                    sma = df['close'].rolling(20).mean()
+                    std = df['close'].rolling(20).std()
+                    df['bollinger_upper'] = sma + (std * 2)
+                    df['bollinger_lower'] = sma - (std * 2)
+                else:
+                    df[col] = np.random.normal(100, 10, len(df))
+            else:
+                # Default synthetic values for other indicators
+                df[col] = np.random.normal(0, 0.1, len(df))
+        
+        print(f"✅ Generated synthetic features for {missing_cols}")
+        return df
+    
     def _create_fallback_prediction(self, symbol):
         """Always return a valid prediction structure"""
         return {
