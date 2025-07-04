@@ -15,18 +15,18 @@ class BacktestEngine:
         self.results = []
         self.trade_history = []
 
-    def load_data(self, symbol, days=90, timeframe="4h"):  # Increased default days
-        """Load more historical data for backtesting"""
+    def load_data(self, symbol, days=90, timeframe="4h"):
+        """Load proper backtesting data"""
+        print(f"\n📊 Loading {days} days of {timeframe} data for {symbol}")
         df = self.data.get_data(symbol, timeframe)
         
-        # Ensure minimum data requirements
+        # Ensure we have enough data
         if len(df) < 100:
             print(f"⚠️ Insufficient data for {symbol} ({len(df)} rows)")
             return pd.DataFrame()
             
-        print(f"✅ Loaded {len(df)} rows for {symbol} ({timeframe})")
-        print(f"📅 Date Range: {df.index[0]} to {df.index[-1]}")
-        return df[df['volume'] > 0].copy()
+        print(f"✅ Loaded {len(df)} candles from {df.index[0]} to {df.index[-1]}")
+        return df
 
     def run_backtest(self, symbol, strategy_type="main", days=30):
         """Run complete backtest for one asset"""
