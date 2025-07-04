@@ -57,19 +57,28 @@ class BacktestEngine:
                 print("❌ No data loaded - aborting backtest")
                 return
             
-            if strategy_type == "main":
-                prediction = self.analyst.predict(symbol, df)
-            elif strategy_type == "swing":
-                prediction = self.analyst.predict_swing(symbol, df)
-            else:
-                prediction = self.analyst.predict_scalp(symbol, df)
+            # Replace the single prediction call with:
+            print(f"\n🔎 Scanning {len(df)} candles for signals...")
+            signals_found = 0
+
+            for i in range(100, len(df), 10):  # Check every 10 candles
+                window = df.iloc[i-100:i]  # Use rolling 100-candle window
                 
-            # Replace the complex trade logic with:
-            if self.should_execute_trade(prediction):
-                self._execute_trade(prediction)
-                print("✅ Trade executed")
-            else:
-                print("⏩ Trade skipped (doesn't meet criteria)")
+                if strategy_type == "main":
+                    prediction = self.analyst.predict(symbol, window)
+                elif strategy_type == "swing":
+                    prediction = self.analyst.predict_swing(symbol, window)
+                else:
+                    prediction = self.analyst.predict_scalp(symbol, window)
+                
+                if prediction and prediction['confidence'] >= 0.65:
+                    print(f"🎯 Signal at {df.index[i]} | {prediction['direction']} | "
+                          f"Conf: {prediction['confidence']*100:.0f}% | "
+                          f"Change: {prediction['pct_change']:.2f}%")
+                    self._execute_trade(prediction)
+                    signals_found += 1
+
+            print(f"\n📍 Found {signals_found} valid signals in this period")
                 
         except Exception as e:
             print(f"💥 Backtest error: {traceback.format_exc()}")
