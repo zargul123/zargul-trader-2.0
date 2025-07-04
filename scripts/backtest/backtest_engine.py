@@ -35,6 +35,12 @@ class BacktestEngine:
         if len(df) < 100:
             print(f"⚠️ Insufficient data for {symbol} ({len(df)} rows)")
             return pd.DataFrame()
+        
+        # Change to get more recent data:
+        end_date = datetime.now()
+        start_date = end_date - timedelta(days=days)
+        df = df.loc[start_date:end_date]
+        print(f"📅 Date range: {df.index[0]} to {df.index[-1]}")
             
         print(f"✅ Loaded {len(df)} candles from {df.index[0]} to {df.index[-1]}")
         return df
