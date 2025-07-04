@@ -71,7 +71,7 @@ class BacktestEngine:
             signals_found = 0
 
             # Change the scanning loop to:
-            window_size = 50  # Reduced from 100
+            window_size = 60  # Must match SEQUENCE_LENGTH in analysis_engine.py
             step_size = 5     # Check every 5 candles
 
             for i in range(window_size, len(df), step_size):
