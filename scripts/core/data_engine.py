@@ -382,16 +382,15 @@ class DataMaster:
 
     def get_training_data(self, symbol):
         """Get training data with guaranteed structure"""
-        # Try TwelveData first with extended history
-        df = self._get_twelvedata_series(symbol, '15m')
+        # Reduce the data size for training
+        df = self._get_twelvedata_series(symbol, '1h')  # Changed from 15m to 1h
         if df.empty:
-            # Fallback to Yahoo
-            df = self._yahoo_fallback(symbol, '15m')
+            df = self._yahoo_fallback(symbol, '1h')  # Changed timeframe here too
             if df.empty:
-                # Final fallback to synthetic with more data points
                 df = self._generate_synthetic_data(symbol)
-                df = df.iloc[-TRAINING_DAYS*96:]  # 15min intervals for training days
-
+        
+        # Take only the most recent 2000 candles instead of all
+        df = df.iloc[-2000:] if len(df) > 2000 else df
+        
         # Add technical indicators
-        df = self._add_technical_indicators(df, symbol)
-        return df
+        return self._add_technical_indicators(df, symbol)
