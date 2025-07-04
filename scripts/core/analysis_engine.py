@@ -242,8 +242,8 @@ class AIAnalyst:
                 return None
 
             # Adjust for swing trading parameters
-            if (prediction['confidence'] >= SWING_MIN_CONFIDENCE and 
-                abs(prediction['pct_change']) >= SWING_THRESHOLD):
+            if (prediction['confidence'] >= 0.55 and 
+                abs(prediction['pct_change']) >= 1.5):
                 return {
                     **prediction,
                     'type': 'swing',
@@ -266,8 +266,8 @@ class AIAnalyst:
                 return None
 
             # Adjust for scalp trading parameters
-            if (prediction['confidence'] >= SCALP_MIN_CONFIDENCE and 
-                abs(prediction['pct_change']) >= SCALP_THRESHOLD):
+            if (prediction['confidence'] >= 0.5 and 
+                abs(prediction['pct_change']) >= 0.8):
                 return {
                     **prediction,
                     'type': 'scalp',
