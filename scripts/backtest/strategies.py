@@ -34,26 +34,32 @@ class MainStrategy(BaseStrategy):
         self.open_trades = []
         
     def get_signal(self, df):
-        if len(df) < 10:  # Reduced minimum data requirement
+        if len(df) < 20:
             return 0
             
         current = df.iloc[-1]
         prev = df.iloc[-2]
         
-        # More lenient volume check
-        volume_ok = current['volume'] > df['volume'].rolling(10, min_periods=5).mean().iloc[-1] * 0.8
+        # Volume check (your suggestion)
+        volume_ok = current['volume'] > df['volume'].rolling(20).mean().iloc[-1]
         
-        # Simplified indicator checks - just need price momentum
-        price_up = current['close'] > prev['close']
-        rsi_ok = 25 < current['rsi'] < 75  # Wider RSI range
-        
-        # Simple momentum-based signals
-        if price_up and rsi_ok and volume_ok:
-            return 1  # Long signal
-        elif not price_up and rsi_ok and volume_ok:
-            return -1  # Short signal
+        # Indicator checks (only need 1/3 to confirm - your suggestion)
+        indicator_checks = 0
+        if current['macd'] > current['macd_signal']:
+            indicator_checks += 1
+        if current['close'] > df['close'].ewm(span=20).mean().iloc[-1]:
+            indicator_checks += 1
+        if 30 < current['rsi'] < 70:
+            indicator_checks += 1
             
-        return 0
+        # Entry logic (simplified)
+        long_cond = (volume_ok and indicator_checks >= 1 and 
+                    current['close'] > prev['close'])
+                    
+        short_cond = (volume_ok and indicator_checks >= 1 and 
+                     current['close'] < prev['close'])
+        
+        return 1 if long_cond else (-1 if short_cond else 0)
 
     def _get_ai_signal(self, df):
         """Replace this with your actual AI model call"""

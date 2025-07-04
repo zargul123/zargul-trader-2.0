@@ -43,12 +43,12 @@ class BacktestEngine:
             if df.empty:
                 raise ValueError(f"No data for {symbol}")
                 
-            # Skip trading hours filtering for backtesting to have more data
-            # df = self.data._filter_trading_hours(df, config['trading_hours'])
+            # Filter by trading hours
+            df = self.data._filter_trading_hours(df, config['trading_hours'])
             
             # Add minimum data threshold check
-            if len(df) < 50:  # Need at least 50 candles for meaningful backtest
-                print(f"⚠️ Insufficient data for {symbol} ({len(df)} candles)")
+            if len(df) < 10:  # Minimum data threshold
+                print(f"⚠️ Insufficient data after time filtering for {symbol}")
                 return get_empty_metrics()
                 
             # Prepare dataframe columns
@@ -58,7 +58,10 @@ class BacktestEngine:
                 pnl=0.0        # Profit/loss per trade
             )
             
-            # Ready for strategy-based signals
+            # DEBUG: Force test trades (remove after verification)
+            if len(df) > 100:
+                df.at[df.index[50], 'signal'] = 1  # Force long
+                df.at[df.index[100], 'signal'] = -1  # Force short
 
             # Get strategy rules
             strategy_rules = self.get_strategy(strategy_type)
@@ -79,17 +82,16 @@ class BacktestEngine:
 
                 # Get trade signal
                 signal = strategy_rules.get_signal(df[:i])  # Only use past data
-                
-                # Debug: Print first few signals
-                if i < 60 and signal != 0:
-                    print(f"📈 Signal {signal} at index {i} (Price: {current['close']:.2f})")
 
                 # Execute trade with realistic conditions
                 if signal != 0 and prev['position'] == 0:
-                    # Execute trade immediately without restrictive filters
-                    # Enhanced trade execution with slippage (0.15%)
-                    entry_price = current['open'] * (1.0015 if signal == 1 else 0.9985)
-                    df.at[df.index[i], 'position'] = signal
+                    # Remove the volume filter completely for now
+                    # Keep price change filter but make it much smaller
+                    price_change = abs((current['close'] - current['open']) / current['open'] * 100)
+                    if price_change > 0.1:  # Reduced from 0.5%
+                        # Enhanced trade execution with slippage (0.15%)
+                        entry_price = current['open'] * (1.0015 if signal == 1 else 0.9985)
+                        df.at[df.index[i], 'position'] = signal
                         
                         # Track open trades for strategy
                         self.open_trades.append({
