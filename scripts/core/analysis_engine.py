@@ -184,6 +184,7 @@ class AIAnalyst:
 
     def predict(self, symbol, df=None, news=[]):
         import traceback
+        from datetime import datetime
         try:
             print(f"\n🔍 [DEBUG] Starting prediction for {symbol}")
             
@@ -249,18 +250,31 @@ class AIAnalyst:
             pct_change = abs((predicted_price - current_price) / current_price) * 100
             pct_change = min(20, pct_change)  # Cap at 20% to avoid extreme values
             
+            strategy_type = 'main'
+            
             print(f"✅ [DEBUG] Current: {current_price}, Direction: {direction}, Change: {pct_change:.2f}%")
 
-            # Create prediction dictionary
+            # Add guaranteed fields
             prediction = {
                 'asset': str(symbol),
+                'timestamp': datetime.now().isoformat(),  # Critical for backtest
                 'price': float(predicted_price),
                 'direction': direction,
-                'confidence': float(confidence),
+                'confidence': min(0.99, max(0.3, confidence)),  # 30-99% range
                 'pct_change': float(pct_change),
                 'type': 'main',
-                'current_price': float(df['close'].iloc[-1]) if df is not None else float(predicted_price)
+                'current_price': float(current_price),
+                'exchange': 'simulated',
+                'strategy': strategy_type
             }
+            
+            # Validate all required fields exist
+            required_fields = ['asset', 'direction', 'confidence', 'pct_change']
+            for field in required_fields:
+                if field not in prediction:
+                    print(f"⚠️ Missing {field} in prediction")
+                    prediction[field] = 0  # Default value
+            
             print(f"✅ [DEBUG] Final prediction created: {prediction}")
 
             # Now safely apply news boost AFTER prediction is created
@@ -334,13 +348,18 @@ class AIAnalyst:
     
     def _create_fallback_prediction(self, symbol):
         """Always return a valid prediction structure"""
+        from datetime import datetime
         return {
-            'asset': symbol,
+            'asset': str(symbol),
+            'timestamp': datetime.now().isoformat(),
             'direction': 'long' if random.random() > 0.5 else 'short',
             'confidence': 0.6,  # Neutral confidence
             'pct_change': 1.5,  # Small expected move
-            'current_price': 0,
-            'type': 'fallback'
+            'current_price': 100.0,
+            'price': 100.0,
+            'type': 'fallback',
+            'exchange': 'simulated',
+            'strategy': 'fallback'
         }
 
     def _calibrate_confidence(self, prediction, symbol):
