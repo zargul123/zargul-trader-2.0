@@ -7,12 +7,14 @@ TIMEZONE = pytz.timezone('UTC')  # Or 'America/New_York' etc.
 # ===== QUANTUM TRADER PRO STRATEGY CONFIG =====
 # Optimized for BTC/ETH/SOL - Tested Parameters
 
+# Enhanced Strategy Configs
 STRATEGIES = {
     'main': {
-        'timeframe': '4h',  # Changed from 1h
-        'long_threshold': 0.65,      # Reduced from 0.85
-        'short_threshold': 0.5,      # Reduced from 0.65
-        'min_confidence': 0.62,      # Reduced from 0.68
+        'timeframe': '4h',
+        'long_threshold': 0.3,       # Reduced from 0.85
+        'short_threshold': 0.25,     # Reduced from 0.65
+        'min_confidence': 0.55,      # Reduced from 0.68
+        'required_indicators': 1,    # Only need 1/3 indicators to confirm
         'min_hold': 21600,           # 6 hours (reduced from 8)
         'max_hold': 86400,           # 24 hours (reduced from 48)
         'sl_multiplier': 2.0,        # Reduced from 2.5
@@ -23,27 +25,29 @@ STRATEGIES = {
     },
     'swing': {
         'timeframe': '4h',
-        'long_threshold': 1.0,       # Reduced from 1.25
-        'short_threshold': 0.9,       # Reduced from 1.1
-        'min_confidence': 0.65,       # Reduced from 0.72
-        'min_hold': 36000,            # 10 hours (reduced from 12)
-        'max_hold': 172800,           # 48 hours (reduced from 72)
-        'sl_multiplier': 2.5,         # Reduced from 3.0
-        'tp_multiplier': 4.0,         # Reduced from 5.0
-        'rsi_limits': (28, 72),       # Slightly wider
+        'long_threshold': 0.5,       # Reduced from 1.25
+        'short_threshold': 0.45,     # Reduced from 1.1
+        'min_confidence': 0.6,       # Reduced from 0.72
+        'trend_strength': 'medium',  # More flexible trend requirement
+        'min_hold': 36000,           # 10 hours (reduced from 12)
+        'max_hold': 172800,          # 48 hours (reduced from 72)
+        'sl_multiplier': 2.5,        # Reduced from 3.0
+        'tp_multiplier': 4.0,        # Reduced from 5.0
+        'rsi_limits': (28, 72),      # Slightly wider
         'trading_hours': [4,10,16,22], # More opportunities
         'timezone': 'UTC'
     },
     'scalp': {
-        'timeframe': '30m',  # Changed from 15m
-        'long_threshold': 0.25,       # Reduced from 0.35
-        'short_threshold': 0.2,       # Reduced from 0.3
-        'min_confidence': 0.7,        # Reduced from 0.78
-        'min_hold': 600,              # 10 minutes (reduced from 15)
-        'max_hold': 1800,             # 30 minutes (reduced from 60)
-        'sl_multiplier': 0.4,         # Tighter from 0.5
-        'tp_multiplier': 1.2,         # Reduced from 1.5
-        'rsi_limits': (35, 65),       # More sensitive
+        'timeframe': '30m',
+        'long_threshold': 0.15,      # Reduced from 0.35
+        'short_threshold': 0.1,      # Reduced from 0.3
+        'min_confidence': 0.65,      # Reduced from 0.78
+        'volume_multiplier': 1.2,    # Reduced from 1.5
+        'min_hold': 600,             # 10 minutes (reduced from 15)
+        'max_hold': 1800,            # 30 minutes (reduced from 60)
+        'sl_multiplier': 0.4,        # Tighter from 0.5
+        'tp_multiplier': 1.2,        # Reduced from 1.5
+        'rsi_limits': (35, 65),      # More sensitive
         'trading_hours': [0,2,4,6,8,10,12,14,16,18,20,22],  # All hours
         'timezone': 'UTC'
     }
@@ -51,18 +55,19 @@ STRATEGIES = {
 
 # Universal Settings
 ASSETS = ["BTC-USD", "ETH-USD", "SOL-USD"]
-RISK_PER_TRADE = 0.01               # Risk 1% of capital per trade
+RISK_PER_TRADE = 0.02               # Slightly increased risk for better position sizing
 AUTO_TRAIN = True                   # Keep models fresh
 
 # ===== TRAINING SCHEDULE =====
 RETRAIN_DAY = "sunday"     # Lowercase day name
 RETRAIN_TIME = "03:00"     # 3 AM UTC (adjust if needed)
-MIN_CONFIDENCE = 0.65      # Retrain if confidence < 65%
+MIN_CONFIDENCE = 0.55      # Retrain if confidence < 55%
 
-# Legacy Trading Strategy Parameters (backwards compatibility)
-# ---------------------------
-LONG_THRESHOLD = 0.5   # 0.5% move needed
-SHORT_THRESHOLD = 0.5  
+# Updated Trading Parameters
+LONG_THRESHOLD = 0.25   # Reduced from 0.5
+SHORT_THRESHOLD = 0.25  
+MIN_CONFIDENCE = 0.55   # Reduced from 0.65
+RISK_PER_TRADE = 0.02   # Slightly increased risk for better position sizing
 RISK_REWARD_RATIO = 2.0  # Classic institutional risk model
 
 # Legacy Swing Trading Strategy
