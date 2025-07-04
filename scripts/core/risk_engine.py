@@ -1,7 +1,7 @@
 
 import numpy as np
 import pandas as pd
-from scripts.config import RISK_REWARD_RATIO, MIN_CONFIDENCE, LONG_THRESHOLD, SHORT_THRESHOLD
+from scripts.config import RISK_REWARD_RATIO, MIN_CONFIDENCE, LONG_THRESHOLD, SHORT_THRESHOLD, RISK_PER_TRADE
 from scripts.core.safety import armor_get
 
 def super_safe_get(obj, key, default=None):
@@ -18,19 +18,20 @@ class RiskManager:
         return true_range.rolling(period).mean().iloc[-1]
 
     def calculate_levels(self, df, prediction):
-        """ATR-based risk calculation with 2:1 reward ratio"""
-        # Add this at the start:
-        print(f"🔍 Analyzing {prediction['asset']} at {df.index[-1]}")
-        print(f"   Current Price: {df['close'].iloc[-1]}")
-        print(f"   Volume: {df['volume'].iloc[-1]} vs avg {df['volume'].mean()}")
-        
+        # More dynamic position sizing
         atr = self._calculate_atr(df)
-        current_price = df['close'].iloc[-1]
+        volatility = atr / df['close'].iloc[-1]  # Current volatility
+        
+        # Adjust position size based on volatility
+        position_size = min(
+            0.1,  # Max 10% of capital
+            RISK_PER_TRADE / max(volatility, 0.01)  # Dynamic sizing
+        )
         
         return {
-            'sl': current_price - (atr * 2),  # 2x ATR stop
-            'tp': current_price + (atr * 4),   # 2:1 reward
-            'size': min(0.2, 0.05 * (1 + (df['volume'].iloc[-1]/df['volume'].mean())))  # Sizes based on volume
+            'sl': df['close'].iloc[-1] * (0.99 if prediction['direction'] == 'long' else 1.01),
+            'tp': df['close'].iloc[-1] * (1.02 if prediction['direction'] == 'long' else 0.98),
+            'size': position_size
         }
 
     def _get_position_size(self, df):
