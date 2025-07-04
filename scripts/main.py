@@ -109,14 +109,14 @@ class ZargulTrader:
         pct = prediction.get('pct_change', 0)
         direction = prediction.get('direction', '').lower()
         
-        # Check thresholds using the SAME confidence value
-        if raw_confidence >= MIN_CONFIDENCE * 100:  # Compare against 68% threshold
+        # New corrected version
+        if raw_confidence >= MIN_CONFIDENCE * 100:  # Now this works right
             if (direction == 'long' and pct >= LONG_THRESHOLD) or \
                (direction == 'short' and pct <= -SHORT_THRESHOLD):
                 print(f"└ ✅ TRADE SIGNAL! {direction.upper()} {pct:.2f}% (Confidence: {raw_confidence:.0f}%)")
                 self.log_trade(prediction)
             else:
-                print(f"└ ⚠️ Needs bigger move (Current: {pct:.2f}%, Required: {LONG_THRESHOLD:.2f}%)")
+                print(f"└ ⚠️ Needs bigger move (Current: {pct:.2f}%, Required: {LONG_THRESHOLD if direction=='long' else SHORT_THRESHOLD:.2f}%)")
         else:
             print(f"└ ⚠️ Needs more confidence (Current: {raw_confidence:.0f}%, Required: {MIN_CONFIDENCE*100:.0f}%)")
 
