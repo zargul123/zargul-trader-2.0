@@ -14,7 +14,7 @@ import numpy as np
 import traceback
 from scripts.config import TECHNICAL_INDICATORS
 from scripts.backtest.metrics import calculate_all_metrics, get_empty_metrics
-from .strategies import MainStrategy, SwingStrategy, ScalpStrategy
+from scripts.backtest.strategies import MainStrategy, SwingStrategy, ScalpStrategy
 import matplotlib.pyplot as plt
 import seaborn as sns
 
