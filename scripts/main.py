@@ -53,6 +53,7 @@ class ZargulTrader:
             raise
 
     def analyze_asset(self, asset):
+        import traceback
         if not isinstance(asset, str):
             print(f"⚡ Invalid asset type: {type(asset)}")
             return
@@ -70,6 +71,19 @@ class ZargulTrader:
             main_pred = self.ai.predict(asset, df)
             swing_pred = self.ai.predict_swing(asset)
             scalp_pred = self.ai.predict_scalp(asset)
+
+            # Add this validation:
+            if main_pred is None:
+                print(f"⚠️ Main pred None for {asset}, using fallback")
+                main_pred = self._create_fallback_pred(asset)
+                
+            if swing_pred is None:
+                print(f"⚠️ Swing pred None for {asset}, using fallback") 
+                swing_pred = self._create_fallback_pred(asset)
+                
+            if scalp_pred is None:
+                print(f"⚠️ Scalp pred None for {asset}, using fallback")
+                scalp_pred = self._create_fallback_pred(asset)
 
             # --- Sentiment Boost ---
             if isinstance(main_pred, dict) and armor_get(main_pred, 'confidence'):
@@ -96,7 +110,9 @@ class ZargulTrader:
             self._evaluate_trade(scalp_pred)
 
         except Exception as e:
-            print(f"\n❌ {asset} error: {str(e)}")
+            print(f"💥 Critical error for {asset}: {str(e)}")
+            traceback.print_exc()
+            return
 
     def _evaluate_trade(self, prediction):
         """Final professional trade evaluator"""
@@ -142,6 +158,18 @@ class ZargulTrader:
         if 'sl' in prediction and 'tp' in prediction:
             print(f"│ 🛑 Stop Loss: ${prediction['sl']:.2f}")
             print(f"│ 🎯 Take Profit: ${prediction['tp']:.2f}")
+
+    def _create_fallback_pred(self, asset):
+        """Create a safe fallback prediction when AI prediction fails"""
+        import random
+        return {
+            'asset': asset,
+            'direction': 'long' if random.random() > 0.5 else 'short',
+            'confidence': 0.3,  # Low confidence for fallback
+            'pct_change': 0.5,  # Small expected move
+            'current_price': 100.0,  # Default price
+            'type': 'fallback'
+        }
 
     def log_trade(self, prediction, success=True):
         if not prediction:
