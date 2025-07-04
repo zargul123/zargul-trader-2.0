@@ -113,6 +113,11 @@ class ZargulTrader:
             print(f"💥 Critical error for {asset}: {str(e)}")
             traceback.print_exc()
             return
+        
+        # Add backtest logging
+        if os.environ.get('IN_BACKTEST'):
+            with open('backtest_signals.csv', 'a') as f:
+                f.write(f"{datetime.now()},{asset},{main_pred}\n")
 
     def _evaluate_trade(self, prediction):
         """Final professional trade evaluator"""
