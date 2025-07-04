@@ -1,14 +1,22 @@
+import sys
+import os
+# Add the project root directory to Python path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+# Now import your modules
+from scripts.core.data_engine import DataMaster
+from scripts.core.analysis_engine import AIAnalyst
+from scripts.config import ASSETS, STRATEGIES
+
 import pandas as pd
 from datetime import datetime, timedelta
 import numpy as np
 import traceback
-from scripts.core.data_engine import DataMaster
-from scripts.config import ASSETS, TECHNICAL_INDICATORS, STRATEGIES
+from scripts.config import TECHNICAL_INDICATORS
 from scripts.backtest.metrics import calculate_all_metrics, get_empty_metrics
 from .strategies import MainStrategy, SwingStrategy, ScalpStrategy
 import matplotlib.pyplot as plt
 import seaborn as sns
-import os
 
 class BacktestEngine:
     def __init__(self):
