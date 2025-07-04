@@ -293,6 +293,24 @@ class BacktestEngine:
         
         return calculate_all_metrics(validated_trades)
 
+    def calculate_performance(self):
+        """Comprehensive performance metrics"""
+        if not self.trade_history:
+            return {"error": "No trades executed"}
+        
+        returns = [t['pnl']/100 for t in self.trade_history]  # Decimal returns
+        wins = [r for r in returns if r > 0]
+        
+        metrics = {
+            'total_trades': len(self.trade_history),
+            'win_rate': len(wins)/len(returns),
+            'avg_pnl': np.mean(returns)*100,
+            'sharpe': np.mean(returns)/np.std(returns) if len(returns) > 1 else 0,
+            'max_drawdown': min(returns)*100,
+            'profit_factor': sum(wins)/abs(sum([r for r in returns if r < 0])) if wins else 0
+        }
+        return metrics
+
     def generate_report(self, symbol):
         """Create visual report"""
         from .reports import generate_html_report
