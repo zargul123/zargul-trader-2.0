@@ -327,10 +327,35 @@ class DataMaster:
         return df
 
     def get_data(self, symbol, timeframe='1h'):
-        """Get market data with guaranteed structure"""
-        # Try TwelveData first
-        df = self._get_twelvedata_series(symbol, timeframe)
-        self.last_used_source = 'twelvedata' if not df.empty else self.last_used_source
+        """Get market data with more historical depth"""
+        # Increase data length based on timeframe
+        if timeframe == '1h':
+            days = 30  # ~720 candles (30 days)
+        elif timeframe == '4h':
+            days = 60  # ~360 candles (60 days)
+        elif timeframe == '15m':
+            days = 15  # ~600 candles (15 days)
+        else:
+            days = 30
+            
+        # Modified TwelveData request with more data
+        params = {
+            'symbol': TWELVEDATA_MAPPING.get(symbol, symbol),
+            'interval': self._convert_timeframe(timeframe),
+            'apikey': TWELVEDATA_API_KEY,
+            'outputsize': days * 24  # Get full days of data
+        }
+
+        # Try TwelveData first with increased data
+        data = self._twelvedata_request('time_series', symbol, timeframe, params)
+        if data and data.get('status') == 'ok':
+            df = self._parse_twelvedata_response(data, symbol)
+            if len(df) >= 100:  # Require minimum data
+                self.last_used_source = 'twelvedata'
+            else:
+                df = pd.DataFrame()
+        else:
+            df = pd.DataFrame()
 
         # Fallback to Yahoo
         if df.empty:
