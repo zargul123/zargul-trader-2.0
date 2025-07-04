@@ -326,56 +326,53 @@ class DataMaster:
         df['obv'] = (np.sign(df['close'].diff()) * df['volume']).cumsum()
         return df
 
-    def get_data(self, symbol, timeframe='1h'):
-        """Get market data with more historical depth"""
-        # Increase data length based on timeframe
+    def get_data(self, symbol, timeframe='4h'):  # Default to 4h now
+        """Get market data with proper historical depth"""
+        # Set appropriate period based on timeframe
         if timeframe == '1h':
-            days = 30  # ~720 candles (30 days)
+            period = "60d"  # 60 days of hourly data (~1440 candles)
         elif timeframe == '4h':
-            days = 60  # ~360 candles (60 days)
-        elif timeframe == '15m':
-            days = 15  # ~600 candles (15 days)
+            period = "120d" # 120 days of 4h data (~720 candles)
         else:
-            days = 30
+            period = "30d"  # Default fallback
             
-        # Modified TwelveData request with more data
+        # Try TwelveData first with increased data
         params = {
             'symbol': TWELVEDATA_MAPPING.get(symbol, symbol),
             'interval': self._convert_timeframe(timeframe),
             'apikey': TWELVEDATA_API_KEY,
-            'outputsize': days * 24  # Get full days of data
+            'outputsize': 5000  # Max allowed by TwelveData
         }
-
-        # Try TwelveData first with increased data
+        
         data = self._twelvedata_request('time_series', symbol, timeframe, params)
-        if data and data.get('status') == 'ok':
-            df = self._parse_twelvedata_response(data, symbol)
-            if len(df) >= 100:  # Require minimum data
-                self.last_used_source = 'twelvedata'
-            else:
-                df = pd.DataFrame()
-        else:
-            df = pd.DataFrame()
-
-        # Fallback to Yahoo
-        if df.empty:
-            df = self._yahoo_fallback(symbol, timeframe)
-            self.last_used_source = 'yahoo' if not df.empty else self.last_used_source
-
-        # Final fallback to synthetic
+        df = self._parse_twelvedata_response(data, symbol) if data else pd.DataFrame()
+        
+        # Fallback to Yahoo with larger period if needed
+        if df.empty or len(df) < 300:  # Require at least 300 candles
+            df = yf.download(
+                symbol,
+                period=period,
+                interval=self._convert_timeframe(timeframe),
+                prepost=True,
+                progress=False
+            )
+            # Standardize columns
+            df = df.rename(columns={
+                'Open': 'open',
+                'High': 'high', 
+                'Low': 'low',
+                'Close': 'close',
+                'Volume': 'volume'
+            })
+        
+        # Final fallback to synthetic if still empty
         if df.empty:
             df = self._generate_synthetic_data(symbol)
-            self.last_used_source = 'synthetic'
-
-        # Add technical indicators
+            df = df.iloc[-500:]  # Use last 500 synthetic candles
+            
+        # Add indicators and ensure required columns
         df = self._add_technical_indicators(df, symbol)
-
-        # Ensure all technical indicators exist
-        for indicator in TECHNICAL_INDICATORS:
-            if indicator not in df.columns:
-                df[indicator] = 0.0
-
-        self.cache[symbol] = df
+        print(f"✅ Loaded {len(df)} {timeframe} candles for {symbol}")
         return df
 
     def _filter_trading_hours(self, df, hours):
