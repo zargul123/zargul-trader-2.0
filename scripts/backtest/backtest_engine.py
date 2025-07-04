@@ -273,6 +273,13 @@ class BacktestEngine:
                 print(f"⚠️ [BACKTEST] No prediction to execute")
                 return
                 
+            # Add Debug Prints in key locations:
+            print(f"\n📝 TRADE SIGNAL RECEIVED:")
+            print(f"Asset: {prediction.get('asset')}")
+            print(f"Direction: {prediction.get('direction')}")
+            print(f"Confidence: {prediction.get('confidence', 0)*100:.1f}%")
+            print(f"Predicted Change: {prediction.get('pct_change', 0):.2f}%")
+                
             # Create a mock trade entry for testing
             from datetime import datetime
             current_time = datetime.now()
