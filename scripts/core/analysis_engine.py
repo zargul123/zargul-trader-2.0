@@ -391,12 +391,12 @@ class AIAnalyst:
         """Predicts scalp trade opportunities (quick trades)"""
         try:
             if df is None:
-                df = self.data.get_data(symbol, '5m')  # Use 5-minute timeframe
+                df = self.data.get_data(symbol, '5m')
 
             prediction = self.predict(symbol, df)
             if not prediction:
-                return None
-
+                return self._create_fallback_prediction(symbol)  # Never return None
+                
             # Adjust for scalp trading parameters
             if (prediction['confidence'] >= SCALP_MIN_CONFIDENCE and 
                 abs(prediction['pct_change']) >= SCALP_THRESHOLD):
@@ -406,7 +406,7 @@ class AIAnalyst:
                     'hold_time': random.randint(SCALP_MIN_HOLD, SCALP_MAX_HOLD),
                     'timeframe': '5m'
                 }
-            return None
+            return self._create_fallback_prediction(symbol)  # Fallback instead of None
         except Exception as e:
             print(f"⚠️ Scalp prediction failed for {symbol}: {str(e)}")
-            return None
+            return self._create_fallback_prediction(symbol)  # Always return valid prediction
