@@ -64,9 +64,10 @@ RETRAIN_TIME = "03:00"     # 3 AM UTC (adjust if needed)
 MIN_CONFIDENCE = 0.55      # Retrain if confidence < 55%
 
 # Emergency debug values
-MIN_CONFIDENCE = 0.1  # 10% - we'll raise this later
+MIN_CONFIDENCE = 0.1  # 10% - accept virtually everything
 LONG_THRESHOLD = 0.1  # 0.1%
-SHORT_THRESHOLD = 0.1 
+SHORT_THRESHOLD = 0.1
+TRADE_EMULATION = True  # Force trade execution
 RISK_PER_TRADE = 0.02   # Slightly increased risk for better position sizing
 RISK_REWARD_RATIO = 2.0  # Classic institutional risk model
 
