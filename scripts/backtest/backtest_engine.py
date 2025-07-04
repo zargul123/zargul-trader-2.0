@@ -187,20 +187,15 @@ class BacktestEngine:
             raise ValueError(f"Unknown strategy: {name}")
 
     def should_execute_trade(self, prediction):
-        print(f"\n🔍 [BACKTEST DEBUG] Evaluating prediction: {prediction}")
-        
         if not prediction:
-            print("⚠️ [BACKTEST DEBUG] Empty prediction")
+            print("⚠️ Empty prediction in backtest")
             return False
             
-        print(f"✅ [BACKTEST DEBUG] Prediction exists - Confidence: {prediction.get('confidence')}, Move: {prediction.get('pct_change')}")
+        # TEMPORARY - Accept all trades for debugging
+        print(f"✅ Accepting trade regardless of criteria: {prediction}")
+        return True
         
-        # Temporary ultra-loose criteria
-        if 'direction' not in prediction:
-            print("⚠️ [BACKTEST DEBUG] Missing direction")
-            return False
-            
-        return True  # <-- Force accept ALL trades temporarily
+        # We'll restore proper criteria after confirming trades flow
 
     def calculate_position_size(self, volatility, df):
         """Better position sizing based on volatility"""
