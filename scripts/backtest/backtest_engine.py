@@ -376,5 +376,10 @@ if __name__ == "__main__":
     print(f"Total Trades Executed: {len(engine.trade_history)}")
     if engine.trade_history:
         print("\nSample Trades:")
-        for trade in engine.trade_history[:3]:
-            print(f"{trade['symbol']} {trade['type']} @ {trade['entry_price']}")
+        for i, trade in enumerate(engine.trade_history[:3]):
+            print(f"Trade {i+1}:")
+            print(f"• Symbol: {trade.get('symbol', 'N/A')}")
+            print(f"• Direction: {trade.get('direction', trade.get('type', 'N/A'))}")
+            print(f"• Entry: ${trade.get('entry', trade.get('entry_price', 0)):.2f}")
+            print(f"• PnL: {trade.get('pnl', 0):.2f}%")
+            print("─"*30)
