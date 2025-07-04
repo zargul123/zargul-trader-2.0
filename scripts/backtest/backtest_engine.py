@@ -43,6 +43,13 @@ class BacktestEngine:
         try:
             import traceback  # Add at top of file
             
+            # Move Strategy Selection to the top of run_backtest:
+            strategy = self.get_strategy(strategy_type)
+            print(f"\n🔧 Using {strategy_type} strategy with rules:")
+            print(f"- Long Threshold: {strategy.long_threshold}%")
+            print(f"- Short Threshold: {strategy.short_threshold}%")
+            print(f"- Min Confidence: {strategy.min_confidence}%")
+            
             # Replace the initial data loading with:
             df = self.load_data(symbol, days, 
                                "1h" if strategy_type != "scalp" else "15m")
