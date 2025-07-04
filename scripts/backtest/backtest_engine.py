@@ -1,23 +1,32 @@
+
+#!/usr/bin/env python3
+import sys
+import os
+
+# Add this ABSOLUTE path fix at the very top:
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+# Now your imports will work:
+from scripts.core.data_engine import DataMaster
+from scripts.core.analysis_engine import AIAnalyst
+import traceback
 import pandas as pd
 from datetime import datetime, timedelta
 import numpy as np
-import traceback
-from scripts.core.data_engine import DataMaster
 from scripts.config import ASSETS, TECHNICAL_INDICATORS, STRATEGIES
 from scripts.backtest.metrics import calculate_all_metrics, get_empty_metrics
 from .strategies import MainStrategy, SwingStrategy, ScalpStrategy
 import matplotlib.pyplot as plt
 import seaborn as sns
-import os
 
 class BacktestEngine:
     def __init__(self):
-        from scripts.core.analysis_engine import AIAnalyst
-        from scripts.core.data_engine import DataMaster
-        self.trade_history = []  # Initialize the trade_history list
         self.analyst = AIAnalyst()
         self.data = DataMaster()
+        self.trade_history = []
         self.trades = []
+        self.results = []
+        self.open_trades = []
 
     def load_data(self, symbol, days=90, timeframe="4h"):
         """Load proper backtesting data"""
@@ -34,33 +43,15 @@ class BacktestEngine:
 
     def run_backtest(self, symbol, strategy_type, days):
         try:
-            import traceback  # Add at top of file
-            df = self.data.get_data(symbol, "1h" if strategy_type != "scalp" else "15m")
-            
-            if strategy_type == "main":
-                prediction = self.analyst.predict(symbol, df)
-            elif strategy_type == "swing":
-                prediction = self.analyst.predict_swing(symbol, df)
-            else:
-                prediction = self.analyst.predict_scalp(symbol, df)
-                
-            if prediction:
-                print(f"🎯 Accepting trade: {prediction}")
-                self._execute_trade(prediction)
-                
-        except Exception as e:
-            print(f"💥 Backtest error: {traceback.format_exc()}")
-            
             # Get data with correct timeframe
-            df = self.data.get_data(symbol, config['timeframe'])
+            timeframe = "1h" if strategy_type != "scalp" else "15m"
+            df = self.data.get_data(symbol, timeframe)
+            
             if df.empty:
                 raise ValueError(f"No data for {symbol}")
                 
-            # Filter by trading hours
-            df = self.data._filter_trading_hours(df, config['trading_hours'])
-            
             # Add minimum data threshold check
-            if len(df) < 10:  # Minimum data threshold
+            if len(df) < 10:
                 print(f"⚠️ Insufficient data after time filtering for {symbol}")
                 return get_empty_metrics()
                 
@@ -70,23 +61,10 @@ class BacktestEngine:
                 position=0,    # Current position
                 pnl=0.0        # Profit/loss per trade
             )
-            
-            # DEBUG: Force test trades (remove after verification)
-            if len(df) > 100:
-                df.at[df.index[50], 'signal'] = 1  # Force long
-                df.at[df.index[100], 'signal'] = -1  # Force short
 
             # Get strategy rules
             strategy_rules = self.get_strategy(strategy_type)
-            strategy_rules.open_trades = self.open_trades  # Share trade tracking
-            
-            # Set strategy-specific thresholds
-            if hasattr(strategy_rules, 'set_thresholds'):
-                strategy_rules.set_thresholds(
-                    long=config['long_threshold'],
-                    short=config['short_threshold'],
-                    confidence=config['min_confidence']
-                )
+            strategy_rules.open_trades = self.open_trades
 
             # Simulate trading
             for i in range(1, len(df)):
@@ -94,14 +72,12 @@ class BacktestEngine:
                 prev = df.iloc[i-1]
 
                 # Get trade signal
-                signal = strategy_rules.get_signal(df[:i])  # Only use past data
+                signal = strategy_rules.get_signal(df[:i])
 
                 # Execute trade with realistic conditions
                 if signal != 0 and prev['position'] == 0:
-                    # Remove the volume filter completely for now
-                    # Keep price change filter but make it much smaller
                     price_change = abs((current['close'] - current['open']) / current['open'] * 100)
-                    if price_change > 0.1:  # Reduced from 0.5%
+                    if price_change > 0.1:
                         # Enhanced trade execution with slippage (0.15%)
                         entry_price = current['open'] * (1.0015 if signal == 1 else 0.9985)
                         df.at[df.index[i], 'position'] = signal
@@ -112,13 +88,13 @@ class BacktestEngine:
                             'entry_price': entry_price
                         })
                         
-                        # When opening a trade (updated format):
+                        # When opening a trade:
                         self.trade_history.append({
                             'symbol': symbol,
                             'entry_time': df.index[i],
                             'entry_price': entry_price,
                             'type': 'long' if signal == 1 else 'short',
-                            'exit_time': None,  # Will be set when trade closes
+                            'exit_time': None,
                             'exit_price': None,
                             'pnl': 0.0,
                             'status': 'open'
@@ -135,27 +111,26 @@ class BacktestEngine:
                         # Clear open trades on exit
                         self.open_trades.clear()
                         
-                        # When closing a trade (updated format):
+                        # When closing a trade:
                         for trade in reversed(self.trade_history):
-                            if trade['status'] == 'open' and trade['symbol'] == symbol:  # Add symbol check
+                            if trade['status'] == 'open' and trade['symbol'] == symbol:
                                 pnl_percent = ((exit_price - trade['entry_price']) / trade['entry_price']) * 100
                                 final_pnl = pnl_percent if trade['type'] == 'long' else -pnl_percent
                                 
                                 # Skip trades with < 0.1% PnL
                                 if abs(final_pnl) < 0.1:
-                                    # Mark as closed but don't record for metrics
                                     trade.update({
                                         'exit_time': df.index[i],
                                         'exit_price': exit_price,
-                                        'pnl': float(final_pnl),  # Ensure PnL is stored as float
-                                        'status': 'filtered'  # Different status for filtered trades
+                                        'pnl': float(final_pnl),
+                                        'status': 'filtered'
                                     })
                                     break
                                 
                                 trade.update({
                                     'exit_time': df.index[i],
                                     'exit_price': exit_price,
-                                    'pnl': float(final_pnl),  # Ensure PnL is stored as float
+                                    'pnl': float(final_pnl),
                                     'status': 'closed'
                                 })
                                 break
@@ -207,8 +182,6 @@ class BacktestEngine:
         # TEMPORARY - Accept all trades for debugging
         print(f"✅ Accepting trade regardless of criteria: {prediction}")
         return True
-        
-        # We'll restore proper criteria after confirming trades flow
 
     def calculate_position_size(self, volatility, df):
         """Better position sizing based on volatility"""
@@ -291,3 +264,13 @@ class BacktestEngine:
         except Exception as e:
             print(f"❌ [BACKTEST] Trade execution failed: {str(e)}")
             traceback.print_exc()
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--asset', required=True)
+    parser.add_argument('--strategy', choices=['main','swing','scalp'], required=True)
+    args = parser.parse_args()
+    
+    engine = BacktestEngine()
+    engine.run_backtest(args.asset, args.strategy, days=7)
