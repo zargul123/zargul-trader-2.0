@@ -64,9 +64,9 @@ RETRAIN_TIME = "03:00"     # 3 AM UTC (adjust if needed)
 MIN_CONFIDENCE = 0.55      # Retrain if confidence < 55%
 
 # Updated Trading Parameters
-LONG_THRESHOLD = 0.25   # Reduced from 0.5
-SHORT_THRESHOLD = 0.25  
-MIN_CONFIDENCE = 0.55   # Reduced from 0.65
+LONG_THRESHOLD = 1.0    # Changed from 0.25 (look for 1% moves)
+SHORT_THRESHOLD = 1.0   # Changed from 0.25
+MIN_CONFIDENCE = 0.55   # Changed from 0.68 (55% confidence now)
 RISK_PER_TRADE = 0.02   # Slightly increased risk for better position sizing
 RISK_REWARD_RATIO = 2.0  # Classic institutional risk model
 
