@@ -12,6 +12,12 @@ from joblib import dump, load
 from scripts.config import (ASSETS, TECHNICAL_INDICATORS, TRAINING_EPOCHS, BATCH_SIZE, EARLY_STOP_PATIENCE, 
                           SEQUENCE_LENGTH, SWING_MIN_CONFIDENCE, SWING_THRESHOLD, SWING_MIN_HOLD, SWING_MAX_HOLD,
                           SCALP_MIN_CONFIDENCE, SCALP_THRESHOLD, SCALP_MIN_HOLD, SCALP_MAX_HOLD)
+
+# Updated strategy thresholds
+SWING_MIN_CONFIDENCE = 0.55
+SWING_THRESHOLD = 1.5
+SCALP_MIN_CONFIDENCE = 0.5 
+SCALP_THRESHOLD = 0.8
 import random
 import time
 import pandas as pd
@@ -242,8 +248,8 @@ class AIAnalyst:
                 return None
 
             # Adjust for swing trading parameters
-            if (prediction['confidence'] >= 0.55 and 
-                abs(prediction['pct_change']) >= 1.5):
+            if (prediction['confidence'] >= SWING_MIN_CONFIDENCE and 
+                abs(prediction['pct_change']) >= SWING_THRESHOLD):
                 return {
                     **prediction,
                     'type': 'swing',
@@ -266,8 +272,8 @@ class AIAnalyst:
                 return None
 
             # Adjust for scalp trading parameters
-            if (prediction['confidence'] >= 0.5 and 
-                abs(prediction['pct_change']) >= 0.8):
+            if (prediction['confidence'] >= SCALP_MIN_CONFIDENCE and 
+                abs(prediction['pct_change']) >= SCALP_THRESHOLD):
                 return {
                     **prediction,
                     'type': 'scalp',
