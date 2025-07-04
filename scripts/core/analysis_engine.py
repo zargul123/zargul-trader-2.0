@@ -193,12 +193,6 @@ class AIAnalyst:
                 print(f"⚠️ Missing columns for {symbol}, using fallback")
                 return self._create_fallback_prediction(symbol)
 
-            if news:  # If news headlines provided
-                guru = GuruDetector()
-                wisdom = guru.find_patterns(df, news)
-                if wisdom:
-                    prediction['confidence'] *= 1.1  # 10% boost!
-
             features = ['open','high','low','close','volume'] + TECHNICAL_INDICATORS
             last_sequence = df[features].values[-SEQUENCE_LENGTH:]
 
@@ -207,31 +201,41 @@ class AIAnalyst:
             )
 
             input_data = scaled_data.reshape(1, SEQUENCE_LENGTH, len(features))
-            prediction = self.models[symbol].predict(input_data, verbose=0)[0]
+            model_prediction = self.models[symbol].predict(input_data, verbose=0)[0]
 
             # Get predicted price
             dummy_row = np.zeros((1, len(features)))
-            dummy_row[0, 3] = prediction[0]
+            dummy_row[0, 3] = model_prediction[0]
             predicted_price = self.scalers[symbol].inverse_transform(dummy_row)[0, 3]
 
             # Calculate percentage change
             current_price = df['close'].iloc[-1]
-            direction = 'long' if float(prediction[1]) > 0.6 else 'short'
+            direction = 'long' if float(model_prediction[1]) > 0.6 else 'short'
             pct_change = ((predicted_price - current_price) / current_price) * 100
 
             # Force positive percentage for long trades
             if direction == 'long' and pct_change < 0:
                 pct_change = abs(pct_change)
 
-            return {
+            # Create prediction dictionary
+            prediction = {
                 'asset': str(symbol),
                 'price': float(predicted_price),
                 'direction': direction,
-                'confidence': float(min(0.99, prediction[2])),  # Now shows 0.99 (99%)
+                'confidence': float(min(0.99, model_prediction[2])),  # Now shows 0.99 (99%)
                 'pct_change': float(pct_change),
                 'type': 'main',
                 'current_price': float(df['close'].iloc[-1]) if df is not None else float(predicted_price)
             }
+
+            # Now safely apply news boost AFTER prediction is created
+            if news:
+                guru = GuruDetector()
+                wisdom = guru.find_patterns(df, news)
+                if wisdom:
+                    prediction['confidence'] = min(0.99, prediction['confidence'] * 1.1)  # 10% boost!
+
+            return prediction
         except Exception as e:
             print(f"🔧 Prediction recovery for {symbol}: {str(e)}")
             return self._create_fallback_prediction(symbol)
