@@ -42,7 +42,13 @@ class BacktestEngine:
     def run_backtest(self, symbol, strategy_type, days):
         try:
             import traceback  # Add at top of file
-            df = self.data.get_data(symbol, "1h" if strategy_type != "scalp" else "15m")
+            
+            # Replace the initial data loading with:
+            df = self.load_data(symbol, days, 
+                               "1h" if strategy_type != "scalp" else "15m")
+            if df.empty:
+                print("❌ No data loaded - aborting backtest")
+                return
             
             if strategy_type == "main":
                 prediction = self.analyst.predict(symbol, df)
@@ -58,11 +64,6 @@ class BacktestEngine:
         except Exception as e:
             print(f"💥 Backtest error: {traceback.format_exc()}")
             
-            # Get data with correct timeframe
-            df = self.data.get_data(symbol, config['timeframe'])
-            if df.empty:
-                raise ValueError(f"No data for {symbol}")
-                
             # Filter by trading hours
             df = self.data._filter_trading_hours(df, config['trading_hours'])
             
