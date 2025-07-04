@@ -34,41 +34,32 @@ class MainStrategy(BaseStrategy):
         self.open_trades = []
         
     def get_signal(self, df):
-        if len(df) < 30: 
+        if len(df) < 20:
             return 0
-        
-        current = df.iloc[-1]
-        
-        # Skip low-volume periods
-        if current['volume'] < df['volume'].mean():
-            return 0
-        
-        # Stronger confirmation for longs
-        long_cond = (current['rsi'] < 30) and \
-                    (current['close'] < current['bollinger_lower']) and \
-                    (current['volume'] > df['volume'].rolling(20).mean().iloc[-1])
-        
-        # Stronger confirmation for shorts
-        short_cond = (current['rsi'] > 70) and \
-                     (current['close'] > current['bollinger_upper']) and \
-                     (current['volume'] > df['volume'].rolling(20).mean().iloc[-1])
-        
-        signal = 1 if long_cond else (-1 if short_cond else 0)
-        
-        # Trade filters - only trade if conditions met
-        if signal != 0:
-            current_volume = current['volume']
-            average_volume = df['volume'].mean()
-            price_change = abs((current['close'] - current['open']) / current['open'] * 100)
             
-            # Only trade if high volume and meaningful move
-            if (current_volume > average_volume * 1.5 and   # High volume
-                price_change > 0.5):                        # Meaningful move
-                return signal
-            else:
-                return 0  # Skip trade
+        current = df.iloc[-1]
+        prev = df.iloc[-2]
         
-        return signal
+        # Volume check (your suggestion)
+        volume_ok = current['volume'] > df['volume'].rolling(20).mean().iloc[-1]
+        
+        # Indicator checks (only need 1/3 to confirm - your suggestion)
+        indicator_checks = 0
+        if current['macd'] > current['macd_signal']:
+            indicator_checks += 1
+        if current['close'] > df['close'].ewm(span=20).mean().iloc[-1]:
+            indicator_checks += 1
+        if 30 < current['rsi'] < 70:
+            indicator_checks += 1
+            
+        # Entry logic (simplified)
+        long_cond = (volume_ok and indicator_checks >= 1 and 
+                    current['close'] > prev['close'])
+                    
+        short_cond = (volume_ok and indicator_checks >= 1 and 
+                     current['close'] < prev['close'])
+        
+        return 1 if long_cond else (-1 if short_cond else 0)
 
     def _get_ai_signal(self, df):
         """Replace this with your actual AI model call"""
@@ -143,40 +134,19 @@ class MainStrategy(BaseStrategy):
 
 class SwingStrategy(MainStrategy):
     def get_signal(self, df):
-        if len(df) < 50:  # Need more data for swing
+        if len(df) < 50:
             return 0
-
+            
         current = df.iloc[-1]
         
-        # Skip low-volume periods
-        if current['volume'] < df['volume'].mean():
-            return 0
-
-        signal = super().get_signal(df)
-        if signal == 0:
-            return 0
-
-        # Additional swing filters
-        swing_signal = 0
-        if current['close'] > df['close'].rolling(20).mean().iloc[-1]:  # Above 20MA
-            swing_signal = 1 if signal == 1 else 0
-        elif current['close'] < df['close'].rolling(20).mean().iloc[-1]:  # Below 20MA
-            swing_signal = -1 if signal == -1 else 0
+        # Your suggested "medium trend or Bollinger" condition
+        trend_ok = (df['close'].iloc[-1] > df['close'].rolling(50).mean().iloc[-1])
+        bollinger_ok = (current['close'] < current['bollinger_lower'] or 
+                       current['close'] > current['bollinger_upper'])
         
-        # Trade filters - only trade if conditions met
-        if swing_signal != 0:
-            current_volume = current['volume']
-            average_volume = df['volume'].mean()
-            price_change = abs((current['close'] - current['open']) / current['open'] * 100)
-            
-            # Only trade if high volume and meaningful move
-            if (current_volume > average_volume * 1.5 and   # High volume
-                price_change > 0.5):                        # Meaningful move
-                return swing_signal
-            else:
-                return 0  # Skip trade
-        
-        return swing_signal
+        if trend_ok or bollinger_ok:
+            return super().get_signal(df)
+        return 0
 
     def get_exit_signal(self, df, current_position):
         current = df.iloc[-1]
@@ -205,46 +175,19 @@ class SwingStrategy(MainStrategy):
 
 class ScalpStrategy(MainStrategy):
     def get_signal(self, df):
-        if len(df) < 5:  # Need less data for scalp
+        if len(df) < 5:
             return 0
-
-        current = df.iloc[-1]
-        prev = df.iloc[-2]
-
-        # Skip low-volume periods
-        if current['volume'] < df['volume'].mean():
-            return 0
-
-        # More sensitive thresholds
-        long_thresh = SCALP_THRESHOLD / 100
-        short_thresh = SCALP_THRESHOLD / 100
-
-        signal = 0
-        
-        # Long signal
-        if (current['close'] > prev['close'] * (1 + long_thresh) and
-            current['macd'] > current['macd_signal']):
-            signal = 1
-
-        # Short signal
-        elif (current['close'] < prev['close'] * (1 - short_thresh) and
-              current['macd'] < current['macd_signal']):
-            signal = -1
-
-        # Trade filters - only trade if conditions met
-        if signal != 0:
-            current_volume = current['volume']
-            average_volume = df['volume'].mean()
-            price_change = abs((current['close'] - current['open']) / current['open'] * 100)
             
-            # Only trade if high volume and meaningful move
-            if (current_volume > average_volume * 1.5 and   # High volume
-                price_change > 0.5):                        # Meaningful move
-                return signal
-            else:
-                return 0  # Skip trade
+        current = df.iloc[-1]
         
-        return signal
+        # Your RSI/volume spike suggestion
+        rsi_ok = (current['rsi'] < 35 or current['rsi'] > 65)
+        volume_spike = current['vol_spike'] > 1.5
+        volume_ok = current['volume'] > df['volume'].rolling(20).mean().iloc[-1]
+        
+        if (rsi_ok or volume_spike) and volume_ok:
+            return super().get_signal(df)
+        return 0
 
     def get_exit_signal(self, df, current_position):
         current = df.iloc[-1]
