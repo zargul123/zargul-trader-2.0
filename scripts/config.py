@@ -9,7 +9,7 @@ TIMEZONE = pytz.timezone('UTC')  # Or 'America/New_York' etc.
 
 STRATEGIES = {
     'main': {
-        'timeframe': '4h',  # Changed from 1h to 4h
+        'timeframe': '4h',  # Changed from 1h
         'long_threshold': 0.65,      # Reduced from 0.85
         'short_threshold': 0.5,      # Reduced from 0.65
         'min_confidence': 0.62,      # Reduced from 0.68
@@ -22,7 +22,7 @@ STRATEGIES = {
         'timezone': 'UTC'
     },
     'swing': {
-        'timeframe': '4h',  # Keep 4h
+        'timeframe': '4h',
         'long_threshold': 1.0,       # Reduced from 1.25
         'short_threshold': 0.9,       # Reduced from 1.1
         'min_confidence': 0.65,       # Reduced from 0.72
@@ -35,7 +35,7 @@ STRATEGIES = {
         'timezone': 'UTC'
     },
     'scalp': {
-        'timeframe': '30m',  # Changed from 15m to 30m
+        'timeframe': '30m',  # Changed from 15m
         'long_threshold': 0.25,       # Reduced from 0.35
         'short_threshold': 0.2,       # Reduced from 0.3
         'min_confidence': 0.7,        # Reduced from 0.78
