@@ -28,15 +28,28 @@ class BacktestEngine:
         print(f"✅ Loaded {len(df)} candles from {df.index[0]} to {df.index[-1]}")
         return df
 
-    def run_backtest(self, symbol, strategy_type="main", days=30):
-        """Run complete backtest for one asset"""
+    def run_backtest(self, symbol, strategy_type, days):
         try:
-            # Initialize trackers
-            self.open_trades = []
-            self.trade_history = []
+            print(f"\n🔍 [BACKTEST] Starting {symbol} {strategy_type} backtest")
             
-            # Load strategy configuration
-            config = STRATEGIES[strategy_type]
+            # Get the correct prediction method
+            if strategy_type == 'swing':
+                prediction = self.analyst.predict_swing(symbol)
+            elif strategy_type == 'scalp':
+                prediction = self.analyst.predict_scalp(symbol) 
+            else:
+                prediction = self.analyst.predict(symbol)
+                
+            print(f"✅ [BACKTEST] Raw prediction: {prediction}")
+            
+            # Force accept all trades temporarily
+            if prediction:
+                print(f"🎯 [BACKTEST] Accepting trade: {prediction}")
+                self._execute_trade(prediction)
+                
+        except Exception as e:
+            print(f"💥 Backtest crashed: {str(e)}")
+            traceback.print_exc()
             
             # Get data with correct timeframe
             df = self.data.get_data(symbol, config['timeframe'])
@@ -244,3 +257,37 @@ class BacktestEngine:
         generate_html_report(result)
 
         print(f"✅ Backtest report saved to backtest_reports/{symbol}_report.html")
+
+    def _execute_trade(self, prediction):
+        """Execute a trade based on AI prediction"""
+        try:
+            if not prediction:
+                print(f"⚠️ [BACKTEST] No prediction to execute")
+                return
+                
+            # Create a mock trade entry for testing
+            from datetime import datetime
+            current_time = datetime.now()
+            entry_price = prediction.get('current_price', 100.0)
+            direction = prediction.get('direction', 'long')
+            
+            # Add to trade history for tracking
+            trade_entry = {
+                'symbol': prediction.get('asset', 'UNKNOWN'),
+                'entry_time': current_time,
+                'entry_price': entry_price,
+                'type': direction,
+                'exit_time': None,
+                'exit_price': None,
+                'pnl': 0.0,
+                'status': 'simulated',
+                'strategy': 'backtest',
+                'confidence': prediction.get('confidence', 0.5)
+            }
+            
+            self.trade_history.append(trade_entry)
+            print(f"✅ [BACKTEST] Simulated {direction} trade for {prediction.get('asset')} at ${entry_price:.2f}")
+            
+        except Exception as e:
+            print(f"❌ [BACKTEST] Trade execution failed: {str(e)}")
+            traceback.print_exc()
