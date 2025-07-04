@@ -33,7 +33,11 @@ warnings.filterwarnings("ignore")
 # --- Core Imports ---
 from scripts.core.data_engine import DataMaster
 from scripts.core.analysis_engine import AIAnalyst
-from scripts.config import ASSETS, LONG_THRESHOLD, SHORT_THRESHOLD, MIN_CONFIDENCE
+from scripts.config import (
+    ASSETS, LONG_THRESHOLD, SHORT_THRESHOLD, 
+    MIN_CONFIDENCE, STRATEGIES, RETRAIN_DAY, 
+    RETRAIN_TIME, RISK_PER_TRADE
+)
 from scripts.core.data_monitor import DataHealthMonitor
 from scripts.core.guru_wisdom import GuruDetector
 from scripts.core.risk_engine import RiskManager
