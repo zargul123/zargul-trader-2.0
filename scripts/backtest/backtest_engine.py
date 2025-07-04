@@ -1,6 +1,7 @@
 import pandas as pd
 from datetime import datetime, timedelta
 import numpy as np
+import traceback
 from scripts.core.data_engine import DataMaster
 from scripts.config import ASSETS, TECHNICAL_INDICATORS, STRATEGIES
 from scripts.backtest.metrics import calculate_all_metrics, get_empty_metrics
@@ -13,6 +14,7 @@ class BacktestEngine:
     def __init__(self):
         from scripts.core.analysis_engine import AIAnalyst
         from scripts.core.data_engine import DataMaster
+        self.trade_history = []  # Initialize the trade_history list
         self.analyst = AIAnalyst()
         self.data = DataMaster()
         self.trades = []
