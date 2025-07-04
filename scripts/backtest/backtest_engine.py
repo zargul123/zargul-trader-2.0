@@ -11,9 +11,11 @@ import os
 
 class BacktestEngine:
     def __init__(self):
+        from scripts.core.analysis_engine import AIAnalyst
+        from scripts.core.data_engine import DataMaster
+        self.analyst = AIAnalyst()
         self.data = DataMaster()
-        self.results = []
-        self.trade_history = []
+        self.trades = []
 
     def load_data(self, symbol, days=90, timeframe="4h"):
         """Load proper backtesting data"""
@@ -30,26 +32,22 @@ class BacktestEngine:
 
     def run_backtest(self, symbol, strategy_type, days):
         try:
-            print(f"\n🔍 [BACKTEST] Starting {symbol} {strategy_type} backtest")
+            import traceback  # Add at top of file
+            df = self.data.get_data(symbol, "1h" if strategy_type != "scalp" else "15m")
             
-            # Get the correct prediction method
-            if strategy_type == 'swing':
-                prediction = self.analyst.predict_swing(symbol)
-            elif strategy_type == 'scalp':
-                prediction = self.analyst.predict_scalp(symbol) 
+            if strategy_type == "main":
+                prediction = self.analyst.predict(symbol, df)
+            elif strategy_type == "swing":
+                prediction = self.analyst.predict_swing(symbol, df)
             else:
-                prediction = self.analyst.predict(symbol)
+                prediction = self.analyst.predict_scalp(symbol, df)
                 
-            print(f"✅ [BACKTEST] Raw prediction: {prediction}")
-            
-            # Force accept all trades temporarily
             if prediction:
-                print(f"🎯 [BACKTEST] Accepting trade: {prediction}")
+                print(f"🎯 Accepting trade: {prediction}")
                 self._execute_trade(prediction)
                 
         except Exception as e:
-            print(f"💥 Backtest crashed: {str(e)}")
-            traceback.print_exc()
+            print(f"💥 Backtest error: {traceback.format_exc()}")
             
             # Get data with correct timeframe
             df = self.data.get_data(symbol, config['timeframe'])
