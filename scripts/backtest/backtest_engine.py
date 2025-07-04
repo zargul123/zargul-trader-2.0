@@ -2,6 +2,10 @@ import os
 import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
+# Add these at the TOP of the file under other imports
+LONG_THRESHOLD = 1.2  # 1.2% target for longs
+SHORT_THRESHOLD = 0.8 # 0.8% target for shorts
+
 # Now import your modules
 from scripts.core.data_engine import DataMaster
 from scripts.core.analysis_engine import AIAnalyst
@@ -78,11 +82,17 @@ class BacktestEngine:
                     prediction = self.analyst.predict_scalp(symbol, window)
                 
                 if prediction and prediction['confidence'] >= 0.65:
+                    # Add debug print
+                    print(f"\n🔎 Signal Check:")
+                    print(f"Direction: {prediction['direction']}")
+                    print(f"Change: {prediction['pct_change']:.2f}%")
+                    print(f"Threshold: {'>=' + str(LONG_THRESHOLD) if prediction['direction'] == 'long' else '<=' + str(-SHORT_THRESHOLD)}%")
+                    
                     # Add these filters before accepting trades
                     if (prediction['confidence'] < 0.75 or 
                         abs(prediction['pct_change']) < 1.0 or
-                        (prediction['direction'] == 'long' and prediction['pct_change'] < 1.5) or
-                        (prediction['direction'] == 'short' and prediction['pct_change'] > -1.0)):
+                        (prediction['direction'] == 'long' and prediction['pct_change'] < LONG_THRESHOLD) or
+                        (prediction['direction'] == 'short' and prediction['pct_change'] > -SHORT_THRESHOLD)):
                         print(f"⏩ Skipping marginal signal: {prediction['direction']} {prediction['pct_change']:.2f}%")
                         continue
                     
