@@ -99,8 +99,10 @@ class BacktestEngine:
                     if (prediction['confidence'] < 0.75 or 
                         abs(prediction['pct_change']) < 1.0 or
                         (prediction['direction'] == 'long' and prediction['pct_change'] < LONG_THRESHOLD) or
-                        (prediction['direction'] == 'short' and prediction['pct_change'] > -SHORT_THRESHOLD)):
+                        (prediction['direction'] == 'short' and prediction['pct_change'] > -SHORT_THRESHOLD)):  # Notice > for shorts
                         print(f"⏩ Skipping marginal signal: {prediction['direction']} {prediction['pct_change']:.2f}%")
+                        print(f"Threshold Check: {'>=' if prediction['direction']=='long' else '<='} " 
+                              f"{LONG_THRESHOLD if prediction['direction']=='long' else -SHORT_THRESHOLD}%")
                         continue
                     
                     print(f"🎯 Signal at {df.index[i]} | {prediction['direction']} | "
