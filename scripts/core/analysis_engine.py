@@ -240,6 +240,11 @@ class AIAnalyst:
             # Calculate percentage change
             current_price = df['close'].iloc[-1]
             
+            # Add price verification debug
+            print(f"🔢 Price Check: Current=${current_price:.2f} | "
+                  f"Predicted=${predicted_price:.2f} | "
+                  f"Direction={'long' if predicted_price > current_price else 'short'}")
+            
             # Fix direction calculation - use price comparison
             direction = 'long' if predicted_price > current_price else 'short'
             
