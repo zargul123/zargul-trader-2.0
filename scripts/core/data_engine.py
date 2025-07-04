@@ -183,33 +183,29 @@ class DataMaster:
         except Exception:
             return df.assign(vol_spike=1.0)
 
-    def _yahoo_fallback(self, symbol, timeframe):
-        """Yahoo Finance fallback with robust error handling"""
+    def _yahoo_fallback(self, symbol, timeframe, days=60):
+        """Improved Yahoo Finance fallback with more data"""
         try:
             df = yf.download(
                 symbol,
-                period="30d",
+                period=f"{days}d",
                 interval=self._convert_timeframe(timeframe),
                 prepost=True,
-                progress=False,
-                threads=True
+                progress=False
             )
             if df.empty:
                 return pd.DataFrame()
-
+                
             # Standardize columns
-            column_map = {
+            return df.rename(columns={
                 'Open': 'open',
                 'High': 'high',
-                'Low': 'low',
+                'Low': 'low', 
                 'Close': 'close',
                 'Volume': 'volume'
-            }
-            df = df.rename(columns={k: v for k, v in column_map.items() if k in df.columns})
-
-            return self._ensure_required_columns(df[[col for col in ['open','high','low','close','volume'] if col in df.columns]], symbol)
+            })
         except Exception as e:
-            print(f"❌ Yahoo failed for {symbol}: {str(e)}")
+            print(f"❌ Yahoo fallback failed for {symbol}: {str(e)}")
             return pd.DataFrame()
 
     def _generate_synthetic_data(self, symbol):
