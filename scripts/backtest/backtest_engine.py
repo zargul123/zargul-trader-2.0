@@ -78,6 +78,14 @@ class BacktestEngine:
                     prediction = self.analyst.predict_scalp(symbol, window)
                 
                 if prediction and prediction['confidence'] >= 0.65:
+                    # Add these filters before accepting trades
+                    if (prediction['confidence'] < 0.75 or 
+                        abs(prediction['pct_change']) < 1.0 or
+                        (prediction['direction'] == 'long' and prediction['pct_change'] < 1.5) or
+                        (prediction['direction'] == 'short' and prediction['pct_change'] > -1.0)):
+                        print(f"⏩ Skipping marginal signal: {prediction['direction']} {prediction['pct_change']:.2f}%")
+                        continue
+                    
                     print(f"🎯 Signal at {df.index[i]} | {prediction['direction']} | "
                           f"Conf: {prediction['confidence']*100:.0f}% | "
                           f"Change: {prediction['pct_change']:.2f}%")
@@ -294,20 +302,27 @@ class BacktestEngine:
         return calculate_all_metrics(validated_trades)
 
     def calculate_performance(self):
-        """Comprehensive performance metrics"""
+        """More robust metric calculation"""
         if not self.trade_history:
             return {"error": "No trades executed"}
         
-        returns = [t['pnl']/100 for t in self.trade_history]  # Decimal returns
+        # Filter out invalid trades
+        valid_trades = [t for t in self.trade_history 
+                       if isinstance(t.get('pnl', None), (int, float))]
+        
+        if not valid_trades:
+            return {"error": "No valid trades found"}
+        
+        returns = [t['pnl']/100 for t in valid_trades]
         wins = [r for r in returns if r > 0]
         
         metrics = {
-            'total_trades': len(self.trade_history),
-            'win_rate': len(wins)/len(returns),
-            'avg_pnl': np.mean(returns)*100,
-            'sharpe': np.mean(returns)/np.std(returns) if len(returns) > 1 else 0,
-            'max_drawdown': min(returns)*100,
-            'profit_factor': sum(wins)/abs(sum([r for r in returns if r < 0])) if wins else 0
+            'total_trades': len(valid_trades),
+            'win_rate': len(wins)/len(returns) if returns else 0,
+            'avg_pnl': np.mean(returns)*100 if returns else 0,
+            'sharpe': (np.mean(returns)/np.std(returns))*np.sqrt(252) if len(returns)>1 and np.std(returns)>0 else 0,
+            'max_drawdown': min(returns)*100 if returns else 0,
+            'profit_factor': (sum(wins)/abs(sum([r for r in returns if r<0]))) if wins and any(r<0 for r in returns) else 0
         }
         return metrics
 
@@ -331,7 +346,12 @@ class BacktestEngine:
                 
             # Generate realistic exit price after hold period
             hold_hours = random.randint(4, 24) if prediction['type'] != 'scalp' else random.randint(1, 4)
-            exit_price = prediction['current_price'] * (1 + prediction['pct_change']/100 * (1 if prediction['direction'] == 'long' else -1))
+            
+            # More realistic exit price simulation (with random noise)
+            price_change = prediction['pct_change'] / 100
+            direction = 1 if prediction['direction'] == 'long' else -1
+            exit_multiplier = (1 + direction * price_change * random.uniform(0.8, 1.2))
+            exit_price = prediction['current_price'] * exit_multiplier
             
             # Calculate actual PnL (with 0.15% slippage)
             entry = prediction['current_price'] * (1.0015 if prediction['direction'] == 'long' else 0.9985)
