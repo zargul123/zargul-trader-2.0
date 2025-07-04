@@ -22,13 +22,14 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 class BacktestEngine:
-    def __init__(self):
+    def __init__(self, debug=False):
         from scripts.core.analysis_engine import AIAnalyst
         from scripts.core.data_engine import DataMaster
         self.trade_history = []  # Initialize the trade_history list
         self.analyst = AIAnalyst()
         self.data = DataMaster()
         self.trades = []
+        self.debug = debug
 
     def load_data(self, symbol, days=90, timeframe="4h"):
         """Load proper backtesting data"""
@@ -85,10 +86,14 @@ class BacktestEngine:
                 
                 if prediction and prediction['confidence'] >= 0.65:
                     # Add debug print
-                    print(f"\n🔎 Signal Check:")
-                    print(f"Direction: {prediction['direction']}")
-                    print(f"Change: {prediction['pct_change']:.2f}%")
-                    print(f"Threshold: {'>=' + str(LONG_THRESHOLD) if prediction['direction'] == 'long' else '<=' + str(-SHORT_THRESHOLD)}%")
+                    if self.debug:
+                        print(f"\n🔎 Signal Check:")
+                        print(f"Direction: {prediction['direction']}")
+                        print(f"Change: {prediction['pct_change']:.2f}%")
+                        print(f"Threshold: {'>=' + str(LONG_THRESHOLD) if prediction['direction'] == 'long' else '<=' + str(-SHORT_THRESHOLD)}%")
+                        print(f"Raw prediction: {prediction}")
+                    else:
+                        print(f"🔎 Signal: {prediction['direction']} {prediction['pct_change']:.2f}% (conf: {prediction['confidence']*100:.0f}%)")
                     
                     # Add these filters before accepting trades
                     if (prediction['confidence'] < 0.75 or 
@@ -397,11 +402,14 @@ if __name__ == "__main__":
     parser.add_argument('--asset', required=True, help='Asset to backtest (e.g. BTC-USD)')
     parser.add_argument('--strategy', required=True, help='Strategy to use (main/swing/scalp)')
     parser.add_argument('--days', type=int, default=90, help='Number of days to backtest')
+    parser.add_argument('--debug', action='store_true', help='Enable debug mode with verbose output')
     args = parser.parse_args()
 
     print(f"\n🚀 Starting backtest for {args.asset} ({args.strategy} strategy)")
+    if args.debug:
+        print("🔍 Debug mode enabled - verbose output active")
     
-    engine = BacktestEngine()
+    engine = BacktestEngine(debug=args.debug)
     results = engine.run_backtest(args.asset, args.strategy, args.days)
     
     print("\n📊 Backtest Results:")
