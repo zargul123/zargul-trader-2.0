@@ -187,20 +187,21 @@ class BacktestEngine:
             raise ValueError(f"Unknown strategy: {name}")
 
     def should_execute_trade(self, prediction):
-        """More lenient trade execution criteria"""
+        """More lenient trade criteria"""
         if not prediction:
+            print("⚠️ Empty prediction in backtest")
             return False
             
-        # Convert confidence to percentage (0.55 → 55)
-        confidence_percent = prediction.get('confidence', 0) * 100
+        # Ensure all required fields exist
+        required_fields = ['direction', 'confidence', 'pct_change']
+        if not all(field in prediction for field in required_fields):
+            print(f"⚠️ Malformed prediction: {prediction}")
+            return False
         
-        # Lowered thresholds further
-        min_confidence = 45  # 45% instead of 55%
-        min_move = 0.5  # 0.5% instead of 1%
-        
-        return (confidence_percent >= min_confidence and 
-                ((prediction['direction'] == 'long' and prediction['pct_change'] >= min_move) or
-                 (prediction['direction'] == 'short' and prediction['pct_change'] <= -min_move)))
+        # Lower thresholds temporarily for testing
+        return (prediction['confidence'] >= 0.4 and  # 40% confidence
+                ((prediction['direction'] == 'long' and prediction['pct_change'] >= 0.5) or
+                 (prediction['direction'] == 'short' and prediction['pct_change'] <= -0.5)))
 
     def calculate_position_size(self, volatility, df):
         """Better position sizing based on volatility"""
