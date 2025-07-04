@@ -240,32 +240,28 @@ class AIAnalyst:
             # Calculate percentage change
             current_price = df['close'].iloc[-1]
             
-            # Fix confidence calculation - current values are 0-0.1 which is too low
-            confidence = min(0.99, max(0.3, raw_prediction[2] * 3))  # Force minimum 30% confidence
-            
             # Fix direction calculation
-            direction = 'long' if raw_prediction[1] > 0.55 else 'short'
+            direction = 'long' if raw_prediction[1] > 0.5 else 'short'
+            
+            # Fix confidence scaling
+            confidence = min(0.99, max(0.3, (raw_prediction[2] * 2)))  # 30-99% range
             
             # Fix pct_change calculation
             pct_change = abs((predicted_price - current_price) / current_price) * 100
             pct_change = min(20, pct_change)  # Cap at 20% to avoid extreme values
             
-            strategy_type = 'main'
-            
             print(f"✅ [DEBUG] Current: {current_price}, Direction: {direction}, Change: {pct_change:.2f}%")
 
             # Add guaranteed fields
             prediction = {
-                'asset': str(symbol),
-                'timestamp': datetime.now().isoformat(),  # Critical for backtest
+                'asset': symbol,
+                'timestamp': datetime.now().isoformat(),
                 'price': float(predicted_price),
                 'direction': direction,
-                'confidence': min(0.99, max(0.3, confidence)),  # 30-99% range
+                'confidence': confidence,
                 'pct_change': float(pct_change),
                 'type': 'main',
-                'current_price': float(current_price),
-                'exchange': 'simulated',
-                'strategy': strategy_type
+                'current_price': float(current_price)
             }
             
             # Validate all required fields exist
@@ -294,11 +290,8 @@ class AIAnalyst:
             return prediction
             
         except Exception as e:
-            print(f"💥 [DEBUG] Prediction crash for {symbol}: {str(e)}")
-            traceback.print_exc()
-            pred = self._create_fallback_prediction(symbol)
-            print(f"⚡ [DEBUG] Emergency fallback: {pred}")
-            return pred
+            print(f"💥 Prediction failed: {traceback.format_exc()}")
+            return self._create_fallback_prediction(symbol)
 
     def _generate_synthetic_features(self, df, missing_cols):
         """Generate synthetic features for missing columns"""
