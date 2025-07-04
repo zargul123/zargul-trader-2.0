@@ -11,12 +11,12 @@ TIMEZONE = pytz.timezone('UTC')  # Or 'America/New_York' etc.
 STRATEGIES = {
     'main': {
         'timeframe': '4h',
-        'long_threshold': 0.3,       # Reduced from 0.85
-        'short_threshold': 0.25,     # Reduced from 0.65
-        'min_confidence': 0.55,      # Reduced from 0.68
+        'long_threshold': 1.5,       # Increased from 0.3
+        'short_threshold': 1.2,      # Increased from 0.25
+        'min_confidence': 0.75,      # Increased from 0.55
         'required_indicators': 1,    # Only need 1/3 indicators to confirm
-        'min_hold': 21600,           # 6 hours (reduced from 8)
-        'max_hold': 86400,           # 24 hours (reduced from 48)
+        'min_hold': 28800,           # 8 hours
+        'max_hold': 172800,          # 48 hours
         'sl_multiplier': 2.0,        # Reduced from 2.5
         'tp_multiplier': 3.0,        # Reduced from 4.0
         'rsi_limits': (30, 70),      # Widened from (28,72)
