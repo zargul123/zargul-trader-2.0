@@ -270,21 +270,18 @@ class AIAnalyst:
 
             prediction = self.predict(symbol, df)
             if not prediction:
-                return None
-
-            # Adjust for swing trading parameters
-            if (prediction['confidence'] >= SWING_MIN_CONFIDENCE and 
-                abs(prediction['pct_change']) >= SWING_THRESHOLD):
-                return {
-                    **prediction,
-                    'type': 'swing',
-                    'hold_time': random.randint(SWING_MIN_HOLD, SWING_MAX_HOLD),
-                    'timeframe': '4h'
-                }
-            return None
+                return self._create_fallback_prediction(symbol)  # Never return None
+                
+            return {
+                **prediction,
+                'type': 'swing',
+                'hold_time': random.randint(SWING_MIN_HOLD, SWING_MAX_HOLD),
+                'timeframe': '4h'
+            }
+            
         except Exception as e:
             print(f"⚠️ Swing prediction failed for {symbol}: {str(e)}")
-            return None
+            return self._create_fallback_prediction(symbol)  # Always return valid prediction
 
     def predict_scalp(self, symbol, df=None):
         """Predicts scalp trade opportunities (quick trades)"""
