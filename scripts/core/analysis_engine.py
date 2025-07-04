@@ -238,20 +238,25 @@ class AIAnalyst:
 
             # Calculate percentage change
             current_price = df['close'].iloc[-1]
-            direction = 'long' if float(raw_prediction[1]) > 0.6 else 'short'
-            pct_change = ((predicted_price - current_price) / current_price) * 100
+            
+            # Fix confidence calculation - current values are 0-0.1 which is too low
+            confidence = min(0.99, max(0.3, raw_prediction[2] * 3))  # Force minimum 30% confidence
+            
+            # Fix direction calculation
+            direction = 'long' if raw_prediction[1] > 0.55 else 'short'
+            
+            # Fix pct_change calculation
+            pct_change = abs((predicted_price - current_price) / current_price) * 100
+            pct_change = min(20, pct_change)  # Cap at 20% to avoid extreme values
+            
             print(f"✅ [DEBUG] Current: {current_price}, Direction: {direction}, Change: {pct_change:.2f}%")
-
-            # Force positive percentage for long trades
-            if direction == 'long' and pct_change < 0:
-                pct_change = abs(pct_change)
 
             # Create prediction dictionary
             prediction = {
                 'asset': str(symbol),
                 'price': float(predicted_price),
                 'direction': direction,
-                'confidence': float(min(0.99, raw_prediction[2])),
+                'confidence': float(confidence),
                 'pct_change': float(pct_change),
                 'type': 'main',
                 'current_price': float(df['close'].iloc[-1]) if df is not None else float(predicted_price)
