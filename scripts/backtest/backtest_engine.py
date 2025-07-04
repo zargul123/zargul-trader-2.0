@@ -79,6 +79,16 @@ class BacktestEngine:
                     signals_found += 1
 
             print(f"\n📍 Found {signals_found} valid signals in this period")
+            
+            # Add this after the backtest completes:
+            print("\n📈 Trade Performance Summary:")
+            if self.trade_history:
+                wins = [t for t in self.trade_history if t.get('pnl',0) > 0]
+                print(f"• {len(wins)}/{len(self.trade_history)} winning trades "
+                      f"({len(wins)/len(self.trade_history):.1%} win rate)")
+                print(f"• Avg PnL: {sum(t.get('pnl',0) for t in self.trade_history)/len(self.trade_history):.2f}%")
+            else:
+                print("⚠️ No trades executed")
                 
         except Exception as e:
             print(f"💥 Backtest error: {traceback.format_exc()}")
