@@ -298,3 +298,23 @@ class BacktestEngine:
         except Exception as e:
             print(f"❌ [BACKTEST] Trade execution failed: {str(e)}")
             traceback.print_exc()
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--asset', required=True, help='Asset to backtest (e.g. BTC-USD)')
+    parser.add_argument('--strategy', required=True, help='Strategy to use (main/swing/scalp)')
+    parser.add_argument('--days', type=int, default=90, help='Number of days to backtest')
+    args = parser.parse_args()
+
+    print(f"\n🚀 Starting backtest for {args.asset} ({args.strategy} strategy)")
+    
+    engine = BacktestEngine()
+    results = engine.run_backtest(args.asset, args.strategy, args.days)
+    
+    print("\n📊 Backtest Results:")
+    print(f"Total Trades Executed: {len(engine.trade_history)}")
+    if engine.trade_history:
+        print("\nSample Trades:")
+        for trade in engine.trade_history[:3]:
+            print(f"{trade['symbol']} {trade['type']} @ {trade['entry_price']}")
