@@ -32,20 +32,18 @@ class BacktestEngine:
 
     def load_data(self, symbol, days=90, timeframe="4h"):
         """Load proper backtesting data"""
-        print(f"\n📊 Loading {days} days of {timeframe} data for {symbol}")
-        df = self.data.get_data(symbol, timeframe)
+        # Change the data loading to:
+        days_to_load = max(days, 7)  # Always load at least 7 days
+        print(f"\n📊 Loading {days_to_load} days of {timeframe} data for {symbol}")
+        df = self.data.get_data(symbol, "1h")
+        df = df.last(f"{days_to_load}D")  # Get last N days
         
         # Ensure we have enough data
-        if len(df) < 100:
+        if len(df) < 50:
             print(f"⚠️ Insufficient data for {symbol} ({len(df)} rows)")
             return pd.DataFrame()
         
-        # Change to get more recent data:
-        end_date = datetime.now()
-        start_date = end_date - timedelta(days=days)
-        df = df.loc[start_date:end_date]
         print(f"📅 Date range: {df.index[0]} to {df.index[-1]}")
-            
         print(f"✅ Loaded {len(df)} candles from {df.index[0]} to {df.index[-1]}")
         return df
 
@@ -71,8 +69,12 @@ class BacktestEngine:
             print(f"\n🔎 Scanning {len(df)} candles for signals...")
             signals_found = 0
 
-            for i in range(100, len(df), 10):  # Check every 10 candles
-                window = df.iloc[i-100:i]  # Use rolling 100-candle window
+            # Change the scanning loop to:
+            window_size = 50  # Reduced from 100
+            step_size = 5     # Check every 5 candles
+
+            for i in range(window_size, len(df), step_size):
+                window = df.iloc[i-window_size:i]  # Use rolling window
                 
                 if strategy_type == "main":
                     prediction = self.analyst.predict(symbol, window)
