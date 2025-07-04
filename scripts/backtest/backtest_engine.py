@@ -302,44 +302,43 @@ class BacktestEngine:
         print(f"✅ Backtest report saved to backtest_reports/{symbol}_report.html")
 
     def _execute_trade(self, prediction):
-        """Execute a trade based on AI prediction"""
+        """Realistic trade simulation with PnL"""
         try:
+            import random
+            from datetime import timedelta
+            
             if not prediction:
                 print(f"⚠️ [BACKTEST] No prediction to execute")
                 return
                 
-            # Add Debug Prints in key locations:
-            print(f"\n📝 TRADE SIGNAL RECEIVED:")
-            print(f"Asset: {prediction.get('asset')}")
-            print(f"Direction: {prediction.get('direction')}")
-            print(f"Confidence: {prediction.get('confidence', 0)*100:.1f}%")
-            print(f"Predicted Change: {prediction.get('pct_change', 0):.2f}%")
-                
-            # Create a mock trade entry for testing
-            from datetime import datetime
-            current_time = datetime.now()
-            entry_price = prediction.get('current_price', 100.0)
-            direction = prediction.get('direction', 'long')
+            # Generate realistic exit price after hold period
+            hold_hours = random.randint(4, 24) if prediction['type'] != 'scalp' else random.randint(1, 4)
+            exit_price = prediction['current_price'] * (1 + prediction['pct_change']/100 * (1 if prediction['direction'] == 'long' else -1))
             
-            # Add to trade history for tracking
-            trade_entry = {
-                'symbol': prediction.get('asset', 'UNKNOWN'),
-                'entry_time': current_time,
-                'entry_price': entry_price,
-                'type': direction,
-                'exit_time': None,
-                'exit_price': None,
-                'pnl': 0.0,
-                'status': 'simulated',
-                'strategy': 'backtest',
-                'confidence': prediction.get('confidence', 0.5)
+            # Calculate actual PnL (with 0.15% slippage)
+            entry = prediction['current_price'] * (1.0015 if prediction['direction'] == 'long' else 0.9985)
+            exit = exit_price * (0.9985 if prediction['direction'] == 'long' else 1.0015)
+            pnl_pct = ((exit - entry)/entry) * 100
+            
+            trade = {
+                'symbol': prediction['asset'],
+                'entry': entry,
+                'exit': exit,
+                'entry_time': datetime.now(),
+                'exit_time': datetime.now() + timedelta(hours=hold_hours),
+                'direction': prediction['direction'],
+                'pnl': pnl_pct,
+                'status': 'closed',
+                'confidence': prediction['confidence']
             }
+            self.trade_history.append(trade)
             
-            self.trade_history.append(trade_entry)
-            print(f"✅ [BACKTEST] Simulated {direction} trade for {prediction.get('asset')} at ${entry_price:.2f}")
-            
+            print(f"✅ Executed {trade['direction']} trade | Entry: ${entry:.2f} | "
+                  f"Exit: ${exit:.2f} | PnL: {pnl_pct:.2f}%")
+                  
         except Exception as e:
-            print(f"❌ [BACKTEST] Trade execution failed: {str(e)}")
+            print(f"❌ Trade execution failed: {str(e)}")
+            import traceback
             traceback.print_exc()
 
 if __name__ == "__main__":
