@@ -183,42 +183,64 @@ class AIAnalyst:
             raise
 
     def predict(self, symbol, df=None, news=[]):
+        import traceback
         try:
+            print(f"\n🔍 [DEBUG] Starting prediction for {symbol}")
+            
             if symbol not in self.models:
-                print(f"⚠️ Model missing for {symbol}, using fallback")
-                return self._create_fallback_prediction(symbol)
+                print(f"⚠️ [DEBUG] Model missing for {symbol}")
+                pred = self._create_fallback_prediction(symbol)
+                print(f"⚡ [DEBUG] Fallback prediction: {pred}")
+                return pred
                 
             if df is None:
+                print(f"⚠️ [DEBUG] Fetching fresh data for {symbol}")
                 df = self.data.get_data(symbol)
-                if df.empty:
-                    print(f"⚠️ Empty data for {symbol}, using fallback")
-                    return self._create_fallback_prediction(symbol)
+                
+            if df.empty:
+                print(f"⚠️ [DEBUG] Empty dataframe for {symbol}")
+                pred = self._create_fallback_prediction(symbol)
+                print(f"⚡ [DEBUG] Fallback prediction: {pred}")
+                return pred
 
+            print(f"✅ [DEBUG] Data shape: {df.shape}, Columns: {df.columns.tolist()}")
+            
             # Add this validation
             required_cols = ['open','high','low','close','volume']
             if not all(col in df.columns for col in required_cols):
-                print(f"⚠️ Missing columns for {symbol}, using fallback")
-                return self._create_fallback_prediction(symbol)
+                print(f"⚠️ [DEBUG] Missing columns for {symbol}, using fallback")
+                pred = self._create_fallback_prediction(symbol)
+                print(f"⚡ [DEBUG] Fallback prediction: {pred}")
+                return pred
 
             features = ['open','high','low','close','volume'] + TECHNICAL_INDICATORS
+            print(f"✅ [DEBUG] Required features: {features}")
+            
             last_sequence = df[features].values[-SEQUENCE_LENGTH:]
+            print(f"✅ [DEBUG] Last sequence shape: {last_sequence.shape}")
 
             scaled_data = self.scalers[symbol].transform(
                 pd.DataFrame(last_sequence, columns=features)
             )
+            print(f"✅ [DEBUG] Scaled data stats - Mean: {scaled_data.mean():.4f}, Std: {scaled_data.std():.4f}")
 
             input_data = scaled_data.reshape(1, SEQUENCE_LENGTH, len(features))
-            model_prediction = self.models[symbol].predict(input_data, verbose=0)[0]
+            print(f"✅ [DEBUG] Input data shape: {input_data.shape}")
+            
+            raw_prediction = self.models[symbol].predict(input_data, verbose=0)[0]
+            print(f"✅ [DEBUG] Raw model output: {raw_prediction}")
 
             # Get predicted price
             dummy_row = np.zeros((1, len(features)))
-            dummy_row[0, 3] = model_prediction[0]
+            dummy_row[0, 3] = raw_prediction[0]
             predicted_price = self.scalers[symbol].inverse_transform(dummy_row)[0, 3]
+            print(f"✅ [DEBUG] Predicted price: {predicted_price}")
 
             # Calculate percentage change
             current_price = df['close'].iloc[-1]
-            direction = 'long' if float(model_prediction[1]) > 0.6 else 'short'
+            direction = 'long' if float(raw_prediction[1]) > 0.6 else 'short'
             pct_change = ((predicted_price - current_price) / current_price) * 100
+            print(f"✅ [DEBUG] Current: {current_price}, Direction: {direction}, Change: {pct_change:.2f}%")
 
             # Force positive percentage for long trades
             if direction == 'long' and pct_change < 0:
@@ -229,23 +251,35 @@ class AIAnalyst:
                 'asset': str(symbol),
                 'price': float(predicted_price),
                 'direction': direction,
-                'confidence': float(min(0.99, model_prediction[2])),  # Now shows 0.99 (99%)
+                'confidence': float(min(0.99, raw_prediction[2])),
                 'pct_change': float(pct_change),
                 'type': 'main',
                 'current_price': float(df['close'].iloc[-1]) if df is not None else float(predicted_price)
             }
+            print(f"✅ [DEBUG] Final prediction created: {prediction}")
 
             # Now safely apply news boost AFTER prediction is created
             if news:
-                guru = GuruDetector()
-                wisdom = guru.find_patterns(df, news)
-                if wisdom:
-                    prediction['confidence'] = min(0.99, prediction['confidence'] * 1.1)  # 10% boost!
+                print(f"✅ [DEBUG] Applying news boost...")
+                try:
+                    from scripts.core.guru_wisdom import GuruDetector
+                    guru = GuruDetector()
+                    wisdom = guru.find_patterns(df, news)
+                    if wisdom:
+                        prediction['confidence'] = min(0.99, prediction['confidence'] * 1.1)
+                        print(f"✅ [DEBUG] News boost applied!")
+                except Exception as guru_e:
+                    print(f"⚠️ [DEBUG] Guru boost failed: {guru_e}")
 
+            print(f"🎯 [DEBUG] Returning prediction for {symbol}: {prediction}")
             return prediction
+            
         except Exception as e:
-            print(f"🔧 Prediction recovery for {symbol}: {str(e)}")
-            return self._create_fallback_prediction(symbol)
+            print(f"💥 [DEBUG] Prediction crash for {symbol}: {str(e)}")
+            traceback.print_exc()
+            pred = self._create_fallback_prediction(symbol)
+            print(f"⚡ [DEBUG] Emergency fallback: {pred}")
+            return pred
 
     def _generate_synthetic_features(self, df, missing_cols):
         """Generate synthetic features for missing columns"""
