@@ -240,15 +240,15 @@ class AIAnalyst:
             # Calculate percentage change
             current_price = df['close'].iloc[-1]
             
-            # Fix direction calculation
-            direction = 'long' if raw_prediction[1] > 0.5 else 'short'
+            # Fix direction calculation - use price comparison
+            direction = 'long' if predicted_price > current_price else 'short'
             
             # Fix confidence scaling
             confidence = min(0.99, max(0.3, (raw_prediction[2] * 2)))  # 30-99% range
             
-            # Fix pct_change calculation
-            pct_change = abs((predicted_price - current_price) / current_price) * 100
-            pct_change = min(20, pct_change)  # Cap at 20% to avoid extreme values
+            # Fix pct_change calculation - keep the sign
+            pct_change = ((predicted_price - current_price) / current_price) * 100
+            pct_change = max(-20, min(20, pct_change))  # Cap at ±20% to avoid extreme values
             
             print(f"✅ [DEBUG] Current: {current_price}, Direction: {direction}, Change: {pct_change:.2f}%")
 
