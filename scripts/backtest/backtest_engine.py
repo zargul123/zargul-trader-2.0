@@ -64,9 +64,12 @@ class BacktestEngine:
             else:
                 prediction = self.analyst.predict_scalp(symbol, df)
                 
-            if prediction:
-                print(f"🎯 Accepting trade: {prediction}")
+            # Replace the complex trade logic with:
+            if self.should_execute_trade(prediction):
                 self._execute_trade(prediction)
+                print("✅ Trade executed")
+            else:
+                print("⏩ Trade skipped (doesn't meet criteria)")
                 
         except Exception as e:
             print(f"💥 Backtest error: {traceback.format_exc()}")
