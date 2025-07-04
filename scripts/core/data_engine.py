@@ -142,22 +142,25 @@ class DataMaster:
             return pd.DataFrame()
 
     def _get_twelvedata_series(self, symbol, timeframe):
-        """Get data from TwelveData with timeout and retry"""
-        # Add timeout and retry
+        """Get data from TwelveData with proper error handling"""
         try:
-            data = self._twelvedata_request('time_series', symbol, timeframe)
+            params = {
+                'outputsize': 5000,  # Max historical data
+                'apikey': TWELVEDATA_API_KEY
+            }
+            data = self._twelvedata_request('time_series', symbol, timeframe, params)
+            
             if not data or data.get('status') != 'ok':
-                raise ValueError("Bad data")
+                raise ValueError("Invalid TwelveData response")
                 
             df = self._parse_twelvedata_response(data, symbol)
-            if len(df) < 100:  # Require minimum data
-                raise ValueError("Not enough data")
+            if len(df) < 100:  # Minimum viable data
+                raise ValueError("Insufficient data points")
                 
-            print(f"✅ Got clean {symbol} data from TwelveData")
             return df
             
         except Exception as e:
-            print(f"⚠️ TwelveData failed for {symbol}, trying Yahoo...")
+            print(f"⚠️ TwelveData failed for {symbol}: {str(e)}")
             return self._yahoo_fallback(symbol, timeframe)
 
     def _calculate_volume_spike(self, df):
