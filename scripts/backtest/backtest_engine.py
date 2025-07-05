@@ -411,6 +411,11 @@ class BacktestEngine:
             
             # Add slippage (0.1%) and fees (0.05%)
             final_pnl = pnl_pct * 0.9985  # Adjust for costs
+            
+            # Debug PnL calculation
+            print(f"🔢 PnL Check: Entry=${entry_price:.2f} | Exit=${exit_price:.2f} | "
+                  f"Raw PnL={((exit_price-entry_price)/entry_price)*100:.2f}% | "
+                  f"Direction={direction} | Final PnL={final_pnl:.2f}%")
             pnl_pct = final_pnl
             
             trade = {
