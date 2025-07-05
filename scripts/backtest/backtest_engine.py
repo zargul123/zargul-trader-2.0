@@ -375,7 +375,16 @@ class BacktestEngine:
             # Calculate actual PnL (with 0.15% slippage)
             entry = prediction['current_price'] * (1.0015 if prediction['direction'] == 'long' else 0.9985)
             exit = exit_price * (0.9985 if prediction['direction'] == 'long' else 1.0015)
-            pnl_pct = ((exit - entry)/entry) * 100
+            
+            # Add directional profit calculation
+            if prediction['direction'] == 'long':
+                pnl_pct = ((exit - entry) / entry) * 100
+            else:  # short
+                pnl_pct = ((entry - exit) / entry) * 100  # Inverted for shorts
+            
+            # Add slippage (0.1%) and fees (0.05%)
+            final_pnl = pnl_pct * 0.9985  # Adjust for costs
+            pnl_pct = final_pnl
             
             trade = {
                 'symbol': prediction['asset'],
