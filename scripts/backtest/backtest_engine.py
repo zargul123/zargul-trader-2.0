@@ -356,88 +356,44 @@ class BacktestEngine:
     def _execute_trade(self, prediction):
         """Realistic trade simulation with PnL"""
         try:
-            import random
             from datetime import timedelta
             
             if not prediction:
                 print(f"⚠️ [BACKTEST] No prediction to execute")
                 return
                 
-            # Generate realistic exit price after hold period
-            hold_hours = random.randint(4, 24) if prediction['type'] != 'scalp' else random.randint(1, 4)
+            # Force 0.2% slippage and 0.1% fees
+            entry_slippage = prediction['current_price'] * 0.002 * (-1 if prediction['direction'] == 'long' else 1)
+            exit_slippage = (prediction['price'] * 0.002 * (1 if prediction['direction'] == 'long' else -1))
+            fees = prediction['current_price'] * 0.001
             
-            # Get current price and direction
-            current_price = prediction['current_price']
-            direction = prediction['direction']
-            pct_change = prediction['pct_change']
+            entry_price = prediction['current_price'] + entry_slippage
+            exit_price = prediction['price'] + exit_slippage - fees
             
-            # Calculate entry price with slippage
-            entry_price = current_price * (1.0015 if direction == 'long' else 0.9985)
-            
-            # Set 1% stop-loss for all trades
-            stop_loss = entry_price * (0.99 if direction == 'long' else 1.01)
-            
-            # Get historical data for volatility calculation
-            try:
-                df = self.data.get_data(prediction['asset'], "1h")
-                if len(df) > 20:
-                    # Simulate price path with volatility
-                    volatility = df['close'].pct_change().std() * 2  # 2x std dev
-                    direction_sign = 1 if direction == 'long' else -1
-                    exit_price = current_price * (1 + direction_sign * abs(pct_change)/100 * random.uniform(0.7, 1.3))
-                else:
-                    # Fallback if no data
-                    target = entry_price * (1 + pct_change/100)
-                    exit_price = random.uniform(min(stop_loss, target), max(stop_loss, target))
-            except Exception:
-                # Fallback exit logic
-                target = entry_price * (1 + pct_change/100)
-                exit_price = random.uniform(min(stop_loss, target), max(stop_loss, target))
-            
-            # Enforce stop-loss
-            if direction == 'long':
-                exit_price = max(exit_price, stop_loss)  # Long stop-loss is minimum
-            else:
-                exit_price = min(exit_price, stop_loss)  # Short stop-loss is maximum
-            
-            # Apply exit slippage
-            exit_price = exit_price * (0.9985 if direction == 'long' else 1.0015)
-            
-            # Add directional profit calculation
-            if direction == 'long':
-                pnl_pct = ((exit_price - entry_price) / entry_price) * 100
-            else:  # short
-                pnl_pct = ((entry_price - exit_price) / entry_price) * 100  # Inverted for shorts
-            
-            # Add slippage (0.1%) and fees (0.05%)
-            final_pnl = pnl_pct * 0.9985  # Adjust for costs
+            # Calculate realistic PnL
+            pnl = ((exit_price - entry_price)/entry_price)*100 if prediction['direction'] == 'long' \
+                  else ((entry_price - exit_price)/entry_price)*100
             
             # Debug PnL calculation
             print(f"🔢 PnL Check: Entry=${entry_price:.2f} | Exit=${exit_price:.2f} | "
                   f"Raw PnL={((exit_price-entry_price)/entry_price)*100:.2f}% | "
-                  f"Direction={direction} | Final PnL={final_pnl:.2f}%")
-            pnl_pct = final_pnl
+                  f"Direction={prediction['direction']} | Final PnL={pnl:.2f}%")
             
             trade = {
                 'symbol': prediction['asset'],
                 'entry': entry_price,
                 'exit': exit_price,
                 'entry_time': datetime.now(),
-                'exit_time': datetime.now() + timedelta(hours=hold_hours),
-                'direction': direction,
-                'pnl': pnl_pct,
+                'exit_time': datetime.now() + timedelta(hours=4),  # Default 4 hour hold
+                'direction': prediction['direction'],
+                'pnl': pnl,
                 'status': 'closed',
-                'confidence': prediction['confidence'],
-                'stop_loss': stop_loss  # Track stop-loss for analysis
+                'confidence': prediction['confidence']
             }
             self.trade_history.append(trade)
             
-            # Enhanced logging
-            stop_hit = "STOP HIT" if (direction == 'long' and exit_price <= stop_loss * 1.001) or \
-                                   (direction == 'short' and exit_price >= stop_loss * 0.999) else ""
-            
-            print(f"✅ Executed {direction} trade | Entry: ${entry_price:.2f} | "
-                  f"Exit: ${exit_price:.2f} | PnL: {pnl_pct:.2f}% {stop_hit}")
+            print(f"✅ Executed {prediction['direction']} trade | Entry: ${entry_price:.2f} | "
+                  f"Exit: ${exit_price:.2f} | PnL: {pnl:.2f}%")
                   
         except Exception as e:
             print(f"❌ Trade execution failed: {str(e)}")
