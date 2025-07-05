@@ -246,7 +246,9 @@ class AIAnalyst:
                   f"Direction={'long' if predicted_price > current_price else 'short'}")
             
             # Price-based directional logic (not binary classifier)
-            direction = 'long' if predicted_price > current_price else 'short'
+            price_diff = predicted_price - current_price
+            direction = 'long' if price_diff > (current_price * 0.005) else (  # 0.5% threshold
+                         'short' if price_diff < -(current_price * 0.005) else 'hold')
             pct_change = ((predicted_price - current_price) / current_price) * 100  # Keep signed value
             
             # Fix confidence scaling first
