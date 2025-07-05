@@ -121,13 +121,13 @@ class AIAnalyst:
                 os.rename(model_path, f"{model_path}.backup")
             df = self.data.get_training_data(symbol)
             features = ['open','high','low','close','volume'] + TECHNICAL_INDICATORS
-            
+
             # Add validation for missing columns
             missing_cols = [col for col in features if col not in df.columns]
             if missing_cols:
                 print(f"⚠️ Missing columns for {symbol}: {missing_cols}")
                 df = self._generate_synthetic_features(df, missing_cols)
-            
+
             df = df[features].astype('float32')
 
             if len(df) < 100:
@@ -187,17 +187,17 @@ class AIAnalyst:
         from datetime import datetime
         try:
             print(f"\n🔍 [DEBUG] Starting prediction for {symbol}")
-            
+
             if symbol not in self.models:
                 print(f"⚠️ [DEBUG] Model missing for {symbol}")
                 pred = self._create_fallback_prediction(symbol)
                 print(f"⚡ [DEBUG] Fallback prediction: {pred}")
                 return pred
-                
+
             if df is None:
                 print(f"⚠️ [DEBUG] Fetching fresh data for {symbol}")
                 df = self.data.get_data(symbol)
-                
+
             if df.empty:
                 print(f"⚠️ [DEBUG] Empty dataframe for {symbol}")
                 pred = self._create_fallback_prediction(symbol)
@@ -205,7 +205,7 @@ class AIAnalyst:
                 return pred
 
             print(f"✅ [DEBUG] Data shape: {df.shape}, Columns: {df.columns.tolist()}")
-            
+
             # Add this validation
             required_cols = ['open','high','low','close','volume']
             if not all(col in df.columns for col in required_cols):
@@ -216,7 +216,7 @@ class AIAnalyst:
 
             features = ['open','high','low','close','volume'] + TECHNICAL_INDICATORS
             print(f"✅ [DEBUG] Required features: {features}")
-            
+
             last_sequence = df[features].values[-SEQUENCE_LENGTH:]
             print(f"✅ [DEBUG] Last sequence shape: {last_sequence.shape}")
 
@@ -227,7 +227,7 @@ class AIAnalyst:
 
             input_data = scaled_data.reshape(1, SEQUENCE_LENGTH, len(features))
             print(f"✅ [DEBUG] Input data shape: {input_data.shape}")
-            
+
             raw_prediction = self.models[symbol].predict(input_data, verbose=0)[0]
             print(f"✅ [DEBUG] Raw model output: {raw_prediction}")
 
@@ -239,34 +239,34 @@ class AIAnalyst:
 
             # Calculate percentage change
             current_price = df['close'].iloc[-1]
-            
+
             # Add price verification debug
             print(f"🔢 Price Check: Current=${current_price:.2f} | "
                   f"Predicted=${predicted_price:.2f} | "
                   f"Direction={'long' if predicted_price > current_price else 'short'}")
-            
+
             # Price-based directional logic (not binary classifier)
             price_diff = predicted_price - current_price
             direction = 'long' if price_diff > (current_price * 0.005) else (  # 0.5% threshold
                          'short' if price_diff < -(current_price * 0.005) else 'hold')
             pct_change = ((predicted_price - current_price) / current_price) * 100  # Keep signed value
-            
+
             # New scientifically calibrated confidence:
             price_volatility = df['close'].pct_change().std() * 100  # In %
             confidence = 0.5 + (abs(predicted_price - current_price) / (current_price * price_volatility * 2))
             confidence = min(0.9, max(0.4, confidence))  # Cap at 90%, floor at 40%
-            
+
             # Handle near-zero predictions
             if abs(pct_change) < 0.05:  # If change < 0.05%
                 direction = 'hold'
                 confidence *= 0.5  # Reduce confidence for marginal moves
-            
+
             # Add debug validation
             print(f"🔢 Direction Check: Current=${current_price:.2f} | "
                   f"Predicted=${predicted_price:.2f} | "
                   f"Direction={direction} | Change={pct_change:.2f}%")
             pct_change = max(-20, min(20, pct_change))  # Cap at ±20% to avoid extreme values
-            
+
             print(f"✅ [DEBUG] Current: {current_price}, Direction: {direction}, Change: {pct_change:.2f}%")
 
             # Add guaranteed fields
@@ -280,14 +280,14 @@ class AIAnalyst:
                 'type': 'main',
                 'current_price': float(current_price)
             }
-            
+
             # Validate all required fields exist
             required_fields = ['asset', 'direction', 'confidence', 'pct_change']
             for field in required_fields:
                 if field not in prediction:
                     print(f"⚠️ Missing {field} in prediction")
                     prediction[field] = 0  # Default value
-            
+
             print(f"✅ [DEBUG] Final prediction created: {prediction}")
 
             # Now safely apply news boost AFTER prediction is created
@@ -305,7 +305,7 @@ class AIAnalyst:
 
             print(f"🎯 [DEBUG] Returning prediction for {symbol}: {prediction}")
             return prediction
-            
+
         except Exception as e:
             print(f"💥 Prediction failed: {traceback.format_exc()}")
             return self._create_fallback_prediction(symbol)
@@ -352,10 +352,10 @@ class AIAnalyst:
             else:
                 # Default synthetic values for other indicators
                 df[col] = np.random.normal(0, 0.1, len(df))
-        
+
         print(f"✅ Generated synthetic features for {missing_cols}")
         return df
-    
+
     def _create_fallback_prediction(self, symbol):
         """Always return a valid prediction structure"""
         from datetime import datetime
@@ -392,14 +392,14 @@ class AIAnalyst:
             prediction = self.predict(symbol, df)
             if not prediction:
                 return self._create_fallback_prediction(symbol)  # Never return None
-                
+
             return {
                 **prediction,
                 'type': 'swing',
                 'hold_time': random.randint(SWING_MIN_HOLD, SWING_MAX_HOLD),
                 'timeframe': '4h'
             }
-            
+
         except Exception as e:
             print(f"⚠️ Swing prediction failed for {symbol}: {str(e)}")
             return self._create_fallback_prediction(symbol)  # Always return valid prediction
@@ -413,7 +413,7 @@ class AIAnalyst:
             prediction = self.predict(symbol, df)
             if not prediction:
                 return self._create_fallback_prediction(symbol)  # Never return None
-                
+
             # Adjust for scalp trading parameters
             if (prediction['confidence'] >= SCALP_MIN_CONFIDENCE and 
                 abs(prediction['pct_change']) >= SCALP_THRESHOLD):
@@ -427,3 +427,20 @@ class AIAnalyst:
         except Exception as e:
             print(f"⚠️ Scalp prediction failed for {symbol}: {str(e)}")
             return self._create_fallback_prediction(symbol)  # Always return valid prediction
+
+# Command-line interface for testing
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description='Test AI Analysis Engine')
+    parser.add_argument('--test-confidence', action='store_true', help='Test confidence calculation')
+    parser.add_argument('--asset', default='BTC-USD', help='Asset to test')
+    args = parser.parse_args()
+
+    if args.test_confidence:
+        print(f"🧪 Testing confidence calculation for {args.asset}")
+        analyst = AIAnalyst()
+        prediction = analyst.predict(args.asset)
+        print(f"📊 Prediction: {prediction}")
+        print(f"🎯 Confidence: {prediction.get('confidence', 0):.2%}")
+        print(f"📈 Direction: {prediction.get('direction', 'N/A')}")
+        print(f"💹 Expected Change: {prediction.get('pct_change', 0):.2f}%")
