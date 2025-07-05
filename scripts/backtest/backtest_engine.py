@@ -366,11 +366,11 @@ class BacktestEngine:
             # Generate realistic exit price after hold period
             hold_hours = random.randint(4, 24) if prediction['type'] != 'scalp' else random.randint(1, 4)
             
-            # More realistic exit price simulation (with random noise)
-            price_change = prediction['pct_change'] / 100
-            direction = 1 if prediction['direction'] == 'long' else -1
-            exit_multiplier = (1 + direction * price_change * random.uniform(0.8, 1.2))
-            exit_price = prediction['current_price'] * exit_multiplier
+            # Improved exit logic with proper stop loss and target
+            entry = prediction['current_price']
+            target = entry * (1 + prediction['pct_change']/100)
+            stop_loss = entry * (0.99 if prediction['direction'] == 'long' else 1.01)
+            exit_price = random.uniform(stop_loss, target)  # Simulate realistic outcome
             
             # Calculate actual PnL (with 0.15% slippage)
             entry = prediction['current_price'] * (1.0015 if prediction['direction'] == 'long' else 0.9985)
