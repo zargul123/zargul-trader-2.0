@@ -147,11 +147,11 @@ STRATEGY_ENFORCEMENT = {
 # TEMPORARY DEBUG CONFIG - Single unified strategy
 STRATEGIES = {
     'main': {  # Single strategy during debug
-        'long_threshold': 0.5,   # 0.5% unified for all
-        'short_threshold': 0.5,  # 0.5% unified for all
+        'long_threshold': 0.3,   # Lowered from 0.5% for more signals
+        'short_threshold': 0.3,  # Lowered from 0.5% for more signals
         'min_hold': 3600,        # 1h (reduced from 4h/12h/15m)
         'max_hold': 86400,       # 24h (simplified from 48h/30m)
-        'min_confidence': 0.6,   # 60% minimum confidence
+        'min_confidence': 0.55,  # Lowered from 0.6 for more signals
         'timeframe': '1h',       # Standard timeframe
         'profit_cap': 0.05,      # Max 5% per trade
         'loss_stop': -0.02       # Max -2% per trade

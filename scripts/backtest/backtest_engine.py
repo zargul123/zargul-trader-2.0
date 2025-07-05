@@ -38,7 +38,7 @@ class BacktestEngine:
         days_to_load = max(days, 7)  # Always load at least 7 days
         print(f"\n📊 Loading {days_to_load} days of {timeframe} data for {symbol}")
         df = self.data.get_data(symbol, "1h")
-        df = df.last(f"{days_to_load}D")  # Get last N days
+        df = df.loc[df.index[-days_to_load*24:]]  # For hourly data
         
         # Ensure we have enough data
         if len(df) < 50:
@@ -74,6 +74,11 @@ class BacktestEngine:
             # Change the scanning loop to:
             window_size = 60  # Must match SEQUENCE_LENGTH in analysis_engine.py
             step_size = 5     # Check every 5 candles
+
+            # Add price movement analysis
+            print(f"\n🔍 PRICE MOVEMENT ANALYSIS:")
+            print(f"Max 1h change: {df['close'].pct_change().abs().max()*100:.2f}%")
+            print(f"Avg volatility: {df['close'].pct_change().std()*100:.2f}%")
 
             for i in range(window_size, len(df), step_size):
                 window = df.iloc[i-window_size:i]  # Use rolling window
