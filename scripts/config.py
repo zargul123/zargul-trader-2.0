@@ -19,6 +19,8 @@ STRATEGIES = {
         'max_hold': 86400,           # 24 hours (lowered from 48)
         'sl_multiplier': 2.0,        # Reduced from 2.5
         'tp_multiplier': 3.0,        # Reduced from 4.0
+        'take_profit': 1.5,          # Target 1.5% gains
+        'stop_loss': 0.8,            # Cut losses at 0.8%
         'rsi_limits': (30, 70),      # Widened from (28,72)
         'trading_hours': [2,5,8,11,14,17,20,23],  # More frequent
         'timezone': 'UTC'
@@ -33,6 +35,8 @@ STRATEGIES = {
         'max_hold': 172800,          # 48 hours (reduced from 72)
         'sl_multiplier': 2.5,        # Reduced from 3.0
         'tp_multiplier': 4.0,        # Reduced from 5.0
+        'take_profit': 2.0,          # Target 2.0% gains for swing
+        'stop_loss': 1.0,            # Cut losses at 1.0% for swing
         'rsi_limits': (28, 72),      # Slightly wider
         'trading_hours': [4,10,16,22], # More opportunities
         'timezone': 'UTC'
@@ -47,6 +51,8 @@ STRATEGIES = {
         'max_hold': 1800,            # 30 minutes (reduced from 60)
         'sl_multiplier': 0.4,        # Tighter from 0.5
         'tp_multiplier': 1.2,        # Reduced from 1.5
+        'take_profit': 0.8,          # Target 0.8% gains for scalp
+        'stop_loss': 0.4,            # Cut losses at 0.4% for scalp
         'rsi_limits': (35, 65),      # More sensitive
         'trading_hours': [0,2,4,6,8,10,12,14,16,18,20,22],  # All hours
         'timezone': 'UTC'
