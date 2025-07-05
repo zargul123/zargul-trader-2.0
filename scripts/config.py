@@ -138,6 +138,12 @@ SCALP_SETTINGS = {
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress TensorFlow logs
 os.environ['OMP_NUM_THREADS'] = '6'  # Match CPU cores
 
+# Strategy Enforcement for Balanced Trading
+STRATEGY_ENFORCEMENT = {
+    'long_quota': 0.3,  # Minimum 30% long trades
+    'force_long_every': 5  # Force long every 5th trade
+}
+
 # TEMPORARY DEBUG CONFIG - Single unified strategy
 STRATEGIES = {
     'main': {  # Single strategy during debug
