@@ -1,4 +1,3 @@
-
 import pytz  # Add to requirements.txt if needed
 import os
 
@@ -138,3 +137,18 @@ SCALP_SETTINGS = {
 # System Optimization
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress TensorFlow logs
 os.environ['OMP_NUM_THREADS'] = '6'  # Match CPU cores
+
+# TEMPORARY DEBUG CONFIG - Single unified strategy
+STRATEGIES = {
+    'main': {  # Single strategy during debug
+        'long_threshold': 0.5,   # 0.5% unified for all
+        'short_threshold': 0.5,  # 0.5% unified for all
+        'min_hold': 3600,        # 1h (reduced from 4h/12h/15m)
+        'max_hold': 86400,       # 24h (simplified from 48h/30m)
+        'min_confidence': 0.6,   # 60% minimum confidence
+        'timeframe': '1h',       # Standard timeframe
+        'profit_cap': 0.05,      # Max 5% per trade
+        'loss_stop': -0.02       # Max -2% per trade
+    }
+    # swing/scalp strategies temporarily commented out for debugging
+}
