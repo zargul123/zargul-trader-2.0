@@ -245,14 +245,17 @@ class AIAnalyst:
                   f"Predicted=${predicted_price:.2f} | "
                   f"Direction={'long' if predicted_price > current_price else 'short'}")
             
-            # Fix direction calculation - use price comparison
+            # Price-based directional logic (not binary classifier)
             direction = 'long' if predicted_price > current_price else 'short'
+            pct_change = ((predicted_price - current_price) / current_price) * 100  # Keep signed value
+            
+            # Add debug validation
+            print(f"🔢 Direction Check: Current=${current_price:.2f} | "
+                  f"Predicted=${predicted_price:.2f} | "
+                  f"Direction={direction} | Change={pct_change:.2f}%")
             
             # Fix confidence scaling
             confidence = min(0.99, max(0.3, (raw_prediction[2] * 2)))  # 30-99% range
-            
-            # Fix pct_change calculation - keep the sign
-            pct_change = ((predicted_price - current_price) / current_price) * 100
             pct_change = max(-20, min(20, pct_change))  # Cap at ±20% to avoid extreme values
             
             print(f"✅ [DEBUG] Current: {current_price}, Direction: {direction}, Change: {pct_change:.2f}%")
