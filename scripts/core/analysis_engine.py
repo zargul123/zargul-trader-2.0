@@ -251,8 +251,10 @@ class AIAnalyst:
                          'short' if price_diff < -(current_price * 0.005) else 'hold')
             pct_change = ((predicted_price - current_price) / current_price) * 100  # Keep signed value
             
-            # Fix confidence scaling first
-            confidence = min(0.99, max(0.3, (raw_prediction[2] * 2)))  # 30-99% range
+            # New scientifically calibrated confidence:
+            price_volatility = df['close'].pct_change().std() * 100  # In %
+            confidence = 0.5 + (abs(predicted_price - current_price) / (current_price * price_volatility * 2))
+            confidence = min(0.9, max(0.4, confidence))  # Cap at 90%, floor at 40%
             
             # Handle near-zero predictions
             if abs(pct_change) < 0.05:  # If change < 0.05%
