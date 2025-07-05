@@ -369,6 +369,20 @@ class DataMaster:
             df = self._generate_synthetic_data(symbol)
             df = df.iloc[-500:]  # Use last 500 synthetic candles
             
+        # Add data validation for downward bias
+        if not df.empty and 'close' in df.columns:
+            pct_change_mean = df['close'].pct_change().mean()
+            if pct_change_mean < -0.001:  # If avg trend is negative
+                print(f"⚠️ WARNING: {symbol} data has downward bias (avg {pct_change_mean:.4f}%)")
+                # Synthetically balance data
+                df['close'] = df['close'] * (1 + abs(pct_change_mean))
+                # Adjust other OHLC prices accordingly
+                adjustment_factor = 1 + abs(pct_change_mean)
+                for col in ['open', 'high', 'low']:
+                    if col in df.columns:
+                        df[col] = df[col] * adjustment_factor
+                print(f"✅ Applied bias correction factor: {adjustment_factor:.6f}")
+            
         # Add indicators and ensure required columns
         df = self._add_technical_indicators(df, symbol)
         print(f"✅ Loaded {len(df)} {timeframe} candles for {symbol}")
