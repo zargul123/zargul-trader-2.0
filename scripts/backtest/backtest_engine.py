@@ -22,9 +22,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 class BacktestEngine:
-    def __init__(self, debug=False):
+    def __init__(self, debug=False, enforce_longs=False):
         from scripts.core.analysis_engine import AIAnalyst
         from scripts.core.data_engine import DataMaster
+        self.enforce_longs = enforce_longs
         self.trade_history = []  # Initialize the trade_history list
         self.analyst = AIAnalyst()
         self.data = DataMaster()
@@ -362,6 +363,12 @@ class BacktestEngine:
                 print(f"⚠️ [BACKTEST] No prediction to execute")
                 return
                 
+            # Smart long enforcement - force every 3rd trade to be long
+            if self.enforce_longs and len(self.trade_history) % 3 == 0:
+                prediction['direction'] = 'long'  # Force every 3rd trade
+                prediction['confidence'] = 0.7    # Set realistic confidence
+                print(f"🔄 [ENFORCEMENT] Forcing LONG trade #{len(self.trade_history)+1} for balance")
+                
             # Force 0.2% slippage and 0.1% fees
             entry_slippage = prediction['current_price'] * 0.002 * (-1 if prediction['direction'] == 'long' else 1)
             exit_slippage = (prediction['price'] * 0.002 * (1 if prediction['direction'] == 'long' else -1))
@@ -407,13 +414,14 @@ if __name__ == "__main__":
     parser.add_argument('--strategy', required=True, help='Strategy to use (main/swing/scalp)')
     parser.add_argument('--days', type=int, default=90, help='Number of days to backtest')
     parser.add_argument('--debug', action='store_true', help='Enable debug mode with verbose output')
+    parser.add_argument('--enforce-longs', action='store_true', help='Ensure minimum 30% long trades')
     args = parser.parse_args()
 
     print(f"\n🚀 Starting backtest for {args.asset} ({args.strategy} strategy)")
     if args.debug:
         print("🔍 Debug mode enabled - verbose output active")
     
-    engine = BacktestEngine(debug=args.debug)
+    engine = BacktestEngine(debug=args.debug, enforce_longs=args.enforce_longs)
     results = engine.run_backtest(args.asset, args.strategy, args.days)
     
     print("\n📊 Backtest Results:")
