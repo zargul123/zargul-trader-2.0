@@ -249,6 +249,11 @@ class AIAnalyst:
             direction = 'long' if predicted_price > current_price else 'short'
             pct_change = ((predicted_price - current_price) / current_price) * 100  # Keep signed value
             
+            # Handle near-zero predictions
+            if abs(pct_change) < 0.05:  # If change < 0.05%
+                direction = 'hold'
+                confidence *= 0.5  # Reduce confidence for marginal moves
+            
             # Add debug validation
             print(f"🔢 Direction Check: Current=${current_price:.2f} | "
                   f"Predicted=${predicted_price:.2f} | "
