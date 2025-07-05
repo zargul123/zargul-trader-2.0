@@ -249,6 +249,9 @@ class AIAnalyst:
             direction = 'long' if predicted_price > current_price else 'short'
             pct_change = ((predicted_price - current_price) / current_price) * 100  # Keep signed value
             
+            # Fix confidence scaling first
+            confidence = min(0.99, max(0.3, (raw_prediction[2] * 2)))  # 30-99% range
+            
             # Handle near-zero predictions
             if abs(pct_change) < 0.05:  # If change < 0.05%
                 direction = 'hold'
@@ -258,9 +261,6 @@ class AIAnalyst:
             print(f"🔢 Direction Check: Current=${current_price:.2f} | "
                   f"Predicted=${predicted_price:.2f} | "
                   f"Direction={direction} | Change={pct_change:.2f}%")
-            
-            # Fix confidence scaling
-            confidence = min(0.99, max(0.3, (raw_prediction[2] * 2)))  # 30-99% range
             pct_change = max(-20, min(20, pct_change))  # Cap at ±20% to avoid extreme values
             
             print(f"✅ [DEBUG] Current: {current_price}, Direction: {direction}, Change: {pct_change:.2f}%")
