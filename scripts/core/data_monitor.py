@@ -1,5 +1,11 @@
+import os
+import sys
 import threading
 import time
+
+# Add project root to Python path for standalone execution
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
 from scripts.core.safety import armor_get
 
 class DataHealthMonitor:
