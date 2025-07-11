@@ -69,7 +69,7 @@ RETRAIN_TIME = "03:00"     # 3 AM UTC (adjust if needed)
 MIN_CONFIDENCE = 0.55      # Retrain if confidence < 55%
 
 # Emergency debug values
-MIN_CONFIDENCE = 0.1  # 10% - accept virtually everything
+MIN_CONFIDENCE = 0.55  # Lower from 0.65 to accept 58.6% signals
 LONG_THRESHOLD = 0.1  # 0.1%
 SHORT_THRESHOLD = 0.1
 TRADE_EMULATION = True  # Force trade execution
