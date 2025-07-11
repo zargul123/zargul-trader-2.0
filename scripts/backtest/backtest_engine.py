@@ -91,6 +91,12 @@ class BacktestEngine:
                     prediction = self.analyst.predict_scalp(symbol, window)
                 
                 if prediction and prediction['confidence'] >= 0.65:
+                    # Add signal check debug print
+                    print(f"\n🔍 SIGNAL CHECK: {prediction['direction']} "
+                          f"{prediction['pct_change']:.2f}% "
+                          f"(Conf: {prediction['confidence']:.2f}) "
+                          f"| Required: {LONG_THRESHOLD if prediction['direction'] == 'long' else SHORT_THRESHOLD}%")
+                    
                     # Add debug print
                     if self.debug:
                         print(f"\n🔎 Signal Check:")
