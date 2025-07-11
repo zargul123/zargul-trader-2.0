@@ -112,6 +112,10 @@ class BacktestEngine:
                         abs(prediction['pct_change']) < 1.0 or
                         (prediction['direction'] == 'long' and prediction['pct_change'] < LONG_THRESHOLD) or
                         (prediction['direction'] == 'short' and prediction['pct_change'] > -SHORT_THRESHOLD)):  # Notice > for shorts
+                        print(f"🚨 Rejected: {prediction['direction']} {prediction['pct_change']:.2f}% "
+                              f"(Conf: {prediction['confidence']:.2f}) | "
+                              f"Needs: {STRATEGIES[strategy_type]['min_confidence']} conf, "
+                              f"{STRATEGIES[strategy_type]['long_threshold']}% move")
                         print(f"⏩ Skipping marginal signal: {prediction['direction']} {prediction['pct_change']:.2f}%")
                         print(f"Threshold Check: {'>=' if prediction['direction']=='long' else '<='} " 
                               f"{LONG_THRESHOLD if prediction['direction']=='long' else -SHORT_THRESHOLD}%")
