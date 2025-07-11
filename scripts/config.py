@@ -66,10 +66,10 @@ AUTO_TRAIN = True                   # Keep models fresh
 # ===== TRAINING SCHEDULE =====
 RETRAIN_DAY = "sunday"     # Lowercase day name
 RETRAIN_TIME = "03:00"     # 3 AM UTC (adjust if needed)
-MIN_CONFIDENCE = 0.55      # Retrain if confidence < 55%
+MIN_CONFIDENCE = 0.50      # Retrain if confidence < 50%
 
 # Emergency debug values
-MIN_CONFIDENCE = 0.55  # Lower from 0.65 to accept 58.6% signals
+MIN_CONFIDENCE = 0.50  # Lower from 0.65 to accept 50% signals
 LONG_THRESHOLD = 0.1  # 0.1%
 SHORT_THRESHOLD = 0.1
 TRADE_EMULATION = True  # Force trade execution
@@ -147,11 +147,11 @@ STRATEGY_ENFORCEMENT = {
 # TEMPORARY DEBUG CONFIG - Single unified strategy
 STRATEGIES = {
     'main': {  # Single strategy during debug
-        'long_threshold': 0.3,   # Lowered from 0.5% for more signals
-        'short_threshold': 0.3,  # Lowered from 0.5% for more signals
+        'long_threshold': 0.0025,   # 0.25% for more precise signals
+        'short_threshold': 0.0025,  # 0.25% for more precise signals
         'min_hold': 3600,        # 1h (reduced from 4h/12h/15m)
         'max_hold': 86400,       # 24h (simplified from 48h/30m)
-        'min_confidence': 0.55,  # Lowered from 0.6 for more signals
+        'min_confidence': 0.50,  # Match global MIN_CONFIDENCE setting
         'timeframe': '1h',       # Standard timeframe
         'profit_cap': 0.05,      # Max 5% per trade
         'loss_stop': -0.02       # Max -2% per trade
