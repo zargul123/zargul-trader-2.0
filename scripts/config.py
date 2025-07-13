@@ -53,6 +53,17 @@ RISK_PER_TRADE = 0.02  # Risk 2% of (pretend) capital on any single trade
 RISK_CONFIG = {
     'risk_reward_ratio': 2.0,  # Aim for 2:1 risk-reward
     'max_daily_drawdown': 0.10, # Max 10% loss in a day
+    'volatility_adjusted': True,      # New - adjust position size based on volatility
+    'trailing_stop': {
+        'enabled': True,
+        'activation_pct': 0.5,       # Activate after 0.5% profit
+        'trail_pct': 0.3             # Trail by 0.3%
+    },
+    'asset_weights': {               # Different risk per asset
+        'BTC-USD': 1.0,
+        'ETH-USD': 0.8,
+        'SOL-USD': 0.6
+    }
 }
 
 # Schedule for automatically retraining the AI models

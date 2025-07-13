@@ -74,6 +74,10 @@ class BacktestEngine:
 
             print(f"\n🔎 Scanning {len(df)} candles for signals (Window: {window_size}, Step: {step_size})...")
 
+            # Initialize risk manager for position sizing
+            from scripts.core.risk_engine import RiskManager
+            risk_manager = RiskManager()
+
             for i in range(window_size, len(df), step_size):
                 window_data = df.iloc[i - window_size : i]
                 current_time = df.index[i]
@@ -102,13 +106,18 @@ class BacktestEngine:
 
                 if is_confident and (is_long_target_met or is_short_target_met):
                     print(f"🎯 {current_time}: {prediction['direction'].upper()} signal found!")
+                    
+                    # Calculate position size with symbol-aware risk management
+                    position_size = risk_manager.calculate_position_size(window_data, symbol)
+                    
                     trade_data = prediction.copy()
                     trade_data.update({
                         'entry_time': current_time,
                         'current_price': current_price,
-                        'asset': symbol
+                        'asset': symbol,
+                        'position_size': position_size
                     })
-                    self._execute_trade(trade_data, df)
+                    self._execute_trade(trade_data, df, strategy_type)
 
             # 4. Calculate Final Metrics
             print(f"\n✅ Backtest scan complete for {symbol}.")
@@ -140,7 +149,7 @@ class BacktestEngine:
             print(traceback.format_exc())
             return get_empty_metrics()
 
-    def _execute_trade(self, prediction, df):
+    def _execute_trade(self, prediction, df, strategy_type):
         """
         Simulates a realistic trade using actual market data for exits.
         """

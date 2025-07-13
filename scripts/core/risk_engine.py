@@ -29,19 +29,56 @@ class RiskManager:
             take_profit = current_price * (1 - (strategy_rules.get('take_profit_pct', 2.0) / 100))
             
         return {'stop_loss': stop_loss, 'take_profit': take_profit}
-
-    def calculate_position_size(self, df):
+    
+    def update_trailing_stop(self, entry_price, current_price, direction, current_stop=None):
         """
-        Calculates position size based on volatility (ATR).
+        Updates trailing stop loss based on RISK_CONFIG settings.
         """
-        atr = self._calculate_atr(df)
-        if atr == 0: # Avoid division by zero
-            return RISK_PER_TRADE 
+        if not RISK_CONFIG.get('trailing_stop', {}).get('enabled', False):
+            return current_stop
             
-        volatility = atr / df['close'].iloc[-1]
+        trail_config = RISK_CONFIG['trailing_stop']
+        activation_pct = trail_config['activation_pct'] / 100
+        trail_pct = trail_config['trail_pct'] / 100
         
-        # Dynamic sizing: take less risk when volatility is high
-        position_size = RISK_PER_TRADE / max(volatility, 0.01) # Ensure volatility is not zero
+        if direction == 'long':
+            # Check if we've hit activation threshold
+            profit_pct = (current_price - entry_price) / entry_price
+            if profit_pct >= activation_pct:
+                new_stop = current_price * (1 - trail_pct)
+                return max(current_stop or 0, new_stop)  # Only move stop up
+        else: # short
+            # For shorts, profit when price goes down
+            profit_pct = (entry_price - current_price) / entry_price
+            if profit_pct >= activation_pct:
+                new_stop = current_price * (1 + trail_pct)
+                return min(current_stop or float('inf'), new_stop)  # Only move stop down
+                
+        return current_stop
+
+    def calculate_position_size(self, df, symbol=None):
+        """
+        Calculates position size based on volatility (ATR) and asset weights.
+        """
+        base_risk = RISK_PER_TRADE
+        
+        # Apply asset-specific weights
+        if symbol and symbol in RISK_CONFIG.get('asset_weights', {}):
+            asset_weight = RISK_CONFIG['asset_weights'][symbol]
+            base_risk = base_risk * asset_weight
+        
+        # Apply volatility adjustment if enabled
+        if RISK_CONFIG.get('volatility_adjusted', False):
+            atr = self._calculate_atr(df)
+            if atr == 0: # Avoid division by zero
+                return base_risk
+                
+            volatility = atr / df['close'].iloc[-1]
+            
+            # Dynamic sizing: take less risk when volatility is high
+            position_size = base_risk / max(volatility, 0.01) # Ensure volatility is not zero
+        else:
+            position_size = base_risk
         
         # Cap position size to a max of 10% of portfolio
         return min(position_size, 0.10)
