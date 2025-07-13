@@ -37,35 +37,110 @@ class DataMaster:
         return timeframe_map.get(tf, '1h')
 
     def _twelvedata_request(self, symbol, timeframe, params=None):
+        mapped_symbol = TWELVEDATA_MAPPING.get(symbol, symbol)
         base_params = {
-            'symbol': TWELVEDATA_MAPPING.get(symbol, symbol),
+            'symbol': mapped_symbol,
             'interval': self._convert_timeframe(timeframe),
             'apikey': TWELVEDATA_API_KEY,
-            'outputsize': 5000
+            'outputsize': 5000,
+            'format': 'JSON'
         }
         if params:
             base_params.update(params)
+        
+        print(f"🔍 TwelveData API Request: {mapped_symbol} ({timeframe})")
+        print(f"   URL: {TWELVEDATA_CONFIG['base_url']}/time_series")
+        print(f"   Params: {base_params}")
+        
         try:
             response = self.session.get(f"{TWELVEDATA_CONFIG['base_url']}/time_series", params=base_params, timeout=TWELVEDATA_CONFIG['timeout'])
-            response.raise_for_status()
-            return response.json()
-        except (requests.exceptions.RequestException, json.JSONDecodeError) as e:
+            print(f"   Status Code: {response.status_code}")
+            
+            if response.status_code != 200:
+                print(f"❌ HTTP Error {response.status_code}: {response.text}")
+                return None
+                
+            data = response.json()
+            print(f"   Response Keys: {list(data.keys()) if isinstance(data, dict) else 'Not a dict'}")
+            
+            # Log the actual response for debugging
+            if 'message' in data:
+                print(f"   API Message: {data['message']}")
+            if 'status' in data:
+                print(f"   API Status: {data['status']}")
+            if 'code' in data:
+                print(f"   API Code: {data['code']}")
+                
+            return data
+            
+        except requests.exceptions.Timeout:
+            print(f"⚠️ TwelveData request timeout for {symbol}")
+            return None
+        except requests.exceptions.RequestException as e:
             print(f"⚠️ TwelveData request failed for {symbol}: {e}")
+            return None
+        except json.JSONDecodeError as e:
+            print(f"⚠️ TwelveData JSON decode error for {symbol}: {e}")
+            print(f"   Raw response: {response.text[:500]}...")
             return None
 
     def _parse_twelvedata_response(self, data, symbol):
-        if not data or data.get('status') != 'ok' or 'values' not in data:
+        if not data:
+            print(f"❌ No data returned from TwelveData for {symbol}")
             return pd.DataFrame()
-        df = pd.DataFrame(data['values']).iloc[::-1]
-        df['datetime'] = pd.to_datetime(df['datetime'])
-        df = df.set_index('datetime').rename(columns=str.lower)
-        for col in ['open', 'high', 'low', 'close']:
-            df[col] = pd.to_numeric(df[col], errors='coerce')
-        if 'volume' in df.columns:
-            df['volume'] = pd.to_numeric(df['volume'], errors='coerce')
-        else:
-            df['volume'] = 0  # Or np.nan, depending on how you want to handle missing volume
-        return df
+            
+        # Check for API errors
+        if 'message' in data and 'error' in data.get('message', '').lower():
+            print(f"❌ TwelveData API Error for {symbol}: {data['message']}")
+            return pd.DataFrame()
+            
+        if 'code' in data and data['code'] != 200:
+            print(f"❌ TwelveData API Code {data['code']} for {symbol}: {data.get('message', 'Unknown error')}")
+            return pd.DataFrame()
+            
+        # TwelveData doesn't always return status='ok', check for values instead
+        if 'values' not in data:
+            print(f"❌ No 'values' key in TwelveData response for {symbol}")
+            print(f"   Available keys: {list(data.keys())}")
+            return pd.DataFrame()
+            
+        values = data['values']
+        if not values or len(values) == 0:
+            print(f"❌ Empty values array from TwelveData for {symbol}")
+            return pd.DataFrame()
+            
+        print(f"✅ TwelveData returned {len(values)} data points for {symbol}")
+        
+        try:
+            df = pd.DataFrame(values).iloc[::-1]  # Reverse to get chronological order
+            df['datetime'] = pd.to_datetime(df['datetime'])
+            df = df.set_index('datetime').rename(columns=str.lower)
+            
+            # Convert price columns to numeric
+            for col in ['open', 'high', 'low', 'close']:
+                if col in df.columns:
+                    df[col] = pd.to_numeric(df[col], errors='coerce')
+                else:
+                    print(f"⚠️ Missing column '{col}' in TwelveData response for {symbol}")
+                    
+            # Handle volume - TwelveData sometimes doesn't include volume for crypto
+            if 'volume' in df.columns:
+                df['volume'] = pd.to_numeric(df['volume'], errors='coerce')
+            else:
+                print(f"⚠️ No volume data from TwelveData for {symbol}, setting to 0")
+                df['volume'] = 0
+                
+            # Remove any rows with NaN values in essential columns
+            essential_cols = ['open', 'high', 'low', 'close']
+            df = df.dropna(subset=essential_cols)
+            
+            print(f"✅ Parsed {len(df)} valid candles for {symbol}")
+            return df
+            
+        except Exception as e:
+            print(f"❌ Error parsing TwelveData response for {symbol}: {e}")
+            print(f"   Raw data sample: {values[0] if values else 'No data'}")
+            return pd.DataFrame()
 
     def _yahoo_fallback(self, symbol, timeframe):
         period_map = {'1h': '60d', '4h': '120d', '15m': '30d'}
@@ -208,25 +283,40 @@ class DataMaster:
         return df
 
     def get_data(self, symbol, timeframe='4h', limit=None):
+        print(f"\n📊 Fetching {timeframe} data for {symbol}...")
+        
+        # Try TwelveData first
         data = self._twelvedata_request(symbol, timeframe)
         df = self._parse_twelvedata_response(data, symbol)
-        self.last_used_source = 'TwelveData'
-
-        if df.empty:
+        
+        if not df.empty:
+            self.last_used_source = 'TwelveData'
+            print(f"✅ TwelveData successful for {symbol}")
+        else:
             print(f"📉 TwelveData failed for {symbol}. Falling back to Yahoo Finance.")
             df = self._yahoo_fallback(symbol, timeframe)
-            self.last_used_source = 'Yahoo'
+            if not df.empty:
+                self.last_used_source = 'Yahoo'
+                print(f"✅ Yahoo Finance successful for {symbol}")
+            else:
+                print(f"❌ CRITICAL: All real data sources failed for {symbol}. No data available.")
+                return None
 
-        if df.empty:
-            print(f"❌ CRITICAL: All real data sources failed for {symbol}. No data available.")
+        # Add technical indicators
+        try:
+            df = self._add_technical_indicators(df)
+            print(f"✅ Technical indicators added for {symbol}")
+        except Exception as e:
+            print(f"⚠️ Error adding technical indicators for {symbol}: {e}")
             return None
 
-        df = self._add_technical_indicators(df)
-
+        # Apply limit if specified
         if limit and not df.empty:
+            original_len = len(df)
             df = df.tail(int(limit))
+            print(f"📊 Limited data from {original_len} to {len(df)} candles")
 
-        print(f"✅ Loaded {len(df)} {timeframe} candles for {symbol} from {self.last_used_source}")
+        print(f"✅ Final result: {len(df)} {timeframe} candles for {symbol} from {self.last_used_source}")
         return df
 
     def get_training_data(self, symbol, days=None):
