@@ -178,19 +178,42 @@ class DataMaster:
         return df
 
     def _add_technical_indicators(self, df):
-        df['rsi'] = self._calculate_rsi(df)
-        df = self._calculate_macd(df)
-        df = self._calculate_bollinger_bands(df)
-        df = self._calculate_cmf(df)
-        df = self._calculate_obv(df)
-        df = self._calculate_vol_spike(df)
-        df = self._calculate_vwap(df)
-        df = self._calculate_emas(df)
-        df = self._calculate_atr(df)
-        df = self._calculate_stochastic(df)
-        df = self._calculate_adx(df)
-        df = self._calculate_volume_ma(df)
-        return df.dropna()
+        if df.empty:
+            return df
+            
+        # Make a copy to avoid modifying the original
+        df = df.copy()
+        
+        try:
+            df['rsi'] = self._calculate_rsi(df)
+            df = self._calculate_macd(df)
+            df = self._calculate_bollinger_bands(df)
+            df = self._calculate_cmf(df)
+            df = self._calculate_obv(df)
+            df = self._calculate_vol_spike(df)
+            df = self._calculate_vwap(df)
+            df = self._calculate_emas(df)
+            df = self._calculate_atr(df)
+            df = self._calculate_stochastic(df)
+            df = self._calculate_adx(df)
+            df = self._calculate_volume_ma(df)
+            
+            # Only drop rows where ALL indicator columns are NaN
+            # Keep the original OHLCV data intact
+            essential_cols = ['open', 'high', 'low', 'close', 'volume']
+            before_count = len(df)
+            df = df.dropna(subset=essential_cols, how='any')
+            after_count = len(df)
+            
+            if before_count != after_count:
+                print(f"⚠️ Dropped {before_count - after_count} rows with missing OHLCV data")
+                
+            return df
+            
+        except Exception as e:
+            print(f"❌ Error in technical indicators calculation: {e}")
+            # Return original data without indicators if calculation fails
+            return df
 
     def _calculate_rsi(self, df, window=14):
         delta = df['close'].diff()
