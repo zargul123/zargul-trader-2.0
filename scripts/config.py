@@ -74,18 +74,6 @@ LONG_THRESHOLD = 0.1     # 0.1% minimum move for long trades
 SHORT_THRESHOLD = 0.1    # 0.1% minimum move for short trades
 RISK_PER_TRADE = 0.02    # Risk 2% per trade
 
-# Swing Trading Configuration
-SWING_MIN_CONFIDENCE = 0.55
-SWING_THRESHOLD = 1.5
-SWING_MIN_HOLD = 36000   # 10 hours in seconds
-SWING_MAX_HOLD = 172800  # 48 hours in seconds
-
-# Scalp Trading Configuration  
-SCALP_MIN_CONFIDENCE = 0.5
-SCALP_THRESHOLD = 0.8
-SCALP_MIN_HOLD = 600     # 10 minutes in seconds
-SCALP_MAX_HOLD = 1800    # 30 minutes in seconds
-
 # Training Configuration
 TRAINING_EPOCHS = 200
 BATCH_SIZE = 32
