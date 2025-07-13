@@ -1,0 +1,2328 @@
+
+🤖 Initializing AI Analyst...
+🧠 Loading pre-trained model for BTC-USD...
+2025-07-13 14:15:09.537827: E external/local_xla/xla/stream_executor/cuda/cuda_platform.cc:51] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+   - ✅ Model for BTC-USD loaded successfully.
+🧠 Loading pre-trained model for ETH-USD...
+   - ✅ Model for ETH-USD loaded successfully.
+🧠 Loading pre-trained model for SOL-USD...
+   - ✅ Model for SOL-USD loaded successfully.
+
+🔍 Testing BTC-USD - MAIN Strategy
+
+🔧 Running backtest for BTC-USD with 'main' strategy.
+   - Confidence Threshold: 65.0%
+   - Long Target: > 0.8%
+   - Short Target: < -0.6%
+
+📊 Loading 90 days of 1h data for BTC-USD...
+✅ Loaded 2160 1h candles for BTC-USD from TwelveData
+📅 Data loaded for BTC-USD: 2160 candles from 2025-04-14 15:00:00 to 2025-07-13 14:00:00
+
+🔎 Scanning 2160 candles for signals (Window: 60, Step: 12)...
+🎯 2025-04-17 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $83916.61 -> $83323.80 | PnL: 0.66%
+🎯 2025-04-19 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $84790.64 -> $83453.95 | PnL: 1.55%
+🎯 2025-04-20 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $84265.67 -> $83621.34 | PnL: 0.72%
+🎯 2025-04-21 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $87119.07 -> $84492.13 | PnL: 3.06%
+🎯 2025-04-21 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $88005.41 -> $87276.71 | PnL: 0.78%
+🎯 2025-04-22 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $88081.78 -> $87244.73 | PnL: 0.91%
+🎯 2025-04-22 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $90940.62 -> $89684.76 | PnL: 1.35%
+🎯 2025-04-24 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $93154.15 -> $91110.90 | PnL: 2.19%
+🎯 2025-04-25 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $95077.46 -> $93249.91 | PnL: 1.91%
+🎯 2025-04-26 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $94315.60 -> $93650.98 | PnL: 0.66%
+🎯 2025-04-27 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $94099.47 -> $93028.42 | PnL: 1.10%
+🎯 2025-04-27 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $93843.17 -> $92637.52 | PnL: 1.25%
+🎯 2025-04-28 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $93791.00 -> $92895.67 | PnL: 0.91%
+🎯 2025-05-01 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $94712.79 -> $93427.68 | PnL: 1.33%
+🎯 2025-05-01 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $96832.07 -> $96002.64 | PnL: 0.81%
+🎯 2025-05-03 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $96343.69 -> $95046.20 | PnL: 1.32%
+🎯 2025-05-04 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $95647.69 -> $94842.23 | PnL: 0.80%
+🎯 2025-05-04 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $95375.60 -> $93698.97 | PnL: 1.74%
+🎯 2025-05-05 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $93953.12 -> $92878.90 | PnL: 1.11%
+🎯 2025-05-05 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $93674.81 -> $92642.29 | PnL: 1.06%
+🎯 2025-05-06 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $94355.47 -> $93600.19 | PnL: 0.76%
+🎯 2025-05-06 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $94463.55 -> $93534.44 | PnL: 0.94%
+🎯 2025-05-07 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $96402.28 -> $94810.37 | PnL: 1.63%
+🎯 2025-05-08 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $99060.87 -> $97073.37 | PnL: 2.00%
+🎯 2025-05-12 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $102625.41 -> $103766.52 | PnL: 1.06%
+🎯 2025-05-16 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $103942.89 -> $102766.22 | PnL: 1.09%
+🎯 2025-05-18 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $105446.30 -> $104559.76 | PnL: 0.80%
+🎯 2025-05-19 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $104717.84 -> $103612.92 | PnL: 1.02%
+🎯 2025-05-21 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $106786.07 -> $105768.88 | PnL: 0.91%
+🎯 2025-05-21 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $108921.34 -> $106415.38 | PnL: 2.30%
+🎯 2025-05-22 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $111694.18 -> $109220.35 | PnL: 2.21%
+🎯 2025-05-22 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $111216.87 -> $110139.46 | PnL: 0.93%
+🎯 2025-05-23 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $110989.77 -> $110212.13 | PnL: 0.66%
+🎯 2025-05-25 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $106894.20 -> $106145.84 | PnL: 0.66%
+🎯 2025-05-26 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $109572.66 -> $107930.59 | PnL: 1.47%
+🎯 2025-05-29 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107984.63 -> $106462.38 | PnL: 1.38%
+🎯 2025-05-30 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $105945.62 -> $105220.73 | PnL: 0.64%
+🎯 2025-05-31 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $104504.62 -> $103085.71 | PnL: 1.33%
+🎯 2025-06-01 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $104662.86 -> $103849.63 | PnL: 0.73%
+🎯 2025-06-03 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $106595.46 -> $105503.98 | PnL: 0.98%
+🎯 2025-06-09 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $105826.59 -> $106674.51 | PnL: 0.75%
+🎯 2025-06-09 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107581.91 -> $106714.73 | PnL: 0.76%
+🎯 2025-06-12 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $106922.36 -> $105454.36 | PnL: 1.34%
+🎯 2025-06-13 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $104476.60 -> $106059.23 | PnL: 1.46%
+🎯 2025-06-13 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $105398.10 -> $104569.83 | PnL: 0.74%
+🎯 2025-06-15 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $105428.71 -> $104421.18 | PnL: 0.91%
+🎯 2025-06-16 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $105829.31 -> $105119.39 | PnL: 0.63%
+🎯 2025-06-18 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $105102.44 -> $103893.16 | PnL: 1.11%
+🎯 2025-06-20 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $104513.42 -> $103711.10 | PnL: 0.72%
+🎯 2025-06-20 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $104348.38 -> $106024.99 | PnL: 1.56%
+🎯 2025-06-22 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $99049.25 -> $101457.78 | PnL: 2.38%
+🎯 2025-06-23 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $101098.80 -> $99795.53 | PnL: 1.26%
+🎯 2025-06-24 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $104891.12 -> $103359.51 | PnL: 1.43%
+🎯 2025-06-24 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $105194.70 -> $103906.98 | PnL: 1.19%
+🎯 2025-06-25 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $106195.14 -> $105220.23 | PnL: 0.88%
+🎯 2025-07-02 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $106123.44 -> $105227.22 | PnL: 0.80%
+🎯 2025-07-02 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $108691.20 -> $107684.57 | PnL: 0.88%
+🎯 2025-07-03 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $109053.06 -> $108228.45 | PnL: 0.71%
+🎯 2025-07-05 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $108079.19 -> $106701.83 | PnL: 1.24%
+🎯 2025-07-06 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $108835.66 -> $107722.48 | PnL: 0.98%
+🎯 2025-07-10 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $111003.51 -> $110105.51 | PnL: 0.77%
+🎯 2025-07-10 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $111374.01 -> $110640.48 | PnL: 0.61%
+🎯 2025-07-11 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $116813.19 -> $113651.02 | PnL: 2.73%
+🎯 2025-07-11 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $116786.00 -> $114830.83 | PnL: 1.65%
+🎯 2025-07-12 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $117720.62 -> $116189.98 | PnL: 1.27%
+🎯 2025-07-13 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $117679.97 -> $116958.88 | PnL: 0.57%
+
+✅ Backtest scan complete for BTC-USD.
+
+📈 Trade Performance Summary:
+• 66/66 winning trades (100.0% win rate)
+• Avg PnL: 1.18%
+
+📊 Results for BTC-USD (MAIN):
+Total Trades: 66
+Winning Trades: 66
+Losing Trades: 0
+Win Rate: 100.0
+Sharpe Ratio: 42.17
+Max Drawdown: 0.01
+Profit Factor: 0
+Avg Win: 1.18
+Avg Loss: 0
+
+📄 Report for BTC-USD - main
+----------------------------------------
+Total Trades        : 66.00
+Winning Trades      : 66.00
+Losing Trades       : 0.00
+Win Rate            : 100.00
+Sharpe Ratio        : 42.17
+Max Drawdown        : 0.01
+Profit Factor       : 0.00
+Avg Win             : 1.18
+Avg Loss            : 0.00
+----------------------------------------
+
+🔍 Testing BTC-USD - SWING Strategy
+
+🔧 Running backtest for BTC-USD with 'swing' strategy.
+   - Confidence Threshold: 70.0%
+   - Long Target: > 1.5%
+   - Short Target: < -1.2%
+
+📊 Loading 90 days of 4h data for BTC-USD...
+✅ Loaded 2160 4h candles for BTC-USD from TwelveData
+📅 Data loaded for BTC-USD: 2160 candles from 2024-07-18 16:00:00 to 2025-07-13 12:00:00
+
+🔎 Scanning 2160 candles for signals (Window: 60, Step: 12)...
+🎯 2024-07-28 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $68186.37 -> $77870.57 | PnL: 14.15%
+🎯 2024-07-30 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $65957.80 -> $76320.62 | PnL: 15.66%
+🎯 2024-08-01 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $63409.75 -> $75229.73 | PnL: 18.59%
+🎯 2024-08-03 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $60264.84 -> $72656.59 | PnL: 20.51%
+🎯 2024-08-05 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $53543.83 -> $70538.42 | PnL: 31.69%
+🎯 2024-08-07 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $54836.80 -> $70828.08 | PnL: 29.11%
+🎯 2024-08-09 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $60765.52 -> $76668.63 | PnL: 26.12%
+🎯 2024-08-11 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $59693.39 -> $76435.85 | PnL: 28.00%
+🎯 2024-08-13 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $60894.02 -> $78082.85 | PnL: 28.18%
+🎯 2024-08-15 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $57093.05 -> $72389.28 | PnL: 26.74%
+🎯 2024-08-17 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $59536.10 -> $74714.05 | PnL: 25.44%
+🎯 2024-08-19 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $59038.74 -> $75436.67 | PnL: 27.72%
+🎯 2024-08-21 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $61672.37 -> $77965.37 | PnL: 26.37%
+🎯 2024-08-23 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $63713.49 -> $78578.38 | PnL: 23.28%
+🎯 2024-08-25 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $64274.35 -> $77977.29 | PnL: 21.27%
+🎯 2024-08-27 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $62171.79 -> $77495.50 | PnL: 24.60%
+🎯 2024-08-29 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $59312.96 -> $72713.42 | PnL: 22.54%
+🎯 2024-08-31 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $58918.87 -> $73805.87 | PnL: 25.22%
+🎯 2024-09-02 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $58505.52 -> $73005.39 | PnL: 24.73%
+🎯 2024-09-04 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $58101.53 -> $73352.13 | PnL: 26.20%
+🎯 2024-09-06 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $53532.18 -> $72665.35 | PnL: 35.69%
+🎯 2024-09-08 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $54393.12 -> $73587.55 | PnL: 35.24%
+🎯 2024-09-10 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $58018.53 -> $76562.33 | PnL: 31.91%
+🎯 2024-09-12 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $58465.46 -> $77382.61 | PnL: 32.31%
+🎯 2024-09-14 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $59885.93 -> $77418.00 | PnL: 29.23%
+🎯 2024-09-16 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $57994.00 -> $77540.57 | PnL: 33.65%
+🎯 2024-09-18 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $60121.07 -> $77157.04 | PnL: 28.29%
+🎯 2024-09-20 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $62869.71 -> $77118.97 | PnL: 22.61%
+🎯 2024-09-22 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $63232.36 -> $78072.97 | PnL: 23.42%
+🎯 2024-09-24 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $64365.17 -> $78383.55 | PnL: 21.73%
+🎯 2024-09-26 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $64787.05 -> $76071.00 | PnL: 17.37%
+🎯 2024-09-28 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $65802.76 -> $77619.57 | PnL: 17.91%
+🎯 2024-09-30 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $63528.22 -> $76506.98 | PnL: 20.38%
+🎯 2024-10-02 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $60242.89 -> $72268.80 | PnL: 19.91%
+🎯 2024-10-04 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $62436.77 -> $74061.10 | PnL: 18.57%
+🎯 2024-10-06 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $62710.22 -> $74713.65 | PnL: 19.09%
+🎯 2024-10-08 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $62306.84 -> $75934.47 | PnL: 21.82%
+🎯 2024-10-10 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $59773.97 -> $74002.21 | PnL: 23.75%
+🎯 2024-10-12 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $63091.54 -> $75125.89 | PnL: 19.02%
+🎯 2024-10-14 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $66013.11 -> $76518.25 | PnL: 15.86%
+🎯 2024-10-16 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $67799.91 -> $78430.44 | PnL: 15.63%
+🎯 2024-10-18 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $68672.76 -> $79158.22 | PnL: 15.22%
+🎯 2024-10-20 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $68568.50 -> $79037.15 | PnL: 15.22%
+🎯 2024-10-22 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $67547.32 -> $77558.38 | PnL: 14.77%
+🎯 2024-10-24 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $68379.72 -> $75857.84 | PnL: 10.89%
+🎯 2024-10-26 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $67235.57 -> $75513.24 | PnL: 12.26%
+🎯 2024-10-28 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $69702.92 -> $76739.48 | PnL: 10.05%
+🎯 2024-10-30 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $71889.38 -> $78626.12 | PnL: 9.32%
+🎯 2024-11-01 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $69280.55 -> $78579.17 | PnL: 13.37%
+🎯 2024-11-03 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $68718.17 -> $77039.88 | PnL: 12.06%
+🎯 2024-11-05 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $69066.73 -> $74358.52 | PnL: 7.61%
+🎯 2024-11-07 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $76715.63 -> $78179.00 | PnL: 1.86%
+🎯 2024-11-09 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $76320.86 -> $79529.87 | PnL: 4.15%
+🎯 2024-11-11 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $86195.41 -> $84556.06 | PnL: 1.89%
+🎯 2024-11-13 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $90222.93 -> $84124.11 | PnL: 7.20%
+🎯 2024-11-15 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $90327.78 -> $89025.41 | PnL: 1.41%
+🎯 2024-11-17 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $89964.43 -> $87432.28 | PnL: 2.85%
+🎯 2024-11-19 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $93237.69 -> $89365.22 | PnL: 4.28%
+🎯 2024-11-21 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $97839.00 -> $93643.21 | PnL: 4.43%
+🎯 2024-11-23 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $97522.47 -> $94877.48 | PnL: 2.74%
+🎯 2024-11-27 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $96684.53 -> $93012.53 | PnL: 3.90%
+🎯 2024-11-29 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $97324.72 -> $94727.26 | PnL: 2.69%
+🎯 2024-12-05 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $98965.09 -> $94780.70 | PnL: 4.36%
+🎯 2024-12-07 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $100065.08 -> $97666.48 | PnL: 2.41%
+🎯 2024-12-11 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $101181.76 -> $96674.46 | PnL: 4.61%
+🎯 2024-12-15 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $103115.14 -> $101037.74 | PnL: 2.01%
+🎯 2024-12-17 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $106365.30 -> $103711.96 | PnL: 2.51%
+🎯 2024-12-19 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $97192.59 -> $98888.18 | PnL: 1.69%
+🎯 2024-12-23 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $92992.90 -> $97974.90 | PnL: 5.31%
+🎯 2024-12-27 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $94704.75 -> $96798.32 | PnL: 2.16%
+🎯 2024-12-31 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $93928.08 -> $91989.50 | PnL: 2.06%
+🎯 2025-01-02 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $97127.61 -> $95202.71 | PnL: 1.97%
+🎯 2025-01-06 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $101752.40 -> $97385.22 | PnL: 4.43%
+🎯 2025-01-08 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $94307.78 -> $96659.94 | PnL: 2.44%
+🎯 2025-01-14 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $96393.88 -> $94234.28 | PnL: 2.24%
+🎯 2025-01-16 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $100302.80 -> $97781.21 | PnL: 2.53%
+🎯 2025-01-18 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $104179.36 -> $99134.50 | PnL: 5.04%
+🎯 2025-01-20 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $103475.60 -> $99520.25 | PnL: 3.92%
+🎯 2025-01-22 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $104520.41 -> $102125.71 | PnL: 2.29%
+🎯 2025-01-24 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $105687.88 -> $102307.92 | PnL: 3.25%
+🎯 2025-01-30 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $105639.22 -> $103758.91 | PnL: 1.76%
+🎯 2025-02-19 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $96096.80 -> $94528.36 | PnL: 1.61%
+🎯 2025-02-21 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $95137.48 -> $93896.72 | PnL: 1.27%
+🎯 2025-02-25 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $87912.88 -> $93415.19 | PnL: 6.21%
+🎯 2025-02-27 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $84073.99 -> $86496.15 | PnL: 2.83%
+🎯 2025-03-01 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $85524.38 -> $87781.58 | PnL: 2.59%
+🎯 2025-03-05 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $89641.65 -> $88055.80 | PnL: 1.75%
+🎯 2025-03-09 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $82700.02 -> $84619.61 | PnL: 2.27%
+🎯 2025-03-13 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $80220.96 -> $82074.60 | PnL: 2.26%
+🎯 2025-03-15 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $84218.06 -> $83124.37 | PnL: 1.27%
+🎯 2025-03-19 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $85384.26 -> $83340.82 | PnL: 2.40%
+🎯 2025-03-23 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $84931.52 -> $82888.95 | PnL: 2.41%
+🎯 2025-03-25 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $88087.42 -> $86595.43 | PnL: 1.67%
+🎯 2025-03-29 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $82810.31 -> $84332.24 | PnL: 1.79%
+🎯 2025-03-31 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $82361.41 -> $80144.57 | PnL: 2.72%
+🎯 2025-04-02 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $86839.05 -> $83229.63 | PnL: 4.29%
+🎯 2025-04-08 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $76828.15 -> $78276.93 | PnL: 1.84%
+🎯 2025-04-10 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $79654.32 -> $81024.66 | PnL: 1.67%
+🎯 2025-04-12 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $84844.66 -> $81169.47 | PnL: 4.48%
+🎯 2025-04-14 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $84833.97 -> $83604.33 | PnL: 1.42%
+🎯 2025-04-16 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $84254.28 -> $82263.27 | PnL: 2.37%
+🎯 2025-04-18 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $84471.38 -> $83436.67 | PnL: 1.19%
+🎯 2025-04-22 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $91405.54 -> $87052.25 | PnL: 4.95%
+🎯 2025-04-24 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $93524.78 -> $90723.30 | PnL: 3.04%
+🎯 2025-04-26 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $94242.03 -> $91685.32 | PnL: 2.74%
+🎯 2025-04-28 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $94718.82 -> $92847.18 | PnL: 1.97%
+🎯 2025-05-02 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $96869.74 -> $94581.31 | PnL: 2.37%
+🎯 2025-05-06 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $94882.70 -> $93436.41 | PnL: 1.50%
+🎯 2025-05-08 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $101234.53 -> $96767.79 | PnL: 4.57%
+🎯 2025-05-10 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $103102.07 -> $100022.45 | PnL: 3.03%
+🎯 2025-05-12 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $101749.07 -> $100301.68 | PnL: 1.39%
+🎯 2025-05-14 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $103198.70 -> $101343.27 | PnL: 1.78%
+🎯 2025-05-16 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $103965.25 -> $102426.01 | PnL: 1.45%
+🎯 2025-05-18 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $103821.79 -> $101816.29 | PnL: 1.92%
+🎯 2025-05-22 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $111130.70 -> $106944.14 | PnL: 3.86%
+🎯 2025-05-24 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $108879.72 -> $107252.33 | PnL: 1.47%
+🎯 2025-05-26 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $109048.43 -> $106582.50 | PnL: 2.26%
+🎯 2025-05-28 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $107063.15 -> $108780.41 | PnL: 1.55%
+🎯 2025-06-07 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $105680.68 -> $103843.85 | PnL: 1.72%
+🎯 2025-06-09 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $108570.56 -> $106806.67 | PnL: 1.60%
+🎯 2025-06-11 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $108660.13 -> $106978.09 | PnL: 1.52%
+🎯 2025-06-17 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $104809.73 -> $107283.36 | PnL: 2.31%
+🎯 2025-06-25 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107728.16 -> $105394.56 | PnL: 2.16%
+🎯 2025-06-29 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107323.92 -> $105706.19 | PnL: 1.48%
+🎯 2025-07-11 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $118072.87 -> $113132.56 | PnL: 4.32%
+
+✅ Backtest scan complete for BTC-USD.
+
+📈 Trade Performance Summary:
+• 125/125 winning trades (100.0% win rate)
+• Avg PnL: 10.48%
+
+📊 Results for BTC-USD (SWING):
+Total Trades: 125
+Winning Trades: 125
+Losing Trades: 0
+Win Rate: 100.0
+Sharpe Ratio: 19.21
+Max Drawdown: 0.01
+Profit Factor: 0
+Avg Win: 10.48
+Avg Loss: 0
+
+📄 Report for BTC-USD - main
+----------------------------------------
+Total Trades        : 66.00
+Winning Trades      : 66.00
+Losing Trades       : 0.00
+Win Rate            : 100.00
+Sharpe Ratio        : 42.17
+Max Drawdown        : 0.01
+Profit Factor       : 0.00
+Avg Win             : 1.18
+Avg Loss            : 0.00
+----------------------------------------
+
+🔍 Testing BTC-USD - SCALP Strategy
+
+🔧 Running backtest for BTC-USD with 'scalp' strategy.
+   - Confidence Threshold: 75.0%
+   - Long Target: > 0.5%
+   - Short Target: < -0.5%
+
+📊 Loading 90 days of 15m data for BTC-USD...
+✅ Loaded 2160 15m candles for BTC-USD from TwelveData
+📅 Data loaded for BTC-USD: 2160 candles from 2025-06-21 02:15:00 to 2025-07-13 14:00:00
+
+🔎 Scanning 2160 candles for signals (Window: 60, Step: 12)...
+🎯 2025-06-21 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $102345.81 -> $101362.05 | PnL: 0.92%
+🎯 2025-06-21 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $101352.46 -> $99946.54 | PnL: 1.36%
+🎯 2025-06-22 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $102141.62 -> $101087.08 | PnL: 0.99%
+🎯 2025-06-22 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $102766.13 -> $101805.42 | PnL: 0.89%
+🎯 2025-06-22 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $102579.26 -> $102016.03 | PnL: 0.50%
+🎯 2025-06-22 14:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $99660.44 -> $100615.31 | PnL: 0.91%
+🎯 2025-06-22 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $99461.05 -> $97959.50 | PnL: 1.48%
+🎯 2025-06-22 20:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $98640.99 -> $99269.96 | PnL: 0.59%
+🎯 2025-06-22 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $100952.24 -> $99720.92 | PnL: 1.18%
+🎯 2025-06-23 08:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $102082.39 -> $102866.31 | PnL: 0.72%
+🎯 2025-06-23 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $101770.65 -> $100647.49 | PnL: 1.07%
+🎯 2025-06-23 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $103713.15 -> $102892.26 | PnL: 0.75%
+🎯 2025-06-23 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $105420.13 -> $104685.19 | PnL: 0.65%
+🎯 2025-06-24 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $105104.86 -> $104398.35 | PnL: 0.63%
+🎯 2025-06-24 08:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $105248.49 -> $106403.50 | PnL: 1.05%
+🎯 2025-06-26 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107740.45 -> $106941.90 | PnL: 0.70%
+🎯 2025-06-26 05:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $107845.33 -> $108567.26 | PnL: 0.62%
+🎯 2025-06-26 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107177.01 -> $106337.89 | PnL: 0.74%
+🎯 2025-06-26 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107286.91 -> $106585.51 | PnL: 0.61%
+🎯 2025-06-27 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107148.49 -> $106411.26 | PnL: 0.64%
+🎯 2025-06-27 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $106859.15 -> $106243.86 | PnL: 0.53%
+🎯 2025-06-27 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $106983.41 -> $106304.97 | PnL: 0.59%
+🎯 2025-06-28 08:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $107588.76 -> $108865.06 | PnL: 1.14%
+🎯 2025-06-28 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107263.57 -> $106642.80 | PnL: 0.53%
+🎯 2025-06-29 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107168.74 -> $106495.64 | PnL: 0.58%
+🎯 2025-06-29 11:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $108297.44 -> $110011.04 | PnL: 1.53%
+🎯 2025-06-29 14:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $108234.14 -> $109394.64 | PnL: 1.02%
+🎯 2025-06-29 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107400.39 -> $106617.80 | PnL: 0.68%
+🎯 2025-06-29 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $108309.18 -> $107688.66 | PnL: 0.53%
+🎯 2025-06-30 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107540.06 -> $106202.19 | PnL: 1.21%
+🎯 2025-06-30 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107769.36 -> $105922.63 | PnL: 1.69%
+🎯 2025-06-30 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107232.65 -> $106586.65 | PnL: 0.56%
+🎯 2025-06-30 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107675.73 -> $106346.59 | PnL: 1.20%
+🎯 2025-07-01 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107257.04 -> $106667.47 | PnL: 0.50%
+🎯 2025-07-01 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $106849.89 -> $105559.85 | PnL: 1.17%
+🎯 2025-07-01 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $106416.81 -> $105321.81 | PnL: 0.99%
+🎯 2025-07-01 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $106479.37 -> $104899.69 | PnL: 1.46%
+🎯 2025-07-01 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $106128.11 -> $105264.45 | PnL: 0.77%
+🎯 2025-07-01 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $105539.36 -> $104824.14 | PnL: 0.63%
+🎯 2025-07-02 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $105628.24 -> $104825.32 | PnL: 0.72%
+🎯 2025-07-02 08:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $107783.78 -> $108948.30 | PnL: 1.03%
+🎯 2025-07-02 11:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $107898.37 -> $109772.04 | PnL: 1.69%
+🎯 2025-07-02 20:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $109641.92 -> $110318.96 | PnL: 0.57%
+🎯 2025-07-03 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $108548.64 -> $107974.88 | PnL: 0.48%
+🎯 2025-07-03 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $109048.59 -> $108111.20 | PnL: 0.82%
+🎯 2025-07-04 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $109280.13 -> $108459.93 | PnL: 0.71%
+🎯 2025-07-04 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $109052.65 -> $107776.13 | PnL: 1.13%
+🎯 2025-07-04 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $108730.83 -> $107366.15 | PnL: 1.22%
+🎯 2025-07-04 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $109030.80 -> $107876.96 | PnL: 1.02%
+🎯 2025-07-04 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107685.72 -> $105681.00 | PnL: 1.85%
+🎯 2025-07-04 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107655.80 -> $106359.22 | PnL: 1.17%
+🎯 2025-07-06 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107921.67 -> $107200.34 | PnL: 0.62%
+🎯 2025-07-06 17:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $109004.45 -> $110172.85 | PnL: 1.02%
+🎯 2025-07-07 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $109367.94 -> $108806.61 | PnL: 0.47%
+🎯 2025-07-07 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $108791.95 -> $107868.40 | PnL: 0.81%
+🎯 2025-07-07 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $108647.75 -> $107851.34 | PnL: 0.69%
+🎯 2025-07-07 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $108049.06 -> $106505.40 | PnL: 1.40%
+🎯 2025-07-07 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $108038.69 -> $106932.59 | PnL: 0.98%
+🎯 2025-07-07 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107935.31 -> $106847.27 | PnL: 0.97%
+🎯 2025-07-07 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $108068.68 -> $107288.31 | PnL: 0.68%
+🎯 2025-07-08 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $107988.79 -> $107179.67 | PnL: 0.70%
+🎯 2025-07-08 08:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $108510.09 -> $109250.63 | PnL: 0.63%
+🎯 2025-07-08 11:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $109024.88 -> $109656.21 | PnL: 0.53%
+🎯 2025-07-08 14:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $108638.75 -> $109935.83 | PnL: 1.14%
+🎯 2025-07-08 20:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $109029.52 -> $109735.54 | PnL: 0.60%
+🎯 2025-07-09 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $108414.98 -> $107431.79 | PnL: 0.87%
+🎯 2025-07-09 14:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $109047.72 -> $110044.33 | PnL: 0.86%
+🎯 2025-07-09 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $110924.37 -> $110304.64 | PnL: 0.51%
+🎯 2025-07-10 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $110814.17 -> $109874.21 | PnL: 0.81%
+🎯 2025-07-10 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $113419.03 -> $111485.48 | PnL: 1.68%
+🎯 2025-07-10 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $115689.02 -> $114397.22 | PnL: 1.08%
+🎯 2025-07-11 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $116192.14 -> $115249.42 | PnL: 0.77%
+🎯 2025-07-11 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $117818.31 -> $116927.21 | PnL: 0.71%
+🎯 2025-07-11 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $117445.19 -> $116607.17 | PnL: 0.67%
+🎯 2025-07-11 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $117876.70 -> $117163.93 | PnL: 0.56%
+🎯 2025-07-11 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $117553.34 -> $116681.15 | PnL: 0.70%
+🎯 2025-07-12 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $117662.63 -> $116607.80 | PnL: 0.85%
+🎯 2025-07-12 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $117805.05 -> $117055.16 | PnL: 0.59%
+🎯 2025-07-12 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $117586.38 -> $116251.36 | PnL: 1.10%
+🎯 2025-07-12 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $117372.48 -> $115932.93 | PnL: 1.19%
+🎯 2025-07-12 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $117369.22 -> $116649.80 | PnL: 0.57%
+🎯 2025-07-12 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $117215.47 -> $116205.42 | PnL: 0.82%
+🎯 2025-07-13 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $117359.16 -> $116219.60 | PnL: 0.93%
+🎯 2025-07-13 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $117984.04 -> $117211.55 | PnL: 0.61%
+
+✅ Backtest scan complete for BTC-USD.
+
+📈 Trade Performance Summary:
+• 84/84 winning trades (100.0% win rate)
+• Avg PnL: 0.88%
+
+📊 Results for BTC-USD (SCALP):
+Total Trades: 84
+Winning Trades: 84
+Losing Trades: 0
+Win Rate: 100.0
+Sharpe Ratio: 51.94
+Max Drawdown: 0.0
+Profit Factor: 0
+Avg Win: 0.88
+Avg Loss: 0
+
+📄 Report for BTC-USD - main
+----------------------------------------
+Total Trades        : 66.00
+Winning Trades      : 66.00
+Losing Trades       : 0.00
+Win Rate            : 100.00
+Sharpe Ratio        : 42.17
+Max Drawdown        : 0.01
+Profit Factor       : 0.00
+Avg Win             : 1.18
+Avg Loss            : 0.00
+----------------------------------------
+
+🔍 Testing ETH-USD - MAIN Strategy
+
+🔧 Running backtest for ETH-USD with 'main' strategy.
+   - Confidence Threshold: 65.0%
+   - Long Target: > 0.8%
+   - Short Target: < -0.6%
+
+📊 Loading 90 days of 1h data for ETH-USD...
+✅ Loaded 2160 1h candles for ETH-USD from TwelveData
+📅 Data loaded for ETH-USD: 2160 candles from 2025-04-14 15:00:00 to 2025-07-13 14:00:00
+
+🔎 Scanning 2160 candles for signals (Window: 60, Step: 12)...
+🎯 2025-04-17 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1583.56 -> $1533.83 | PnL: 3.19%
+🎯 2025-04-20 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1613.67 -> $1645.43 | PnL: 1.92%
+🎯 2025-04-20 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1575.26 -> $1596.78 | PnL: 1.32%
+🎯 2025-04-21 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1631.94 -> $1571.11 | PnL: 3.82%
+🎯 2025-04-21 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1624.48 -> $1645.23 | PnL: 1.23%
+🎯 2025-04-22 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1700.31 -> $1643.54 | PnL: 3.40%
+🎯 2025-04-23 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1793.34 -> $1754.45 | PnL: 2.17%
+🎯 2025-04-23 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1796.40 -> $1828.03 | PnL: 1.71%
+🎯 2025-04-24 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1770.54 -> $1814.84 | PnL: 2.45%
+🎯 2025-04-25 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1803.71 -> $1754.02 | PnL: 2.78%
+🎯 2025-04-26 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1796.33 -> $1778.01 | PnL: 0.98%
+🎯 2025-04-29 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1799.98 -> $1770.15 | PnL: 1.63%
+🎯 2025-04-30 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1767.10 -> $1798.84 | PnL: 1.75%
+🎯 2025-05-01 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1805.22 -> $1770.83 | PnL: 1.89%
+🎯 2025-05-02 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1849.55 -> $1890.20 | PnL: 2.15%
+🎯 2025-05-03 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1836.56 -> $1860.81 | PnL: 1.27%
+🎯 2025-05-03 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1832.67 -> $1803.85 | PnL: 1.55%
+🎯 2025-05-04 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1829.83 -> $1809.79 | PnL: 1.06%
+🎯 2025-05-04 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1828.83 -> $1815.23 | PnL: 0.70%
+🎯 2025-05-05 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1799.19 -> $1773.02 | PnL: 1.43%
+🎯 2025-05-06 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1804.52 -> $1788.75 | PnL: 0.83%
+🎯 2025-05-06 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1768.18 -> $1753.02 | PnL: 0.81%
+🎯 2025-05-07 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1824.34 -> $1754.83 | PnL: 3.91%
+🎯 2025-05-08 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1898.61 -> $1847.46 | PnL: 2.72%
+🎯 2025-05-08 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2049.34 -> $1984.04 | PnL: 3.24%
+🎯 2025-05-09 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2203.38 -> $2115.20 | PnL: 4.12%
+🎯 2025-05-09 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2297.99 -> $2269.34 | PnL: 1.21%
+🎯 2025-05-10 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2337.52 -> $2302.28 | PnL: 1.48%
+🎯 2025-05-10 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2430.82 -> $2374.71 | PnL: 2.31%
+🎯 2025-05-11 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2536.17 -> $2518.79 | PnL: 0.64%
+🎯 2025-05-11 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2464.88 -> $2489.98 | PnL: 0.97%
+🎯 2025-05-12 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2516.93 -> $2478.28 | PnL: 1.51%
+🎯 2025-05-12 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2488.83 -> $2514.11 | PnL: 0.97%
+🎯 2025-05-13 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2427.20 -> $2454.40 | PnL: 1.07%
+🎯 2025-05-13 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2562.30 -> $2480.69 | PnL: 3.24%
+🎯 2025-05-14 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2649.99 -> $2681.02 | PnL: 1.12%
+🎯 2025-05-14 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2600.68 -> $2633.83 | PnL: 1.22%
+🎯 2025-05-15 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2571.96 -> $2555.75 | PnL: 0.58%
+🎯 2025-05-15 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2566.36 -> $2607.59 | PnL: 1.56%
+🎯 2025-05-16 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2578.24 -> $2534.39 | PnL: 1.68%
+🎯 2025-05-17 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2499.21 -> $2547.56 | PnL: 1.88%
+🎯 2025-05-17 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2471.23 -> $2426.33 | PnL: 1.80%
+🎯 2025-05-18 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2474.27 -> $2428.30 | PnL: 1.84%
+🎯 2025-05-18 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2575.60 -> $2509.58 | PnL: 2.58%
+🎯 2025-05-19 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2388.44 -> $2451.60 | PnL: 2.59%
+🎯 2025-05-19 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2465.88 -> $2436.69 | PnL: 1.15%
+🎯 2025-05-20 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2549.74 -> $2514.88 | PnL: 1.34%
+🎯 2025-05-20 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2484.72 -> $2539.74 | PnL: 2.16%
+🎯 2025-05-21 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2542.45 -> $2472.47 | PnL: 2.78%
+🎯 2025-05-21 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2563.66 -> $2529.18 | PnL: 1.31%
+🎯 2025-05-22 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2625.40 -> $2558.30 | PnL: 2.57%
+🎯 2025-05-22 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2659.23 -> $2632.37 | PnL: 0.97%
+🎯 2025-05-23 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2719.63 -> $2665.58 | PnL: 1.98%
+🎯 2025-05-23 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2570.95 -> $2638.01 | PnL: 2.56%
+🎯 2025-05-25 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2509.03 -> $2453.53 | PnL: 2.21%
+🎯 2025-05-26 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2557.32 -> $2531.14 | PnL: 0.98%
+🎯 2025-05-26 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2567.94 -> $2601.57 | PnL: 1.26%
+🎯 2025-05-27 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2664.91 -> $2628.78 | PnL: 1.32%
+🎯 2025-05-28 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2648.05 -> $2707.91 | PnL: 2.21%
+🎯 2025-05-29 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2759.01 -> $2638.96 | PnL: 4.50%
+🎯 2025-05-29 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2646.44 -> $2695.45 | PnL: 1.80%
+🎯 2025-05-30 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2628.81 -> $2598.64 | PnL: 1.11%
+🎯 2025-05-31 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2516.26 -> $2548.37 | PnL: 1.23%
+🎯 2025-05-31 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2533.31 -> $2473.92 | PnL: 2.35%
+🎯 2025-06-01 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2515.41 -> $2535.78 | PnL: 0.76%
+🎯 2025-06-01 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2520.65 -> $2455.93 | PnL: 2.59%
+🎯 2025-06-02 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2540.64 -> $2455.22 | PnL: 3.43%
+🎯 2025-06-03 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2599.99 -> $2550.94 | PnL: 1.87%
+🎯 2025-06-03 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2620.33 -> $2596.26 | PnL: 0.88%
+🎯 2025-06-06 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2458.61 -> $2501.87 | PnL: 1.71%
+🎯 2025-06-06 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2507.12 -> $2472.39 | PnL: 1.35%
+🎯 2025-06-07 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2490.91 -> $2526.05 | PnL: 1.36%
+🎯 2025-06-07 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2517.23 -> $2497.99 | PnL: 0.72%
+🎯 2025-06-08 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2514.33 -> $2554.90 | PnL: 1.56%
+🎯 2025-06-09 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2531.09 -> $2484.95 | PnL: 1.81%
+🎯 2025-06-10 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2685.18 -> $2617.77 | PnL: 2.53%
+🎯 2025-06-11 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2861.51 -> $2817.23 | PnL: 1.52%
+🎯 2025-06-12 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2767.66 -> $2818.66 | PnL: 1.79%
+🎯 2025-06-12 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2717.62 -> $2670.60 | PnL: 1.71%
+🎯 2025-06-13 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2518.73 -> $2691.11 | PnL: 6.79%
+🎯 2025-06-14 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2552.16 -> $2576.11 | PnL: 0.89%
+🎯 2025-06-15 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2528.01 -> $2473.73 | PnL: 2.14%
+🎯 2025-06-15 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2539.39 -> $2499.13 | PnL: 1.56%
+🎯 2025-06-16 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2565.83 -> $2516.91 | PnL: 1.89%
+🎯 2025-06-17 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2609.67 -> $2646.91 | PnL: 1.38%
+🎯 2025-06-17 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2501.94 -> $2536.13 | PnL: 1.32%
+🎯 2025-06-18 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2524.37 -> $2490.49 | PnL: 1.31%
+🎯 2025-06-19 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2522.72 -> $2485.96 | PnL: 1.43%
+🎯 2025-06-20 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2514.82 -> $2480.16 | PnL: 1.35%
+🎯 2025-06-20 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2496.73 -> $2548.40 | PnL: 2.02%
+🎯 2025-06-22 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2267.58 -> $2318.73 | PnL: 2.21%
+🎯 2025-06-22 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2177.16 -> $2199.01 | PnL: 0.95%
+🎯 2025-06-23 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2231.80 -> $2168.18 | PnL: 2.88%
+🎯 2025-06-23 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2246.20 -> $2226.16 | PnL: 0.85%
+🎯 2025-06-24 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2396.59 -> $2319.15 | PnL: 3.29%
+🎯 2025-06-24 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2435.28 -> $2406.91 | PnL: 1.13%
+🎯 2025-06-25 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2400.88 -> $2379.34 | PnL: 0.86%
+🎯 2025-06-26 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2486.01 -> $2384.93 | PnL: 4.19%
+🎯 2025-06-27 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2444.14 -> $2373.77 | PnL: 2.91%
+🎯 2025-06-27 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2435.47 -> $2420.12 | PnL: 0.58%
+🎯 2025-06-28 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2417.97 -> $2376.14 | PnL: 1.71%
+🎯 2025-06-28 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2433.05 -> $2404.78 | PnL: 1.13%
+🎯 2025-06-30 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2497.29 -> $2478.20 | PnL: 0.72%
+🎯 2025-06-30 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2476.98 -> $2523.31 | PnL: 1.82%
+🎯 2025-07-02 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2427.99 -> $2332.30 | PnL: 4.05%
+🎯 2025-07-02 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2495.53 -> $2431.34 | PnL: 2.59%
+🎯 2025-07-04 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2498.64 -> $2473.64 | PnL: 0.96%
+🎯 2025-07-05 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2515.73 -> $2406.90 | PnL: 4.47%
+🎯 2025-07-05 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2504.94 -> $2459.88 | PnL: 1.78%
+🎯 2025-07-06 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2512.40 -> $2457.16 | PnL: 2.20%
+🎯 2025-07-06 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2554.83 -> $2493.45 | PnL: 2.41%
+🎯 2025-07-07 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2535.88 -> $2573.73 | PnL: 1.44%
+🎯 2025-07-08 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2535.48 -> $2517.31 | PnL: 0.67%
+🎯 2025-07-10 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2772.50 -> $2738.02 | PnL: 1.21%
+🎯 2025-07-11 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2967.86 -> $2881.23 | PnL: 2.96%
+🎯 2025-07-12 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2960.12 -> $2941.26 | PnL: 0.59%
+🎯 2025-07-13 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2951.71 -> $2904.27 | PnL: 1.58%
+
+✅ Backtest scan complete for ETH-USD.
+
+📈 Trade Performance Summary:
+• 117/117 winning trades (100.0% win rate)
+• Avg PnL: 1.88%
+
+📊 Results for ETH-USD (MAIN):
+Total Trades: 117
+Winning Trades: 117
+Losing Trades: 0
+Win Rate: 100.0
+Sharpe Ratio: 35.33
+Max Drawdown: 0.01
+Profit Factor: 0
+Avg Win: 1.88
+Avg Loss: 0
+
+📄 Report for ETH-USD - main
+----------------------------------------
+Total Trades        : 117.00
+Winning Trades      : 117.00
+Losing Trades       : 0.00
+Win Rate            : 100.00
+Sharpe Ratio        : 35.33
+Max Drawdown        : 0.01
+Profit Factor       : 0.00
+Avg Win             : 1.88
+Avg Loss            : 0.00
+----------------------------------------
+
+🔍 Testing ETH-USD - SWING Strategy
+
+🔧 Running backtest for ETH-USD with 'swing' strategy.
+   - Confidence Threshold: 70.0%
+   - Long Target: > 1.5%
+   - Short Target: < -1.2%
+
+📊 Loading 90 days of 4h data for ETH-USD...
+✅ Loaded 2160 4h candles for ETH-USD from TwelveData
+📅 Data loaded for ETH-USD: 2160 candles from 2024-07-18 16:00:00 to 2025-07-13 12:00:00
+
+🔎 Scanning 2160 candles for signals (Window: 60, Step: 12)...
+🎯 2024-08-01 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $3135.83 -> $3280.46 | PnL: 4.56%
+🎯 2024-08-03 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2895.94 -> $3051.38 | PnL: 5.32%
+🎯 2024-08-05 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2408.57 -> $2800.18 | PnL: 16.21%
+🎯 2024-08-07 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2352.58 -> $2538.87 | PnL: 7.87%
+🎯 2024-08-13 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2709.69 -> $2635.32 | PnL: 2.77%
+🎯 2024-08-19 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2608.71 -> $2651.77 | PnL: 1.60%
+🎯 2024-08-23 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2744.10 -> $2695.90 | PnL: 1.74%
+🎯 2024-08-27 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2587.53 -> $2679.81 | PnL: 3.52%
+🎯 2024-08-29 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2525.29 -> $2485.86 | PnL: 1.54%
+🎯 2024-09-06 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2225.11 -> $2325.06 | PnL: 4.44%
+🎯 2024-09-08 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2274.34 -> $2334.46 | PnL: 2.59%
+🎯 2024-09-14 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2405.31 -> $2359.79 | PnL: 1.88%
+🎯 2024-09-16 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2277.58 -> $2350.80 | PnL: 3.16%
+🎯 2024-09-20 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2537.17 -> $2399.61 | PnL: 5.68%
+🎯 2024-09-26 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2646.95 -> $2584.84 | PnL: 2.35%
+🎯 2024-10-02 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2375.95 -> $2434.65 | PnL: 2.42%
+🎯 2024-10-08 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2442.86 -> $2487.63 | PnL: 1.78%
+🎯 2024-10-12 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2469.87 -> $2410.17 | PnL: 2.43%
+🎯 2024-10-14 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2617.02 -> $2476.26 | PnL: 5.63%
+🎯 2024-10-18 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2648.51 -> $2593.46 | PnL: 2.07%
+🎯 2024-10-20 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2696.91 -> $2627.04 | PnL: 2.61%
+🎯 2024-10-22 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2631.28 -> $2687.59 | PnL: 2.09%
+🎯 2024-10-28 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2504.23 -> $2471.96 | PnL: 1.26%
+🎯 2024-10-30 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2652.45 -> $2557.80 | PnL: 3.65%
+🎯 2024-11-01 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2515.77 -> $2577.69 | PnL: 2.41%
+🎯 2024-11-05 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2406.43 -> $2351.84 | PnL: 2.27%
+🎯 2024-11-07 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2881.56 -> $2587.71 | PnL: 11.31%
+🎯 2024-11-09 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3066.95 -> $2824.13 | PnL: 8.55%
+🎯 2024-11-11 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3297.15 -> $3087.21 | PnL: 6.75%
+🎯 2024-11-13 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3154.93 -> $2986.12 | PnL: 5.60%
+🎯 2024-11-15 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $3042.65 -> $3129.02 | PnL: 2.79%
+🎯 2024-11-21 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3343.15 -> $3187.38 | PnL: 4.84%
+🎯 2024-11-23 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3405.02 -> $3254.27 | PnL: 4.58%
+🎯 2024-11-25 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3460.54 -> $3281.34 | PnL: 5.41%
+🎯 2024-11-27 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3585.35 -> $3386.70 | PnL: 5.82%
+🎯 2024-11-29 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3578.78 -> $3490.95 | PnL: 2.47%
+🎯 2024-12-01 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3704.29 -> $3581.63 | PnL: 3.37%
+🎯 2024-12-05 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3827.97 -> $3657.92 | PnL: 4.60%
+🎯 2024-12-07 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $4007.98 -> $3846.34 | PnL: 4.15%
+🎯 2024-12-11 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3799.69 -> $3659.12 | PnL: 3.79%
+🎯 2024-12-15 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3901.48 -> $3830.66 | PnL: 1.80%
+🎯 2024-12-17 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3940.09 -> $3890.35 | PnL: 1.23%
+🎯 2024-12-19 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $3442.75 -> $3584.60 | PnL: 4.07%
+🎯 2024-12-21 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $3361.98 -> $3461.52 | PnL: 2.91%
+🎯 2024-12-23 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $3341.37 -> $3430.28 | PnL: 2.61%
+🎯 2024-12-27 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $3357.00 -> $3413.54 | PnL: 1.63%
+🎯 2025-01-02 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3459.54 -> $3391.43 | PnL: 1.96%
+🎯 2025-01-04 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3627.47 -> $3551.59 | PnL: 2.09%
+🎯 2025-01-06 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3683.88 -> $3580.23 | PnL: 2.85%
+🎯 2025-01-08 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $3283.69 -> $3421.30 | PnL: 4.14%
+🎯 2025-01-10 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $3297.29 -> $3348.19 | PnL: 1.49%
+🎯 2025-01-24 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3365.51 -> $3280.63 | PnL: 2.54%
+🎯 2025-01-30 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3266.85 -> $3206.48 | PnL: 1.83%
+🎯 2025-02-03 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2767.41 -> $3136.15 | PnL: 13.27%
+🎯 2025-02-05 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2778.16 -> $2874.37 | PnL: 3.41%
+🎯 2025-02-07 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2662.19 -> $2768.23 | PnL: 3.93%
+🎯 2025-02-09 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2626.37 -> $2684.50 | PnL: 2.16%
+🎯 2025-02-17 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2715.73 -> $2638.12 | PnL: 2.89%
+🎯 2025-02-23 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2805.08 -> $2759.05 | PnL: 1.62%
+🎯 2025-02-25 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2474.14 -> $2740.20 | PnL: 10.70%
+🎯 2025-02-27 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2294.82 -> $2480.74 | PnL: 8.05%
+🎯 2025-03-01 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2225.74 -> $2413.19 | PnL: 8.37%
+🎯 2025-03-03 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2112.65 -> $2176.79 | PnL: 2.99%
+🎯 2025-03-05 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2220.30 -> $2276.00 | PnL: 2.46%
+🎯 2025-03-07 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2180.65 -> $2221.29 | PnL: 1.81%
+🎯 2025-03-09 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2043.09 -> $2133.05 | PnL: 4.35%
+🎯 2025-03-11 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1954.36 -> $2119.13 | PnL: 8.38%
+🎯 2025-03-13 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1852.83 -> $1965.68 | PnL: 6.04%
+🎯 2025-03-19 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2028.42 -> $1902.42 | PnL: 6.57%
+🎯 2025-03-21 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1975.93 -> $2009.71 | PnL: 1.66%
+🎯 2025-03-23 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1994.16 -> $1962.24 | PnL: 1.58%
+🎯 2025-03-27 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2005.65 -> $2047.00 | PnL: 2.01%
+🎯 2025-03-29 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1830.10 -> $1922.08 | PnL: 4.98%
+🎯 2025-04-02 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1910.04 -> $1855.30 | PnL: 2.90%
+🎯 2025-04-06 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1628.93 -> $1669.96 | PnL: 2.47%
+🎯 2025-04-08 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1468.26 -> $1633.86 | PnL: 11.23%
+🎯 2025-04-10 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1515.46 -> $1676.33 | PnL: 10.57%
+🎯 2025-04-12 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1640.46 -> $1606.60 | PnL: 2.06%
+🎯 2025-04-16 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1590.66 -> $1625.71 | PnL: 2.15%
+🎯 2025-04-20 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1587.78 -> $1621.49 | PnL: 2.07%
+🎯 2025-04-22 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1696.83 -> $1599.14 | PnL: 6.06%
+🎯 2025-04-24 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1760.96 -> $1719.71 | PnL: 2.35%
+🎯 2025-04-26 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $1811.36 -> $1782.35 | PnL: 1.58%
+🎯 2025-04-28 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1798.89 -> $1840.94 | PnL: 2.29%
+🎯 2025-04-30 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $1789.14 -> $1835.73 | PnL: 2.55%
+🎯 2025-05-08 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2114.40 -> $1879.32 | PnL: 12.46%
+🎯 2025-05-10 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2496.59 -> $2144.62 | PnL: 16.36%
+🎯 2025-05-12 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2457.42 -> $2254.89 | PnL: 8.93%
+🎯 2025-05-14 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2602.47 -> $2409.50 | PnL: 7.96%
+🎯 2025-05-16 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2588.26 -> $2483.91 | PnL: 4.15%
+🎯 2025-05-18 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2406.13 -> $2296.51 | PnL: 4.72%
+🎯 2025-05-22 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2631.97 -> $2514.35 | PnL: 4.63%
+🎯 2025-05-26 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2540.56 -> $2492.24 | PnL: 1.89%
+🎯 2025-05-30 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2576.33 -> $2616.71 | PnL: 1.52%
+🎯 2025-06-01 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2523.10 -> $2491.32 | PnL: 1.23%
+🎯 2025-06-03 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2621.43 -> $2520.38 | PnL: 3.96%
+🎯 2025-06-11 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2810.03 -> $2650.08 | PnL: 5.99%
+🎯 2025-06-13 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2529.65 -> $2636.67 | PnL: 4.18%
+🎯 2025-06-17 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2531.50 -> $2634.43 | PnL: 4.02%
+🎯 2025-06-19 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2507.08 -> $2552.69 | PnL: 1.77%
+🎯 2025-06-21 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2387.37 -> $2436.81 | PnL: 2.02%
+🎯 2025-06-23 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $2315.77 -> $2396.87 | PnL: 3.45%
+🎯 2025-06-29 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2435.48 -> $2399.57 | PnL: 1.45%
+🎯 2025-07-03 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2583.53 -> $2497.13 | PnL: 3.41%
+🎯 2025-07-09 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2759.09 -> $2676.10 | PnL: 3.05%
+🎯 2025-07-11 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $3002.85 -> $2851.49 | PnL: 5.26%
+
+✅ Backtest scan complete for ETH-USD.
+
+📈 Trade Performance Summary:
+• 106/106 winning trades (100.0% win rate)
+• Avg PnL: 4.22%
+
+📊 Results for ETH-USD (SWING):
+Total Trades: 106
+Winning Trades: 106
+Losing Trades: 0
+Win Rate: 100.0
+Sharpe Ratio: 25.82
+Max Drawdown: 0.01
+Profit Factor: 0
+Avg Win: 4.22
+Avg Loss: 0
+
+📄 Report for ETH-USD - main
+----------------------------------------
+Total Trades        : 117.00
+Winning Trades      : 117.00
+Losing Trades       : 0.00
+Win Rate            : 100.00
+Sharpe Ratio        : 35.33
+Max Drawdown        : 0.01
+Profit Factor       : 0.00
+Avg Win             : 1.88
+Avg Loss            : 0.00
+----------------------------------------
+
+🔍 Testing ETH-USD - SCALP Strategy
+
+🔧 Running backtest for ETH-USD with 'scalp' strategy.
+   - Confidence Threshold: 75.0%
+   - Long Target: > 0.5%
+   - Short Target: < -0.5%
+
+📊 Loading 90 days of 15m data for ETH-USD...
+✅ Loaded 2160 15m candles for ETH-USD from TwelveData
+📅 Data loaded for ETH-USD: 2160 candles from 2025-06-21 02:15:00 to 2025-07-13 14:00:00
+
+🔎 Scanning 2160 candles for signals (Window: 60, Step: 12)...
+🎯 2025-06-21 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2412.38 -> $2358.30 | PnL: 2.24%
+🎯 2025-06-21 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2391.36 -> $2307.17 | PnL: 3.60%
+🎯 2025-06-21 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2260.60 -> $2211.53 | PnL: 2.17%
+🎯 2025-06-22 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2263.47 -> $2188.96 | PnL: 3.35%
+🎯 2025-06-22 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2286.06 -> $2205.35 | PnL: 3.61%
+🎯 2025-06-22 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2271.55 -> $2255.77 | PnL: 0.65%
+🎯 2025-06-22 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2274.61 -> $2197.08 | PnL: 3.48%
+🎯 2025-06-22 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2187.85 -> $2112.12 | PnL: 3.54%
+🎯 2025-06-22 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2229.13 -> $2156.07 | PnL: 3.34%
+🎯 2025-06-23 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2240.19 -> $2224.99 | PnL: 0.63%
+🎯 2025-06-23 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2238.82 -> $2225.29 | PnL: 0.56%
+🎯 2025-06-23 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2259.79 -> $2246.23 | PnL: 0.55%
+🎯 2025-06-23 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2276.90 -> $2216.42 | PnL: 2.68%
+🎯 2025-06-23 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2358.90 -> $2305.92 | PnL: 2.25%
+🎯 2025-06-23 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2417.63 -> $2392.37 | PnL: 1.01%
+🎯 2025-06-24 02:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2400.71 -> $2433.01 | PnL: 1.30%
+🎯 2025-06-24 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2409.99 -> $2372.26 | PnL: 1.54%
+🎯 2025-06-24 08:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2403.76 -> $2444.95 | PnL: 1.66%
+🎯 2025-06-24 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2411.06 -> $2391.01 | PnL: 0.79%
+🎯 2025-06-24 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2428.51 -> $2394.62 | PnL: 1.37%
+🎯 2025-06-24 17:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2450.67 -> $2473.59 | PnL: 0.89%
+🎯 2025-06-24 20:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2443.78 -> $2469.09 | PnL: 0.99%
+🎯 2025-06-25 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2452.58 -> $2434.22 | PnL: 0.70%
+🎯 2025-06-25 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2430.84 -> $2372.55 | PnL: 2.41%
+🎯 2025-06-25 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2417.90 -> $2373.07 | PnL: 1.84%
+🎯 2025-06-25 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2402.20 -> $2352.40 | PnL: 2.07%
+🎯 2025-06-25 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2420.42 -> $2366.31 | PnL: 2.24%
+🎯 2025-06-25 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2426.72 -> $2391.95 | PnL: 1.40%
+🎯 2025-06-26 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2466.01 -> $2408.45 | PnL: 2.34%
+🎯 2025-06-26 05:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2476.86 -> $2516.58 | PnL: 1.55%
+🎯 2025-06-26 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2433.08 -> $2348.74 | PnL: 3.54%
+🎯 2025-06-26 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2424.14 -> $2333.42 | PnL: 3.84%
+🎯 2025-06-26 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2441.23 -> $2355.09 | PnL: 3.61%
+🎯 2025-06-26 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2413.94 -> $2381.93 | PnL: 1.29%
+🎯 2025-06-27 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2428.75 -> $2374.12 | PnL: 2.25%
+🎯 2025-06-27 05:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2438.65 -> $2453.11 | PnL: 0.54%
+🎯 2025-06-27 08:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2439.51 -> $2458.15 | PnL: 0.71%
+🎯 2025-06-27 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2417.94 -> $2403.30 | PnL: 0.56%
+🎯 2025-06-27 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2413.64 -> $2364.92 | PnL: 2.01%
+🎯 2025-06-27 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2419.87 -> $2309.00 | PnL: 4.75%
+🎯 2025-06-27 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2413.95 -> $2383.79 | PnL: 1.22%
+🎯 2025-06-28 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2418.68 -> $2374.00 | PnL: 1.83%
+🎯 2025-06-28 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2421.37 -> $2390.62 | PnL: 1.24%
+🎯 2025-06-28 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2424.89 -> $2412.29 | PnL: 0.47%
+🎯 2025-06-28 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2423.32 -> $2408.65 | PnL: 0.56%
+🎯 2025-06-28 20:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2433.92 -> $2451.24 | PnL: 0.66%
+🎯 2025-06-28 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2434.96 -> $2416.74 | PnL: 0.70%
+🎯 2025-06-29 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2426.47 -> $2360.94 | PnL: 2.73%
+🎯 2025-06-29 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2435.88 -> $2420.06 | PnL: 0.60%
+🎯 2025-06-29 11:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2456.45 -> $2495.71 | PnL: 1.55%
+🎯 2025-06-29 14:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2448.28 -> $2477.79 | PnL: 1.16%
+🎯 2025-06-29 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2434.01 -> $2396.78 | PnL: 1.50%
+🎯 2025-06-29 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2432.57 -> $2381.06 | PnL: 2.11%
+🎯 2025-06-29 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2502.60 -> $2404.99 | PnL: 4.01%
+🎯 2025-06-30 02:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2508.42 -> $2538.67 | PnL: 1.16%
+🎯 2025-06-30 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2472.62 -> $2428.16 | PnL: 1.78%
+🎯 2025-06-30 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2460.97 -> $2372.99 | PnL: 3.66%
+🎯 2025-06-30 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2456.39 -> $2376.12 | PnL: 3.33%
+🎯 2025-06-30 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2477.68 -> $2403.13 | PnL: 3.05%
+🎯 2025-06-30 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2510.32 -> $2496.08 | PnL: 0.52%
+🎯 2025-07-01 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2491.32 -> $2462.27 | PnL: 1.13%
+🎯 2025-07-01 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2452.59 -> $2414.48 | PnL: 1.53%
+🎯 2025-07-01 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2456.15 -> $2330.48 | PnL: 5.34%
+🎯 2025-07-01 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2448.20 -> $2338.66 | PnL: 4.63%
+🎯 2025-07-01 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2425.19 -> $2292.59 | PnL: 5.73%
+🎯 2025-07-01 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2424.33 -> $2314.18 | PnL: 4.71%
+🎯 2025-07-01 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2406.42 -> $2342.14 | PnL: 2.69%
+🎯 2025-07-01 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2394.62 -> $2326.52 | PnL: 2.88%
+🎯 2025-07-02 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2412.61 -> $2340.79 | PnL: 3.02%
+🎯 2025-07-02 05:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2441.46 -> $2457.41 | PnL: 0.60%
+🎯 2025-07-02 08:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2453.15 -> $2504.97 | PnL: 2.06%
+🎯 2025-07-02 11:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2456.83 -> $2496.42 | PnL: 1.56%
+🎯 2025-07-02 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2577.42 -> $2563.63 | PnL: 0.49%
+🎯 2025-07-02 20:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2601.02 -> $2646.66 | PnL: 1.70%
+🎯 2025-07-02 23:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2589.04 -> $2635.88 | PnL: 1.76%
+🎯 2025-07-03 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2560.34 -> $2539.10 | PnL: 0.79%
+🎯 2025-07-03 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2580.39 -> $2521.83 | PnL: 2.27%
+🎯 2025-07-03 08:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2600.50 -> $2621.99 | PnL: 0.78%
+🎯 2025-07-03 11:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2592.20 -> $2617.93 | PnL: 0.94%
+🎯 2025-07-03 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2592.57 -> $2564.71 | PnL: 1.04%
+🎯 2025-07-03 23:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2590.32 -> $2615.79 | PnL: 0.93%
+🎯 2025-07-04 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2573.24 -> $2528.44 | PnL: 1.72%
+🎯 2025-07-04 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2541.80 -> $2473.52 | PnL: 2.71%
+🎯 2025-07-04 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2551.85 -> $2454.16 | PnL: 3.93%
+🎯 2025-07-04 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2515.23 -> $2457.35 | PnL: 2.31%
+🎯 2025-07-04 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2489.29 -> $2357.52 | PnL: 5.54%
+🎯 2025-07-04 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2489.88 -> $2349.27 | PnL: 5.94%
+🎯 2025-07-04 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2508.83 -> $2434.69 | PnL: 3.00%
+🎯 2025-07-05 05:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2522.69 -> $2538.33 | PnL: 0.57%
+🎯 2025-07-05 08:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2521.81 -> $2540.12 | PnL: 0.68%
+🎯 2025-07-05 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2520.15 -> $2496.18 | PnL: 0.91%
+🎯 2025-07-05 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2513.72 -> $2487.70 | PnL: 1.00%
+🎯 2025-07-05 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2497.99 -> $2438.77 | PnL: 2.38%
+🎯 2025-07-05 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2495.69 -> $2393.79 | PnL: 4.21%
+🎯 2025-07-05 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2516.39 -> $2486.53 | PnL: 1.15%
+🎯 2025-07-06 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2509.17 -> $2490.03 | PnL: 0.72%
+🎯 2025-07-06 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2509.35 -> $2473.68 | PnL: 1.39%
+🎯 2025-07-06 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2554.65 -> $2520.85 | PnL: 1.29%
+🎯 2025-07-06 17:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2554.51 -> $2614.66 | PnL: 2.30%
+🎯 2025-07-06 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2543.60 -> $2520.79 | PnL: 0.86%
+🎯 2025-07-06 23:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2567.11 -> $2591.27 | PnL: 0.89%
+🎯 2025-07-07 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2576.29 -> $2554.85 | PnL: 0.79%
+🎯 2025-07-07 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2571.81 -> $2546.03 | PnL: 0.96%
+🎯 2025-07-07 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2540.19 -> $2472.52 | PnL: 2.69%
+🎯 2025-07-07 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2532.67 -> $2446.73 | PnL: 3.46%
+🎯 2025-07-07 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2537.01 -> $2470.08 | PnL: 2.66%
+🎯 2025-07-07 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2537.54 -> $2483.24 | PnL: 2.14%
+🎯 2025-07-08 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2544.11 -> $2503.62 | PnL: 1.57%
+🎯 2025-07-08 08:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2553.82 -> $2589.49 | PnL: 1.35%
+🎯 2025-07-08 14:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2570.68 -> $2635.39 | PnL: 2.47%
+🎯 2025-07-08 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2606.82 -> $2579.55 | PnL: 1.01%
+🎯 2025-07-08 20:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2614.59 -> $2661.71 | PnL: 1.75%
+🎯 2025-07-09 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2602.57 -> $2557.36 | PnL: 1.72%
+🎯 2025-07-09 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2620.04 -> $2585.51 | PnL: 1.29%
+🎯 2025-07-09 14:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2651.72 -> $2684.31 | PnL: 1.18%
+🎯 2025-07-09 20:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2746.88 -> $2767.98 | PnL: 0.72%
+🎯 2025-07-09 23:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2778.15 -> $2821.06 | PnL: 1.49%
+🎯 2025-07-10 02:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2787.06 -> $2805.99 | PnL: 0.63%
+🎯 2025-07-10 05:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2780.73 -> $2808.41 | PnL: 0.95%
+🎯 2025-07-10 08:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2790.75 -> $2829.48 | PnL: 1.34%
+🎯 2025-07-10 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2761.75 -> $2742.40 | PnL: 0.66%
+🎯 2025-07-10 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2812.18 -> $2767.99 | PnL: 1.55%
+🎯 2025-07-10 20:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2826.18 -> $2851.96 | PnL: 0.86%
+🎯 2025-07-10 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2945.08 -> $2927.23 | PnL: 0.56%
+🎯 2025-07-11 05:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2997.17 -> $3014.79 | PnL: 0.54%
+🎯 2025-07-11 08:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2985.75 -> $3049.07 | PnL: 2.07%
+🎯 2025-07-11 11:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2987.83 -> $3024.22 | PnL: 1.17%
+🎯 2025-07-11 20:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2998.57 -> $3018.35 | PnL: 0.61%
+🎯 2025-07-12 05:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2955.75 -> $2991.02 | PnL: 1.14%
+🎯 2025-07-12 11:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2977.95 -> $3014.91 | PnL: 1.19%
+🎯 2025-07-12 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $2936.96 -> $2899.69 | PnL: 1.24%
+🎯 2025-07-12 20:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2937.33 -> $2959.39 | PnL: 0.70%
+🎯 2025-07-13 02:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2943.92 -> $2973.08 | PnL: 0.94%
+🎯 2025-07-13 05:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2958.16 -> $3001.28 | PnL: 1.41%
+🎯 2025-07-13 08:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $2959.95 -> $3006.52 | PnL: 1.52%
+
+✅ Backtest scan complete for ETH-USD.
+
+📈 Trade Performance Summary:
+• 135/135 winning trades (100.0% win rate)
+• Avg PnL: 1.85%
+
+📊 Results for ETH-USD (SCALP):
+Total Trades: 135
+Winning Trades: 135
+Losing Trades: 0
+Win Rate: 100.0
+Sharpe Ratio: 28.48
+Max Drawdown: 0.0
+Profit Factor: 0
+Avg Win: 1.85
+Avg Loss: 0
+
+📄 Report for ETH-USD - main
+----------------------------------------
+Total Trades        : 117.00
+Winning Trades      : 117.00
+Losing Trades       : 0.00
+Win Rate            : 100.00
+Sharpe Ratio        : 35.33
+Max Drawdown        : 0.01
+Profit Factor       : 0.00
+Avg Win             : 1.88
+Avg Loss            : 0.00
+----------------------------------------
+
+🔍 Testing SOL-USD - MAIN Strategy
+
+🔧 Running backtest for SOL-USD with 'main' strategy.
+   - Confidence Threshold: 65.0%
+   - Long Target: > 0.8%
+   - Short Target: < -0.6%
+
+📊 Loading 90 days of 1h data for SOL-USD...
+✅ Loaded 2160 1h candles for SOL-USD from TwelveData
+📅 Data loaded for SOL-USD: 2160 candles from 2025-04-14 15:00:00 to 2025-07-13 14:00:00
+
+🔎 Scanning 2160 candles for signals (Window: 60, Step: 12)...
+🎯 2025-04-18 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $134.38 -> $132.01 | PnL: 1.74%
+🎯 2025-04-18 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $132.77 -> $131.91 | PnL: 0.60%
+🎯 2025-04-19 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $138.69 -> $134.32 | PnL: 3.20%
+🎯 2025-04-20 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $140.83 -> $138.68 | PnL: 1.50%
+🎯 2025-04-20 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $135.84 -> $133.77 | PnL: 1.50%
+🎯 2025-04-21 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $139.26 -> $137.14 | PnL: 1.49%
+🎯 2025-04-21 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $138.26 -> $136.05 | PnL: 1.58%
+🎯 2025-04-22 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $139.22 -> $136.06 | PnL: 2.27%
+🎯 2025-04-22 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $145.27 -> $143.43 | PnL: 1.24%
+🎯 2025-04-23 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $151.28 -> $150.21 | PnL: 0.66%
+🎯 2025-04-24 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $147.63 -> $145.52 | PnL: 1.40%
+🎯 2025-04-24 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $149.26 -> $144.28 | PnL: 3.40%
+🎯 2025-04-25 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $152.89 -> $151.10 | PnL: 1.13%
+🎯 2025-04-26 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $151.29 -> $149.71 | PnL: 1.01%
+🎯 2025-04-26 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $149.23 -> $147.91 | PnL: 0.84%
+🎯 2025-04-27 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $148.91 -> $146.68 | PnL: 1.47%
+🎯 2025-04-28 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $146.52 -> $149.24 | PnL: 1.81%
+🎯 2025-04-29 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $147.37 -> $145.72 | PnL: 1.09%
+🎯 2025-04-29 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $147.94 -> $146.13 | PnL: 1.19%
+🎯 2025-04-30 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $148.07 -> $146.36 | PnL: 1.12%
+🎯 2025-04-30 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $142.37 -> $144.36 | PnL: 1.35%
+🎯 2025-05-01 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $148.58 -> $146.43 | PnL: 1.42%
+🎯 2025-05-01 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $151.75 -> $150.13 | PnL: 1.03%
+🎯 2025-05-02 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $150.66 -> $148.89 | PnL: 1.14%
+🎯 2025-05-02 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $149.80 -> $146.91 | PnL: 1.92%
+🎯 2025-05-03 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $148.19 -> $144.80 | PnL: 2.29%
+🎯 2025-05-03 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $148.32 -> $146.64 | PnL: 1.09%
+🎯 2025-05-04 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $145.50 -> $144.33 | PnL: 0.76%
+🎯 2025-05-04 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $146.68 -> $144.30 | PnL: 1.60%
+🎯 2025-05-05 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $144.77 -> $143.09 | PnL: 1.12%
+🎯 2025-05-06 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $143.02 -> $141.18 | PnL: 1.25%
+🎯 2025-05-07 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $145.61 -> $144.26 | PnL: 0.89%
+🎯 2025-05-08 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $150.76 -> $147.78 | PnL: 1.97%
+🎯 2025-05-08 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $160.07 -> $158.38 | PnL: 1.01%
+🎯 2025-05-09 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $161.17 -> $159.79 | PnL: 0.81%
+🎯 2025-05-10 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $171.44 -> $167.85 | PnL: 2.09%
+🎯 2025-05-10 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $170.91 -> $167.72 | PnL: 1.85%
+🎯 2025-05-11 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $170.39 -> $168.37 | PnL: 1.15%
+🎯 2025-05-12 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $174.75 -> $172.57 | PnL: 1.21%
+🎯 2025-05-12 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $174.24 -> $173.17 | PnL: 0.56%
+🎯 2025-05-13 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $167.15 -> $168.99 | PnL: 1.05%
+🎯 2025-05-13 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $175.92 -> $174.82 | PnL: 0.58%
+🎯 2025-05-15 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $173.93 -> $172.01 | PnL: 1.06%
+🎯 2025-05-16 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $172.49 -> $169.70 | PnL: 1.59%
+🎯 2025-05-18 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $166.78 -> $165.35 | PnL: 0.82%
+🎯 2025-05-18 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $176.11 -> $173.75 | PnL: 1.31%
+🎯 2025-05-19 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $164.06 -> $160.46 | PnL: 2.19%
+🎯 2025-05-20 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $169.06 -> $166.04 | PnL: 1.77%
+🎯 2025-05-21 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $172.08 -> $167.76 | PnL: 2.52%
+🎯 2025-05-22 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $176.67 -> $174.27 | PnL: 1.33%
+🎯 2025-05-22 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $178.88 -> $177.39 | PnL: 0.79%
+🎯 2025-05-23 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $184.82 -> $180.72 | PnL: 2.22%
+🎯 2025-05-23 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $180.55 -> $178.33 | PnL: 1.19%
+🎯 2025-05-25 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $173.54 -> $172.06 | PnL: 0.81%
+🎯 2025-05-26 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $176.93 -> $175.35 | PnL: 0.85%
+🎯 2025-05-26 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $177.36 -> $175.19 | PnL: 1.19%
+🎯 2025-05-27 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $178.36 -> $176.95 | PnL: 0.75%
+🎯 2025-05-28 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $175.01 -> $172.92 | PnL: 1.16%
+🎯 2025-05-29 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $173.59 -> $169.29 | PnL: 2.49%
+🎯 2025-05-29 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $169.63 -> $168.11 | PnL: 0.85%
+🎯 2025-05-31 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $154.40 -> $156.89 | PnL: 1.56%
+🎯 2025-05-31 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $155.57 -> $153.96 | PnL: 1.00%
+🎯 2025-06-01 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $154.10 -> $152.42 | PnL: 1.05%
+🎯 2025-06-02 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $153.10 -> $151.20 | PnL: 1.20%
+🎯 2025-06-03 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $159.36 -> $157.52 | PnL: 1.12%
+🎯 2025-06-03 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $162.20 -> $158.27 | PnL: 2.43%
+🎯 2025-06-05 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $153.76 -> $152.21 | PnL: 0.97%
+🎯 2025-06-06 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $146.79 -> $143.68 | PnL: 2.12%
+🎯 2025-06-07 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $149.45 -> $146.80 | PnL: 1.75%
+🎯 2025-06-07 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $151.26 -> $152.48 | PnL: 0.75%
+🎯 2025-06-08 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $149.80 -> $148.19 | PnL: 1.04%
+🎯 2025-06-08 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $150.66 -> $148.48 | PnL: 1.42%
+🎯 2025-06-10 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $159.06 -> $157.84 | PnL: 0.72%
+🎯 2025-06-11 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $166.55 -> $165.55 | PnL: 0.56%
+🎯 2025-06-11 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $167.12 -> $164.08 | PnL: 1.80%
+🎯 2025-06-12 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $156.89 -> $154.12 | PnL: 1.75%
+🎯 2025-06-13 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $145.03 -> $150.74 | PnL: 3.88%
+🎯 2025-06-13 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $147.13 -> $145.62 | PnL: 0.99%
+🎯 2025-06-14 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $144.51 -> $142.11 | PnL: 1.64%
+🎯 2025-06-15 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $145.67 -> $143.50 | PnL: 1.47%
+🎯 2025-06-15 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $150.75 -> $145.60 | PnL: 3.49%
+🎯 2025-06-16 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $155.43 -> $153.04 | PnL: 1.52%
+🎯 2025-06-17 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $153.27 -> $151.67 | PnL: 1.00%
+🎯 2025-06-18 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $148.26 -> $146.59 | PnL: 1.09%
+🎯 2025-06-18 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $145.65 -> $144.34 | PnL: 0.86%
+🎯 2025-06-21 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $140.66 -> $138.92 | PnL: 1.21%
+🎯 2025-06-22 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $128.71 -> $130.89 | PnL: 1.65%
+🎯 2025-06-24 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $144.24 -> $140.12 | PnL: 2.89%
+🎯 2025-06-25 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $145.46 -> $141.82 | PnL: 2.52%
+🎯 2025-06-25 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $143.62 -> $142.51 | PnL: 0.73%
+🎯 2025-06-26 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $145.86 -> $142.26 | PnL: 2.48%
+🎯 2025-06-26 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $142.92 -> $141.54 | PnL: 0.92%
+🎯 2025-06-27 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $141.29 -> $139.18 | PnL: 1.46%
+🎯 2025-06-28 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $143.32 -> $142.01 | PnL: 0.87%
+🎯 2025-06-28 15:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $148.37 -> $149.95 | PnL: 1.02%
+🎯 2025-06-30 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $151.69 -> $150.09 | PnL: 1.02%
+🎯 2025-06-30 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $157.73 -> $154.26 | PnL: 2.20%
+🎯 2025-07-01 03:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $154.13 -> $155.52 | PnL: 0.85%
+🎯 2025-07-02 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $148.75 -> $144.92 | PnL: 2.59%
+🎯 2025-07-02 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $151.25 -> $149.13 | PnL: 1.37%
+🎯 2025-07-05 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $147.66 -> $145.21 | PnL: 1.64%
+🎯 2025-07-05 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $147.02 -> $144.95 | PnL: 1.38%
+🎯 2025-07-06 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $147.26 -> $145.98 | PnL: 0.83%
+🎯 2025-07-06 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $151.40 -> $149.05 | PnL: 1.52%
+🎯 2025-07-08 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $148.51 -> $146.77 | PnL: 1.14%
+🎯 2025-07-09 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $151.18 -> $148.79 | PnL: 1.56%
+🎯 2025-07-10 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $157.26 -> $155.30 | PnL: 1.21%
+🎯 2025-07-11 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $165.11 -> $163.12 | PnL: 1.17%
+🎯 2025-07-11 15:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $162.19 -> $159.52 | PnL: 1.62%
+🎯 2025-07-12 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $163.37 -> $162.10 | PnL: 0.73%
+🎯 2025-07-13 03:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $161.07 -> $159.52 | PnL: 0.92%
+
+✅ Backtest scan complete for SOL-USD.
+
+📈 Trade Performance Summary:
+• 111/111 winning trades (100.0% win rate)
+• Avg PnL: 1.42%
+
+📊 Results for SOL-USD (MAIN):
+Total Trades: 111
+Winning Trades: 111
+Losing Trades: 0
+Win Rate: 100.0
+Sharpe Ratio: 41.73
+Max Drawdown: 0.01
+Profit Factor: 0
+Avg Win: 1.42
+Avg Loss: 0
+
+📄 Report for SOL-USD - main
+----------------------------------------
+Total Trades        : 111.00
+Winning Trades      : 111.00
+Losing Trades       : 0.00
+Win Rate            : 100.00
+Sharpe Ratio        : 41.73
+Max Drawdown        : 0.01
+Profit Factor       : 0.00
+Avg Win             : 1.42
+Avg Loss            : 0.00
+----------------------------------------
+
+🔍 Testing SOL-USD - SWING Strategy
+
+🔧 Running backtest for SOL-USD with 'swing' strategy.
+   - Confidence Threshold: 70.0%
+   - Long Target: > 1.5%
+   - Short Target: < -1.2%
+
+📊 Loading 90 days of 4h data for SOL-USD...
+✅ Loaded 2160 4h candles for SOL-USD from TwelveData
+📅 Data loaded for SOL-USD: 2160 candles from 2024-07-18 16:00:00 to 2025-07-13 12:00:00
+
+🔎 Scanning 2160 candles for signals (Window: 60, Step: 12)...
+🎯 2024-08-01 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $162.57 -> $171.58 | PnL: 5.49%
+🎯 2024-08-03 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $140.73 -> $149.48 | PnL: 6.16%
+🎯 2024-08-05 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $128.73 -> $137.31 | PnL: 6.62%
+🎯 2024-08-09 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $153.86 -> $159.68 | PnL: 3.73%
+🎯 2024-08-13 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $146.51 -> $143.47 | PnL: 2.07%
+🎯 2024-08-15 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $139.82 -> $137.88 | PnL: 1.36%
+🎯 2024-08-29 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $140.21 -> $136.90 | PnL: 2.36%
+🎯 2024-09-06 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $125.22 -> $129.64 | PnL: 3.48%
+🎯 2024-09-08 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $128.87 -> $132.04 | PnL: 2.41%
+🎯 2024-09-14 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $136.47 -> $134.32 | PnL: 1.55%
+🎯 2024-09-16 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $130.76 -> $129.00 | PnL: 1.32%
+🎯 2024-09-18 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $129.60 -> $131.93 | PnL: 1.75%
+🎯 2024-09-20 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $146.65 -> $143.49 | PnL: 2.15%
+🎯 2024-09-24 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $148.27 -> $143.29 | PnL: 3.43%
+🎯 2024-09-26 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $155.64 -> $148.10 | PnL: 5.05%
+🎯 2024-10-04 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $143.89 -> $139.74 | PnL: 2.92%
+🎯 2024-10-08 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $143.92 -> $146.22 | PnL: 1.55%
+🎯 2024-10-14 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $155.47 -> $149.39 | PnL: 4.02%
+🎯 2024-10-16 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $154.20 -> $151.94 | PnL: 1.44%
+🎯 2024-10-18 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $154.67 -> $149.81 | PnL: 3.19%
+🎯 2024-10-24 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $177.10 -> $172.79 | PnL: 2.45%
+🎯 2024-10-26 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $171.14 -> $168.30 | PnL: 1.64%
+🎯 2024-10-28 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $176.52 -> $179.68 | PnL: 1.74%
+🎯 2024-11-01 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $166.63 -> $169.44 | PnL: 1.64%
+🎯 2024-11-03 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $161.15 -> $165.10 | PnL: 2.40%
+🎯 2024-11-05 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $163.85 -> $159.41 | PnL: 2.73%
+🎯 2024-11-07 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $197.01 -> $191.16 | PnL: 3.01%
+🎯 2024-11-11 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $218.05 -> $205.97 | PnL: 5.82%
+🎯 2024-11-13 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $210.93 -> $202.97 | PnL: 3.87%
+🎯 2024-11-17 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $235.15 -> $222.50 | PnL: 5.64%
+🎯 2024-11-19 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $243.57 -> $240.62 | PnL: 1.17%
+🎯 2024-11-21 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $253.90 -> $239.63 | PnL: 5.90%
+🎯 2024-11-23 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $254.44 -> $246.92 | PnL: 3.00%
+🎯 2024-11-27 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $239.13 -> $226.83 | PnL: 5.37%
+🎯 2024-11-29 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $241.06 -> $235.02 | PnL: 2.52%
+🎯 2024-12-05 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $232.93 -> $227.37 | PnL: 2.39%
+🎯 2024-12-07 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $241.64 -> $235.98 | PnL: 2.35%
+🎯 2024-12-09 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $221.99 -> $228.12 | PnL: 2.71%
+🎯 2024-12-11 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $229.81 -> $217.25 | PnL: 5.73%
+🎯 2024-12-13 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $223.50 -> $228.27 | PnL: 2.08%
+🎯 2024-12-17 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $227.31 -> $224.01 | PnL: 1.42%
+🎯 2024-12-19 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $191.90 -> $197.30 | PnL: 2.76%
+🎯 2024-12-21 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $181.62 -> $188.82 | PnL: 3.91%
+🎯 2024-12-23 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $187.38 -> $190.44 | PnL: 1.59%
+🎯 2024-12-27 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $186.80 -> $190.55 | PnL: 1.96%
+🎯 2024-12-31 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $193.32 -> $184.46 | PnL: 4.75%
+🎯 2025-01-02 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $206.28 -> $197.12 | PnL: 4.60%
+🎯 2025-01-06 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $219.89 -> $211.30 | PnL: 4.01%
+🎯 2025-01-12 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $188.61 -> $185.21 | PnL: 1.79%
+🎯 2025-01-14 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $186.75 -> $184.32 | PnL: 1.27%
+🎯 2025-01-16 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $213.96 -> $206.47 | PnL: 3.58%
+🎯 2025-01-18 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $254.90 -> $222.64 | PnL: 14.44%
+🎯 2025-01-22 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $264.94 -> $250.91 | PnL: 5.54%
+🎯 2025-01-24 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $261.88 -> $248.38 | PnL: 5.38%
+🎯 2025-01-26 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $255.98 -> $252.31 | PnL: 1.41%
+🎯 2025-01-28 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $231.88 -> $226.66 | PnL: 2.25%
+🎯 2025-01-30 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $240.90 -> $232.98 | PnL: 3.35%
+🎯 2025-02-03 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $215.35 -> $211.85 | PnL: 1.61%
+🎯 2025-02-05 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $199.82 -> $205.97 | PnL: 3.03%
+🎯 2025-02-07 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $195.26 -> $192.38 | PnL: 1.45%
+🎯 2025-02-17 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $177.27 -> $181.61 | PnL: 2.40%
+🎯 2025-02-23 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $167.88 -> $172.23 | PnL: 2.54%
+🎯 2025-02-25 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $145.41 -> $155.93 | PnL: 7.19%
+🎯 2025-02-27 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $136.22 -> $139.14 | PnL: 2.10%
+🎯 2025-03-01 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $140.61 -> $144.08 | PnL: 2.42%
+🎯 2025-03-03 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $141.88 -> $146.86 | PnL: 3.46%
+🎯 2025-03-05 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $144.62 -> $141.46 | PnL: 2.18%
+🎯 2025-03-09 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $129.31 -> $136.48 | PnL: 5.49%
+🎯 2025-03-13 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $121.51 -> $126.91 | PnL: 4.40%
+🎯 2025-03-19 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $132.95 -> $126.31 | PnL: 5.20%
+🎯 2025-03-21 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $128.33 -> $130.82 | PnL: 1.89%
+🎯 2025-03-25 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $144.91 -> $138.87 | PnL: 4.30%
+🎯 2025-03-27 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $138.92 -> $136.77 | PnL: 1.52%
+🎯 2025-04-02 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $131.28 -> $129.02 | PnL: 1.70%
+🎯 2025-04-06 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $108.14 -> $114.90 | PnL: 6.20%
+🎯 2025-04-08 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $104.02 -> $108.97 | PnL: 4.71%
+🎯 2025-04-10 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $111.40 -> $116.17 | PnL: 4.23%
+🎯 2025-04-12 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $130.57 -> $119.38 | PnL: 9.33%
+🎯 2025-04-14 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $130.97 -> $128.59 | PnL: 1.80%
+🎯 2025-04-16 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $132.31 -> $126.47 | PnL: 4.57%
+🎯 2025-04-18 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $134.08 -> $131.60 | PnL: 1.83%
+🎯 2025-04-22 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $144.24 -> $135.00 | PnL: 6.79%
+🎯 2025-04-24 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $151.46 -> $149.11 | PnL: 1.53%
+🎯 2025-04-30 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $145.77 -> $148.42 | PnL: 1.77%
+🎯 2025-05-04 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $146.06 -> $144.17 | PnL: 1.26%
+🎯 2025-05-08 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $160.40 -> $150.75 | PnL: 6.35%
+🎯 2025-05-10 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $172.03 -> $169.81 | PnL: 1.25%
+🎯 2025-05-12 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $171.02 -> $165.66 | PnL: 3.18%
+🎯 2025-05-14 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $176.95 -> $174.82 | PnL: 1.17%
+🎯 2025-05-16 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $171.33 -> $166.83 | PnL: 2.65%
+🎯 2025-05-18 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $166.54 -> $158.34 | PnL: 5.13%
+🎯 2025-05-22 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $177.78 -> $173.92 | PnL: 2.17%
+🎯 2025-05-26 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $173.97 -> $171.79 | PnL: 1.22%
+🎯 2025-05-30 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $161.04 -> $164.70 | PnL: 2.22%
+🎯 2025-06-03 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $160.53 -> $156.32 | PnL: 2.64%
+🎯 2025-06-09 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $155.66 -> $152.62 | PnL: 1.95%
+🎯 2025-06-11 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $162.55 -> $159.76 | PnL: 1.70%
+🎯 2025-06-15 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $152.13 -> $148.10 | PnL: 2.67%
+🎯 2025-06-17 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $149.09 -> $154.09 | PnL: 3.31%
+🎯 2025-06-25 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $144.96 -> $148.59 | PnL: 2.45%
+🎯 2025-06-27 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $141.70 -> $137.99 | PnL: 2.63%
+🎯 2025-07-01 16:00:00: LONG signal found!
+✅ Executed Trade: LONG @ $145.64 -> $148.14 | PnL: 1.67%
+🎯 2025-07-05 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $146.77 -> $144.47 | PnL: 1.55%
+🎯 2025-07-09 16:00:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $157.18 -> $153.71 | PnL: 2.21%
+
+✅ Backtest scan complete for SOL-USD.
+
+📈 Trade Performance Summary:
+• 104/104 winning trades (100.0% win rate)
+• Avg PnL: 3.22%
+
+📊 Results for SOL-USD (SWING):
+Total Trades: 104
+Winning Trades: 104
+Losing Trades: 0
+Win Rate: 100.0
+Sharpe Ratio: 30.67
+Max Drawdown: 0.01
+Profit Factor: 0
+Avg Win: 3.22
+Avg Loss: 0
+
+📄 Report for SOL-USD - main
+----------------------------------------
+Total Trades        : 111.00
+Winning Trades      : 111.00
+Losing Trades       : 0.00
+Win Rate            : 100.00
+Sharpe Ratio        : 41.73
+Max Drawdown        : 0.01
+Profit Factor       : 0.00
+Avg Win             : 1.42
+Avg Loss            : 0.00
+----------------------------------------
+
+🔍 Testing SOL-USD - SCALP Strategy
+
+🔧 Running backtest for SOL-USD with 'scalp' strategy.
+   - Confidence Threshold: 75.0%
+   - Long Target: > 0.5%
+   - Short Target: < -0.5%
+
+📊 Loading 90 days of 15m data for SOL-USD...
+✅ Loaded 2160 15m candles for SOL-USD from TwelveData
+📅 Data loaded for SOL-USD: 2160 candles from 2025-06-21 02:15:00 to 2025-07-13 14:00:00
+
+🔎 Scanning 2160 candles for signals (Window: 60, Step: 12)...
+🎯 2025-06-21 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $139.50 -> $136.77 | PnL: 1.95%
+🎯 2025-06-21 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $137.63 -> $134.58 | PnL: 2.22%
+🎯 2025-06-21 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $133.76 -> $132.16 | PnL: 1.16%
+🎯 2025-06-22 02:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $134.37 -> $135.18 | PnL: 0.55%
+🎯 2025-06-22 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $136.14 -> $135.08 | PnL: 0.74%
+🎯 2025-06-22 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $134.78 -> $134.05 | PnL: 0.49%
+🎯 2025-06-22 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $133.14 -> $131.10 | PnL: 1.50%
+🎯 2025-06-22 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $129.53 -> $128.21 | PnL: 0.98%
+🎯 2025-06-22 20:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $127.12 -> $129.75 | PnL: 2.02%
+🎯 2025-06-23 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $132.96 -> $132.17 | PnL: 0.54%
+🎯 2025-06-23 08:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $134.58 -> $135.31 | PnL: 0.49%
+🎯 2025-06-23 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $133.43 -> $132.12 | PnL: 0.94%
+🎯 2025-06-23 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $135.46 -> $133.94 | PnL: 1.09%
+🎯 2025-06-23 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $136.05 -> $134.02 | PnL: 1.46%
+🎯 2025-06-23 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $144.67 -> $143.66 | PnL: 0.65%
+🎯 2025-06-24 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $142.81 -> $139.03 | PnL: 2.67%
+🎯 2025-06-24 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $144.23 -> $140.14 | PnL: 2.87%
+🎯 2025-06-24 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $144.26 -> $142.46 | PnL: 1.21%
+🎯 2025-06-24 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $144.98 -> $143.40 | PnL: 1.05%
+🎯 2025-06-24 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $144.04 -> $142.57 | PnL: 0.98%
+🎯 2025-06-25 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $146.15 -> $144.92 | PnL: 0.80%
+🎯 2025-06-25 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $145.30 -> $144.08 | PnL: 0.80%
+🎯 2025-06-25 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $145.71 -> $143.73 | PnL: 1.33%
+🎯 2025-06-25 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $143.99 -> $141.02 | PnL: 2.05%
+🎯 2025-06-25 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $144.50 -> $143.12 | PnL: 0.91%
+🎯 2025-06-25 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $142.85 -> $140.55 | PnL: 1.58%
+🎯 2025-06-26 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $144.73 -> $142.93 | PnL: 1.21%
+🎯 2025-06-26 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $145.24 -> $143.86 | PnL: 0.91%
+🎯 2025-06-26 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $143.32 -> $139.91 | PnL: 2.38%
+🎯 2025-06-26 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $142.58 -> $139.80 | PnL: 1.94%
+🎯 2025-06-26 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $142.15 -> $140.19 | PnL: 1.35%
+🎯 2025-06-26 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $142.50 -> $140.71 | PnL: 1.22%
+🎯 2025-06-26 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $139.08 -> $138.25 | PnL: 0.55%
+🎯 2025-06-27 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $139.99 -> $138.20 | PnL: 1.25%
+🎯 2025-06-27 05:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $141.14 -> $141.98 | PnL: 0.55%
+🎯 2025-06-27 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $140.94 -> $139.35 | PnL: 1.09%
+🎯 2025-06-27 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $141.82 -> $140.95 | PnL: 0.57%
+🎯 2025-06-27 17:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $142.54 -> $143.76 | PnL: 0.80%
+🎯 2025-06-27 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $142.16 -> $138.81 | PnL: 2.36%
+🎯 2025-06-28 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $143.14 -> $140.96 | PnL: 1.50%
+🎯 2025-06-28 05:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $143.70 -> $144.92 | PnL: 0.80%
+🎯 2025-06-28 08:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $146.72 -> $148.01 | PnL: 0.83%
+🎯 2025-06-28 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $146.79 -> $143.90 | PnL: 1.96%
+🎯 2025-06-28 17:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $149.83 -> $151.25 | PnL: 0.90%
+🎯 2025-06-28 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $150.30 -> $148.94 | PnL: 0.86%
+🎯 2025-06-28 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $150.71 -> $149.15 | PnL: 1.00%
+🎯 2025-06-29 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $149.44 -> $147.09 | PnL: 1.55%
+🎯 2025-06-29 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $149.51 -> $146.92 | PnL: 1.71%
+🎯 2025-06-29 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $152.31 -> $151.01 | PnL: 0.81%
+🎯 2025-06-29 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $150.70 -> $148.94 | PnL: 1.13%
+🎯 2025-06-30 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $152.24 -> $149.32 | PnL: 1.90%
+🎯 2025-06-30 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $150.56 -> $149.40 | PnL: 0.73%
+🎯 2025-06-30 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $149.98 -> $147.38 | PnL: 1.72%
+🎯 2025-06-30 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $150.63 -> $148.28 | PnL: 1.53%
+🎯 2025-06-30 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $150.88 -> $149.73 | PnL: 0.72%
+🎯 2025-06-30 17:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $157.38 -> $158.20 | PnL: 0.47%
+🎯 2025-06-30 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $157.01 -> $154.66 | PnL: 1.47%
+🎯 2025-06-30 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $155.34 -> $152.71 | PnL: 1.67%
+🎯 2025-07-01 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $153.85 -> $151.85 | PnL: 1.26%
+🎯 2025-07-01 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $151.48 -> $147.72 | PnL: 2.49%
+🎯 2025-07-01 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $149.79 -> $146.73 | PnL: 2.04%
+🎯 2025-07-01 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $148.65 -> $145.28 | PnL: 2.27%
+🎯 2025-07-01 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $147.54 -> $144.51 | PnL: 2.05%
+🎯 2025-07-01 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $147.92 -> $146.72 | PnL: 0.77%
+🎯 2025-07-01 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $146.14 -> $143.72 | PnL: 1.64%
+🎯 2025-07-02 05:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $148.77 -> $149.90 | PnL: 0.71%
+🎯 2025-07-02 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $149.49 -> $148.57 | PnL: 0.57%
+🎯 2025-07-02 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $149.97 -> $148.09 | PnL: 1.22%
+🎯 2025-07-02 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $153.40 -> $151.18 | PnL: 1.42%
+🎯 2025-07-03 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $152.08 -> $150.48 | PnL: 1.01%
+🎯 2025-07-03 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $154.98 -> $153.32 | PnL: 1.03%
+🎯 2025-07-03 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $154.41 -> $153.47 | PnL: 0.56%
+🎯 2025-07-03 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $151.01 -> $147.61 | PnL: 2.25%
+🎯 2025-07-04 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $153.25 -> $150.65 | PnL: 1.68%
+🎯 2025-07-04 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $149.81 -> $148.73 | PnL: 0.68%
+🎯 2025-07-04 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $150.56 -> $149.12 | PnL: 0.92%
+🎯 2025-07-04 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $148.57 -> $146.69 | PnL: 1.23%
+🎯 2025-07-04 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $145.99 -> $143.94 | PnL: 1.38%
+🎯 2025-07-04 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $146.76 -> $144.80 | PnL: 1.30%
+🎯 2025-07-05 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $146.97 -> $145.99 | PnL: 0.63%
+🎯 2025-07-05 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $147.29 -> $145.84 | PnL: 0.95%
+🎯 2025-07-05 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $148.26 -> $146.41 | PnL: 1.22%
+🎯 2025-07-05 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $147.81 -> $146.28 | PnL: 1.00%
+🎯 2025-07-05 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $146.64 -> $144.38 | PnL: 1.51%
+🎯 2025-07-05 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $146.40 -> $144.74 | PnL: 1.10%
+🎯 2025-07-06 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $147.13 -> $145.36 | PnL: 1.17%
+🎯 2025-07-06 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $147.42 -> $145.18 | PnL: 1.49%
+🎯 2025-07-06 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $151.41 -> $149.56 | PnL: 1.19%
+🎯 2025-07-07 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $152.21 -> $148.67 | PnL: 2.33%
+🎯 2025-07-07 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $152.49 -> $151.66 | PnL: 0.50%
+🎯 2025-07-07 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $153.10 -> $152.12 | PnL: 0.60%
+🎯 2025-07-07 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $150.25 -> $149.15 | PnL: 0.68%
+🎯 2025-07-07 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $148.33 -> $147.35 | PnL: 0.62%
+🎯 2025-07-07 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $148.38 -> $145.24 | PnL: 2.11%
+🎯 2025-07-08 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $151.61 -> $148.76 | PnL: 1.86%
+🎯 2025-07-08 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $151.33 -> $149.52 | PnL: 1.16%
+🎯 2025-07-09 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $151.75 -> $150.20 | PnL: 0.98%
+🎯 2025-07-09 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $151.43 -> $149.96 | PnL: 0.93%
+🎯 2025-07-09 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $153.19 -> $152.21 | PnL: 0.59%
+🎯 2025-07-09 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $157.15 -> $156.29 | PnL: 0.50%
+🎯 2025-07-10 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $158.40 -> $156.46 | PnL: 1.19%
+🎯 2025-07-10 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $157.49 -> $155.03 | PnL: 1.54%
+🎯 2025-07-10 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $159.15 -> $156.51 | PnL: 1.64%
+🎯 2025-07-10 20:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $160.02 -> $158.17 | PnL: 1.12%
+🎯 2025-07-10 23:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $164.05 -> $165.07 | PnL: 0.57%
+🎯 2025-07-11 02:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $164.84 -> $162.67 | PnL: 1.29%
+🎯 2025-07-11 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $165.30 -> $163.87 | PnL: 0.82%
+🎯 2025-07-11 08:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $163.77 -> $162.70 | PnL: 0.61%
+🎯 2025-07-11 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $167.42 -> $166.33 | PnL: 0.61%
+🎯 2025-07-11 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $164.01 -> $162.06 | PnL: 1.15%
+🎯 2025-07-11 20:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $164.25 -> $165.36 | PnL: 0.62%
+🎯 2025-07-11 23:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $162.47 -> $160.22 | PnL: 1.35%
+🎯 2025-07-12 02:15:00: LONG signal found!
+✅ Executed Trade: LONG @ $163.98 -> $164.82 | PnL: 0.46%
+🎯 2025-07-12 05:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $162.70 -> $160.07 | PnL: 1.59%
+🎯 2025-07-12 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $162.68 -> $160.69 | PnL: 1.19%
+🎯 2025-07-12 14:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $160.28 -> $157.31 | PnL: 1.84%
+🎯 2025-07-12 17:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $159.76 -> $157.63 | PnL: 1.30%
+🎯 2025-07-13 11:15:00: SHORT signal found!
+✅ Executed Trade: SHORT @ $162.38 -> $160.67 | PnL: 1.01%
+
+✅ Backtest scan complete for SOL-USD.
+
+📈 Trade Performance Summary:
+• 118/118 winning trades (100.0% win rate)
+• Avg PnL: 1.22%
+
+📊 Results for SOL-USD (SCALP):
+Total Trades: 118
+Winning Trades: 118
+Losing Trades: 0
+Win Rate: 100.0
+Sharpe Ratio: 42.12
+Max Drawdown: 0.0
+Profit Factor: 0
+Avg Win: 1.22
+Avg Loss: 0
+
+📄 Report for SOL-USD - main
+----------------------------------------
+Total Trades        : 111.00
+Winning Trades      : 111.00
+Losing Trades       : 0.00
+Win Rate            : 100.00
+Sharpe Ratio        : 41.73
+Max Drawdown        : 0.01
+Profit Factor       : 0.00
+Avg Win             : 1.42
+Avg Loss            : 0.00
+----------------------------------------

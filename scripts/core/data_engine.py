@@ -59,8 +59,12 @@ class DataMaster:
         df = pd.DataFrame(data['values']).iloc[::-1]
         df['datetime'] = pd.to_datetime(df['datetime'])
         df = df.set_index('datetime').rename(columns=str.lower)
-        for col in ['open', 'high', 'low', 'close', 'volume']:
+        for col in ['open', 'high', 'low', 'close']:
             df[col] = pd.to_numeric(df[col], errors='coerce')
+        if 'volume' in df.columns:
+            df['volume'] = pd.to_numeric(df['volume'], errors='coerce')
+        else:
+            df['volume'] = 0  # Or np.nan, depending on how you want to handle missing volume
         return df
 
     def _yahoo_fallback(self, symbol, timeframe):
@@ -90,6 +94,10 @@ class DataMaster:
         df['rsi'] = self._calculate_rsi(df)
         df = self._calculate_macd(df)
         df = self._calculate_bollinger_bands(df)
+        df = self._calculate_cmf(df)
+        df = self._calculate_obv(df)
+        df = self._calculate_vol_spike(df)
+        df = self._calculate_vwap(df)
         return df.dropna()
 
     def _calculate_rsi(self, df, window=14):
@@ -109,6 +117,25 @@ class DataMaster:
         std = df['close'].rolling(window).std()
         df['bollinger_upper'] = sma + (std * 2)
         df['bollinger_lower'] = sma - (std * 2)
+        return df
+
+    def _calculate_cmf(self, df, window=20):
+        mfv = ((df['close'] - df['low']) - (df['high'] - df['close'])) / (df['high'] - df['low']).replace(0, 0.001) * df['volume']
+        cmf = mfv.rolling(window).sum() / df['volume'].rolling(window).sum().replace(0, 0.001)
+        df['cmf'] = cmf
+        return df
+
+    def _calculate_obv(self, df):
+        obv = (np.sign(df['close'].diff()) * df['volume']).fillna(0).cumsum()
+        df['obv'] = obv
+        return df
+
+    def _calculate_vol_spike(self, df, window=10):
+        df['vol_spike'] = df['volume'] / df['volume'].rolling(window).mean().replace(0, 0.001)
+        return df
+
+    def _calculate_vwap(self, df):
+        df['vwap'] = (df['close'] * df['volume']).cumsum() / df['volume'].cumsum().replace(0, 0.001)
         return df
 
     def get_data(self, symbol, timeframe='4h', limit=None):
