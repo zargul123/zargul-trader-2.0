@@ -100,7 +100,7 @@ class AIAnalyst:
             checkpoint = ModelCheckpoint(f'trained_models/{symbol}_model.keras', save_best_only=True, monitor='val_mae', mode='min')
 
             model.fit(X_train, y_train, epochs=TRAINING_CONFIG['epochs'], batch_size=TRAINING_CONFIG['batch_size'], validation_split=0.2, callbacks=[es, checkpoint], verbose=1)
-            
+
             model.save(f'trained_models/{symbol}_model.keras')
             dump(scaler, f'trained_models/{symbol}_scaler.joblib')
             self.models[symbol] = model
@@ -117,24 +117,25 @@ class AIAnalyst:
             # **ROBUSTNESS FIX**: Use the same feature order as training.
             features = ['open', 'high', 'low', 'close', 'volume'] + [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
             sequence_length = STRATEGIES['main']['sequence_length']
-            
+
             last_sequence_df = df[features].tail(sequence_length).astype('float32')
             if len(last_sequence_df) < sequence_length:
                 return None # Not enough data to form a sequence
 
-            # Fix: Convert DataFrame to numpy array to avoid feature name issues
+            # Use numpy arrays consistently
             last_sequence_values = last_sequence_df.values
             scaled_data = self.scalers[symbol].transform(last_sequence_values)
             input_data = scaled_data.reshape(1, sequence_length, len(features))
             raw_prediction = self.models[symbol].predict(input_data, verbose=0)[0]
 
+            # Create dummy row for inverse transform
             dummy_row = np.zeros((1, len(features)))
             dummy_row[0, 3] = raw_prediction[0]
             predicted_price = self.scalers[symbol].inverse_transform(dummy_row)[0, 3]
             current_price = float(df['close'].iloc[-1])
             pct_change = ((predicted_price - current_price) / current_price) * 100
             direction = 'long' if predicted_price > current_price else 'short'
-            
+
             # Fix: Handle potential NaN values in volatility calculation
             price_changes = df['close'].pct_change().dropna()
             if len(price_changes) > 0:
@@ -144,7 +145,7 @@ class AIAnalyst:
                     price_volatility = 1.0
             else:
                 price_volatility = 1.0
-            
+
             confidence = min(0.95, max(0.30, 0.5 + (abs(pct_change) / (price_volatility * 2))))
             if abs(pct_change) < 0.05:
                 direction = 'hold'
