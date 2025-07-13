@@ -11,27 +11,30 @@ import os
 STRATEGIES = {
     'main': {
         'timeframe': '1h',
-        'long_threshold': 0.8,       # Minimum % increase for a long signal
-        'short_threshold': 0.6,      # Minimum % decrease for a short signal
-        'min_confidence': 0.65,      # AI's confidence must be at least this value (0.0 to 1.0)
-        'sequence_length': 60,       # How many past candles the AI looks at (must match model)
-        'hold_period_hours': 12,     # How long to hold a trade in backtesting
+        'long_threshold': 1.2,       # Increased from 0.8
+        'short_threshold': 1.0,      # Increased from 0.6
+        'min_confidence': 0.70,      # Increased from 0.65
+        'sequence_length': 90,       # Increased from 60 for more context
+        'hold_period_hours': 8,      # Reduced from 12
+        'dynamic_exit': True         # New parameter
     },
     'swing': {
         'timeframe': '4h',
-        'long_threshold': 1.5,
-        'short_threshold': 1.2,
-        'min_confidence': 0.70,
-        'sequence_length': 60,
-        'hold_period_hours': 48,
+        'long_threshold': 2.0,       # Increased from 1.5
+        'short_threshold': 1.5,      # Increased from 1.2
+        'min_confidence': 0.75,      # Increased from 0.70
+        'sequence_length': 90,
+        'hold_period_hours': 24,     # Reduced from 48
+        'dynamic_exit': True
     },
     'scalp': {
         'timeframe': '15m',
-        'long_threshold': 0.5,
-        'short_threshold': 0.5,
-        'min_confidence': 0.75,
-        'sequence_length': 60,
-        'hold_period_hours': 1,
+        'long_threshold': 0.8,       # Increased from 0.5
+        'short_threshold': 0.8,      # Increased from 0.5
+        'min_confidence': 0.80,      # Increased from 0.75
+        'sequence_length': 90,
+        'hold_period_hours': 0.5,    # Reduced from 1
+        'dynamic_exit': True
     }
 }
 

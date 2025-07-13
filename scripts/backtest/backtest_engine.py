@@ -161,9 +161,12 @@ class BacktestEngine:
                 actual_entry = entry_price * (1 - slippage)
 
             # Determine hold period based on strategy
-            strategy_config = STRATEGIES.get('main', {})  # Default to main
+            strategy_config = STRATEGIES.get(strategy_type, STRATEGIES['main'])  # Use correct strategy
             hold_hours = strategy_config.get('hold_period_hours', 4)
             hold_period = timedelta(hours=hold_hours)
+            
+            # Check for dynamic exit
+            use_dynamic_exit = strategy_config.get('dynamic_exit', False)
             target_exit_time = entry_time + hold_period
             
             # Fix: Ensure timezone consistency for time comparisons
@@ -197,6 +200,35 @@ class BacktestEngine:
             actual_exit_time = exit_data.index[0]
             exit_price = exit_data['close'].iloc[0]
             
+            # Apply exit slippage
+            if direction == 'long':
+                actual_exit = exit_price * (1 - slippage)
+            else: # short
+                actual_exit = exit_price * (1 + slippage)
+
+            # Implement dynamic exit if enabled
+            if use_dynamic_exit and not future_data.empty:
+                # Check for better exit points based on momentum
+                for idx, row in future_data.iterrows():
+                    if idx >= target_exit_time:
+                        break
+                    
+                    current_pnl = 0
+                    if direction == 'long':
+                        current_pnl = ((row['close'] - actual_entry) / actual_entry - fees) * 100
+                    else:
+                        current_pnl = ((actual_entry - row['close']) / actual_entry - fees) * 100
+                    
+                    # Dynamic exit conditions
+                    if current_pnl > 1.5:  # Take profit at 1.5%
+                        actual_exit_time = idx
+                        exit_price = row['close']
+                        break
+                    elif current_pnl < -1.0:  # Stop loss at 1%
+                        actual_exit_time = idx
+                        exit_price = row['close']
+                        break
+
             # Apply exit slippage
             if direction == 'long':
                 actual_exit = exit_price * (1 - slippage)
