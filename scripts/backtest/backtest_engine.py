@@ -142,58 +142,89 @@ class BacktestEngine:
 
     def _execute_trade(self, prediction):
         """
-        Simulates a single trade with realistic slippage and fees.
-        This is a simplified and robust version.
+        Simulates a realistic trade using actual market data for exits.
         """
         try:
             entry_time = prediction.get('entry_time')
             entry_price = prediction.get('current_price')
             direction = prediction.get('direction')
+            symbol = prediction.get('asset')
             
-            # Simulate realistic market conditions
+            # Realistic market conditions
             slippage = 0.001  # 0.1%
-            fees = 0.0005   # 0.05%
+            fees = 0.001     # 0.1% total (entry + exit)
             
-            # Slippage goes against you
+            # Apply slippage (goes against you)
             if direction == 'long':
                 actual_entry = entry_price * (1 + slippage)
             else: # short
                 actual_entry = entry_price * (1 - slippage)
 
-            # Simplified exit: Hold for a fixed period (e.g., 4 hours)
-            # A real system would have dynamic exits (take profit/stop loss)
-            hold_period = timedelta(hours=4)
-            exit_time = entry_time + hold_period
+            # Determine hold period based on strategy
+            strategy_config = STRATEGIES.get('main', {})  # Default to main
+            hold_hours = strategy_config.get('hold_period_hours', 4)
+            hold_period = timedelta(hours=hold_hours)
+            target_exit_time = entry_time + hold_period
             
-            # We need to find the actual close price from the dataframe at exit_time
-            # This part is complex, so for now, we simulate an exit based on prediction
-            # This is an area for future improvement!
-            predicted_move = prediction.get('pct_change', 0) / 100.0
-            exit_price = actual_entry * (1 + predicted_move)
-
-            # Calculate PnL
+            # Find actual exit price from market data
+            df = self.load_data(symbol, 30, strategy_config['timeframe'])  # Get enough data
+            if df.empty:
+                return
+                
+            # Find the closest available data point to our target exit time
+            future_data = df[df.index > entry_time]
+            if future_data.empty:
+                return  # No future data available
+                
+            # Use the first available price after our target time, or the last available
+            exit_data = future_data[future_data.index >= target_exit_time]
+            if exit_data.empty:
+                exit_data = future_data.tail(1)
+            else:
+                exit_data = exit_data.head(1)
+                
+            actual_exit_time = exit_data.index[0]
+            exit_price = exit_data['close'].iloc[0]
+            
+            # Apply exit slippage
             if direction == 'long':
-                pnl = ((exit_price / actual_entry) - 1 - fees) * 100
+                actual_exit = exit_price * (1 - slippage)
             else: # short
-                pnl = ((actual_entry / exit_price) - 1 - fees) * 100
+                actual_exit = exit_price * (1 + slippage)
+
+            # Calculate realistic PnL
+            if direction == 'long':
+                raw_return = (actual_exit - actual_entry) / actual_entry
+                pnl = (raw_return - fees) * 100
+            else: # short
+                raw_return = (actual_entry - actual_exit) / actual_entry
+                pnl = (raw_return - fees) * 100
+
+            # Add some realism - not all trades work perfectly
+            # Simulate stop losses (2% loss limit)
+            if pnl < -2.0:
+                pnl = -2.0 - random.uniform(0, 0.5)  # Some slippage on stops
+                actual_exit = actual_entry * (0.98 if direction == 'long' else 1.02)
 
             trade = {
-                'symbol': prediction['asset'],
+                'symbol': symbol,
                 'entry_time': entry_time,
-                'exit_time': exit_time,
+                'exit_time': actual_exit_time,
                 'entry_price': actual_entry,
-                'exit_price': exit_price,
+                'exit_price': actual_exit,
                 'type': direction,
                 'pnl': pnl,
                 'status': 'closed',
-                'confidence': prediction.get('confidence', 0)
+                'confidence': prediction.get('confidence', 0),
+                'predicted_pnl': prediction.get('pct_change', 0),  # For comparison
             }
             
             self.trade_history.append(trade)
-            print(f"✅ Executed Trade: {direction.upper()} @ ${actual_entry:.2f} -> ${exit_price:.2f} | PnL: {pnl:.2f}%")
+            result_emoji = "✅" if pnl > 0 else "❌"
+            print(f"{result_emoji} Trade: {direction.upper()} @ ${actual_entry:.2f} -> ${actual_exit:.2f} | PnL: {pnl:.2f}% | Pred: {prediction.get('pct_change', 0):.2f}%")
 
-        except Exception:
-            print(f"❌ Trade execution error: {traceback.format_exc()}")
+        except Exception as e:
+            print(f"❌ Trade execution error: {str(e)}")
 
     def generate_report(self, symbol):
         """Create visual report (placeholder for now)"""
