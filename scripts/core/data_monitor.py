@@ -22,9 +22,9 @@ class DataHealthMonitor:
         try:
             source = str(source) if source is not None else 'unknown'
             if source not in self.source_stats:
-                self.source_stats[source] = {'success': 0, 'failure': 0}
+                self.source_stats[source] = {'success': 0, 'fail': 0}
                 
-            key = 'success' if success else 'failure'
+            key = 'success' if success else 'fail'
             self.source_stats[source][key] += 1
         except Exception as e:
             print(f"⚠️ Monitoring error: {str(e)}")

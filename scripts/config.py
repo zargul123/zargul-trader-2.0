@@ -1,104 +1,87 @@
-import pytz  # Add to requirements.txt if needed
+import pytz
 import os
 
-TIMEZONE = pytz.timezone('UTC')  # Or 'America/New_York' etc.
+# ==============================================================================
+# == SINGLE SOURCE OF TRUTH: STRATEGY CONFIGURATION                           ==
+# ==============================================================================
+# This dictionary is the ONLY place where strategy rules are defined.
+# Both the live bot (main.py) and the simulator (backtest_engine.py)
+# will read their rules from here to ensure 100% consistency.
 
-# ===== QUANTUM TRADER PRO STRATEGY CONFIG =====
-# Optimized for BTC/ETH/SOL - Tested Parameters
-
-# Enhanced Strategy Configs
 STRATEGIES = {
     'main': {
-        'timeframe': '4h',
-        'long_threshold': 0.8,       # Lowered from 1.5
-        'short_threshold': 0.6,      # Lowered from 1.2
-        'min_confidence': 0.65,      # Lowered from 0.75
-        'required_indicators': 1,    # Only need 1/3 indicators to confirm
-        'min_hold': 14400,           # 4 hours (lowered from 8)
-        'max_hold': 86400,           # 24 hours (lowered from 48)
-        'sl_multiplier': 2.0,        # Reduced from 2.5
-        'tp_multiplier': 3.0,        # Reduced from 4.0
-        'take_profit': 1.5,          # Target 1.5% gains
-        'stop_loss': 0.8,            # Cut losses at 0.8%
-        'rsi_limits': (30, 70),      # Widened from (28,72)
-        'trading_hours': [2,5,8,11,14,17,20,23],  # More frequent
-        'timezone': 'UTC'
+        'timeframe': '1h',
+        'long_threshold': 0.8,       # Minimum % increase for a long signal
+        'short_threshold': 0.6,      # Minimum % decrease for a short signal
+        'min_confidence': 0.65,      # AI's confidence must be at least this value (0.0 to 1.0)
+        'sequence_length': 60,       # How many past candles the AI looks at (must match model)
+        'hold_period_hours': 12,     # How long to hold a trade in backtesting
     },
     'swing': {
         'timeframe': '4h',
-        'long_threshold': 0.5,       # Reduced from 1.25
-        'short_threshold': 0.45,     # Reduced from 1.1
-        'min_confidence': 0.6,       # Reduced from 0.72
-        'trend_strength': 'medium',  # More flexible trend requirement
-        'min_hold': 36000,           # 10 hours (reduced from 12)
-        'max_hold': 172800,          # 48 hours (reduced from 72)
-        'sl_multiplier': 2.5,        # Reduced from 3.0
-        'tp_multiplier': 4.0,        # Reduced from 5.0
-        'take_profit': 2.0,          # Target 2.0% gains for swing
-        'stop_loss': 1.0,            # Cut losses at 1.0% for swing
-        'rsi_limits': (28, 72),      # Slightly wider
-        'trading_hours': [4,10,16,22], # More opportunities
-        'timezone': 'UTC'
+        'long_threshold': 1.5,
+        'short_threshold': 1.2,
+        'min_confidence': 0.70,
+        'sequence_length': 60,
+        'hold_period_hours': 48,
     },
     'scalp': {
-        'timeframe': '30m',
-        'long_threshold': 0.15,      # Reduced from 0.35
-        'short_threshold': 0.1,      # Reduced from 0.3
-        'min_confidence': 0.65,      # Reduced from 0.78
-        'volume_multiplier': 1.2,    # Reduced from 1.5
-        'min_hold': 600,             # 10 minutes (reduced from 15)
-        'max_hold': 1800,            # 30 minutes (reduced from 60)
-        'sl_multiplier': 0.4,        # Tighter from 0.5
-        'tp_multiplier': 1.2,        # Reduced from 1.5
-        'take_profit': 0.8,          # Target 0.8% gains for scalp
-        'stop_loss': 0.4,            # Cut losses at 0.4% for scalp
-        'rsi_limits': (35, 65),      # More sensitive
-        'trading_hours': [0,2,4,6,8,10,12,14,16,18,20,22],  # All hours
-        'timezone': 'UTC'
+        'timeframe': '15m',
+        'long_threshold': 0.5,
+        'short_threshold': 0.5,
+        'min_confidence': 0.75,
+        'sequence_length': 60,
+        'hold_period_hours': 1,
     }
 }
 
-# Universal Settings
+
+# ==============================================================================
+# == UNIVERSAL SETTINGS                                                       ==
+# ==============================================================================
+
+# Assets to be traded
 ASSETS = ["BTC-USD", "ETH-USD", "SOL-USD"]
-RISK_PER_TRADE = 0.02               # Slightly increased risk for better position sizing
-AUTO_TRAIN = True                   # Keep models fresh
 
-# ===== TRAINING SCHEDULE =====
-RETRAIN_DAY = "sunday"     # Lowercase day name
-RETRAIN_TIME = "03:00"     # 3 AM UTC (adjust if needed)
-MIN_CONFIDENCE = 0.50      # Retrain if confidence < 50%
+# General risk management
+RISK_PER_TRADE = 0.02  # Risk 2% of (pretend) capital on any single trade
 
-# Main Trading Thresholds (Used by both live trading and backtesting)
-MIN_CONFIDENCE = 0.50    # 50% minimum confidence for signals
-LONG_THRESHOLD = 0.1     # 0.1% minimum move for long trades  
-SHORT_THRESHOLD = 0.1    # 0.1% minimum move for short trades
-RISK_PER_TRADE = 0.02    # Risk 2% per trade
-RISK_REWARD_RATIO = 2.0  # 2:1 risk reward ratio
+# General Risk Configuration
+RISK_CONFIG = {
+    'risk_reward_ratio': 2.0,  # Aim for 2:1 risk-reward
+    'max_daily_drawdown': 0.10, # Max 10% loss in a day
+}
 
-# Swing Trading Configuration
-SWING_MIN_CONFIDENCE = 0.55
-SWING_THRESHOLD = 1.5
-SWING_MIN_HOLD = 36000   # 10 hours in seconds
-SWING_MAX_HOLD = 172800  # 48 hours in seconds
+# Schedule for automatically retraining the AI models
+AUTO_TRAIN_SCHEDULE = {
+    'enabled': True,
+    'day_of_week': "sunday", # Lowercase day name
+    'time_utc': "03:00"      # 3 AM UTC
+}
 
-# Scalp Trading Configuration  
-SCALP_MIN_CONFIDENCE = 0.5
-SCALP_THRESHOLD = 0.8
-SCALP_MIN_HOLD = 600     # 10 minutes in seconds
-SCALP_MAX_HOLD = 1800    # 30 minutes in seconds
 
-# Training Configuration
-TRAINING_EPOCHS = 200
-BATCH_SIZE = 32
-EARLY_STOP_PATIENCE = 7
-SEQUENCE_LENGTH = 60
-TRAINING_DAYS = 180  # 6 months of training data
+# ==============================================================================
+# == AI & TRAINING CONFIGURATION                                              ==
+# ==============================================================================
 
-# TwelveData Configuration
-TWELVEDATA_API_KEY = "2c86eee94557424ea431537d0d59a5b1"  # Your actual key
+# These settings control how the AI model is built and trained
+TRAINING_CONFIG = {
+    'epochs': 100,                  # Max training rounds
+    'batch_size': 32,               # How many data samples to process at once
+    'early_stop_patience': 10,      # Stop training if no improvement after 10 epochs
+    'training_days': 365            # Use 1 year of historical data for training
+}
+
+
+# ==============================================================================
+# == API & ENVIRONMENT CONFIGURATION                                          ==
+# ==============================================================================
+
+# TwelveData API settings
+TWELVEDATA_API_KEY = "2c86eee94557424ea431537d0d59a5b1"
 TWELVEDATA_CONFIG = {
     'base_url': 'https://api.twelvedata.com',
-    'timeout': 5,
+    'timeout': 10,
     'rate_limit': 8,  # requests per minute
     'max_retries': 3
 }
@@ -106,54 +89,16 @@ TWELVEDATA_MAPPING = {
     "BTC-USD": "BTC/USD",
     "ETH-USD": "ETH/USD",
     "SOL-USD": "SOL/USD",
-    "BNB-USD": "BNB/USD"
 }
 
-# Technical Indicators
+# Technical indicators to be calculated and fed to the AI
 TECHNICAL_INDICATORS = [
     'rsi', 'macd', 'macd_signal', 'bollinger_upper', 'bollinger_lower', 'obv',
     'vol_spike', 'cmf', 'vwap'
 ]
 
-# Asset-Specific Optimization
-BTC_SETTINGS = {
-    'long_threshold': 0.9,  # BTC needs bigger moves
-    'rsi_limits': (30, 70)
-}
+# Suppress excessive TensorFlow logging
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-ETH_SETTINGS = {
-    'long_threshold': 0.7,  # ETH reacts quicker
-    'rsi_limits': (35, 65)
-}
-
-# Scalp Trading Settings
-SCALP_SETTINGS = {
-    'min_confidence': 0.82,  # Increase from 0.75
-    'min_hold': 300,         # 5 minutes minimum
-    'max_hold': 900          # 15 minutes maximum (reduced from 30)
-}
-
-# System Optimization
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress TensorFlow logs
-os.environ['OMP_NUM_THREADS'] = '6'  # Match CPU cores
-
-# Strategy Enforcement for Balanced Trading
-STRATEGY_ENFORCEMENT = {
-    'long_quota': 0.3,  # Minimum 30% long trades
-    'force_long_every': 5  # Force long every 5th trade
-}
-
-# TEMPORARY DEBUG CONFIG - Single unified strategy
-STRATEGIES = {
-    'main': {  # Single strategy during debug
-        'long_threshold': 0.0025,   # 0.25% threshold
-        'short_threshold': 0.0025,  # 0.25% threshold
-        'min_hold': 3600,        # 1h (reduced from 4h/12h/15m)
-        'max_hold': 86400,       # 24h (simplified from 48h/30m)
-        'min_confidence': 0.50,  # allow 50%+ confidence
-        'timeframe': '1h',       # Standard timeframe
-        'profit_cap': 0.05,      # Max 5% per trade
-        'loss_stop': -0.02       # Max -2% per trade
-    }
-    # swing/scalp strategies temporarily commented out for debugging
-}
+# Set the system's timezone for consistent date/time handling
+TIMEZONE = pytz.timezone('UTC')

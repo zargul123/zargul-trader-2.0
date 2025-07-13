@@ -1,68 +1,69 @@
 
 import numpy as np
 import pandas as pd
-from scripts.config import RISK_REWARD_RATIO, MIN_CONFIDENCE, LONG_THRESHOLD, SHORT_THRESHOLD, RISK_PER_TRADE
+from scripts.config import STRATEGIES, RISK_CONFIG, RISK_PER_TRADE
 from scripts.core.safety import armor_get
-
-def super_safe_get(obj, key, default=None):
-    """Legacy wrapper for armor_get"""
-    return armor_get(obj, key, default)
 
 class RiskManager:
     def _calculate_atr(self, df, period=14):
         """Average True Range calculation"""
+        if df.empty or len(df) < period:
+            return 0.01 # Return a default non-zero value
         high_low = df['high'] - df['low']
         high_close = np.abs(df['high'] - df['close'].shift())
         low_close = np.abs(df['low'] - df['close'].shift())
         true_range = np.maximum(high_low, np.maximum(high_close, low_close))
         return true_range.rolling(period).mean().iloc[-1]
 
-    def calculate_levels(self, df, prediction):
-        # More dynamic position sizing
+    def calculate_levels(self, current_price, direction, strategy_rules):
+        """
+        Calculates Stop Loss and Take Profit levels based on strategy rules.
+        This version is simplified to use a fixed percentage. A more advanced
+        version would use volatility (like ATR).
+        """
+        if direction == 'long':
+            stop_loss = current_price * (1 - (strategy_rules.get('stop_loss_pct', 1.0) / 100))
+            take_profit = current_price * (1 + (strategy_rules.get('take_profit_pct', 2.0) / 100))
+        else: # short
+            stop_loss = current_price * (1 + (strategy_rules.get('stop_loss_pct', 1.0) / 100))
+            take_profit = current_price * (1 - (strategy_rules.get('take_profit_pct', 2.0) / 100))
+            
+        return {'stop_loss': stop_loss, 'take_profit': take_profit}
+
+    def calculate_position_size(self, df):
+        """
+        Calculates position size based on volatility (ATR).
+        """
         atr = self._calculate_atr(df)
-        volatility = atr / df['close'].iloc[-1]  # Current volatility
+        if atr == 0: # Avoid division by zero
+            return RISK_PER_TRADE 
+            
+        volatility = atr / df['close'].iloc[-1]
         
-        # Adjust position size based on volatility
-        position_size = min(
-            0.1,  # Max 10% of capital
-            RISK_PER_TRADE / max(volatility, 0.01)  # Dynamic sizing
-        )
+        # Dynamic sizing: take less risk when volatility is high
+        position_size = RISK_PER_TRADE / max(volatility, 0.01) # Ensure volatility is not zero
         
-        return {
-            'sl': df['close'].iloc[-1] * (0.99 if prediction['direction'] == 'long' else 1.01),
-            'tp': df['close'].iloc[-1] * (1.02 if prediction['direction'] == 'long' else 0.98),
-            'size': position_size
-        }
+        # Cap position size to a max of 10% of portfolio
+        return min(position_size, 0.10)
 
-    def _get_position_size(self, df):
-        vol_trend = armor_get(df, 'vol_trend', 0)  # Use 0 if missing
-        """Volume-trend based sizing"""
-        if vol_trend > 0.1: return 'Large'
-        if vol_trend < -0.1: return 'Small'
-        return 'Medium'
+    def should_execute(self, prediction, strategy_name):
+        """
+        Validates if a trade should be executed based on the rules
+        from the STRATEGIES dictionary in config.py.
+        """
+        rules = STRATEGIES.get(strategy_name)
+        if not rules:
+            return False # Don't trade if strategy doesn't exist
 
+        confidence = armor_get(prediction, 'confidence', 0)
+        pct_change = armor_get(prediction, 'pct_change', 0)
+        direction = armor_get(prediction, 'direction', 'hold')
 
-class RiskManagerPro(RiskManager):
-    def __init__(self):
-        super().__init__()
-        self.portfolio_heat = 1.0  # Start neutral
-
-    def dynamic_position_sizing(self, volatility):
-        """Kelly Criterion-inspired sizing"""
-        optimal = (volatility ** 2) / (self.portfolio_heat * 0.1)  # 0.1 = estimated Sharpe
-        return min(max(optimal, 0.01), 0.1)  # Cap between 1-10%
-
-    def update_portfolio_heat(self, recent_performance):
-        """Adjust exposure based on performance"""
-        self.portfolio_heat *= 0.9 if recent_performance > 0 else 1.1
-
-
-    def should_execute(self, prediction):
-        """Validate if a trade should be executed based on confidence and price movement thresholds"""
-        if armor_get(prediction, 'confidence', 0) < MIN_CONFIDENCE:
+        if confidence < rules['min_confidence']:
             return False
-        if prediction['direction'] == 'long' and armor_get(prediction, 'pct_change', 0) < LONG_THRESHOLD:
+        if direction == 'long' and pct_change < rules['long_threshold']:
             return False
-        if prediction['direction'] == 'short' and armor_get(prediction, 'pct_change', 0) > -SHORT_THRESHOLD:
+        if direction == 'short' and pct_change > -rules['short_threshold']:
             return False
+            
         return True
