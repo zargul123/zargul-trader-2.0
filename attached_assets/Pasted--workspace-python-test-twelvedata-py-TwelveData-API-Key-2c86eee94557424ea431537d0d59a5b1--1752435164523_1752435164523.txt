@@ -1,0 +1,42 @@
+~/workspace$ python test_twelvedata.py
+TwelveData API Key: 2c86eee94557424ea431537d0d59a5b1
+
+==================================================
+Testing BTC-USD -> BTC/USD
+==================================================
+API Key: 2c86eee945...
+Request URL: https://api.twelvedata.com/time_series
+Request Params: {'symbol': 'BTC/USD', 'interval': '1h', 'apikey': '2c86eee94557424ea431537d0d59a5b1', 'outputsize': 10, 'format': 'JSON'}
+Status Code: 200
+Response Headers: {'Date': 'Sun, 13 Jul 2025 19:30:36 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Server': 'cloudflare', 'Nel': '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}', 'Access-Control-Allow-Credentials': 'true', 'Access-Control-Allow-Headers': 'Content-Type, Accept-Encoding, Authorization, Accept, Origin, X-Requested-With, X-CSRF-TOKEN', 'Access-Control-Allow-Methods': 'GET, OPTIONS', 'Access-Control-Allow-Origin': '*', 'Api-Credits-Left': '43', 'Api-Credits-Request': '1', 'Api-Credits-Used': '12', 'Api-Source-Node': 'T', 'Cf-Cache-Status': 'DYNAMIC', 'Report-To': '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=c4115Z%2FWE2iw3MaoVk9qe8zoX2V%2FxtLgPylWU%2FHA6eVhZa4MDoX8VAqvexLbRqgFAw8S1kYQWcCLl36CWiDguQl7Xt5xHju18GdNfMNXNaLJ"}]}', 'Content-Encoding': 'gzip', 'CF-RAY': '95eb32204e103cb8-BOM'}
+Response JSON Keys: ['meta', 'values', 'status']
+✅ Values found: 10 data points
+Sample data point: {'datetime': '2025-07-13 19:00:00', 'open': '119032.26', 'high': '119370.99', 'low': '118999', 'close': '119303.41'}
+API Status: ok
+
+==================================================
+Testing ETH-USD -> ETH/USD
+==================================================
+API Key: 2c86eee945...
+Request URL: https://api.twelvedata.com/time_series
+Request Params: {'symbol': 'ETH/USD', 'interval': '1h', 'apikey': '2c86eee94557424ea431537d0d59a5b1', 'outputsize': 10, 'format': 'JSON'}
+Status Code: 200
+Response Headers: {'Date': 'Sun, 13 Jul 2025 19:30:36 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Server': 'cloudflare', 'Nel': '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}', 'Access-Control-Allow-Credentials': 'true', 'Access-Control-Allow-Headers': 'Content-Type, Accept-Encoding, Authorization, Accept, Origin, X-Requested-With, X-CSRF-TOKEN', 'Access-Control-Allow-Methods': 'GET, OPTIONS', 'Access-Control-Allow-Origin': '*', 'Api-Credits-Left': '42', 'Api-Credits-Request': '1', 'Api-Credits-Used': '13', 'Api-Source-Node': 'T', 'Cf-Cache-Status': 'DYNAMIC', 'Report-To': '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=ACYdyCAftV1Y2eWCbnVAjdBZKxKGHntPiWE%2FKQbM9gDGnDrCZL4nIWNy5%2BCqO4JKbwy3G3csUrWx6q6J9MHt7Ec0vBsqllE5OT96Gu0CAtuO"}]}', 'Content-Encoding': 'gzip', 'CF-RAY': '95eb32217cb246f6-BOM'}
+Response JSON Keys: ['meta', 'values', 'status']
+✅ Values found: 10 data points
+Sample data point: {'datetime': '2025-07-13 19:00:00', 'open': '2993.98', 'high': '2996.28', 'low': '2992.02', 'close': '2996.03'}
+API Status: ok
+
+==================================================
+Testing SOL-USD -> SOL/USD
+==================================================
+API Key: 2c86eee945...
+Request URL: https://api.twelvedata.com/time_series
+Request Params: {'symbol': 'SOL/USD', 'interval': '1h', 'apikey': '2c86eee94557424ea431537d0d59a5b1', 'outputsize': 10, 'format': 'JSON'}
+Status Code: 200
+Response Headers: {'Date': 'Sun, 13 Jul 2025 19:30:36 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Server': 'cloudflare', 'Nel': '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}', 'Access-Control-Allow-Credentials': 'true', 'Access-Control-Allow-Headers': 'Content-Type, Accept-Encoding, Authorization, Accept, Origin, X-Requested-With, X-CSRF-TOKEN', 'Access-Control-Allow-Methods': 'GET, OPTIONS', 'Access-Control-Allow-Origin': '*', 'Api-Credits-Left': '41', 'Api-Credits-Request': '1', 'Api-Credits-Used': '14', 'Api-Source-Node': 'T', 'Cf-Cache-Status': 'DYNAMIC', 'Report-To': '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=gesQ5Dn5fzx4zqKnbwYxfSIv5%2BMoKrSodJ2RcgV08opAHRhSuPSvxoBLJ4Geqjn73bVwvyzJvvkbhsTFz1a4ZOrnexM56rtqrpiUlrIalql6"}]}', 'Content-Encoding': 'gzip', 'CF-RAY': '95eb3222cede85c6-BOM'}
+Response JSON Keys: ['meta', 'values', 'status']
+✅ Values found: 10 data points
+Sample data point: {'datetime': '2025-07-13 19:00:00', 'open': '163.11', 'high': '163.46', 'low': '162.75', 'close': '163.34'}
+API Status: ok
+~/workspace$ 
