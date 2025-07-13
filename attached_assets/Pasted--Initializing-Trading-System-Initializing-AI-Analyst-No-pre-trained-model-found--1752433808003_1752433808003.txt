@@ -1,0 +1,44 @@
+
+🤖 Initializing Trading System...
+
+🤖 Initializing AI Analyst...
+🔧 No pre-trained model found for BTC-USD or retraining was requested. Starting training...
+✅ Loaded 0 1h candles for BTC-USD from TwelveData
+============================================================
+⚠️ WARNING: Real data failed for BTC-USD. Training will proceed with FAKE data.
+         Models trained on this data should NOT be used for live trading.
+============================================================
+❌ Training process for BTC-USD failed: Cannot train BTC-USD, no data available.
+❌ Training failed for BTC-USD: Cannot train BTC-USD, no data available.
+🔧 No pre-trained model found for ETH-USD or retraining was requested. Starting training...
+✅ Loaded 0 1h candles for ETH-USD from TwelveData
+============================================================
+⚠️ WARNING: Real data failed for ETH-USD. Training will proceed with FAKE data.
+         Models trained on this data should NOT be used for live trading.
+============================================================
+❌ Training process for ETH-USD failed: Cannot train ETH-USD, no data available.
+❌ Training failed for ETH-USD: Cannot train ETH-USD, no data available.
+🔧 No pre-trained model found for SOL-USD or retraining was requested. Starting training...
+✅ Loaded 0 1h candles for SOL-USD from TwelveData
+============================================================
+⚠️ WARNING: Real data failed for SOL-USD. Training will proceed with FAKE data.
+         Models trained on this data should NOT be used for live trading.
+============================================================
+❌ Training process for SOL-USD failed: Cannot train SOL-USD, no data available.
+❌ Training failed for SOL-USD: Cannot train SOL-USD, no data available.
+✅ System ready for trading.
+
+🚀 Zargul Trader 2.0 - Live Operations Starting
+============================================================
+------------------------------------------------------------
+🔍 Analyzing BTC-USD at 2025-07-13 19:09:05
+✅ Loaded 0 1h candles for BTC-USD from TwelveData
+   - ⚠️ Insufficient data for BTC-USD on 1h timeframe. Skipping analysis.
+------------------------------------------------------------
+🔍 Analyzing ETH-USD at 2025-07-13 19:09:05
+✅ Loaded 0 1h candles for ETH-USD from TwelveData
+   - ⚠️ Insufficient data for ETH-USD on 1h timeframe. Skipping analysis.
+------------------------------------------------------------
+🔍 Analyzing SOL-USD at 2025-07-13 19:09:05
+✅ Loaded 0 1h candles for SOL-USD from TwelveData
+   - ⚠️ Insufficient data for SOL-USD on 1h timeframe. Skipping analysis.
