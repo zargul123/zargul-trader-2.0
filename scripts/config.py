@@ -68,25 +68,11 @@ RETRAIN_DAY = "sunday"     # Lowercase day name
 RETRAIN_TIME = "03:00"     # 3 AM UTC (adjust if needed)
 MIN_CONFIDENCE = 0.50      # Retrain if confidence < 50%
 
-# Emergency debug values
-MIN_CONFIDENCE = 0.50  # Lower from 0.65 to accept 50% signals
-LONG_THRESHOLD = 0.1  # 0.1%
-SHORT_THRESHOLD = 0.1
-TRADE_EMULATION = True  # Force trade execution
-RISK_PER_TRADE = 0.02   # Slightly increased risk for better position sizing
-RISK_REWARD_RATIO = 2.0  # Classic institutional risk model
-
-# Legacy Swing Trading Strategy - Emergency debug values
-SWING_THRESHOLD = 0.1  # Emergency debug: 0.1% move needed for swing entries
-SWING_MIN_HOLD = 64800  # 18 hours minimum hold (crypto is faster-paced)
-SWING_MAX_HOLD = 172800  # Max 2 days hold to avoid weekend slippage
-SWING_MIN_CONFIDENCE = 0.1  # Emergency debug: 10% confidence
-
-# Legacy Scalp Trading Strategy - Emergency debug values
-SCALP_THRESHOLD = 0.1  # Emergency debug: 0.1% move = crypto scalp sweet spot
-SCALP_MIN_HOLD = 300  # 5 minutes minimum (unchanged)
-SCALP_MAX_HOLD = 2700  # Max 45 minutes (scalping should be fast)
-SCALP_MIN_CONFIDENCE = 0.1  # Emergency debug: 10% confidence
+# Main Trading Thresholds (Used by both live trading and backtesting)
+MIN_CONFIDENCE = 0.50    # 50% minimum confidence for signals
+LONG_THRESHOLD = 0.1     # 0.1% minimum move for long trades  
+SHORT_THRESHOLD = 0.1    # 0.1% minimum move for short trades
+RISK_PER_TRADE = 0.02    # Risk 2% per trade
 
 # Training Configuration
 TRAINING_EPOCHS = 200
