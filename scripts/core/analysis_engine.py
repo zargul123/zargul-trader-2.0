@@ -13,11 +13,7 @@ from scripts.config import (ASSETS, TECHNICAL_INDICATORS, TRAINING_EPOCHS, BATCH
                           SEQUENCE_LENGTH, SWING_MIN_CONFIDENCE, SWING_THRESHOLD, SWING_MIN_HOLD, SWING_MAX_HOLD,
                           SCALP_MIN_CONFIDENCE, SCALP_THRESHOLD, SCALP_MIN_HOLD, SCALP_MAX_HOLD)
 
-# Updated strategy thresholds
-SWING_MIN_CONFIDENCE = 0.55
-SWING_THRESHOLD = 1.5
-SCALP_MIN_CONFIDENCE = 0.5 
-SCALP_THRESHOLD = 0.8
+# Strategy thresholds now imported from config
 import random
 import time
 import pandas as pd
