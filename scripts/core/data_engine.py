@@ -54,14 +54,33 @@ class DataMaster:
             return None
 
     def _parse_twelvedata_response(self, data, symbol):
-        if not data or data.get('status') != 'ok' or 'values' not in data:
+        """Parse TwelveData API response into DataFrame with robust column handling"""
+        try:
+            df = pd.DataFrame(data['values'])
+            df.index = pd.to_datetime(df['datetime'])
+            df = df.drop('datetime', axis=1)
+
+            # Define expected columns
+            expected_cols = ['open', 'high', 'low', 'close', 'volume']
+
+            # Convert existing columns to numeric
+            for col in expected_cols:
+                if col in df.columns:
+                    df[col] = pd.to_numeric(df[col], errors='coerce')
+                else:
+                    # Handle missing columns gracefully
+                    if col == 'volume':
+                        print(f"⚠️ Volume data missing for {symbol}, using synthetic volume")
+                        # Generate synthetic volume based on price volatility
+                        df['volume'] = (df['high'] - df['low']) * 1000000  # Simple synthetic volume
+                    else:
+                        print(f"❌ Critical column '{col}' missing for {symbol}")
+                        return pd.DataFrame()
+
+            return df.sort_index()
+        except Exception as e:
+            print(f"⚠️ TwelveData parsing error for {symbol}: {e}")
             return pd.DataFrame()
-        df = pd.DataFrame(data['values']).iloc[::-1]
-        df['datetime'] = pd.to_datetime(df['datetime'])
-        df = df.set_index('datetime').rename(columns=str.lower)
-        for col in ['open', 'high', 'low', 'close', 'volume']:
-            df[col] = pd.to_numeric(df[col], errors='coerce')
-        return df
 
     def _yahoo_fallback(self, symbol, timeframe):
         period_map = {'1h': '60d', '4h': '120d', '15m': '30d'}
@@ -120,13 +139,13 @@ class DataMaster:
             print(f"📉 TwelveData failed for {symbol}. Falling back to Yahoo Finance.")
             df = self._yahoo_fallback(symbol, timeframe)
             self.last_used_source = 'Yahoo'
-        
+
         if df.empty:
             print(f"❌ CRITICAL: All real data sources failed for {symbol}. No data available.")
             return None
-            
+
         df = self._add_technical_indicators(df)
-        
+
         if limit and not df.empty:
             df = df.tail(int(limit))
 
@@ -136,9 +155,9 @@ class DataMaster:
     def get_training_data(self, symbol, days=None):
         if days is None:
             days = TRAINING_CONFIG['training_days']
-            
+
         df = self.get_data(symbol, '1h')
-        
+
         if df is None or df.empty:
             print("="*60)
             print(f"⚠️ WARNING: Real data failed for {symbol}. Training will proceed with FAKE data.")
