@@ -69,17 +69,8 @@ class DataMaster:
 
     def _yahoo_fallback(self, symbol, timeframe):
         period_map = {'1h': '60d', '4h': '120d', '15m': '30d'}
-        df = yf.download(symbol, period=period_map.get(timeframe, '30d'), 
-                        interval=self._convert_timeframe(timeframe), 
-                        progress=False, auto_adjust=False)
-        
-        if not df.empty:
-            df = df.rename(columns=str.lower)
-            # Convert timezone-aware index to timezone-naive to match TwelveData
-            if df.index.tz is not None:
-                df.index = df.index.tz_convert('UTC').tz_localize(None)
-        
-        return df
+        df = yf.download(symbol, period=period_map.get(timeframe, '30d'), interval=self._convert_timeframe(timeframe), progress=False)
+        return df.rename(columns=str.lower) if not df.empty else pd.DataFrame()
 
     def _generate_synthetic_data(self, symbol):
         params = self.asset_parameters.get(symbol, {"base_price": 100, "base_volume": 100000})
