@@ -108,7 +108,7 @@ class BacktestEngine:
                         'current_price': current_price,
                         'asset': symbol
                     })
-                    self._execute_trade(trade_data)
+                    self._execute_trade(trade_data, df)
 
             # 4. Calculate Final Metrics
             print(f"\n✅ Backtest scan complete for {symbol}.")
@@ -140,7 +140,7 @@ class BacktestEngine:
             print(traceback.format_exc())
             return get_empty_metrics()
 
-    def _execute_trade(self, prediction):
+    def _execute_trade(self, prediction, df):
         """
         Simulates a realistic trade using actual market data for exits.
         """
@@ -166,11 +166,6 @@ class BacktestEngine:
             hold_period = timedelta(hours=hold_hours)
             target_exit_time = entry_time + hold_period
             
-            # Find actual exit price from market data
-            df = self.load_data(symbol, 30, strategy_config['timeframe'])  # Get enough data
-            if df.empty:
-                return
-                
             # Fix: Ensure timezone consistency for time comparisons
             if hasattr(entry_time, 'tz') and entry_time.tz is not None:
                 if df.index.tz is None:
@@ -237,7 +232,7 @@ class BacktestEngine:
             
             self.trade_history.append(trade)
             result_emoji = "✅" if pnl > 0 else "❌"
-            print(f"{result_emoji} Trade: {direction.upper()} @ ${actual_entry:.2f} -> ${actual_exit:.2f} | PnL: {pnl:.2f}% | Pred: {prediction.get('pct_change', 0):.2f}%")
+            print(f"{result_emoji} Trade: {direction.upper()} @ ${actual_entry:.2f} -> ${actual_exit:.2f} | PnL: {pnl:.2f}% | Pred: {prediction.get('pct_change', 0):.2f}% ")
 
         except Exception as e:
             print(f"❌ Trade execution error: {str(e)}")
