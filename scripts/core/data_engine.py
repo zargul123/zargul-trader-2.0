@@ -110,6 +110,11 @@ class DataMaster:
         df = self._calculate_obv(df)
         df = self._calculate_vol_spike(df)
         df = self._calculate_vwap(df)
+        df = self._calculate_emas(df)
+        df = self._calculate_atr(df)
+        df = self._calculate_stochastic(df)
+        df = self._calculate_adx(df)
+        df = self._calculate_volume_ma(df)
         return df.dropna()
 
     def _calculate_rsi(self, df, window=14):
@@ -147,7 +152,59 @@ class DataMaster:
         return df
 
     def _calculate_vwap(self, df):
-        df['vwap'] = (df['close'] * df['volume']).cumsum() / df['volume'].cumsum().replace(0, 0.001)
+        df['vwap'] = (df['volume'] * (df['high'] + df['low'] + df['close']) / 3).cumsum() / df['volume'].cumsum()
+        return df
+
+    def _calculate_emas(self, df):
+        """Calculate Exponential Moving Averages"""
+        df['ema_20'] = df['close'].ewm(span=20).mean()
+        df['ema_50'] = df['close'].ewm(span=50).mean()
+        df['ema_200'] = df['close'].ewm(span=200).mean()
+        return df
+
+    def _calculate_atr(self, df, window=14):
+        """Calculate Average True Range"""
+        high_low = df['high'] - df['low']
+        high_close = np.abs(df['high'] - df['close'].shift())
+        low_close = np.abs(df['low'] - df['close'].shift())
+        true_range = np.maximum(high_low, np.maximum(high_close, low_close))
+        df['atr'] = true_range.rolling(window).mean()
+        return df
+
+    def _calculate_stochastic(self, df, k_window=14, d_window=3):
+        """Calculate Stochastic Oscillator"""
+        low_min = df['low'].rolling(k_window).min()
+        high_max = df['high'].rolling(k_window).max()
+        df['stoch_k'] = 100 * ((df['close'] - low_min) / (high_max - low_min).replace(0, 0.001))
+        df['stoch_d'] = df['stoch_k'].rolling(d_window).mean()
+        return df
+
+    def _calculate_adx(self, df, window=14):
+        """Calculate Average Directional Index"""
+        high_diff = df['high'].diff()
+        low_diff = df['low'].diff()
+
+        plus_dm = np.where((high_diff > low_diff) & (high_diff > 0), high_diff, 0)
+        minus_dm = np.where((low_diff > high_diff) & (low_diff > 0), low_diff, 0)
+
+        # Calculate True Range for ADX
+        high_low = df['high'] - df['low']
+        high_close = np.abs(df['high'] - df['close'].shift())
+        low_close = np.abs(df['low'] - df['close'].shift())
+        true_range = np.maximum(high_low, np.maximum(high_close, low_close))
+
+        # Smooth the values
+        atr = pd.Series(true_range).rolling(window).mean()
+        plus_di = 100 * (pd.Series(plus_dm).rolling(window).mean() / atr)
+        minus_di = 100 * (pd.Series(minus_dm).rolling(window).mean() / atr)
+
+        dx = 100 * np.abs(plus_di - minus_di) / (plus_di + minus_di).replace(0, 0.001)
+        df['adx'] = dx.rolling(window).mean()
+        return df
+
+    def _calculate_volume_ma(self, df, window=20):
+        """Calculate Volume Moving Average"""
+        df['volume_ma'] = df['volume'].rolling(window).mean()
         return df
 
     def get_data(self, symbol, timeframe='4h', limit=None):
@@ -159,13 +216,13 @@ class DataMaster:
             print(f"📉 TwelveData failed for {symbol}. Falling back to Yahoo Finance.")
             df = self._yahoo_fallback(symbol, timeframe)
             self.last_used_source = 'Yahoo'
-        
+
         if df.empty:
             print(f"❌ CRITICAL: All real data sources failed for {symbol}. No data available.")
             return None
-            
+
         df = self._add_technical_indicators(df)
-        
+
         if limit and not df.empty:
             df = df.tail(int(limit))
 
@@ -175,9 +232,9 @@ class DataMaster:
     def get_training_data(self, symbol, days=None):
         if days is None:
             days = TRAINING_CONFIG['training_days']
-            
+
         df = self.get_data(symbol, '1h')
-        
+
         if df is None or df.empty:
             print("="*60)
             print(f"⚠️ WARNING: Real data failed for {symbol}. Training will proceed with FAKE data.")

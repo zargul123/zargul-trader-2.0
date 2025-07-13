@@ -108,7 +108,8 @@ TWELVEDATA_MAPPING = {
 # Technical indicators to be calculated and fed to the AI
 TECHNICAL_INDICATORS = [
     'rsi', 'macd', 'macd_signal', 'bollinger_upper', 'bollinger_lower', 'obv',
-    'vol_spike', 'cmf', 'vwap'
+    'vol_spike', 'cmf', 'vwap', 'ema_20', 'ema_50', 'ema_200', 
+    'atr', 'stoch_k', 'stoch_d', 'adx', 'volume_ma'
 ]
 
 # Suppress excessive TensorFlow logging
