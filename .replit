@@ -113,6 +113,19 @@ mode = "sequential"
 task = "shell.exec"
 args = "python scripts/core/dashboard.py"
 
+[[workflows.workflow]]
+name = "Retrain All Models"
+author = 39690101
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pkill -f \"scripts/main.py\""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "PYTHONPATH=$PYTHONPATH:$PWD python scripts/main.py --train-all --run-once"
+
 [[ports]]
 localPort = 5000
 externalPort = 80
