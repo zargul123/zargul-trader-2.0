@@ -84,8 +84,9 @@ class AIAnalyst:
             features = ['open', 'high', 'low', 'close', 'volume'] + [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
             df_features = df[features].astype('float32')
 
+            # Fix: Use values to avoid feature name issues with MinMaxScaler
             scaler = MinMaxScaler(feature_range=(0, 1))
-            scaled_data = scaler.fit_transform(df_features)
+            scaled_data = scaler.fit_transform(df_features.values)
 
             sequence_length = STRATEGIES['main']['sequence_length']
             X, y = [], []
@@ -121,24 +122,43 @@ class AIAnalyst:
             if len(last_sequence_df) < sequence_length:
                 return None # Not enough data to form a sequence
 
-            scaled_data = self.scalers[symbol].transform(last_sequence_df)
+            # Fix: Convert DataFrame to numpy array to avoid feature name issues
+            last_sequence_values = last_sequence_df.values
+            scaled_data = self.scalers[symbol].transform(last_sequence_values)
             input_data = scaled_data.reshape(1, sequence_length, len(features))
             raw_prediction = self.models[symbol].predict(input_data, verbose=0)[0]
 
             dummy_row = np.zeros((1, len(features)))
             dummy_row[0, 3] = raw_prediction[0]
             predicted_price = self.scalers[symbol].inverse_transform(dummy_row)[0, 3]
-            current_price = df['close'].iloc[-1]
+            current_price = float(df['close'].iloc[-1])
             pct_change = ((predicted_price - current_price) / current_price) * 100
             direction = 'long' if predicted_price > current_price else 'short'
             
-            price_volatility = df['close'].pct_change().std() * 100
+            # Fix: Handle potential NaN values in volatility calculation
+            price_changes = df['close'].pct_change().dropna()
+            if len(price_changes) > 0:
+                price_volatility = price_changes.std() * 100
+                # Fix: Handle NaN volatility
+                if pd.isna(price_volatility) or price_volatility == 0:
+                    price_volatility = 1.0
+            else:
+                price_volatility = 1.0
+            
             confidence = min(0.95, max(0.30, 0.5 + (abs(pct_change) / (price_volatility * 2))))
             if abs(pct_change) < 0.05:
                 direction = 'hold'
                 confidence *= 0.5
 
-            return {'asset': symbol, 'timestamp': pd.to_datetime('now', utc=True), 'price': float(predicted_price), 'direction': direction, 'confidence': float(confidence), 'pct_change': float(pct_change), 'current_price': float(current_price)}
+            return {
+                'asset': symbol, 
+                'timestamp': pd.to_datetime('now', utc=True), 
+                'price': float(predicted_price), 
+                'direction': direction, 
+                'confidence': float(confidence), 
+                'pct_change': float(pct_change), 
+                'current_price': current_price
+            }
         except Exception as e:
             print(f"💥 Prediction failed for {symbol}: {e}")
             return None

@@ -171,17 +171,33 @@ class BacktestEngine:
             if df.empty:
                 return
                 
-            # Find the closest available data point to our target exit time
-            future_data = df[df.index > entry_time]
-            if future_data.empty:
-                return  # No future data available
+            # Fix: Ensure timezone consistency for time comparisons
+            if hasattr(entry_time, 'tz') and entry_time.tz is not None:
+                if df.index.tz is None:
+                    df.index = df.index.tz_localize('UTC')
+                entry_time = entry_time.tz_convert('UTC')
+                target_exit_time = target_exit_time.tz_convert('UTC')
+            elif df.index.tz is not None:
+                df.index = df.index.tz_localize(None)
+                if hasattr(entry_time, 'tz'):
+                    entry_time = entry_time.tz_localize(None)
+                    target_exit_time = target_exit_time.tz_localize(None)
                 
-            # Use the first available price after our target time, or the last available
-            exit_data = future_data[future_data.index >= target_exit_time]
-            if exit_data.empty:
-                exit_data = future_data.tail(1)
-            else:
-                exit_data = exit_data.head(1)
+            # Find the closest available data point to our target exit time
+            try:
+                future_data = df[df.index > entry_time]
+                if future_data.empty:
+                    return  # No future data available
+                    
+                # Use the first available price after our target time, or the last available
+                exit_data = future_data[future_data.index >= target_exit_time]
+                if exit_data.empty:
+                    exit_data = future_data.tail(1)
+                else:
+                    exit_data = exit_data.head(1)
+            except Exception as e:
+                print(f"⚠️ Time comparison error in backtest: {e}")
+                return
                 
             actual_exit_time = exit_data.index[0]
             exit_price = exit_data['close'].iloc[0]
