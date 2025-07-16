@@ -39,7 +39,7 @@ class ZargulTrader:
         try:
             main_timeframe = STRATEGIES['main']['timeframe']
             df = self.data.get_data(asset, main_timeframe)
-            
+
             # **CIRCUIT BREAKER**: If get_data returns None, stop analysis for this asset.
             if df is None:
                 print(f"   - ❌ Skipping analysis for {asset} due to data failure.")
@@ -53,20 +53,20 @@ class ZargulTrader:
 
             print("   - Getting AI predictions for all strategies...")
             predictions = {}
-            
+
             # Determine which strategies to run for this asset
             strategies_to_run = ['main', 'scalp']
-            
+
             # For BTC-USD, use the specific btc-swing strategy instead of regular swing
             if asset == 'BTC-USD':
                 strategies_to_run.append('btc-swing')
             else:
                 strategies_to_run.append('swing')
-            
+
             for strategy_name in strategies_to_run:
                 if strategy_name not in STRATEGIES:
                     continue
-                    
+
                 strategy_config = STRATEGIES[strategy_name]
                 timeframe = strategy_config['timeframe']
                 df_strategy = self.data.get_data(asset, timeframe)
@@ -75,12 +75,12 @@ class ZargulTrader:
                     print(f"   - ❌ Skipping {strategy_name} for {asset} due to data failure.")
                     predictions[strategy_name] = None
                     continue
-                
+
                 if len(df_strategy) < strategy_config['sequence_length']:
                     print(f"   - ⚠️ Insufficient data for {asset} on {timeframe} timeframe for {strategy_name}. Skipping.")
                     predictions[strategy_name] = None
                     continue
-                
+
                 if strategy_name == 'main':
                     predictions['main'] = self.ai.predict(asset, df_strategy)
                 elif strategy_name == 'swing':

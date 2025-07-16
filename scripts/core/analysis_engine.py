@@ -43,7 +43,14 @@ class AIAnalyst:
         print("\n🤖 Initializing AI Analyst...")
         os.makedirs('trained_models', exist_ok=True)
         for symbol in ASSETS:
-            for strategy_name in STRATEGIES.keys():
+            # Determine which strategies to train for this asset
+            strategies_for_symbol = ['main', 'scalp']
+            if symbol == 'BTC-USD':
+                strategies_for_symbol.append('btc-swing')
+            else:
+                strategies_for_symbol.append('swing')
+            
+            for strategy_name in strategies_for_symbol:
                 model_path = f'trained_models/{symbol}_{strategy_name}_model.keras'
                 scaler_path = f'trained_models/{symbol}_{strategy_name}_scaler.joblib'
                 if self.train_all or not os.path.exists(model_path) or not os.path.exists(scaler_path):
@@ -174,3 +181,6 @@ class AIAnalyst:
 
     def predict_scalp(self, symbol, df):
         return self.predict(symbol, df, strategy_name='scalp')
+    
+    def predict_btc_swing(self, symbol, df):
+        return self.predict(symbol, df, strategy_name='btc-swing')
