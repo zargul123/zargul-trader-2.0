@@ -70,7 +70,8 @@ class AIAnalyst:
             Dense(3)
         ])
         lr = 0.0001 if symbol in ["BTC-USD", "ETH-USD"] else 0.0002
-        model.compile(optimizer=AdamW(learning_rate=lr), loss='huber', metrics=['mae'])
+        optimizer = AdamW(learning_rate=lr, clipnorm=1.0)  # Add gradient clipping
+        model.compile(optimizer=optimizer, loss='mse', metrics=['mae'])  # Use MSE instead of Huber
         return model
 
     def _train_model(self, symbol):

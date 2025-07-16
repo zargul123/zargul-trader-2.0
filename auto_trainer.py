@@ -15,6 +15,16 @@ def should_retrain():
     """
     Checks if retraining is needed based on a schedule or low AI confidence.
     """
+    # Check cooldown file to prevent rapid retrains
+    cooldown_file = 'last_retrain.txt'
+    if os.path.exists(cooldown_file):
+        with open(cooldown_file, 'r') as f:
+            last_retrain = datetime.fromisoformat(f.read().strip())
+            # Minimum 6 hours between retrains
+            if datetime.now() - last_retrain < timedelta(hours=6):
+                print(f"⏳ Retrain cooldown active until {last_retrain + timedelta(hours=6)}")
+                return False
+    
     # 1. Check if scheduled retraining is enabled and the time is right
     if AUTO_TRAIN_SCHEDULE['enabled']:
         now = datetime.now()
@@ -24,8 +34,7 @@ def should_retrain():
             print(f"⏰ It's {now.strftime('%A %H:%M')}, scheduled retraining is due.")
             return True
 
-    # 2. Check if any model's confidence is critically low
-    # Note: This is a simplified check. A real-world scenario might be more complex.
+    # 2. Check if any model's confidence is critically low (but only once per cooldown)
     print("Checking model confidence levels...")
     analyst = AIAnalyst() # This will load existing models, not retrain them
     
@@ -33,7 +42,8 @@ def should_retrain():
     from scripts.core.data_engine import DataMaster
     data_master = DataMaster()
     
-    min_confidence_threshold = STRATEGIES['main']['min_confidence']
+    # Lower threshold to prevent constant retraining
+    min_confidence_threshold = STRATEGIES['main']['min_confidence'] - 0.15  # More lenient
 
     for symbol in ASSETS:
         if symbol in analyst.models:
@@ -42,6 +52,9 @@ def should_retrain():
                 test_pred = analyst.predict(symbol, df)
                 if test_pred and test_pred.get('confidence', 1.0) < min_confidence_threshold:
                     print(f"⚠️ EMERGENCY RETRAIN: Confidence for {symbol} ({test_pred['confidence']:.2f}) is below threshold ({min_confidence_threshold:.2f}).")
+                    # Write cooldown timestamp
+                    with open(cooldown_file, 'w') as f:
+                        f.write(datetime.now().isoformat())
                     return True
     
     return False

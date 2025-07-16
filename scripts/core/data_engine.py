@@ -126,9 +126,18 @@ class DataMaster:
             # Handle volume - TwelveData sometimes doesn't include volume for crypto
             if 'volume' in df.columns:
                 df['volume'] = pd.to_numeric(df['volume'], errors='coerce')
+                # If all volume values are 0 or NaN, generate realistic volume
+                if df['volume'].sum() == 0 or df['volume'].isna().all():
+                    print(f"⚠️ No volume data from TwelveData for {symbol}, generating realistic volume")
+                    base_volume = self.asset_parameters.get(symbol, {"base_volume": 100000})["base_volume"]
+                    # Generate volume based on price volatility
+                    price_changes = df['close'].pct_change().abs()
+                    df['volume'] = base_volume * (1 + price_changes * 10)
             else:
-                print(f"⚠️ No volume data from TwelveData for {symbol}, setting to 0")
-                df['volume'] = 0
+                print(f"⚠️ No volume data from TwelveData for {symbol}, generating realistic volume")
+                base_volume = self.asset_parameters.get(symbol, {"base_volume": 100000})["base_volume"]
+                price_changes = df['close'].pct_change().abs()
+                df['volume'] = base_volume * (1 + price_changes * 10)
                 
             # Remove any rows with NaN values in essential columns
             essential_cols = ['open', 'high', 'low', 'close']
