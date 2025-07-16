@@ -53,7 +53,21 @@ class ZargulTrader:
 
             print("   - Getting AI predictions for all strategies...")
             predictions = {}
-            for strategy_name, strategy_config in STRATEGIES.items():
+            
+            # Determine which strategies to run for this asset
+            strategies_to_run = ['main', 'scalp']
+            
+            # For BTC-USD, use the specific btc-swing strategy instead of regular swing
+            if asset == 'BTC-USD':
+                strategies_to_run.append('btc-swing')
+            else:
+                strategies_to_run.append('swing')
+            
+            for strategy_name in strategies_to_run:
+                if strategy_name not in STRATEGIES:
+                    continue
+                    
+                strategy_config = STRATEGIES[strategy_name]
                 timeframe = strategy_config['timeframe']
                 df_strategy = self.data.get_data(asset, timeframe)
 
@@ -71,6 +85,8 @@ class ZargulTrader:
                     predictions['main'] = self.ai.predict(asset, df_strategy)
                 elif strategy_name == 'swing':
                     predictions['swing'] = self.ai.predict_swing(asset, df_strategy)
+                elif strategy_name == 'btc-swing':
+                    predictions['btc-swing'] = self.ai.predict(asset, df_strategy, strategy_name='btc-swing')
                 elif strategy_name == 'scalp':
                     predictions['scalp'] = self.ai.predict_scalp(asset, df_strategy)
 

@@ -169,5 +169,8 @@ class AIAnalyst:
     def predict_swing(self, symbol, df):
         return self.predict(symbol, df, strategy_name='swing')
 
+    def predict_btc_swing(self, symbol, df):
+        return self.predict(symbol, df, strategy_name='btc-swing')
+
     def predict_scalp(self, symbol, df):
         return self.predict(symbol, df, strategy_name='scalp')

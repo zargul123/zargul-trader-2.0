@@ -27,6 +27,15 @@ STRATEGIES = {
         'hold_period_hours': 24,     
         'dynamic_exit': True
     },
+    'btc-swing': {
+        'timeframe': '4h',
+        'long_threshold': 2.0,       # Bigger target for BTC swings
+        'short_threshold': 2.0,      # Bigger target for BTC swings
+        'min_confidence': 0.90,      # Stricter confidence for BTC
+        'sequence_length': 90,
+        'hold_period_hours': 24,     
+        'dynamic_exit': True
+    },
     'scalp': {
         'timeframe': '15m',
         'long_threshold': 999,       # Impossible threshold - effectively disables scalping
