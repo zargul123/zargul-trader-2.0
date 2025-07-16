@@ -33,8 +33,8 @@ class AttentionLayer(tf.keras.layers.Layer):
 
 class AIAnalyst:
     def __init__(self, train_all=False):
-        self.models = {}
-        self.scalers = {}
+        self.models = {symbol: {} for symbol in ASSETS}
+        self.scalers = {symbol: {} for symbol in ASSETS}
         self.train_all = train_all
         self.data = DataMaster()
         self._initialize_models()
@@ -43,22 +43,23 @@ class AIAnalyst:
         print("\n🤖 Initializing AI Analyst...")
         os.makedirs('trained_models', exist_ok=True)
         for symbol in ASSETS:
-            model_path = f'trained_models/{symbol}_model.keras'
-            scaler_path = f'trained_models/{symbol}_scaler.joblib'
-            if self.train_all or not os.path.exists(model_path) or not os.path.exists(scaler_path):
-                print(f"🔧 No pre-trained model found for {symbol} or retraining was requested. Starting training...")
-                try:
-                    self._train_model(symbol)
-                except Exception as e:
-                    print(f"❌ Training failed for {symbol}: {e}")
-            else:
-                print(f"🧠 Loading pre-trained model for {symbol}...")
-                try:
-                    self.models[symbol] = load_model(model_path, custom_objects={'AttentionLayer': AttentionLayer})
-                    self.scalers[symbol] = load(scaler_path)
-                    print(f"   - ✅ Model for {symbol} loaded successfully.")
-                except Exception as e:
-                    print(f"❌ Failed to load model for {symbol}: {e}")
+            for strategy_name in STRATEGIES.keys():
+                model_path = f'trained_models/{symbol}_{strategy_name}_model.keras'
+                scaler_path = f'trained_models/{symbol}_{strategy_name}_scaler.joblib'
+                if self.train_all or not os.path.exists(model_path) or not os.path.exists(scaler_path):
+                    print(f"🔧 No pre-trained model for {symbol} ({strategy_name}) or retraining requested. Starting training...")
+                    try:
+                        self._train_model(symbol, strategy_name)
+                    except Exception as e:
+                        print(f"❌ Training failed for {symbol} ({strategy_name}): {e}")
+                else:
+                    print(f"🧠 Loading pre-trained model for {symbol} ({strategy_name})...")
+                    try:
+                        self.models[symbol][strategy_name] = load_model(model_path, custom_objects={'AttentionLayer': AttentionLayer})
+                        self.scalers[symbol][strategy_name] = load(scaler_path)
+                        print(f"   - ✅ Model for {symbol} ({strategy_name}) loaded successfully.")
+                    except Exception as e:
+                        print(f"❌ Failed to load model for {symbol} ({strategy_name}): {e}")
 
     def _create_advanced_model(self, input_shape, symbol):
         model = Sequential([
@@ -70,25 +71,24 @@ class AIAnalyst:
             Dense(3)
         ])
         lr = 0.0001 if symbol in ["BTC-USD", "ETH-USD"] else 0.0002
-        optimizer = AdamW(learning_rate=lr, clipnorm=1.0)  # Add gradient clipping
-        model.compile(optimizer=optimizer, loss='mse', metrics=['mae'])  # Use MSE instead of Huber
+        optimizer = AdamW(learning_rate=lr, clipnorm=1.0)
+        model.compile(optimizer=optimizer, loss='mse', metrics=['mae'])
         return model
 
-    def _train_model(self, symbol):
+    def _train_model(self, symbol, strategy_name):
         start_time = time.time()
         try:
-            df = self.data.get_training_data(symbol)
+            df = self.data.get_training_data(symbol, STRATEGIES[strategy_name]['timeframe'])
             if df is None or df.empty:
-                raise ValueError(f"Cannot train {symbol}, no data available.")
+                raise ValueError(f"Cannot train {symbol} ({strategy_name}), no data available.")
 
-            # **ROBUSTNESS FIX**: Define feature order and ensure it exists.
             features = ['open', 'high', 'low', 'close', 'volume'] + [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
             df_features = df[features].astype('float32')
 
             scaler = MinMaxScaler(feature_range=(0, 1))
             scaled_data = scaler.fit_transform(df_features.values)
 
-            sequence_length = STRATEGIES['main']['sequence_length']
+            sequence_length = STRATEGIES[strategy_name]['sequence_length']
             X, y = [], []
             for i in range(sequence_length, len(scaled_data)):
                 X.append(scaled_data[i - sequence_length:i])
@@ -97,48 +97,51 @@ class AIAnalyst:
 
             model = self._create_advanced_model((X_train.shape[1], X_train.shape[2]), symbol)
             es = EarlyStopping(monitor='val_loss', patience=TRAINING_CONFIG['early_stop_patience'], restore_best_weights=True)
-            checkpoint = ModelCheckpoint(f'trained_models/{symbol}_model.keras', save_best_only=True, monitor='val_mae', mode='min')
+            
+            model_path = f'trained_models/{symbol}_{strategy_name}_model.keras'
+            scaler_path = f'trained_models/{symbol}_{strategy_name}_scaler.joblib'
+            
+            checkpoint = ModelCheckpoint(model_path, save_best_only=True, monitor='val_mae', mode='min')
 
             model.fit(X_train, y_train, epochs=TRAINING_CONFIG['epochs'], batch_size=TRAINING_CONFIG['batch_size'], validation_split=0.2, callbacks=[es, checkpoint], verbose=1)
 
-            model.save(f'trained_models/{symbol}_model.keras')
-            dump(scaler, f'trained_models/{symbol}_scaler.joblib')
-            self.models[symbol] = model
-            self.scalers[symbol] = scaler
-            print(f"✅ Model for {symbol} trained and saved in {time.time() - start_time:.1f}s.")
+            model.save(model_path)
+            dump(scaler, scaler_path)
+            self.models[symbol][strategy_name] = model
+            self.scalers[symbol][strategy_name] = scaler
+            print(f"✅ Model for {symbol} ({strategy_name}) trained and saved in {time.time() - start_time:.1f}s.")
         except Exception as e:
-            print(f"❌ Training process for {symbol} failed: {e}")
+            print(f"❌ Training process for {symbol} ({strategy_name}) failed: {e}")
             raise
 
-    def predict(self, symbol, df):
-        if symbol not in self.models or symbol not in self.scalers:
+    def predict(self, symbol, df, strategy_name='main'):
+        if symbol not in self.models or strategy_name not in self.models[symbol]:
             return None
         try:
-            # **ROBUSTNESS FIX**: Use the same feature order as training.
+            model = self.models[symbol][strategy_name]
+            scaler = self.scalers[symbol][strategy_name]
+            
             features = ['open', 'high', 'low', 'close', 'volume'] + [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
-            sequence_length = STRATEGIES['main']['sequence_length']
+            sequence_length = STRATEGIES[strategy_name]['sequence_length']
 
             last_sequence_df = df[features].tail(sequence_length).astype('float32')
             if len(last_sequence_df) < sequence_length:
-                return None # Not enough data to form a sequence
+                return None
 
-            scaled_data = self.scalers[symbol].transform(last_sequence_df.values)
+            scaled_data = scaler.transform(last_sequence_df.values)
             input_data = scaled_data.reshape(1, sequence_length, len(features))
-            raw_prediction = self.models[symbol].predict(input_data, verbose=0)[0]
+            raw_prediction = model.predict(input_data, verbose=0)[0]
 
-            # Create dummy row for inverse transform
             dummy_row = np.zeros((1, len(features)))
             dummy_row[0, 3] = raw_prediction[0]
-            predicted_price = self.scalers[symbol].inverse_transform(dummy_row)[0, 3]
+            predicted_price = scaler.inverse_transform(dummy_row)[0, 3]
             current_price = df['close'].iloc[-1].item()
             pct_change = ((predicted_price - current_price) / current_price) * 100
             direction = 'long' if predicted_price > current_price else 'short'
 
-            # Fix: Handle potential NaN values in volatility calculation
             price_changes = df['close'].pct_change().dropna()
             if not price_changes.empty:
                 price_volatility = price_changes.std() * 100
-                # Fix: Handle NaN volatility
                 if pd.isna(price_volatility) or price_volatility == 0:
                     price_volatility = 1.0
             else:
@@ -156,20 +159,15 @@ class AIAnalyst:
                 'direction': direction, 
                 'confidence': float(confidence), 
                 'pct_change': float(pct_change), 
-                'current_price': current_price
+                'current_price': current_price,
+                'strategy': strategy_name
             }
         except Exception as e:
-            print(f"💥 Prediction failed for {symbol}: {e}")
+            print(f"💥 Prediction failed for {symbol} ({strategy_name}): {e}")
             return None
 
     def predict_swing(self, symbol, df):
-        prediction = self.predict(symbol, df)
-        if prediction:
-            prediction['type'] = 'swing'
-        return prediction
+        return self.predict(symbol, df, strategy_name='swing')
 
     def predict_scalp(self, symbol, df):
-        prediction = self.predict(symbol, df)
-        if prediction:
-            prediction['type'] = 'scalp'
-        return prediction
+        return self.predict(symbol, df, strategy_name='scalp')

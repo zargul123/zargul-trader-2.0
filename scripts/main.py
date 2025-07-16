@@ -52,11 +52,27 @@ class ZargulTrader:
                 return
 
             print("   - Getting AI predictions for all strategies...")
-            predictions = {
-                'main': self.ai.predict(asset, df),
-                'swing': self.ai.predict_swing(asset, df),
-                'scalp': self.ai.predict_scalp(asset, df)
-            }
+            predictions = {}
+            for strategy_name, strategy_config in STRATEGIES.items():
+                timeframe = strategy_config['timeframe']
+                df_strategy = self.data.get_data(asset, timeframe)
+
+                if df_strategy is None:
+                    print(f"   - ❌ Skipping {strategy_name} for {asset} due to data failure.")
+                    predictions[strategy_name] = None
+                    continue
+                
+                if len(df_strategy) < strategy_config['sequence_length']:
+                    print(f"   - ⚠️ Insufficient data for {asset} on {timeframe} timeframe for {strategy_name}. Skipping.")
+                    predictions[strategy_name] = None
+                    continue
+                
+                if strategy_name == 'main':
+                    predictions['main'] = self.ai.predict(asset, df_strategy)
+                elif strategy_name == 'swing':
+                    predictions['swing'] = self.ai.predict_swing(asset, df_strategy)
+                elif strategy_name == 'scalp':
+                    predictions['scalp'] = self.ai.predict_scalp(asset, df_strategy)
 
             for strategy_name, pred in predictions.items():
                 print(f"\n   --- Strategy: {strategy_name.upper()} ---")

@@ -3,7 +3,7 @@ from tensorflow.keras.models import load_model
 from scripts.core.analysis_engine import AttentionLayer  # Import custom layer
 
 try:
-    model = load_model('trained_models/SOL-USD_model.keras', 
+    model = load_model('trained_models/SOL-USD_main_model.keras', 
                       custom_objects={'AttentionLayer': AttentionLayer})
     print("✅ SOL Model Loaded Successfully!")
     model.summary()

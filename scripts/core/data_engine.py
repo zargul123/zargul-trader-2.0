@@ -363,11 +363,11 @@ class DataMaster:
         print(f"✅ Final result: {len(df)} {timeframe} candles for {symbol} from {self.last_used_source}")
         return df
 
-    def get_training_data(self, symbol, days=None):
+    def get_training_data(self, symbol, timeframe='1h', days=None):
         if days is None:
             days = TRAINING_CONFIG['training_days']
 
-        df = self.get_data(symbol, '1h')
+        df = self.get_data(symbol, timeframe)
 
         if df is None or df.empty:
             print("="*60)
