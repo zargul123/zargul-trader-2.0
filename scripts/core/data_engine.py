@@ -207,6 +207,18 @@ class DataMaster:
             
             if before_count != after_count:
                 print(f"⚠️ Dropped {before_count - after_count} rows with missing OHLCV data")
+
+            # --- ROBUSTNESS FIX: Fill NaN values from indicators ---
+            # Forward-fill first to propagate last valid values
+            # Backward-fill to handle NaNs at the start of the series
+            indicator_cols = [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
+            df[indicator_cols] = df[indicator_cols].fillna(method='ffill').fillna(method='bfill')
+            
+            # As a final safety net, fill any remaining NaNs (if any) with 0
+            df[indicator_cols] = df[indicator_cols].fillna(0)
+            
+            print(f"✅ Cleaned NaN values from technical indicators.")
+            # ---------------------------------------------------------
                 
             return df
             
