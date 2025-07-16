@@ -92,7 +92,7 @@ TRAINING_CONFIG = {
 # ==============================================================================
 
 # TwelveData API settings
-TWELVEDATA_API_KEY = "2c86eee94557424ea431537d0d59a5b1"
+TWELVEDATA_API_KEY = os.environ.get("TWELVEDATA_API_KEY")
 TWELVEDATA_CONFIG = {
     'base_url': 'https://api.twelvedata.com',
     'timeout': 10,
