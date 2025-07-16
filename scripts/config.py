@@ -11,27 +11,27 @@ import os
 STRATEGIES = {
     'main': {
         'timeframe': '1h',
-        'long_threshold': 0.3,       # More realistic threshold
-        'short_threshold': 0.3,      # More realistic threshold
-        'min_confidence': 0.60,      # Lower to allow more signals
+        'long_threshold': 1.0,       # Increased threshold for higher quality trades
+        'short_threshold': 1.0,      # Increased threshold for higher quality trades
+        'min_confidence': 0.75,      # Higher confidence requirement
         'sequence_length': 90,       # Keep for more context
         'hold_period_hours': 8,      
         'dynamic_exit': True         
     },
     'swing': {
         'timeframe': '4h',
-        'long_threshold': 0.8,       # More realistic for swing trades
-        'short_threshold': 0.8,      # More realistic for swing trades
-        'min_confidence': 0.65,      # Lower to allow more signals
+        'long_threshold': 1.5,       # Higher threshold for swing trades
+        'short_threshold': 1.5,      # Higher threshold for swing trades
+        'min_confidence': 0.80,      # Higher confidence for swing precision
         'sequence_length': 90,
         'hold_period_hours': 24,     
         'dynamic_exit': True
     },
     'scalp': {
         'timeframe': '15m',
-        'long_threshold': 0.2,       # Very low for scalping
-        'short_threshold': 0.2,      # Very low for scalping
-        'min_confidence': 0.70,      # Keep higher for scalp precision
+        'long_threshold': 0.6,       # Moderate threshold for scalping
+        'short_threshold': 0.6,      # Moderate threshold for scalping
+        'min_confidence': 0.85,      # Highest confidence for scalp precision
         'sequence_length': 90,
         'hold_period_hours': 0.5,    
         'dynamic_exit': True
