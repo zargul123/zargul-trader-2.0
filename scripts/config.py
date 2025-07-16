@@ -20,9 +20,9 @@ STRATEGIES = {
     },
     'swing': {
         'timeframe': '4h',
-        'long_threshold': 1.5,       # Higher threshold for swing trades
-        'short_threshold': 1.5,      # Higher threshold for swing trades
-        'min_confidence': 0.80,      # Higher confidence for swing precision
+        'long_threshold': 1.2,       # Lowered threshold for more swing opportunities
+        'short_threshold': 1.2,      # Lowered threshold for more swing opportunities
+        'min_confidence': 0.85,      # Increased confidence for higher quality trades
         'sequence_length': 90,
         'hold_period_hours': 24,     
         'dynamic_exit': True
