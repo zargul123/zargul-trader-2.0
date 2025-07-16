@@ -29,9 +29,9 @@ STRATEGIES = {
     },
     'scalp': {
         'timeframe': '15m',
-        'long_threshold': 0.6,       # Moderate threshold for scalping
-        'short_threshold': 0.6,      # Moderate threshold for scalping
-        'min_confidence': 0.85,      # Highest confidence for scalp precision
+        'long_threshold': 999,       # Impossible threshold - effectively disables scalping
+        'short_threshold': 999,      # Impossible threshold - effectively disables scalping
+        'min_confidence': 0.99,      # Nearly impossible confidence requirement
         'sequence_length': 90,
         'hold_period_hours': 0.5,    
         'dynamic_exit': True
