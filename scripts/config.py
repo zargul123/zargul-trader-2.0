@@ -11,10 +11,10 @@ import os
 STRATEGIES = {
     'main': {
         'timeframe': '1h',
-        'long_threshold': 1.0,       # Increased threshold for higher quality trades
-        'short_threshold': 1.0,      # Increased threshold for higher quality trades
-        'min_confidence': 0.75,      # Higher confidence requirement
-        'sequence_length': 90,       # Keep for more context
+        'long_threshold': 2.5,       # Aim for 2.5% up moves
+        'short_threshold': 2.5,      # Aim for 2.5% down moves
+        'min_confidence': 0.90,      # AI must be 90% sure
+        'sequence_length': 45,       # Shorter memory, faster reaction
         'hold_period_hours': 8,      
         'dynamic_exit': True         
     },
