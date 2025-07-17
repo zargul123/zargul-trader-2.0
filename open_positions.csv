@@ -1,0 +1,3 @@
+trade_id,asset,direction,entry_price,strategy_name,timestamp,stop_loss,take_profit
+20250717131757-ETH-USD,ETH-USD,short,3415.96,swing,2025-07-17 13:17:57.259796+00:00,3450.1196,3347.6408
+20250717131759-SOL-USD,SOL-USD,short,175.51,main,2025-07-17 13:17:58.190751+00:00,177.2651,171.9998

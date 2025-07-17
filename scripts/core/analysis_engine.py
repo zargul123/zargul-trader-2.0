@@ -35,6 +35,7 @@ class AIAnalyst:
     def __init__(self, train_all=False):
         self.models = {symbol: {} for symbol in ASSETS}
         self.scalers = {symbol: {} for symbol in ASSETS}
+        self.prediction_functions = {symbol: {} for symbol in ASSETS}
         self.train_all = train_all
         self.data = DataMaster()
         self._initialize_models()
@@ -137,7 +138,15 @@ class AIAnalyst:
 
             scaled_data = scaler.transform(last_sequence_df.values)
             input_data = scaled_data.reshape(1, sequence_length, len(features))
-            raw_prediction = model.predict(input_data, verbose=0)[0]
+            
+            prediction_fn = self.prediction_functions.get(symbol, {}).get(strategy_name)
+            if prediction_fn:
+                # Use the optimized function
+                tensor_input = tf.convert_to_tensor(input_data, dtype=tf.float32)
+                raw_prediction = prediction_fn(tensor_input)[0].numpy()
+            else:
+                # Fallback to the original method if the optimized function isn't found
+                raw_prediction = model.predict(input_data, verbose=0)[0]
 
             dummy_row = np.zeros((1, len(features)))
             dummy_row[0, 3] = raw_prediction[0]
