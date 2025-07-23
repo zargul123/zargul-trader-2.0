@@ -15,18 +15,61 @@ class RiskManager:
         true_range = np.maximum(high_low, np.maximum(high_close, low_close))
         return true_range.rolling(period).mean().iloc[-1]
 
-    def calculate_levels(self, current_price, direction, strategy_rules):
+    def calculate_levels(self, prediction, df):
         """
-        Calculates Stop Loss and Take Profit levels based on strategy rules.
-        This version is simplified to use a fixed percentage. A more advanced
-        version would use volatility (like ATR).
+        Calculates Stop Loss and Take Profit levels.
+        - Stop Loss is ATR or percentage-based.
+        - Take Profit is dynamic, targeting swing points with an ATR offset,
+          with a fallback to a fixed risk/reward ratio.
         """
+        sl_config = RISK_CONFIG.get('stop_loss', {})
+        sl_type = sl_config.get('type', 'percentage')
+        current_price = prediction['current_price']
+        direction = prediction['direction']
+        rr_ratio = RISK_CONFIG.get('risk_reward_ratio', 2.0)
+        atr = prediction.get('atr', 0)
+
+        # --- 1. CALCULATE STOP LOSS ---
+        stop_loss_distance = 0
+        if sl_type == 'atr' and atr > 0:
+            atr_multiplier = sl_config.get('atr_multiplier', 2.0)
+            stop_loss_distance = atr * atr_multiplier
+        else:
+            # Fallback to percentage if ATR is missing, zero, or type is 'percentage'
+            percentage = sl_config.get('percentage', 1.5)
+            stop_loss_distance = current_price * (percentage / 100)
+
         if direction == 'long':
-            stop_loss = current_price * (1 - (strategy_rules.get('stop_loss_pct', 1.0) / 100))
-            take_profit = current_price * (1 + (strategy_rules.get('take_profit_pct', 2.0) / 100))
-        else: # short
-            stop_loss = current_price * (1 + (strategy_rules.get('stop_loss_pct', 1.0) / 100))
-            take_profit = current_price * (1 - (strategy_rules.get('take_profit_pct', 2.0) / 100))
+            stop_loss = current_price - stop_loss_distance
+        else:  # short
+            stop_loss = current_price + stop_loss_distance
+
+        # --- 2. CALCULATE DYNAMIC TAKE PROFIT ---
+        take_profit = None
+        lookback_period = 20
+        if len(df) >= lookback_period and atr > 0:
+            lookback_df = df.tail(lookback_period)
+            atr_offset = 0.3 * atr
+
+            if direction == 'long':
+                swing_high = lookback_df['high'].max()
+                dynamic_tp = swing_high - atr_offset
+                # Use dynamic TP only if it's actually profitable
+                if dynamic_tp > current_price:
+                    take_profit = dynamic_tp
+            else:  # short
+                swing_low = lookback_df['low'].min()
+                dynamic_tp = swing_low + atr_offset
+                # Use dynamic TP only if it's actually profitable
+                if dynamic_tp < current_price:
+                    take_profit = dynamic_tp
+        
+        # --- 3. FALLBACK TO FIXED RISK/REWARD RATIO ---
+        if take_profit is None:
+            if direction == 'long':
+                take_profit = current_price + (stop_loss_distance * rr_ratio)
+            else: # short
+                take_profit = current_price - (stop_loss_distance * rr_ratio)
             
         return {'stop_loss': stop_loss, 'take_profit': take_profit}
     

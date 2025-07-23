@@ -119,7 +119,7 @@ class BacktestEngine:
 
                     if prediction and self.risk_manager.should_execute(prediction, strategy_type):
                         print(f"🎯 {current_time}: Opening {prediction['direction'].upper()} trade at ${current_price:.2f}")
-                        open_position = self._open_trade(prediction, current_time, strategy_type)
+                        open_position = self._open_trade(prediction, current_time, strategy_type, window_data)
 
             # Final Metrics Calculation
             print(f"\n✅ Backtest scan complete for {symbol}.")
@@ -136,13 +136,13 @@ class BacktestEngine:
             print(traceback.format_exc())
             return get_empty_metrics()
 
-    def _open_trade(self, prediction, entry_time, strategy_name):
+    def _open_trade(self, prediction, entry_time, strategy_name, df):
         """Creates a new virtual position."""
         entry_price = prediction['current_price']
         direction = prediction['direction']
         
         rules = STRATEGIES[strategy_name]
-        levels = self.risk_manager.calculate_levels(entry_price, direction, rules)
+        levels = self.risk_manager.calculate_levels(prediction, df)
 
         position = {
             'asset': prediction['asset'],

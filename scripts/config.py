@@ -61,6 +61,11 @@ RISK_PER_TRADE = 0.02  # Risk 2% of (pretend) capital on any single trade
 # General Risk Configuration
 RISK_CONFIG = {
     'risk_reward_ratio': 2.0,  # Aim for 2:1 risk-reward
+    'stop_loss': {
+        'type': 'atr',               # 'atr' or 'percentage'
+        'atr_multiplier': 2.0,       # Multiplier for ATR-based stops
+        'percentage': 1.5            # Fallback percentage if ATR fails
+    },
     'max_daily_drawdown': 0.10, # Max 10% loss in a day
     'volatility_adjusted': True,      # New - adjust position size based on volatility
     'trailing_stop': {

@@ -6,7 +6,7 @@ import argparse
 import warnings
 import atexit
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -34,8 +34,36 @@ class ZargulTrader:
         self.run_once = run_once
         self.positions_file = 'open_positions.csv'
         self.journal_file = 'trading_journal.csv'
+        self.cooldown_until = {} # Cooldown tracker
+        self._initialize_journal_file()
         self._load_open_positions()
         print("✅ System ready for trading.")
+
+    def _initialize_journal_file(self):
+        """
+        Checks if the journal file exists and has the correct header.
+        If not, it creates a new one and backs up the old one if necessary.
+        """
+        new_header = "trade_id,timestamp,asset,direction,entry_price,confidence,pct_change,strategy_name,stop_loss,take_profit,close_price,outcome\n"
+        
+        if not os.path.exists(self.journal_file):
+            with open(self.journal_file, 'w') as f:
+                f.write(new_header)
+        else:
+            with open(self.journal_file, 'r+') as f:
+                header = f.readline()
+                if header.strip() != new_header.strip():
+                    print("⚠️ Detected old journal format. Backing up and creating new file.")
+                    f.seek(0)
+                    old_content = f.read()
+                    backup_filename = f"trading_journal.csv.backup.{int(time.time())}"
+                    with open(backup_filename, 'w') as backup_f:
+                        backup_f.write(old_content)
+                    
+                    f.seek(0)
+                    f.truncate()
+                    f.write(new_header)
+                    print(f"✅ Backup saved to {backup_filename}")
 
     def _load_open_positions(self):
         if os.path.exists(self.positions_file) and os.path.getsize(self.positions_file) > 0:
@@ -44,13 +72,18 @@ class ZargulTrader:
             self.open_positions = pd.DataFrame(columns=['trade_id', 'asset', 'direction', 'entry_price', 'strategy_name', 'timestamp', 'stop_loss', 'take_profit'])
 
     def _save_open_positions(self):
-        self.open_positions.to_csv(self.positions_file, index=False)
+        try:
+            with open(self.positions_file, 'w') as f:
+                self.open_positions.to_csv(f, index=False)
+                f.flush()
+                os.fsync(f.fileno())
+        except IOError as e:
+            print(f"   └ ❌ CRITICAL: Could not save open positions to {self.positions_file}: {e}")
 
     def analyze_asset(self, asset):
         print("-" * 60)
         print(f"🔍 Analyzing {asset} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         
-        # Ensure open_positions is not None and is a DataFrame
         if self.open_positions is None:
             self._load_open_positions()
 
@@ -59,6 +92,14 @@ class ZargulTrader:
         if not asset_position_df.empty:
             self._manage_open_position(asset_position_df.iloc[0])
         else:
+            # --- COOLDOWN CHECK ---
+            if asset in self.cooldown_until and datetime.now() < self.cooldown_until[asset]:
+                print(f"   - ❄️ {asset} is in a cooldown period until {self.cooldown_until[asset].strftime('%H:%M:%S')}. Skipping analysis.")
+                return
+            elif asset in self.cooldown_until:
+                print(f"   - ✅ Cooldown for {asset} has ended.")
+                del self.cooldown_until[asset]
+            
             self._look_for_new_trade(asset)
 
     def _manage_open_position(self, position):
@@ -75,33 +116,30 @@ class ZargulTrader:
         outcome = None
         close_price = None
 
-        # 1. Check for Take Profit
         if position['direction'] == 'long' and current_price >= position['take_profit']:
             outcome = 'TAKE_PROFIT'
         elif position['direction'] == 'short' and current_price <= position['take_profit']:
             outcome = 'TAKE_PROFIT'
 
-        # 2. Check for Stop Loss
         if not outcome:
             if position['direction'] == 'long' and current_price <= position['stop_loss']:
                 outcome = 'STOP_LOSS'
             elif position['direction'] == 'short' and current_price >= position['stop_loss']:
                 outcome = 'STOP_LOSS'
 
-        # 3. Check for Reversal Signal
         if not outcome:
-            prediction = self.ai.predict(asset, df) # Using main strategy for exit signal
+            prediction = self.ai.predict(asset, df)
             if prediction:
                 self._print_prediction(prediction)
                 if (position['direction'] == 'long' and prediction['direction'] == 'short') or \
                    (position['direction'] == 'short' and prediction['direction'] == 'long'):
-                    if self.risk_manager.should_execute(prediction, 'main'): # Check if exit signal is valid
+                    if self.risk_manager.should_execute(prediction, 'main'):
                         outcome = 'REVERSAL_CLOSE'
 
         if outcome:
             close_price = current_price
             print(f"   - ✅ CLOSING TRADE: {asset} position closed due to {outcome} at ${close_price:,.2f}")
-            self._close_trade(position['trade_id'], close_price, outcome)
+            self._close_trade(position, close_price, outcome)
 
     def _look_for_new_trade(self, asset):
         try:
@@ -136,7 +174,6 @@ class ZargulTrader:
                     print(f"   - ⚠️ Insufficient data for {asset} on {timeframe} for {strategy_name}. Skipping.")
                     continue
 
-                # Generate prediction based on strategy
                 if strategy_name == 'main': predictions['main'] = self.ai.predict(asset, df_strategy)
                 elif strategy_name == 'swing': predictions['swing'] = self.ai.predict_swing(asset, df_strategy)
                 elif strategy_name == 'btc-swing': predictions['btc-swing'] = self.ai.predict(asset, df_strategy, strategy_name='btc-swing')
@@ -147,9 +184,39 @@ class ZargulTrader:
                     print(f"\n   --- Strategy: {strategy_name.upper()} ---")
                     self._print_prediction(pred)
                     if self.risk_manager.should_execute(pred, strategy_name):
-                        print(f"   └ ✅ NEW TRADE SIGNAL! {pred['direction'].upper()} signal is valid.")
-                        self._open_trade(pred, strategy_name)
-                        return # Stop after opening one trade per asset
+                        print(f"   └ ✅ Signal passed initial risk checks.")
+
+                        # --- MTF CONFIRMATION FILTER ---
+                        if strategy_name == 'main':
+                            print("   └ 🧠 Applying Multi-Timeframe (MTF) Confirmation Filter...")
+                            higher_timeframe = STRATEGIES['swing']['timeframe'] # 4h
+                            df_higher = self.data.get_data(asset, higher_timeframe)
+
+                            if df_higher is None or df_higher.empty or 'ema_50' not in df_higher.columns:
+                                print(f"   └ ❌ MTF Rejection: Could not get {higher_timeframe} data for confirmation. Skipping trade for safety.")
+                                continue
+
+                            last_price_higher = df_higher['close'].iloc[-1]
+                            ema_50_higher = df_higher['ema_50'].iloc[-1]
+                            
+                            is_uptrend = last_price_higher > ema_50_higher
+                            is_downtrend = last_price_higher < ema_50_higher
+                            
+                            signal_direction = pred['direction']
+
+                            if (signal_direction == 'long' and is_uptrend) or \
+                               (signal_direction == 'short' and is_downtrend):
+                                print(f"   └ ✅ MTF Confirmation: 1h signal aligns with 4h trend ({'UP' if is_uptrend else 'DOWN'}). Opening trade.")
+                                self._open_trade(pred, strategy_name, df_strategy)
+                                return # Trade opened, exit loop for this asset
+                            else:
+                                print(f"   └ ❌ MTF Rejection: 1h signal '{signal_direction}' conflicts with 4h trend ({'UP' if is_uptrend else 'DOWN'}).")
+
+                        # For other strategies, open trade directly without MTF check
+                        else:
+                            print(f"   └ ✅ NEW TRADE SIGNAL! ({strategy_name.upper()} does not require MTF). Opening trade.")
+                            self._open_trade(pred, strategy_name, df_strategy)
+                            return # Trade opened, exit loop for this asset
                     else:
                         print(f"   └ ⚠️ Signal rejected by risk manager or strategy rules.")
         except Exception as e:
@@ -157,47 +224,79 @@ class ZargulTrader:
             import traceback
             traceback.print_exc()
 
-    def _open_trade(self, prediction, strategy_name):
+    def _open_trade(self, prediction, strategy_name, df):
         trade_id = f"{datetime.now().strftime('%Y%m%d%H%M%S')}-{prediction['asset']}"
         rules = STRATEGIES[strategy_name]
-        levels = self.risk_manager.calculate_levels(prediction['current_price'], prediction['direction'], rules)
-        
-        # Log to journal
-        journal_entry = f"{trade_id},{prediction['timestamp'].isoformat()},{prediction['asset']},{prediction['direction']},{prediction['confidence']:.4f},{prediction['pct_change']:.4f},{strategy_name},{levels.get('stop_loss', 0):.4f},{levels.get('take_profit', 0):.4f},,\n"
-        try:
-            with open(self.journal_file, "a") as f:
-                f.write(journal_entry)
-            print("   └ 📝 Trade logged to trading_journal.csv")
-        except IOError as e:
-            print(f"   └ ❌ Error: Could not log trade to journal: {e}")
+        levels = self.risk_manager.calculate_levels(prediction, df)
 
-        # Add to open positions
+        # --- ATOMIC OPERATION: Step 1. Update and save state FIRST ---
         position_entry = {
             'trade_id': trade_id, 'asset': prediction['asset'], 'direction': prediction['direction'],
             'entry_price': prediction['current_price'], 'strategy_name': strategy_name,
             'timestamp': prediction['timestamp'], 'stop_loss': levels.get('stop_loss', 0),
             'take_profit': levels.get('take_profit', 0)
         }
-        
-        # Use concat instead of append
         self.open_positions = pd.concat([self.open_positions, pd.DataFrame([position_entry])], ignore_index=True)
         self._save_open_positions()
         print(f"   └ 📖 Position added to {self.positions_file}")
 
-    def _close_trade(self, trade_id, close_price, outcome):
-        # Remove from open positions
+        # --- ATOMIC OPERATION: Step 2. Log to journal SECOND ---
+        journal_entry = (
+            f"{trade_id},{prediction['timestamp'].isoformat()},{prediction['asset']},"
+            f"{prediction['direction']},{prediction['current_price']:.4f},{prediction['confidence']:.4f},"
+            f"{prediction['pct_change']:.4f},{strategy_name},{levels.get('stop_loss', 0):.4f},"
+            f"{levels.get('take_profit', 0):.4f},,\n"
+        )
+        try:
+            with open(self.journal_file, "a") as f:
+                f.write(journal_entry)
+                f.flush()
+                os.fsync(f.fileno())
+            print("   └ 📝 Trade logged to trading_journal.csv")
+        except IOError as e:
+            print(f"   └ ❌ Error: Could not log trade to journal: {e}")
+
+    def _close_trade(self, position, close_price, outcome):
+        asset = position['asset']
+        strategy_name = position['strategy_name']
+        trade_id = position['trade_id']
+
+        # --- ATOMIC OPERATION: Step 1. Update and save state FIRST ---
         self.open_positions = self.open_positions[self.open_positions['trade_id'] != trade_id].copy()
         self._save_open_positions()
         print(f"   └ 📖 Position removed from {self.positions_file}")
 
-        # Update journal
+        # --- INITIATE COOLDOWN ---
         try:
+            timeframe = STRATEGIES[strategy_name]['timeframe']
+            if 'h' in timeframe:
+                candle_period = timedelta(hours=int(timeframe.replace('h', '')))
+            elif 'm' in timeframe:
+                candle_period = timedelta(minutes=int(timeframe.replace('m', '')))
+            else:
+                candle_period = timedelta(hours=1) # Default fallback
+            
+            cooldown_duration = candle_period * 3
+            cooldown_end = datetime.now() + cooldown_duration
+            self.cooldown_until[asset] = cooldown_end
+            print(f"   └ ❄️ Cooldown initiated for {asset} for {cooldown_duration}. No new trades until {cooldown_end.strftime('%Y-%m-%d %H:%M:%S')}.")
+        except Exception as e:
+            print(f"   └ ⚠️ Could not set cooldown for {asset}: {e}")
+
+        # --- ATOMIC OPERATION: Step 2. Update journal SECOND ---
+        try:
+            # This read/modify/write operation is not truly atomic, but we add flushing for resilience.
             journal_df = pd.read_csv(self.journal_file)
             trade_index = journal_df[journal_df['trade_id'] == trade_id].index
             if not trade_index.empty:
                 journal_df.loc[trade_index, 'close_price'] = close_price
                 journal_df.loc[trade_index, 'outcome'] = outcome
-                journal_df.to_csv(self.journal_file, index=False)
+                
+                # Use a file object to ensure flush and fsync
+                with open(self.journal_file, 'w') as f:
+                    journal_df.to_csv(f, index=False)
+                    f.flush()
+                    os.fsync(f.fileno())
                 print(f"   └ 📝 Journal updated for trade {trade_id}")
         except Exception as e:
             print(f"   └ ❌ Error updating journal: {e}")

@@ -221,7 +221,7 @@ class DataMaster:
             # Forward-fill first to propagate last valid values
             # Backward-fill to handle NaNs at the start of the series
             indicator_cols = [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
-            df[indicator_cols] = df[indicator_cols].fillna(method='ffill').fillna(method='bfill')
+            df[indicator_cols] = df[indicator_cols].ffill().bfill()
             
             # As a final safety net, fill any remaining NaNs (if any) with 0
             df[indicator_cols] = df[indicator_cols].fillna(0)

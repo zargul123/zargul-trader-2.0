@@ -176,6 +176,7 @@ class AIAnalyst:
                 'confidence': float(confidence), 
                 'pct_change': float(pct_change), 
                 'current_price': current_price,
+                'atr': df['atr'].iloc[-1].item(),
                 'strategy': strategy_name
             }
         except Exception as e:
