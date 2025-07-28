@@ -17,6 +17,8 @@ from scripts.core.analysis_engine import AIAnalyst
 from scripts.config import ASSETS, STRATEGIES
 from scripts.core.data_monitor import DataHealthMonitor
 from scripts.core.risk_engine import RiskManager
+from scripts.core.database_manager import DatabaseManager
+from scripts.core.csv_logger import CsvLogger
 
 def goodbye():
     sys.stdout.flush()
@@ -30,67 +32,34 @@ class ZargulTrader:
         self.ai = AIAnalyst(train_all)
         self.risk_manager = RiskManager()
         self.data_monitor = DataHealthMonitor()
+        self.db = DatabaseManager() # Initialize the database manager
+        self.csv_logger = CsvLogger() # Initialize the CSV logger
         self.update_interval = 300
         self.run_once = run_once
-        self.positions_file = 'open_positions.csv'
-        self.journal_file = 'trading_journal.csv'
         self.cooldown_until = {} # Cooldown tracker
-        self._initialize_journal_file()
+        
+        # Load open positions from the database, which is now the single source of truth
         self._load_open_positions()
         print("✅ System ready for trading.")
 
-    def _initialize_journal_file(self):
-        """
-        Checks if the journal file exists and has the correct header.
-        If not, it creates a new one and backs up the old one if necessary.
-        """
-        new_header = "trade_id,timestamp,asset,direction,entry_price,confidence,pct_change,strategy_name,stop_loss,take_profit,close_price,outcome\n"
-        
-        if not os.path.exists(self.journal_file):
-            with open(self.journal_file, 'w') as f:
-                f.write(new_header)
-        else:
-            with open(self.journal_file, 'r+') as f:
-                header = f.readline()
-                if header.strip() != new_header.strip():
-                    print("⚠️ Detected old journal format. Backing up and creating new file.")
-                    f.seek(0)
-                    old_content = f.read()
-                    backup_filename = f"trading_journal.csv.backup.{int(time.time())}"
-                    with open(backup_filename, 'w') as backup_f:
-                        backup_f.write(old_content)
-                    
-                    f.seek(0)
-                    f.truncate()
-                    f.write(new_header)
-                    print(f"✅ Backup saved to {backup_filename}")
-
     def _load_open_positions(self):
-        if os.path.exists(self.positions_file) and os.path.getsize(self.positions_file) > 0:
-            self.open_positions = pd.read_csv(self.positions_file)
-        else:
-            self.open_positions = pd.DataFrame(columns=['trade_id', 'asset', 'direction', 'entry_price', 'strategy_name', 'timestamp', 'stop_loss', 'take_profit'])
-
-    def _save_open_positions(self):
-        try:
-            with open(self.positions_file, 'w') as f:
-                self.open_positions.to_csv(f, index=False)
-                f.flush()
-                os.fsync(f.fileno())
-        except IOError as e:
-            print(f"   └ ❌ CRITICAL: Could not save open positions to {self.positions_file}: {e}")
+        """
+        Loads all currently open positions from the database.
+        This is the single source of truth for the system's state.
+        """
+        print("   - Loading open positions from database...")
+        self.open_positions = self.db.load_open_positions()
+        print(f"   - ✅ Found {len(self.open_positions)} open position(s).")
 
     def analyze_asset(self, asset):
         print("-" * 60)
         print(f"🔍 Analyzing {asset} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         
-        if self.open_positions is None:
-            self._load_open_positions()
-
+        # The self.open_positions DataFrame is now managed directly by the open/close methods
         asset_position_df = self.open_positions[self.open_positions['asset'] == asset]
         
         if not asset_position_df.empty:
-            self._manage_open_position(asset_position_df.iloc[0])
+            self._manage_open_position(asset_position_df.iloc[0].to_dict())
         else:
             # --- COOLDOWN CHECK ---
             if asset in self.cooldown_until and datetime.now() < self.cooldown_until[asset]:
@@ -229,42 +198,39 @@ class ZargulTrader:
         rules = STRATEGIES[strategy_name]
         levels = self.risk_manager.calculate_levels(prediction, df)
 
-        # --- ATOMIC OPERATION: Step 1. Update and save state FIRST ---
         position_entry = {
             'trade_id': trade_id, 'asset': prediction['asset'], 'direction': prediction['direction'],
             'entry_price': prediction['current_price'], 'strategy_name': strategy_name,
             'timestamp': prediction['timestamp'], 'stop_loss': levels.get('stop_loss', 0),
-            'take_profit': levels.get('take_profit', 0)
+            'take_profit': levels.get('take_profit', 0),
+            'confidence': prediction.get('confidence'),
+            'pct_change': prediction.get('pct_change')
         }
-        self.open_positions = pd.concat([self.open_positions, pd.DataFrame([position_entry])], ignore_index=True)
-        self._save_open_positions()
-        print(f"   └ 📖 Position added to {self.positions_file}")
 
-        # --- ATOMIC OPERATION: Step 2. Log to journal SECOND ---
-        journal_entry = (
-            f"{trade_id},{prediction['timestamp'].isoformat()},{prediction['asset']},"
-            f"{prediction['direction']},{prediction['current_price']:.4f},{prediction['confidence']:.4f},"
-            f"{prediction['pct_change']:.4f},{strategy_name},{levels.get('stop_loss', 0):.4f},"
-            f"{levels.get('take_profit', 0):.4f},,\n"
-        )
-        try:
-            with open(self.journal_file, "a") as f:
-                f.write(journal_entry)
-                f.flush()
-                os.fsync(f.fileno())
-            print("   └ 📝 Trade logged to trading_journal.csv")
-        except IOError as e:
-            print(f"   └ ❌ Error: Could not log trade to journal: {e}")
+        print("   └ 💾 Writing to database...")
+        if self.db.add_trade(position_entry):
+            print("   └ ✅ Trade successfully saved to database.")
+            # Update the in-memory DataFrame to reflect the new state
+            self.open_positions = pd.concat([self.open_positions, pd.DataFrame([position_entry])], ignore_index=True)
+            # Also log the trade to the CSV files for easy viewing
+            self.csv_logger.add_trade(position_entry)
+        else:
+            print("   └ ❌ CRITICAL: Failed to write trade to database. Aborting trade to prevent inconsistency.")
 
     def _close_trade(self, position, close_price, outcome):
         asset = position['asset']
         strategy_name = position['strategy_name']
         trade_id = position['trade_id']
 
-        # --- ATOMIC OPERATION: Step 1. Update and save state FIRST ---
-        self.open_positions = self.open_positions[self.open_positions['trade_id'] != trade_id].copy()
-        self._save_open_positions()
-        print(f"   └ 📖 Position removed from {self.positions_file}")
+        print(f"   └ 💾 Closing trade {trade_id} in database...")
+        if self.db.close_trade(trade_id, close_price, outcome):
+            print(f"   └ ✅ Trade successfully closed in database.")
+            # Update the in-memory DataFrame to reflect the new state
+            self.open_positions = self.open_positions[self.open_positions['trade_id'] != trade_id].copy()
+            # Also update the CSV files to reflect the closure
+            self.csv_logger.close_trade(trade_id, close_price, outcome)
+        else:
+            print(f"   └ ❌ CRITICAL: Failed to close trade in database. Manual check required.")
 
         # --- INITIATE COOLDOWN ---
         try:
@@ -282,24 +248,6 @@ class ZargulTrader:
             print(f"   └ ❄️ Cooldown initiated for {asset} for {cooldown_duration}. No new trades until {cooldown_end.strftime('%Y-%m-%d %H:%M:%S')}.")
         except Exception as e:
             print(f"   └ ⚠️ Could not set cooldown for {asset}: {e}")
-
-        # --- ATOMIC OPERATION: Step 2. Update journal SECOND ---
-        try:
-            # This read/modify/write operation is not truly atomic, but we add flushing for resilience.
-            journal_df = pd.read_csv(self.journal_file)
-            trade_index = journal_df[journal_df['trade_id'] == trade_id].index
-            if not trade_index.empty:
-                journal_df.loc[trade_index, 'close_price'] = close_price
-                journal_df.loc[trade_index, 'outcome'] = outcome
-                
-                # Use a file object to ensure flush and fsync
-                with open(self.journal_file, 'w') as f:
-                    journal_df.to_csv(f, index=False)
-                    f.flush()
-                    os.fsync(f.fileno())
-                print(f"   └ 📝 Journal updated for trade {trade_id}")
-        except Exception as e:
-            print(f"   └ ❌ Error updating journal: {e}")
 
     def _print_prediction(self, prediction):
         print(f"   │ Direction: {prediction['direction'].upper():<5} | Confidence: {prediction['confidence']*100: >3.0f}% | Move: {prediction['pct_change']: >5.2f}% | Current Price: ${prediction['current_price']:,.2f}")
