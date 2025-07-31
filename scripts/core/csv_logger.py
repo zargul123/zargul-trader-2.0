@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import csv
 from threading import Lock
 
 # Define the exact column order for the CSV files
@@ -24,27 +25,38 @@ class CsvLogger:
         """Create CSV files with headers if they don't exist."""
         with self.lock:
             if not os.path.exists(self.journal_path) or os.path.getsize(self.journal_path) == 0:
-                pd.DataFrame(columns=JOURNAL_COLUMNS).to_csv(self.journal_path, index=False)
+                with open(self.journal_path, 'w', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow(JOURNAL_COLUMNS)
 
             if not os.path.exists(self.positions_path) or os.path.getsize(self.positions_path) == 0:
-                pd.DataFrame(columns=POSITIONS_COLUMNS).to_csv(self.positions_path, index=False)
+                with open(self.positions_path, 'w', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow(POSITIONS_COLUMNS)
 
     def add_trade(self, trade_data):
         """
-        Appends a new trade to the trading_journal.csv and open_positions.csv,
-        ensuring correct column order.
+        Appends a new trade to the trading_journal.csv and open_positions.csv
+        using the native csv library for speed and reliability.
         """
         with self.lock:
             try:
-                # Use a dictionary comprehension to handle potentially missing keys gracefully
-                journal_data_point = {col: trade_data.get(col) for col in JOURNAL_COLUMNS}
-                journal_entry = pd.DataFrame([journal_data_point], columns=JOURNAL_COLUMNS)
-                journal_entry.to_csv(self.journal_path, mode='a', header=False, index=False)
+                # Append to journal
+                journal_row = [trade_data.get(col) for col in JOURNAL_COLUMNS]
+                with open(self.journal_path, 'a', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow(journal_row)
+                    f.flush()  # Force write to disk
+                    os.fsync(f.fileno()) # Ensure it's written
 
-                positions_data_point = {col: trade_data.get(col) for col in POSITIONS_COLUMNS}
-                positions_entry = pd.DataFrame([positions_data_point], columns=POSITIONS_COLUMNS)
-                positions_entry.to_csv(self.positions_path, mode='a', header=False, index=False)
-                
+                # Append to open positions
+                positions_row = [trade_data.get(col) for col in POSITIONS_COLUMNS]
+                with open(self.positions_path, 'a', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow(positions_row)
+                    f.flush() # Force write to disk
+                    os.fsync(f.fileno()) # Ensure it's written
+
                 print("   └ 📝 Trade successfully logged to CSV files.")
                 return True
             except Exception as e:
@@ -53,12 +65,12 @@ class CsvLogger:
 
     def close_trade(self, trade_id, close_price, outcome):
         """
-        Updates the journal with the outcome and removes the trade from open_positions.csv,
-        ensuring correct column order on write.
+        Updates the journal and removes a trade from open_positions.csv using pandas,
+        as this requires modifying the entire file.
         """
         with self.lock:
             try:
-                # Update the permanent journal
+                # --- Update Journal (Pandas is better for this) ---
                 journal_df = pd.read_csv(self.journal_path)
                 trade_index = journal_df[journal_df['trade_id'] == trade_id].index
                 if not trade_index.empty:
@@ -66,7 +78,7 @@ class CsvLogger:
                     journal_df.loc[trade_index, 'outcome'] = outcome
                     journal_df.to_csv(self.journal_path, index=False, columns=JOURNAL_COLUMNS)
 
-                # Remove from open positions
+                # --- Remove from Open Positions (Pandas is better for this) ---
                 positions_df = pd.read_csv(self.positions_path)
                 positions_df = positions_df[positions_df['trade_id'] != trade_id]
                 positions_df.to_csv(self.positions_path, index=False, columns=POSITIONS_COLUMNS)
