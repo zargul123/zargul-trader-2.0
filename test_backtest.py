@@ -16,7 +16,7 @@ def main():
     
     for asset in args.assets:
         # Test all strategies
-        for strategy in ['main', 'swing', 'scalp']:
+        for strategy in ['main', 'swing']:
             try:
                 print(f"\n🔍 Testing {asset} - {strategy.upper()} Strategy")
                 

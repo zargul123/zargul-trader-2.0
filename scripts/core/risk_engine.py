@@ -17,59 +17,44 @@ class RiskManager:
 
     def calculate_levels(self, prediction, df):
         """
-        Calculates Stop Loss and Take Profit levels.
-        - Stop Loss is ATR or percentage-based.
-        - Take Profit is dynamic, targeting swing points with an ATR offset,
-          with a fallback to a fixed risk/reward ratio.
+        Calculates Stop Loss and Take Profit levels based on ATR.
+        - Stop Loss is based on config 'atr_multiplier'.
+        - Take Profit is based on config 'tp_atr_multiplier'.
+        - Falls back to percentage/RR ratio if ATR is unavailable.
         """
         sl_config = RISK_CONFIG.get('stop_loss', {})
-        sl_type = sl_config.get('type', 'percentage')
+        sl_type = sl_config.get('type', 'atr') # Prioritize ATR
         current_price = prediction['current_price']
         direction = prediction['direction']
-        rr_ratio = RISK_CONFIG.get('risk_reward_ratio', 2.0)
         atr = prediction.get('atr', 0)
 
-        # --- 1. CALCULATE STOP LOSS ---
         stop_loss_distance = 0
-        if sl_type == 'atr' and atr > 0:
-            atr_multiplier = sl_config.get('atr_multiplier', 2.0)
-            stop_loss_distance = atr * atr_multiplier
-        else:
-            # Fallback to percentage if ATR is missing, zero, or type is 'percentage'
-            percentage = sl_config.get('percentage', 1.5)
-            stop_loss_distance = current_price * (percentage / 100)
+        take_profit_distance = 0
 
+        # --- 1. CALCULATE SL/TP DISTANCES ---
+        if sl_type == 'atr' and atr > 0:
+            # Primary Logic: ATR-based distances
+            sl_atr_multiplier = sl_config.get('atr_multiplier', 1.5)
+            tp_atr_multiplier = RISK_CONFIG.get('tp_atr_multiplier', 2.0)
+            
+            stop_loss_distance = atr * sl_atr_multiplier
+            take_profit_distance = atr * tp_atr_multiplier
+            
+        else:
+            # Fallback Logic: Percentage-based SL and R/R-based TP
+            percentage = sl_config.get('percentage', 1.5)
+            rr_ratio = RISK_CONFIG.get('risk_reward_ratio', 1.33)
+            
+            stop_loss_distance = current_price * (percentage / 100)
+            take_profit_distance = stop_loss_distance * rr_ratio
+
+        # --- 2. CALCULATE FINAL SL/TP PRICES ---
         if direction == 'long':
             stop_loss = current_price - stop_loss_distance
+            take_profit = current_price + take_profit_distance
         else:  # short
             stop_loss = current_price + stop_loss_distance
-
-        # --- 2. CALCULATE DYNAMIC TAKE PROFIT ---
-        take_profit = None
-        lookback_period = 20
-        if len(df) >= lookback_period and atr > 0:
-            lookback_df = df.tail(lookback_period)
-            atr_offset = 0.3 * atr
-
-            if direction == 'long':
-                swing_high = lookback_df['high'].max()
-                dynamic_tp = swing_high - atr_offset
-                # Use dynamic TP only if it's actually profitable
-                if dynamic_tp > current_price:
-                    take_profit = dynamic_tp
-            else:  # short
-                swing_low = lookback_df['low'].min()
-                dynamic_tp = swing_low + atr_offset
-                # Use dynamic TP only if it's actually profitable
-                if dynamic_tp < current_price:
-                    take_profit = dynamic_tp
-        
-        # --- 3. FALLBACK TO FIXED RISK/REWARD RATIO ---
-        if take_profit is None:
-            if direction == 'long':
-                take_profit = current_price + (stop_loss_distance * rr_ratio)
-            else: # short
-                take_profit = current_price - (stop_loss_distance * rr_ratio)
+            take_profit = current_price - take_profit_distance
             
         return {'stop_loss': stop_loss, 'take_profit': take_profit}
     
@@ -130,20 +115,51 @@ class RiskManager:
         """
         Validates if a trade should be executed based on the rules
         from the STRATEGIES dictionary in config.py.
+        This now includes a dynamic ATR-based threshold check.
         """
         rules = STRATEGIES.get(strategy_name)
         if not rules:
-            return False # Don't trade if strategy doesn't exist
+            print(f"   -  RiskManager: No rules found for strategy '{strategy_name}'.")
+            return False
 
         confidence = armor_get(prediction, 'confidence', 0)
         pct_change = armor_get(prediction, 'pct_change', 0)
         direction = armor_get(prediction, 'direction', 'hold')
+        current_price = armor_get(prediction, 'current_price', 0)
+        atr = armor_get(prediction, 'atr', 0)
+        atr_multiplier = rules.get('atr_threshold_multiplier')
 
+        # 1. Confidence Check (applies to all strategies)
         if confidence < rules['min_confidence']:
+            print(f"   - RiskManager: Confidence ({confidence:.2f}) is below threshold ({rules['min_confidence']}).")
             return False
-        if direction == 'long' and pct_change < rules['long_threshold']:
+
+        # 2. Direction Check
+        if direction == 'hold':
+            print("   - RiskManager: Signal is 'hold'.")
             return False
-        if direction == 'short' and pct_change > -rules['short_threshold']:
-            return False
+
+        # 3. Dynamic ATR Threshold Check (Primary Logic)
+        if atr_multiplier and atr > 0 and current_price > 0:
+            required_move_abs = atr * atr_multiplier
+            predicted_move_abs = abs(current_price * (pct_change / 100))
             
+            print(f"   - RiskManager (ATR Check): Required Move: ${required_move_abs:.4f}, Predicted Move: ${predicted_move_abs:.4f}")
+
+            if predicted_move_abs < required_move_abs:
+                print(f"   - RiskManager: Predicted move does not meet ATR-based threshold for '{strategy_name}'.")
+                return False
+        
+        # 4. Static Percentage Threshold Check (Fallback Logic)
+        else:
+            print("   - RiskManager (Static Check): Using fallback percentage thresholds.")
+            if direction == 'long' and pct_change < rules['long_threshold']:
+                print(f"   - RiskManager: Predicted change ({pct_change:.2f}%) is below long threshold ({rules['long_threshold']}%).")
+                return False
+            if direction == 'short' and pct_change > -rules['short_threshold']:
+                print(f"   - RiskManager: Predicted change ({pct_change:.2f}%) is above short threshold ({-rules['short_threshold']}%).")
+                return False
+            
+        # If all checks pass
+        print(f"   - RiskManager: Signal for {direction.upper()} {prediction['asset']} passed all checks.")
         return True

@@ -190,10 +190,10 @@ class DataMaster:
         if df.empty:
             return df
             
-        # Make a copy to avoid modifying the original
         df = df.copy()
         
         try:
+            # --- BASE INDICATORS ---
             df['rsi'] = self._calculate_rsi(df)
             df = self._calculate_macd(df)
             df = self._calculate_bollinger_bands(df)
@@ -206,9 +206,32 @@ class DataMaster:
             df = self._calculate_stochastic(df)
             df = self._calculate_adx(df)
             df = self._calculate_volume_ma(df)
+
+            # --- ELITE NORMALIZED & DERIVATIVE FEATURES ---
+            # These features are price-independent and reveal deeper patterns.
             
-            # Only drop rows where ALL indicator columns are NaN
-            # Keep the original OHLCV data intact
+            # Replace inf/-inf with NaN before calculations
+            df.replace([np.inf, -np.inf], np.nan, inplace=True)
+            
+            # 1. Normalized Volatility
+            df['atr_norm'] = (df['atr'] / df['close']) * 100
+            
+            # 2. Normalized MACD
+            df['macd_norm'] = (df['macd'] / df['close']) * 100
+            
+            # 3. Bollinger Band Width (Volatility Indicator)
+            df['bollinger_width'] = ((df['bollinger_upper'] - df['bollinger_lower']) / df['close']) * 100
+            
+            # 4. Normalized EMA Spread (Trend Indicator)
+            df['ema_spread'] = ((df['ema_20'] - df['ema_200']) / df['close']) * 100
+            
+            # 5. Price Change Percentage (Momentum)
+            df['pct_change'] = df['close'].pct_change() * 100
+            
+            # 6. Log Return (Standard for Financial Modeling)
+            df['log_return'] = np.log(df['close'] / df['close'].shift())
+
+            # --- FINAL CLEANUP ---
             essential_cols = ['open', 'high', 'low', 'close', 'volume']
             before_count = len(df)
             df = df.dropna(subset=essential_cols, how='any')
@@ -217,23 +240,17 @@ class DataMaster:
             if before_count != after_count:
                 print(f"⚠️ Dropped {before_count - after_count} rows with missing OHLCV data")
 
-            # --- ROBUSTNESS FIX: Fill NaN values from indicators ---
-            # Forward-fill first to propagate last valid values
-            # Backward-fill to handle NaNs at the start of the series
             indicator_cols = [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
             df[indicator_cols] = df[indicator_cols].ffill().bfill()
-            
-            # As a final safety net, fill any remaining NaNs (if any) with 0
             df[indicator_cols] = df[indicator_cols].fillna(0)
             
-            print(f"✅ Cleaned NaN values from technical indicators.")
-            # ---------------------------------------------------------
-                
+            print(f"✅ Engineered elite features and cleaned NaN values.")
             return df
             
         except Exception as e:
             print(f"❌ Error in technical indicators calculation: {e}")
-            # Return original data without indicators if calculation fails
+            import traceback
+            traceback.print_exc()
             return df
 
     def _calculate_rsi(self, df, window=14):

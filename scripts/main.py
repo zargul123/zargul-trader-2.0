@@ -85,6 +85,25 @@ class ZargulTrader:
         outcome = None
         close_price = None
 
+        # --- 1. TRAILING STOP LOSS LOGIC ---
+        new_stop_loss = self.risk_manager.update_trailing_stop(
+            entry_price=position['entry_price'],
+            current_price=current_price,
+            direction=position['direction'],
+            current_stop=position['stop_loss']
+        )
+        
+        if new_stop_loss is not None and new_stop_loss != position['stop_loss']:
+            print(f"   - 📈 TRAILING STOP UPDATE for {asset}: New Stop Loss at ${new_stop_loss:,.4f}")
+            # Persist the change to the database and CSV
+            self.db.update_trade_stop_loss(position['trade_id'], new_stop_loss)
+            self.csv_logger.update_trade_stop_loss(position['trade_id'], new_stop_loss)
+            # Update the in-memory representation
+            position['stop_loss'] = new_stop_loss
+            self.open_positions.loc[self.open_positions['trade_id'] == position['trade_id'], 'stop_loss'] = new_stop_loss
+
+
+        # --- 2. CHECK FOR TP/SL HIT ---
         if position['direction'] == 'long' and current_price >= position['take_profit']:
             outcome = 'TAKE_PROFIT'
         elif position['direction'] == 'short' and current_price <= position['take_profit']:
@@ -96,6 +115,7 @@ class ZargulTrader:
             elif position['direction'] == 'short' and current_price >= position['stop_loss']:
                 outcome = 'STOP_LOSS'
 
+        # --- 3. CHECK FOR REVERSAL SIGNAL ---
         if not outcome:
             prediction = self.ai.predict(asset, df)
             if prediction:
@@ -127,7 +147,7 @@ class ZargulTrader:
 
             print("   - Getting AI predictions for all strategies...")
             predictions = {}
-            strategies_to_run = ['main', 'scalp']
+            strategies_to_run = ['main']
             if asset == 'BTC-USD':
                 strategies_to_run.append('btc-swing')
             else:

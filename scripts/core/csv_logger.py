@@ -63,6 +63,28 @@ class CsvLogger:
                 print(f"   └ ❌ CRITICAL: Failed to write trade to CSV files: {e}")
                 return False
 
+    def update_trade_stop_loss(self, trade_id, new_stop_loss):
+        """
+        Updates the stop loss for a trade in both the journal and positions CSV files.
+        """
+        with self.lock:
+            try:
+                # Update the journal file
+                journal_df = pd.read_csv(self.journal_path)
+                journal_df.loc[journal_df['trade_id'] == trade_id, 'stop_loss'] = new_stop_loss
+                journal_df.to_csv(self.journal_path, index=False, columns=JOURNAL_COLUMNS)
+
+                # Update the open positions file
+                positions_df = pd.read_csv(self.positions_path)
+                positions_df.loc[positions_df['trade_id'] == trade_id, 'stop_loss'] = new_stop_loss
+                positions_df.to_csv(self.positions_path, index=False, columns=POSITIONS_COLUMNS)
+                
+                print(f"   - 📝 CSV logs updated for trade {trade_id} with new stop loss: {new_stop_loss}")
+                return True
+            except Exception as e:
+                print(f"   - ❌ CRITICAL: Failed to update stop loss in CSV files for trade {trade_id}: {e}")
+                return False
+
     def close_trade(self, trade_id, close_price, outcome):
         """
         Updates the journal and removes a trade from open_positions.csv using pandas,

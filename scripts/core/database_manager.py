@@ -106,6 +106,26 @@ class DatabaseManager:
             self.conn.rollback()
             return False
 
+    def update_trade_stop_loss(self, trade_id, new_stop_loss):
+        """
+        Updates the stop loss for an active trade in a single, atomic transaction.
+        - Updates the 'journal' table.
+        - Updates the 'positions' table.
+        """
+        try:
+            cursor = self.conn.cursor()
+            # Update the journal
+            cursor.execute("UPDATE journal SET stop_loss = ? WHERE trade_id = ?", (new_stop_loss, trade_id))
+            # Update the active position
+            cursor.execute("UPDATE positions SET stop_loss = ? WHERE trade_id = ?", (new_stop_loss, trade_id))
+            self.conn.commit()
+            print(f"   - 💾 Database updated for trade {trade_id} with new stop loss: {new_stop_loss}")
+            return True
+        except sqlite3.Error as e:
+            print(f"❌ Database error updating stop loss for trade {trade_id}: {e}")
+            self.conn.rollback()
+            return False
+
     def close_trade(self, trade_id, close_price, outcome):
         """
         Closes an active trade in the database in a single, atomic transaction.

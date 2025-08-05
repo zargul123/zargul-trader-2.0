@@ -1,0 +1,69 @@
+[PHASE 3/3] Running SHAP analysis and generating plots...
+
+  --- Analyzing Model for: BTC-USD ---
+    - Strategy: main
+Traceback (most recent call last):
+  File "/home/runner/workspace/analyze_features.py", line 134, in <module>
+    analyze_feature_importance()
+  File "/home/runner/workspace/analyze_features.py", line 104, in analyze_feature_importance
+    shap_values = explainer.shap_values(test_data[symbol])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_deep/__init__.py", line 135, in shap_values
+    return self.explainer.shap_values(X, ranked_outputs, output_rank_order, check_additivity=check_additivity)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_deep/deep_tf.py", line 310, in shap_values
+    sample_phis = self.run(self.phi_symbolic(feature_ind), self.model_inputs, joint_input)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_deep/deep_tf.py", line 366, in run
+    return self.execute_with_overridden_gradients(anon)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_deep/deep_tf.py", line 401, in execute_with_overridden_gradients
+    out = f()
+          ^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_deep/deep_tf.py", line 359, in anon
+    final_out = out(inputs)
+                ^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/tensorflow/python/util/traceback_utils.py", line 153, in error_handler
+    raise e.with_traceback(filtered_tb) from None
+  File "/tmp/__autograph_generated_filety8okkq6.py", line 16, in tf__grad_graph
+    out = ag__.converted_call(ag__.ld(self).model, (ag__.ld(shap_rAnD),), None, fscope)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/keras/src/utils/traceback_utils.py", line 70, in error_handler
+    raise e.with_traceback(filtered_tb) from None
+    ^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_deep/deep_tf.py", line 371, in custom_grad
+    out = op_handlers[type_name](self, op, *grads) # we cut off the shap_ prefix before the lookup
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_deep/deep_tf.py", line 663, in handler
+    return linearity_with_excluded_handler(input_inds, explainer, op, *grads)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_deep/deep_tf.py", line 670, in linearity_with_excluded_handler
+    assert not explainer._variable_inputs(op)[i], str(i) + "th input to " + op.name + " cannot vary!"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_deep/deep_tf.py", line 222, in _variable_inputs
+    out[i] = t.name in self.between_tensors
+                       ^^^^^^^^^^^^^^^^^^^^
+AttributeError: in user code:
+
+    File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_deep/deep_tf.py", line 244, in grad_graph  *
+        out = self.model(shap_rAnD)
+    File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/keras/src/utils/traceback_utils.py", line 70, in error_handler  **
+        raise e.with_traceback(filtered_tb) from None
+    File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_deep/deep_tf.py", line 371, in custom_grad
+        out = op_handlers[type_name](self, op, *grads) # we cut off the shap_ prefix before the lookup
+    File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_deep/deep_tf.py", line 663, in handler
+        return linearity_with_excluded_handler(input_inds, explainer, op, *grads)
+    File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_deep/deep_tf.py", line 670, in linearity_with_excluded_handler
+        assert not explainer._variable_inputs(op)[i], str(i) + "th input to " + op.name + " cannot vary!"
+    File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_deep/deep_tf.py", line 222, in _variable_inputs
+        out[i] = t.name in self.between_tensors
+
+    AttributeError: Exception encountered when calling layer 'forward_lstm' (type LSTM).
+    
+    'TFDeep' object has no attribute 'between_tensors'
+    
+    Call arguments received by layer 'forward_lstm' (type LSTM):
+      • inputs=tf.Tensor(shape=(200, 41, 64), dtype=float32)
+      • mask=None
+      • training=False
+      • initial_state=None

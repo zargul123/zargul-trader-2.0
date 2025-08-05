@@ -11,6 +11,7 @@ import os
 STRATEGIES = {
     'main': {
         'timeframe': '1h',
+        'atr_threshold_multiplier': 1.5, # Trade if predicted move > 1.5 * ATR
         'long_threshold': 2.5,       # Aim for 2.5% up moves
         'short_threshold': 2.5,      # Aim for 2.5% down moves
         'min_confidence': 0.90,      # AI must be 90% sure
@@ -20,6 +21,7 @@ STRATEGIES = {
     },
     'swing': {
         'timeframe': '4h',
+        'atr_threshold_multiplier': 1.5, # Trade if predicted move > 1.5 * ATR
         'long_threshold': 1.2,       # Lowered threshold for more swing opportunities
         'short_threshold': 1.2,      # Lowered threshold for more swing opportunities
         'min_confidence': 0.85,      # Increased confidence for higher quality trades
@@ -29,6 +31,7 @@ STRATEGIES = {
     },
     'btc-swing': {
         'timeframe': '4h',
+        'atr_threshold_multiplier': 1.0, # BTC is volatile, require less of a multiplier
         'long_threshold': 2.0,       # Bigger target for BTC swings
         'short_threshold': 2.0,      # Bigger target for BTC swings
         'min_confidence': 0.90,      # Stricter confidence for BTC
@@ -38,6 +41,7 @@ STRATEGIES = {
     },
     'scalp': {
         'timeframe': '15m',
+        'atr_threshold_multiplier': 1.0, # Scalping is about small, quick moves
         'long_threshold': 999,       # Impossible threshold - effectively disables scalping
         'short_threshold': 999,      # Impossible threshold - effectively disables scalping
         'min_confidence': 0.99,      # Nearly impossible confidence requirement
@@ -60,10 +64,11 @@ RISK_PER_TRADE = 0.02  # Risk 2% of (pretend) capital on any single trade
 
 # General Risk Configuration
 RISK_CONFIG = {
-    'risk_reward_ratio': 2.0,  # Aim for 2:1 risk-reward
+    'risk_reward_ratio': 1.33, # Fallback R/R, derived from 2.0 / 1.5
+    'tp_atr_multiplier': 2.0,    # New: Take Profit is 2.0 * ATR
     'stop_loss': {
         'type': 'atr',               # 'atr' or 'percentage'
-        'atr_multiplier': 2.0,       # Multiplier for ATR-based stops
+        'atr_multiplier': 1.5,       # Stop Loss is 1.5 * ATR
         'percentage': 1.5            # Fallback percentage if ATR fails
     },
     'max_daily_drawdown': 0.10, # Max 10% loss in a day
@@ -97,7 +102,7 @@ TRAINING_CONFIG = {
     'epochs': 100,                  # Max training rounds
     'batch_size': 32,               # How many data samples to process at once
     'early_stop_patience': 10,      # Stop training if no improvement after 10 epochs
-    'training_days': 365            # Use 1 year of historical data for training
+    'training_days': 1095           # Use 3 years of historical data for training
 }
 
 
@@ -121,9 +126,13 @@ TWELVEDATA_MAPPING = {
 
 # Technical indicators to be calculated and fed to the AI
 TECHNICAL_INDICATORS = [
+    # --- Classic Indicators ---
     'rsi', 'macd', 'macd_signal', 'bollinger_upper', 'bollinger_lower', 'obv',
     'vol_spike', 'cmf', 'vwap', 'ema_20', 'ema_50', 'ema_200', 
-    'atr', 'stoch_k', 'stoch_d', 'adx', 'volume_ma'
+    'atr', 'stoch_k', 'stoch_d', 'adx', 'volume_ma',
+    # --- Elite Engineered Features (Normalized & Derivative) ---
+    'atr_norm', 'macd_norm', 'bollinger_width', 'ema_spread', 
+    'pct_change', 'log_return'
 ]
 
 # Suppress excessive TensorFlow logging
