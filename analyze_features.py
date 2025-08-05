@@ -98,7 +98,7 @@ def analyze_feature_importance():
             model = ai_analyst.models[symbol][strategy_name]
             
             # SHAP requires a summary of the data to generate explanations
-            explainer = shap.DeepExplainer(model, background_data[symbol])
+            explainer = shap.GradientExplainer(model, background_data[symbol])
             
             # Calculate SHAP values for our test data
             shap_values = explainer.shap_values(test_data[symbol])
