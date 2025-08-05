@@ -97,8 +97,12 @@ def analyze_feature_importance():
             print(f"    - Strategy: {strategy_name}")
             model = ai_analyst.models[symbol][strategy_name]
             
+            # Create a wrapper function for the model's prediction
+            def f(x):
+                return model.predict(x)
+
             # SHAP requires a summary of the data to generate explanations
-            explainer = shap.DeepExplainer(model, background_data[symbol])
+            explainer = shap.KernelExplainer(f, background_data[symbol])
             
             # Calculate SHAP values for our test data
             shap_values = explainer.shap_values(test_data[symbol])
