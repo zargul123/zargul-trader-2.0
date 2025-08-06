@@ -98,11 +98,21 @@ def analyze_feature_importance():
             model = ai_analyst.models[symbol][strategy_name]
             
             # To solve the SHAP incompatibility, we explicitly wrap the model to ensure
-            # SHAP sees a single input and a single output.
-            from tensorflow.keras.models import Model
-            explainer_model = Model(inputs=model.inputs, outputs=model.outputs)
+            # SHAP sees a single input tensor, not a list/tuple.
+            import tensorflow as tf
+            
+            # Serve SHAP only the "steak" (the primary output tensor)
+            if isinstance(model.output, (list, tuple)):
+                # Create a new model that explicitly selects the first output
+                explainer_model = tf.keras.Model(
+                    inputs=model.inputs,
+                    outputs=model.outputs[0]
+                )
+            else:
+                # The model already has a single output
+                explainer_model = model
 
-            # SHAP requires a summary of the data to generate explanations
+            # Now, create the explainer with the sanitized model
             explainer = shap.DeepExplainer(explainer_model, background_data[symbol])
             
             # Calculate SHAP values for our test data
