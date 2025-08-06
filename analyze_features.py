@@ -101,19 +101,23 @@ def analyze_feature_importance():
             # to ensure all layers are fully initialized before passing to SHAP.
             model.predict(background_data[symbol][:1], verbose=0)
 
-            # To solve SHAP/TensorFlow compatibility issues, we create a new, sanitized
-            # model that explicitly unwraps the single output tensor from the model's
-            # '.outputs' list, which is what SHAP's DeepExplainer expects.
-            import tensorflow as tf
-            explainer_model = tf.keras.Model(
-                inputs=model.inputs,
-                outputs=model.outputs[0]  # Select the first (and only) output tensor
-            )
+            # To solve deep SHAP/TensorFlow compatibility issues, especially with complex
+            # model outputs (like nested tuples from LSTMs), we must find the *actual*
+            # primary output tensor and pass it directly to the explainer.
 
-            # Now, create the explainer by passing the model's inputs and outputs as a tuple.
-            # This is a more robust method that avoids SHAP's internal model parsing issues.
-            # We provide the model's inputs and the *single* output tensor it expects.
-            explainer = shap.DeepExplainer((explainer_model.inputs, explainer_model.outputs[0]), background_data[symbol])
+            def get_first_tensor(output):
+                """Recursively digs through nested outputs to find the first real tensor."""
+                if isinstance(output, (list, tuple)):
+                    return get_first_tensor(output[0])
+                return output
+
+            primary_output_tensor = get_first_tensor(model.output)
+
+            # Create the explainer with the model's inputs and the raw, unwrapped tensor.
+            explainer = shap.DeepExplainer(
+                (model.inputs, primary_output_tensor),
+                background_data[symbol]
+            )
             
             # Calculate SHAP values for our test data
             shap_values = explainer.shap_values(test_data[symbol])
