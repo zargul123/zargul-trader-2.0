@@ -112,7 +112,8 @@ def analyze_feature_importance():
 
             # Now, create the explainer by passing the model's inputs and outputs as a tuple.
             # This is a more robust method that avoids SHAP's internal model parsing issues.
-            explainer = shap.DeepExplainer((explainer_model.inputs, explainer_model.outputs), background_data[symbol])
+            # We provide the model's inputs and the *single* output tensor it expects.
+            explainer = shap.DeepExplainer((explainer_model.inputs, explainer_model.outputs[0]), background_data[symbol])
             
             # Calculate SHAP values for our test data
             shap_values = explainer.shap_values(test_data[symbol])
