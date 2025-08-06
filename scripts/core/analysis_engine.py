@@ -54,7 +54,7 @@ class AIAnalyst:
                 strategies_for_symbol.append('swing')
             
             for strategy_name in strategies_for_symbol:
-                model_path = f'trained_models/{symbol}_{strategy_name}_model.h5' # Use legacy .h5 format
+                model_path = f'trained_models/{symbol}_{strategy_name}_model.keras'
                 scaler_path = f'trained_models/{symbol}_{strategy_name}_scaler.joblib'
                 calibrator_path = f'trained_models/{symbol}_{strategy_name}_calibrator.joblib'
                 
@@ -117,13 +117,13 @@ class AIAnalyst:
             model = self._create_advanced_model((X_train.shape[1], X_train.shape[2]), symbol)
             es = EarlyStopping(monitor='val_loss', patience=TRAINING_CONFIG['early_stop_patience'], restore_best_weights=True)
             
-            model_path = f'trained_models/{symbol}_{strategy_name}_model.h5' # Use legacy .h5 format
+            model_path = f'trained_models/{symbol}_{strategy_name}_model.keras' # Use .keras format
             scaler_path = f'trained_models/{symbol}_{strategy_name}_scaler.joblib'
             calibrator_path = f'trained_models/{symbol}_{strategy_name}_calibrator.joblib'
             
-            # The EarlyStopping callback with restore_best_weights=True handles finding the best model.
-            # We no longer need ModelCheckpoint.
-            model.fit(X_train, y_train, epochs=TRAINING_CONFIG['epochs'], batch_size=TRAINING_CONFIG['batch_size'], validation_data=(X_val, y_val), callbacks=[es], verbose=1)
+            checkpoint = ModelCheckpoint(model_path, save_best_only=True, monitor='val_mae', mode='min')
+
+            model.fit(X_train, y_train, epochs=TRAINING_CONFIG['epochs'], batch_size=TRAINING_CONFIG['batch_size'], validation_data=(X_val, y_val), callbacks=[es, checkpoint], verbose=1)
 
             # --- PLATT SCALING CALIBRATOR TRAINING ---
             print(f"   - Training confidence calibrator for {symbol} ({strategy_name})...")
@@ -140,8 +140,7 @@ class AIAnalyst:
             print("   - ✅ Calibrator trained.")
 
             # --- SAVE ALL COMPONENTS ---
-            # Manually save the model in the legacy .h5 format for SHAP compatibility.
-            model.save(model_path, save_format='h5')
+            # No need to save the model again as ModelCheckpoint already saved the best version
             dump(scaler, scaler_path)
             dump(calibrator, calibrator_path)
             
