@@ -101,21 +101,23 @@ def analyze_feature_importance():
             # to ensure all layers are fully initialized before passing to SHAP.
             model.predict(background_data[symbol][:1], verbose=0)
 
-            # To solve deep SHAP/TensorFlow compatibility issues, especially with complex
-            # model outputs (like nested tuples from LSTMs), we must find the *actual*
-            # primary output tensor and pass it directly to the explainer.
-
+            # To solve deep SHAP/TensorFlow compatibility issues, we use a robust,
+            # recursive function to find the primary output tensor, even if it's nested.
             def get_first_tensor(output):
-                """Recursively digs through nested outputs to find the first real tensor."""
-                if isinstance(output, (list, tuple)):
-                    return get_first_tensor(output[0])
-                return output
+                """Recursively extracts the first actual tensor from nested outputs."""
+                if hasattr(output, 'op') and output.op.type == 'Identity':
+                    return output.op.inputs[0]  # Bypass Identity layers
+                elif isinstance(output, (tuple, list)):
+                    return get_first_tensor(output[0])  # Unpack first element
+                else:
+                    return output  # Return raw tensor
 
-            primary_output_tensor = get_first_tensor(model.output)
+            # Use model.outputs (PLURAL) as the framework suggests.
+            primary_tensor = get_first_tensor(model.outputs)
 
-            # Create the explainer with the model's inputs and the raw, unwrapped tensor.
+            # Pass the inputs and the single, raw output tensor directly to SHAP.
             explainer = shap.DeepExplainer(
-                (model.inputs, primary_output_tensor),
+                (model.inputs, primary_tensor),
                 background_data[symbol]
             )
             
