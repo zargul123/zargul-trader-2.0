@@ -1,0 +1,47 @@
+ok somebody suggested this solution to I will replace the entire if/else block we added previously with a more direct and correct piece of code
+  that uses model.outputs[0].
+
+
+  I will replace this block:
+
+
+    1             # To solve the SHAP incompatibility, we explicitly wrap the model to ensure
+    2             # SHAP sees a single input tensor, not a list/tuple.
+    3             import tensorflow as tf
+    4 
+    5             # Serve SHAP only the "steak" (the primary output tensor)
+    6             if isinstance(model.output, (list, tuple)):
+    7                 # Create a new model that explicitly selects the first output
+    8                 explainer_model = tf.keras.Model(
+    9                     inputs=model.inputs,
+   10                     outputs=model.outputs[0]
+   11                 )
+   12             else:
+   13                 # The model already has a single output
+   14                 explainer_model = model
+   15 
+   16             # Now, create the explainer with the sanitized model
+   17             explainer = shap.DeepExplainer(explainer_model, background_data[symbol])
+
+  with this final, correct version:
+
+
+    1             model = ai_analyst.models[symbol][strategy_name]
+    2 
+    3             # To solve SHAP/TensorFlow compatibility issues, we create a new, sanitized
+    4             # model that explicitly unwraps the single output tensor from the model's
+    5             # '.outputs' list, which is what SHAP's DeepExplainer expects.
+    6             import tensorflow as tf
+    7             explainer_model = tf.keras.Model(
+    8                 inputs=model.inputs,
+    9                 outputs=model.outputs[0]  # Select the first (and only) output tensor
+   10             )
+   11 
+   12             # Now, create the explainer with the sanitized model
+   13             explainer = shap.DeepExplainer(explainer_model, background_data[symbol])
+
+  This is the definitive fix. It is safe, isolated to this script, and correctly handles how Keras models are
+  loaded and interpreted.
+
+
+  what do you say?

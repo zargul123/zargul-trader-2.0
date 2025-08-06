@@ -96,21 +96,19 @@ def analyze_feature_importance():
         for strategy_name in ai_analyst.models[symbol]:
             print(f"    - Strategy: {strategy_name}")
             model = ai_analyst.models[symbol][strategy_name]
-            
-            # To solve the SHAP incompatibility, we explicitly wrap the model to ensure
-            # SHAP sees a single input tensor, not a list/tuple.
+
+            # "Wake up" the model by running a single prediction. This is a robust way
+            # to ensure all layers are fully initialized before passing to SHAP.
+            model.predict(background_data[symbol][:1], verbose=0)
+
+            # To solve SHAP/TensorFlow compatibility issues, we create a new, sanitized
+            # model that explicitly unwraps the single output tensor from the model's
+            # '.outputs' list, which is what SHAP's DeepExplainer expects.
             import tensorflow as tf
-            
-            # Serve SHAP only the "steak" (the primary output tensor)
-            if isinstance(model.output, (list, tuple)):
-                # Create a new model that explicitly selects the first output
-                explainer_model = tf.keras.Model(
-                    inputs=model.inputs,
-                    outputs=model.outputs[0]
-                )
-            else:
-                # The model already has a single output
-                explainer_model = model
+            explainer_model = tf.keras.Model(
+                inputs=model.inputs,
+                outputs=model.outputs[0]  # Select the first (and only) output tensor
+            )
 
             # Now, create the explainer with the sanitized model
             explainer = shap.DeepExplainer(explainer_model, background_data[symbol])
