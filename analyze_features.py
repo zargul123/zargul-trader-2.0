@@ -97,8 +97,13 @@ def analyze_feature_importance():
             print(f"    - Strategy: {strategy_name}")
             model = ai_analyst.models[symbol][strategy_name]
             
+            # To solve the SHAP incompatibility, we explicitly wrap the model to ensure
+            # SHAP sees a single input and a single output.
+            from tensorflow.keras.models import Model
+            explainer_model = Model(inputs=model.inputs, outputs=model.outputs)
+
             # SHAP requires a summary of the data to generate explanations
-            explainer = shap.DeepExplainer(model, background_data[symbol])
+            explainer = shap.DeepExplainer(explainer_model, background_data[symbol])
             
             # Calculate SHAP values for our test data
             shap_values = explainer.shap_values(test_data[symbol])
