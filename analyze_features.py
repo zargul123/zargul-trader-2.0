@@ -1,5 +1,3 @@
-
-
 import os
 import sys
 import shap
@@ -48,6 +46,7 @@ def analyze_feature_importance():
     data_master = DataMaster()
     background_data = {}
     test_data = {}
+    features_dict = {}
 
     for symbol in ASSETS:
         print(f"  - Fetching and preparing data for {symbol}...")
@@ -64,6 +63,7 @@ def analyze_feature_importance():
 
         # Prepare data exactly as the AI would for training
         features = ['open', 'high', 'low', 'close', 'volume'] + [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
+        features_dict[symbol] = features
         df_features = df[features].astype('float32')
         
         # Use the already-fitted scaler from the AIAnalyst
@@ -93,50 +93,52 @@ def analyze_feature_importance():
             
         print(f"\n  --- Analyzing Model for: {symbol} ---")
         
-        for strategy_name in ai_analyst.models[symbol]:
+        strategy_name = 'main'
+        if symbol in ai_analyst.models and strategy_name in ai_analyst.models[symbol]:
             print(f"    - Strategy: {strategy_name}")
             model = ai_analyst.models[symbol][strategy_name]
-
-            # Define a wrapper function for the model's prediction
-            # This is required for KernelExplainer, as it treats the model as a black box.
-            def f(X):
-                # The model expects input of shape (n_samples, sequence_length, n_features)
-                # KernelExplainer provides a 2D array (n_samples, sequence_length * n_features)
-                # We need to reshape it back to the model's expected 3D shape.
-                n_features = background_data[symbol].shape[2]
-                X_reshaped = X.reshape(-1, background_data[symbol].shape[1], n_features)
-                return model.predict(X_reshaped, verbose=0)
-
-            # Use KernelExplainer
-            # It's model-agnostic and more robust than DeepExplainer.
-            # We use a sample of the background data for summarization.
-            explainer = shap.KernelExplainer(f, shap.sample(background_data[symbol], 10))
             
-            # Calculate SHAP values for our test data
-            # Note: KernelExplainer can be slower than DeepExplainer.
-            shap_values = explainer.shap_values(test_data[symbol])
-
-            # The output of shap_values is a list (one for each model output).
-            # We are interested in the primary output, which is the predicted price (output 0).
-            # We also need to average the SHAP values over the sequence length.
-            shap_values_avg = np.abs(shap_values[0]).mean(axis=1)
-
-            # Create a DataFrame for easier plotting
-            feature_names = ['open', 'high', 'low', 'close', 'volume'] + [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
-            shap_df = pd.DataFrame(shap_values_avg, columns=feature_names)
-
-            # --- Generate and Save Plot ---
-            plt.figure(figsize=(12, 8))
-            shap.summary_plot(shap_df.values, feature_names=feature_names, plot_type="bar", show=False)
-            plt.title(f'SHAP Feature Importance for {symbol} ({strategy_name.upper()})')
-            plt.xlabel("Average SHAP Value (Impact on model output)")
-            plt.tight_layout()
+            # Get parameters needed for reshaping inside the wrapper
+            sequence_length = STRATEGIES[strategy_name]['sequence_length']
+            features = features_dict[symbol]
             
-            plot_path = f"feature_analysis/{symbol}_{strategy_name}_feature_importance.png"
-            plt.savefig(plot_path)
-            plt.close() # Close the plot to free up memory
+            def model_predict(x):
+                """Wrapper function that reshapes input and returns predictions"""
+                x_reshaped = x.reshape((x.shape[0], sequence_length, len(features)))
+                preds = model.predict(x_reshaped, verbose=0)
+                if isinstance(preds, (tuple, list)):
+                    return preds[0]
+                return preds
+
+            background_flat = background_data[symbol].reshape(background_data[symbol].shape[0], -1)
             
-            print(f"    ✅ Saved feature importance plot to: {plot_path}")
+            print("    - Creating KernelExplainer...")
+            explainer = shap.KernelExplainer(model_predict, background_flat)
+
+            test_flat = test_data[symbol].reshape(test_data[symbol].shape[0], -1)
+
+            print(f"    - Calculating SHAP values for {len(test_flat)} samples...")
+            shap_values = explainer.shap_values(test_flat)
+
+            shap_values_3d = shap_values.reshape((test_data[symbol].shape[0], sequence_length, len(features)))
+            shap_values_avg = np.abs(shap_values_3d).mean(axis=1)
+
+            if len(features) == shap_values_avg.shape[1]:
+                shap_df = pd.DataFrame(shap_values_avg, columns=features)
+
+                plt.figure(figsize=(12, 8))
+                shap.summary_plot(shap_df.values, feature_names=features, plot_type="bar", show=False)
+                plt.title(f'SHAP Feature Importance for {symbol} ({strategy_name.upper()})')
+                plt.xlabel("Average SHAP Value (Impact on model output)")
+                plt.tight_layout()
+                
+                plot_path = f"feature_analysis/{symbol}_{strategy_name}_feature_importance.png"
+                plt.savefig(plot_path)
+                plt.close()
+                
+                print(f"    ✅ Saved feature importance plot to: {plot_path}")
+            else:
+                print(f"    ❌ Error: Mismatch between feature names ({len(features)}) and SHAP values ({shap_values_avg.shape[1]}).")
 
     print("\n" + "="*80)
     print("✅ ANALYSIS COMPLETE")
@@ -145,4 +147,3 @@ def analyze_feature_importance():
 
 if __name__ == "__main__":
     analyze_feature_importance()
-
