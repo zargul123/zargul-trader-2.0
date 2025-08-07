@@ -101,8 +101,9 @@ def analyze_feature_importance():
             sequence_length = STRATEGIES[strategy_name]['sequence_length']
             features = features_dict[symbol]
             
-            test_samples = min(5, len(test_data[symbol]))
-            background_samples = min(10, len(background_data[symbol]))
+            # Reduced samples for PermutationExplainer (it's more computationally intensive)
+            test_samples = min(3, len(test_data[symbol]))
+            background_samples = min(5, len(background_data[symbol]))
 
             background_flat = background_data[symbol][:background_samples].reshape(background_samples, -1)
             test_flat = test_data[symbol][:test_samples].reshape(test_samples, -1)
@@ -112,22 +113,24 @@ def analyze_feature_importance():
                 preds = model.predict(x_reshaped, verbose=0)
                 if isinstance(preds, tuple): return preds[0]
                 if isinstance(preds, list): return preds[0]
+                if len(preds.shape) > 2: return preds[:, -1, :]
                 return preds
 
             print("    - Creating PermutationExplainer...")
-            explainer = shap.PermutationExplainer(model_predict, background_flat, max_evals=500)
+            explainer = shap.PermutationExplainer(model_predict, background_flat, max_evals=200)
 
             print(f"    - Memory usage before SHAP: {psutil.virtual_memory().percent}%")
             print(f"    - Calculating SHAP values for {test_samples} samples...")
             
             shap_values_list = []
             for i in tqdm(range(test_samples), desc=f"Explaining {symbol}"):
-                if psutil.virtual_memory().percent > 85:
+                if psutil.virtual_memory().percent > 80:
                     print(f"\n⚠️ High memory usage ({psutil.virtual_memory().percent}%) detected! Aborting SHAP for {symbol}.")
                     break
                 
-                explanation = explainer(test_flat[i:i+1])
-                shap_values_list.append(explanation.values)
+                # PermutationExplainer.shap_values() returns raw values, not an explanation object
+                sv = explainer.shap_values(test_flat[i:i+1])
+                shap_values_list.append(sv)
                 gc.collect()
 
             if not shap_values_list:
