@@ -1,3 +1,4 @@
+
 import os
 import sys
 import shap
@@ -7,6 +8,7 @@ import matplotlib.pyplot as plt
 import warnings
 import psutil
 import gc
+import time
 from tqdm import tqdm
 
 # --- Setup Project Environment ---
@@ -48,8 +50,7 @@ def analyze_feature_importance():
     test_data = {}
     features_dict = {}
     
-    # For this test, we will only run for BTC-USD
-    assets_to_run = ["BTC-USD"]
+    assets_to_run = ["BTC-USD"] # Run for a single asset first for verification
 
     for symbol in assets_to_run:
         print(f"  - Fetching and preparing data for {symbol}...")
@@ -101,9 +102,9 @@ def analyze_feature_importance():
             sequence_length = STRATEGIES[strategy_name]['sequence_length']
             features = features_dict[symbol]
             
-            # Reduced samples for PermutationExplainer (it's more computationally intensive)
-            test_samples = min(3, len(test_data[symbol]))
-            background_samples = min(5, len(background_data[symbol]))
+            # Increased sample sizes as PermutationExplainer can handle it
+            background_samples = min(10, len(background_data[symbol]))
+            test_samples = min(5, len(test_data[symbol]))
 
             background_flat = background_data[symbol][:background_samples].reshape(background_samples, -1)
             test_flat = test_data[symbol][:test_samples].reshape(test_samples, -1)
@@ -113,24 +114,30 @@ def analyze_feature_importance():
                 preds = model.predict(x_reshaped, verbose=0)
                 if isinstance(preds, tuple): return preds[0]
                 if isinstance(preds, list): return preds[0]
-                if len(preds.shape) > 2: return preds[:, -1, :]
                 return preds
 
             print("    - Creating PermutationExplainer...")
-            explainer = shap.PermutationExplainer(model_predict, background_flat, max_evals=200)
+            explainer = shap.PermutationExplainer(model_predict, background_flat, max_evals=500)
 
             print(f"    - Memory usage before SHAP: {psutil.virtual_memory().percent}%")
             print(f"    - Calculating SHAP values for {test_samples} samples...")
             
             shap_values_list = []
+            start_time = time.time()
             for i in tqdm(range(test_samples), desc=f"Explaining {symbol}"):
-                if psutil.virtual_memory().percent > 80:
-                    print(f"\n⚠️ High memory usage ({psutil.virtual_memory().percent}%) detected! Aborting SHAP for {symbol}.")
+                if psutil.virtual_memory().percent > 85:
+                    print(f"\n⚠️ High memory usage ({psutil.virtual_memory().percent}%) detected! Aborting.")
                     break
                 
-                # PermutationExplainer.shap_values() returns raw values, not an explanation object
-                sv = explainer.shap_values(test_flat[i:i+1])
-                shap_values_list.append(sv)
+                # CRITICAL FIX: Use the correct API for PermutationExplainer
+                explanation = explainer(test_flat[i:i+1])
+                shap_values_list.append(explanation.values)
+                
+                if i == 0: # After first sample, estimate time
+                   time_per_sample = time.time() - start_time
+                   est_total = time_per_sample * test_samples
+                   print(f"    - Estimated time for {symbol}: {est_total:.1f} seconds")
+
                 gc.collect()
 
             if not shap_values_list:
@@ -141,9 +148,14 @@ def analyze_feature_importance():
             shap_values_3d = shap_values.reshape((len(shap_values_list), sequence_length, len(features)))
             shap_values_avg = np.abs(shap_values_3d).mean(axis=1)
 
-            if np.isnan(shap_values_avg).any():
-                print("    ❌ Invalid SHAP values detected (NaNs). Skipping plot.")
-                continue
+            # Validation and Resilience Checks
+            if np.any(np.isnan(shap_values_avg)):
+               print("    ❌ NaN values detected in SHAP results - skipping plot.")
+               continue
+            
+            if np.sum(shap_values_avg) < 1e-5:
+               print("    ❌ Insignificant SHAP values (near-zero sum) - possible model issue. Skipping plot.")
+               continue
 
             if len(features) == shap_values_avg.shape[1]:
                 shap_df = pd.DataFrame(shap_values_avg, columns=features)
