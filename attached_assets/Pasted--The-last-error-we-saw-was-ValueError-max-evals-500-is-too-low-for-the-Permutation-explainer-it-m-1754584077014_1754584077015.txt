@@ -1,0 +1,42 @@
+ The last error we saw was: ValueError: max_evals=500 is too low for the Permutation explainer, it must be at 
+  least 2 * num_features + 1 = 2431!
+
+
+  Let's break down exactly what this means:
+
+
+   1. What are the "Features"? Our model doesn't just see ~27 features (RSI, MACD, etc.). It sees each of those
+      features at every single time step in the sequence. With a sequence length of 45, the total number of features
+      the explainer sees is 45 timesteps * ~27 indicators = ~1215 features.
+   2. What is `max_evals`? This is a "budget" we give to the PermutationExplainer for how many calculations it's
+      allowed to perform to determine the importance of a feature.
+   3. The Conflict: The PermutationExplainer has a mathematical rule: to get a statistically meaningful result, its
+      max_evals budget must be at least (2 * number_of_features) + 1. In our case, it needed at least (2 * 1215) + 1 
+      = 2431 evaluations. Our setting of max_evals=500 was far too low, so the library's safety check correctly
+      stopped the process.
+
+
+  Simply increasing max_evals to 2431 would make the script incredibly slow and would cause the memory to crash.
+  Therefore, we need a more intelligent solution.
+
+  The Solution: The PCA Method
+
+
+  The root cause is that we have too many features (~1215) for the explainer to handle efficiently. The correct
+  solution, as your friend wisely suggested as a contingency plan, is to use Principal Component Analysis (PCA).
+  This is a standard technique for exactly this kind of problem.
+
+
+  Here is how the code I have already written implements this solution:
+
+
+   1. Compress the Features: Before running the explainer, the code now uses PCA to "compress" the ~1215 features
+      down to a much more manageable 20 "principal components". These 20 components are new, synthetic features that
+      capture the most important patterns from the original 1215.
+   2. Create a PCA-Aware Wrapper: The code creates a special prediction function (pca_predict). When the explainer
+      gives this function the 20 compressed features, the function first "un-compresses" them back into the original
+      ~1215 features before passing them to the real model. This means SHAP only has to work with 20 features, but
+      the model still gets the exact data format it was trained on.
+   3. Run the Explainer on Fewer Features: Now, PermutationExplainer runs on the 20 compressed features. The
+      max_evals requirement drops to a tiny 2 * 20 + 1 = 41. This is easily met, making the analysis both fast and 
+      memory-safe.
