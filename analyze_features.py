@@ -10,6 +10,7 @@ import psutil
 import gc
 import time
 from tqdm import tqdm
+from sklearn.decomposition import PCA
 
 # --- Setup Project Environment ---
 # Add project root to Python path
@@ -29,12 +30,9 @@ def analyze_feature_importance():
     print("="*80)
     print("🔬 INITIATING FEATURE IMPORTANCE ANALYSIS 🔬")
     print("="*80)
-    print("This script will retrain the AI models on the latest data and configuration.")
-    print("It will then analyze the trained models to determine which features are most predictive.")
-    print("-" * 80)
-
+    
     # --- 1. Initialize and Train Models ---
-    print("\n[PHASE 1/3] Forcing model retraining with new data and features...")
+    print(f"\n[PHASE 1/3] Forcing model retraining for all assets...")
     try:
         ai_analyst = AIAnalyst(train_all=True)
         print("✅ Model training complete.")
@@ -49,10 +47,8 @@ def analyze_feature_importance():
     background_data = {}
     test_data = {}
     features_dict = {}
-    
-    assets_to_run = ["BTC-USD"] # Run for a single asset first for verification
 
-    for symbol in assets_to_run:
+    for symbol in ASSETS:
         print(f"  - Fetching and preparing data for {symbol}...")
         strategy_name = 'main'
         timeframe = STRATEGIES[strategy_name]['timeframe']
@@ -84,60 +80,49 @@ def analyze_feature_importance():
     print("\n[PHASE 3/3] Running SHAP analysis and generating plots...")
     os.makedirs('feature_analysis', exist_ok=True)
 
-    for symbol in assets_to_run:
+    for symbol in ASSETS:
         if symbol not in background_data:
             continue
-        
-        model, explainer, shap_values = None, None, None
         
         try:
             print(f"\n  --- Analyzing Model for: {symbol} ---")
             
             strategy_name = 'main'
             if not (symbol in ai_analyst.models and strategy_name in ai_analyst.models[symbol]):
-                print(f"    - No model found for {symbol} with strategy '{strategy_name}'. Skipping.")
+                print(f"    - No model found for {symbol}. Skipping.")
                 continue
 
             model = ai_analyst.models[symbol][strategy_name]
             sequence_length = STRATEGIES[strategy_name]['sequence_length']
             features = features_dict[symbol]
             
-            # Increased sample sizes as PermutationExplainer can handle it
-            background_samples = min(10, len(background_data[symbol]))
             test_samples = min(5, len(test_data[symbol]))
+            background_samples = min(10, len(background_data[symbol]))
 
             background_flat = background_data[symbol][:background_samples].reshape(background_samples, -1)
             test_flat = test_data[symbol][:test_samples].reshape(test_samples, -1)
 
-            def model_predict(x):
-                x_reshaped = x.reshape((x.shape[0], sequence_length, len(features)))
+            # --- PCA FALLBACK IMPLEMENTATION ---
+            print("    - Using PCA to compress features for SHAP analysis.")
+            pca = PCA(n_components=20)
+            background_pca = pca.fit_transform(background_flat)
+            test_pca = pca.transform(test_flat)
+
+            def pca_predict(x_pca):
+                x_flat = pca.inverse_transform(x_pca)
+                x_reshaped = x_flat.reshape(-1, sequence_length, len(features))
                 preds = model.predict(x_reshaped, verbose=0)
-                if isinstance(preds, tuple): return preds[0]
-                if isinstance(preds, list): return preds[0]
-                return preds
+                return preds[0] if isinstance(preds, (tuple, list)) else preds
 
-            print("    - Creating PermutationExplainer...")
-            explainer = shap.PermutationExplainer(model_predict, background_flat, max_evals=500)
+            print("    - Creating PermutationExplainer on PCA-compressed data...")
+            explainer = shap.PermutationExplainer(pca_predict, background_pca, max_evals=2*20+1)
 
-            print(f"    - Memory usage before SHAP: {psutil.virtual_memory().percent}%")
             print(f"    - Calculating SHAP values for {test_samples} samples...")
             
             shap_values_list = []
-            start_time = time.time()
             for i in tqdm(range(test_samples), desc=f"Explaining {symbol}"):
-                if psutil.virtual_memory().percent > 85:
-                    print(f"\n⚠️ High memory usage ({psutil.virtual_memory().percent}%) detected! Aborting.")
-                    break
-                
-                # CRITICAL FIX: Use the correct API for PermutationExplainer
-                explanation = explainer(test_flat[i:i+1])
+                explanation = explainer(test_pca[i:i+1])
                 shap_values_list.append(explanation.values)
-                
-                if i == 0: # After first sample, estimate time
-                   time_per_sample = time.time() - start_time
-                   est_total = time_per_sample * test_samples
-                   print(f"    - Estimated time for {symbol}: {est_total:.1f} seconds")
-
                 gc.collect()
 
             if not shap_values_list:
@@ -145,33 +130,21 @@ def analyze_feature_importance():
                 continue
 
             shap_values = np.vstack(shap_values_list)
-            shap_values_3d = shap_values.reshape((len(shap_values_list), sequence_length, len(features)))
-            shap_values_avg = np.abs(shap_values_3d).mean(axis=1)
-
-            # Validation and Resilience Checks
-            if np.any(np.isnan(shap_values_avg)):
-               print("    ❌ NaN values detected in SHAP results - skipping plot.")
-               continue
             
-            if np.sum(shap_values_avg) < 1e-5:
-               print("    ❌ Insignificant SHAP values (near-zero sum) - possible model issue. Skipping plot.")
-               continue
+            pc_feature_names = [f'PC_{i+1}' for i in range(shap_values.shape[1])]
+            shap_df = pd.DataFrame(shap_values, columns=pc_feature_names)
 
-            if len(features) == shap_values_avg.shape[1]:
-                shap_df = pd.DataFrame(shap_values_avg, columns=features)
-                plt.figure(figsize=(12, 8))
-                shap.summary_plot(shap_df.values, feature_names=features, plot_type="bar", show=False)
-                plt.title(f'SHAP Feature Importance for {symbol} ({strategy_name.upper()})')
-                plt.xlabel("Average SHAP Value (Impact on model output)")
-                plt.tight_layout()
-                
-                plot_path = f"feature_analysis/{symbol}_{strategy_name}_feature_importance.png"
-                plt.savefig(plot_path)
-                plt.close()
-                
-                print(f"    ✅ Saved feature importance plot to: {plot_path}")
-            else:
-                print(f"    ❌ Error: Mismatch between feature names and SHAP values. Skipping plot.")
+            plt.figure(figsize=(12, 8))
+            shap.summary_plot(shap_df.values, feature_names=pc_feature_names, plot_type="bar", show=False)
+            plt.title(f'SHAP PCA Feature Importance for {symbol} ({strategy_name.upper()})')
+            plt.xlabel("Average SHAP Value (Impact on model output)")
+            plt.tight_layout()
+            
+            plot_path = f"feature_analysis/{symbol}_{strategy_name}_pca_feature_importance.png"
+            plt.savefig(plot_path)
+            plt.close()
+            
+            print(f"    ✅ Saved PCA feature importance plot to: {plot_path}")
         
         except Exception as e:
             print(f"❌ An unexpected error occurred while analyzing {symbol}: {e}")
@@ -181,7 +154,7 @@ def analyze_feature_importance():
         finally:
             del model, explainer, shap_values
             gc.collect()
-            print(f"    - Cleanup complete for {symbol}. Memory usage: {psutil.virtual_memory().percent}%")
+            print(f"    - Cleanup complete for {symbol}.")
 
     print("\n" + "="*80)
     print("✅ ANALYSIS COMPLETE")

@@ -1,0 +1,31 @@
+[PHASE 3/3] Running SHAP analysis and generating plots...
+
+  --- Analyzing Model for: BTC-USD ---
+    - Using PCA to compress features for SHAP analysis.
+❌ An unexpected error occurred while analyzing BTC-USD: n_components=20 must be between 0 and min(n_samples, n_features)=10 with svd_solver='full'
+Traceback (most recent call last):
+  File "/home/runner/workspace/analyze_features.py", line 108, in analyze_feature_importance
+    background_pca = pca.fit_transform(background_flat)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/utils/_set_output.py", line 316, in wrapped
+    data_to_wrap = f(self, X, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/base.py", line 1365, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/decomposition/_pca.py", line 466, in fit_transform
+    U, S, _, X, x_is_centered, xp = self._fit(X)
+                                    ^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/decomposition/_pca.py", line 540, in _fit
+    return self._fit_full(X, n_components, xp, is_array_api_compliant)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/decomposition/_pca.py", line 554, in _fit_full
+    raise ValueError(
+ValueError: n_components=20 must be between 0 and min(n_samples, n_features)=10 with svd_solver='full'
+Traceback (most recent call last):
+  File "/home/runner/workspace/analyze_features.py", line 165, in <module>
+    analyze_feature_importance()
+  File "/home/runner/workspace/analyze_features.py", line 155, in analyze_feature_importance
+    del model, explainer, shap_values
+               ^^^^^^^^^
+UnboundLocalError: cannot access local variable 'explainer' where it is not associated with a value
