@@ -91,8 +91,7 @@ def analyze_feature_importance():
         if symbol not in background_data:
             continue
             
-        print(f"
-  --- Analyzing Model for: {symbol} ---")
+        print(f"\n  --- Analyzing Model for: {symbol} ---")
         
         for strategy_name in ai_analyst.models[symbol]:
             print(f"    - Strategy: {strategy_name}")
