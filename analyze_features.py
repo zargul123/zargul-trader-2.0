@@ -120,7 +120,11 @@ def analyze_feature_importance():
                 x_flat = pca.inverse_transform(x_pca)
                 x_reshaped = x_flat.reshape(-1, sequence_length, len(features))
                 preds = model.predict(x_reshaped, verbose=0)
-                return preds[0] if isinstance(preds, (tuple, list)) else preds
+                # Ensure the output is always 2D for the explainer
+                final_preds = preds[0] if isinstance(preds, (tuple, list)) else preds
+                if len(final_preds.shape) == 3:
+                    return final_preds.mean(axis=1) # Average over the sequence length
+                return final_preds
 
             print("    - Creating PermutationExplainer on PCA-compressed data...")
             explainer = shap.PermutationExplainer(pca_predict, background_pca, max_evals=2*n_components+1)
