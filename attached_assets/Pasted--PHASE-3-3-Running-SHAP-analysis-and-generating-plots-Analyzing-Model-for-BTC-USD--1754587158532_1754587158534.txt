@@ -1,0 +1,68 @@
+[PHASE 3/3] Running SHAP analysis and generating plots...
+
+  --- Analyzing Model for: BTC-USD ---
+    - Using PCA to compress features for SHAP analysis.
+    - Compressing features to 9 components.
+    - Creating PermutationExplainer on PCA-compressed data...
+    - Calculating SHAP values for 5 samples...
+PermutationExplainer explainer: 2it [00:10, 10.44s/it]                                                                         
+Explaining BTC-USD: 100%|████████████████████████████████████████████████████████████████████████| 5/5 [00:13<00:00,  2.63s/it]
+❌ An unexpected error occurred while analyzing BTC-USD: Must pass 2-d input. shape=(5, 9, 3)
+Traceback (most recent call last):
+  File "/home/runner/workspace/analyze_features.py", line 143, in analyze_feature_importance
+    shap_df = pd.DataFrame(shap_values, columns=pc_feature_names)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/core/frame.py", line 827, in __init__
+    mgr = ndarray_to_mgr(
+          ^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/core/internals/construction.py", line 314, in ndarray_to_mgr
+    values = _ensure_2d(values)
+             ^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/core/internals/construction.py", line 592, in _ensure_2d
+    raise ValueError(f"Must pass 2-d input. shape={values.shape}")
+ValueError: Must pass 2-d input. shape=(5, 9, 3)
+    - Cleanup complete for BTC-USD.
+
+  --- Analyzing Model for: ETH-USD ---
+    - Using PCA to compress features for SHAP analysis.
+    - Compressing features to 9 components.
+    - Creating PermutationExplainer on PCA-compressed data...
+    - Calculating SHAP values for 5 samples...
+Explaining ETH-USD: 100%|████████████████████████████████████████████████████████████████████████| 5/5 [00:03<00:00,  1.61it/s]
+❌ An unexpected error occurred while analyzing ETH-USD: Must pass 2-d input. shape=(5, 9, 3)
+Traceback (most recent call last):
+  File "/home/runner/workspace/analyze_features.py", line 143, in analyze_feature_importance
+    shap_df = pd.DataFrame(shap_values, columns=pc_feature_names)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/core/frame.py", line 827, in __init__
+    mgr = ndarray_to_mgr(
+          ^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/core/internals/construction.py", line 314, in ndarray_to_mgr
+    values = _ensure_2d(values)
+             ^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/core/internals/construction.py", line 592, in _ensure_2d
+    raise ValueError(f"Must pass 2-d input. shape={values.shape}")
+ValueError: Must pass 2-d input. shape=(5, 9, 3)
+    - Cleanup complete for ETH-USD.
+
+  --- Analyzing Model for: SOL-USD ---
+    - Using PCA to compress features for SHAP analysis.
+    - Compressing features to 9 components.
+    - Creating PermutationExplainer on PCA-compressed data...
+    - Calculating SHAP values for 5 samples...
+Explaining SOL-USD: 100%|████████████████████████████████████████████████████████████████████████| 5/5 [00:02<00:00,  1.74it/s]
+❌ An unexpected error occurred while analyzing SOL-USD: Must pass 2-d input. shape=(5, 9, 3)
+Traceback (most recent call last):
+  File "/home/runner/workspace/analyze_features.py", line 143, in analyze_feature_importance
+    shap_df = pd.DataFrame(shap_values, columns=pc_feature_names)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/core/frame.py", line 827, in __init__
+    mgr = ndarray_to_mgr(
+          ^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/core/internals/construction.py", line 314, in ndarray_to_mgr
+    values = _ensure_2d(values)
+             ^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/core/internals/construction.py", line 592, in _ensure_2d
+    raise ValueError(f"Must pass 2-d input. shape={values.shape}")
+ValueError: Must pass 2-d input. shape=(5, 9, 3)
+    - Cleanup complete for SOL-USD.

@@ -104,7 +104,15 @@ def analyze_feature_importance():
 
             # --- PCA FALLBACK IMPLEMENTATION ---
             print("    - Using PCA to compress features for SHAP analysis.")
-            pca = PCA(n_components=20)
+            
+            # Dynamically set n_components to be less than the number of samples
+            n_components = min(20, background_flat.shape[0] - 1)
+            if n_components < 1:
+                print("    - Not enough background samples to perform PCA. Skipping SHAP analysis.")
+                continue
+
+            print(f"    - Compressing features to {n_components} components.")
+            pca = PCA(n_components=n_components)
             background_pca = pca.fit_transform(background_flat)
             test_pca = pca.transform(test_flat)
 
@@ -115,7 +123,7 @@ def analyze_feature_importance():
                 return preds[0] if isinstance(preds, (tuple, list)) else preds
 
             print("    - Creating PermutationExplainer on PCA-compressed data...")
-            explainer = shap.PermutationExplainer(pca_predict, background_pca, max_evals=2*20+1)
+            explainer = shap.PermutationExplainer(pca_predict, background_pca, max_evals=2*n_components+1)
 
             print(f"    - Calculating SHAP values for {test_samples} samples...")
             
