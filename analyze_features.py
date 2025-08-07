@@ -1,4 +1,3 @@
-
 import os
 import sys
 import shap
@@ -85,10 +84,7 @@ def analyze_feature_importance():
         if symbol not in background_data:
             continue
         
-        # Initialize variables for this loop iteration
-        model = None
-        explainer = None
-        shap_values = None
+        model, explainer, shap_values = None, None, None
         
         try:
             print(f"\n  --- Analyzing Model for: {symbol} ---")
@@ -99,23 +95,31 @@ def analyze_feature_importance():
                 continue
 
             model = ai_analyst.models[symbol][strategy_name]
-            
             sequence_length = STRATEGIES[strategy_name]['sequence_length']
             features = features_dict[symbol]
             
-            background_samples = 10
-            test_samples = 5
-            
-            if len(background_data[symbol]) < background_samples: background_samples = len(background_data[symbol])
-            if len(test_data[symbol]) < test_samples: test_samples = len(test_data[symbol])
+            # Dynamically set sample sizes based on available memory
+            mem = psutil.virtual_memory()
+            if mem.available > 2 * 1024**3:  # More than 2GB free
+                background_samples = min(15, len(background_data[symbol]))
+                test_samples = min(7, len(test_data[symbol]))
+                print(f"    - High memory mode: using {background_samples} background and {test_samples} test samples.")
+            else:
+                background_samples = min(10, len(background_data[symbol]))
+                test_samples = min(5, len(test_data[symbol]))
+                print(f"    - Low memory mode: using {background_samples} background and {test_samples} test samples.")
 
             background_flat = background_data[symbol][:background_samples].reshape(background_samples, -1)
             test_flat = test_data[symbol][:test_samples].reshape(test_samples, -1)
 
+            # Enhanced model prediction wrapper
             def model_predict(x):
                 x_reshaped = x.reshape((x.shape[0], sequence_length, len(features)))
                 preds = model.predict(x_reshaped, verbose=0)
-                return preds[0] if isinstance(preds, (tuple, list)) else preds
+                if isinstance(preds, tuple): return preds[0]
+                if isinstance(preds, list): return preds[0]
+                if len(preds.shape) > 2: return preds[:, -1, :]
+                return preds
 
             print("    - Creating optimized KernelExplainer...")
             explainer = shap.KernelExplainer(model_predict, background_flat, link="identity")
@@ -126,7 +130,7 @@ def analyze_feature_importance():
             shap_values_list = []
             high_memory_abort = False
             for i in tqdm(range(test_samples), desc=f"Explaining {symbol}"):
-                if psutil.virtual_memory().percent > 90:
+                if psutil.virtual_memory().percent > 85: # Safer 85% threshold
                     print(f"\n⚠️ High memory usage ({psutil.virtual_memory().percent}%) detected! Aborting SHAP for {symbol}.")
                     high_memory_abort = True
                     break
@@ -134,8 +138,7 @@ def analyze_feature_importance():
                 sv = explainer.shap_values(test_flat[i:i+1], nsamples=50)
                 shap_values_list.append(sv)
                 
-                if i % 2 == 0:
-                    gc.collect()
+                if i % 2 == 0: gc.collect()
             
             if high_memory_abort or not shap_values_list:
                 print("    - No SHAP values were calculated or memory limit reached. Skipping plot for this asset.")
@@ -144,6 +147,16 @@ def analyze_feature_importance():
             shap_values = np.vstack(shap_values_list)
             shap_values_3d = shap_values.reshape((len(shap_values_list), sequence_length, len(features)))
             shap_values_avg = np.abs(shap_values_3d).mean(axis=1)
+
+            # SHAP Value Validation
+            if np.isnan(shap_values_avg).any():
+                print("    ❌ Invalid SHAP values detected (NaNs). Skipping plot.")
+                continue
+            
+            # Plotting Resilience Check
+            if shap_values_avg.size == 0:
+                print("    ❌ Empty SHAP values array. Skipping plot.")
+                continue
 
             if len(features) == shap_values_avg.shape[1]:
                 shap_df = pd.DataFrame(shap_values_avg, columns=features)
@@ -163,14 +176,16 @@ def analyze_feature_importance():
         
         except Exception as e:
             print(f"❌ An unexpected error occurred while analyzing {symbol}: {e}")
-            print("Continuing to the next asset...")
+            import traceback
+            traceback.print_exc()
         
         finally:
-            # Aggressive cleanup at the end of each asset's analysis
+            # Aggressive cleanup
             del model, explainer, shap_values
+            if 'shap_values_avg' in locals(): del shap_values_avg
+            if 'shap_df' in locals(): del shap_df
             gc.collect()
             print(f"    - Cleanup complete for {symbol}. Memory usage: {psutil.virtual_memory().percent}%")
-
 
     print("\n" + "="*80)
     print("✅ ANALYSIS COMPLETE")
