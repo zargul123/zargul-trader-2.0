@@ -1,0 +1,118 @@
+
+[PHASE 3/3] Running SHAP analysis and generating plots...
+
+  --- Analyzing Model for: BTC-USD ---
+    - High memory mode: using 15 background and 7 test samples.
+    - Creating optimized KernelExplainer...
+    - Memory usage before SHAP: 68.8%
+    - Calculating SHAP values for 7 samples...
+  0%|                                                                                               | 0/1 [00:00<?, ?it/s]
+Explaining BTC-USD:   0%|                                                                           | 0/7 [00:00<?, ?it/s]
+❌ An unexpected error occurred while analyzing BTC-USD: You are using LassoLarsIC in the case where the number of samples is smaller than the number of features. In this setting, getting a good estimate for the variance of the noise is not possible. Provide an estimate of the noise variance in the constructor.
+Traceback (most recent call last):
+  File "/home/runner/workspace/analyze_features.py", line 138, in analyze_feature_importance
+    sv = explainer.shap_values(test_flat[i:i+1], nsamples=50)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_kernel.py", line 271, in shap_values
+    explanations.append(self.explain(data, **kwargs))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_kernel.py", line 482, in explain
+    vphi, vphi_var = self.solve(self.nsamples / self.max_samples, d)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_kernel.py", line 671, in solve
+    nonzero_inds = np.nonzero(model.fit(mask_aug, eyAdj_aug)[1].coef_)[0]
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/base.py", line 1365, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/pipeline.py", line 663, in fit
+    self._final_estimator.fit(Xt, y, **last_step_params["fit"])
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/base.py", line 1365, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/linear_model/_least_angle.py", line 2294, in fit
+    self.noise_variance_ = self._estimate_noise_variance(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/linear_model/_least_angle.py", line 2334, in _estimate_noise_variance
+    raise ValueError(
+ValueError: You are using LassoLarsIC in the case where the number of samples is smaller than the number of features. In this setting, getting a good estimate for the variance of the noise is not possible. Provide an estimate of the noise variance in the constructor.
+    - Cleanup complete for BTC-USD. Memory usage: 68.8%
+
+  --- Analyzing Model for: ETH-USD ---
+    - High memory mode: using 15 background and 7 test samples.
+    - Creating optimized KernelExplainer...
+    - Memory usage before SHAP: 68.8%
+    - Calculating SHAP values for 7 samples...
+  0%|                                                                                               | 0/1 [00:01<?, ?it/s]
+Explaining ETH-USD:   0%|                                                                           | 0/7 [00:01<?, ?it/s]
+❌ An unexpected error occurred while analyzing ETH-USD: You are using LassoLarsIC in the case where the number of samples is smaller than the number of features. In this setting, getting a good estimate for the variance of the noise is not possible. Provide an estimate of the noise variance in the constructor.
+Traceback (most recent call last):
+  File "/home/runner/workspace/analyze_features.py", line 138, in analyze_feature_importance
+    sv = explainer.shap_values(test_flat[i:i+1], nsamples=50)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_kernel.py", line 271, in shap_values
+    explanations.append(self.explain(data, **kwargs))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_kernel.py", line 482, in explain
+    vphi, vphi_var = self.solve(self.nsamples / self.max_samples, d)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_kernel.py", line 671, in solve
+    nonzero_inds = np.nonzero(model.fit(mask_aug, eyAdj_aug)[1].coef_)[0]
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/base.py", line 1365, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/pipeline.py", line 663, in fit
+    self._final_estimator.fit(Xt, y, **last_step_params["fit"])
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/base.py", line 1365, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/linear_model/_least_angle.py", line 2294, in fit
+    self.noise_variance_ = self._estimate_noise_variance(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/linear_model/_least_angle.py", line 2334, in _estimate_noise_variance
+    raise ValueError(
+ValueError: You are using LassoLarsIC in the case where the number of samples is smaller than the number of features. In this setting, getting a good estimate for the variance of the noise is not possible. Provide an estimate of the noise variance in the constructor.
+    - Cleanup complete for ETH-USD. Memory usage: 68.8%
+
+  --- Analyzing Model for: SOL-USD ---
+    - High memory mode: using 15 background and 7 test samples.
+    - Creating optimized KernelExplainer...
+    - Memory usage before SHAP: 68.8%
+    - Calculating SHAP values for 7 samples...
+  0%|                                                                                               | 0/1 [00:00<?, ?it/s]
+Explaining SOL-USD:   0%|                                                                           | 0/7 [00:00<?, ?it/s]
+❌ An unexpected error occurred while analyzing SOL-USD: You are using LassoLarsIC in the case where the number of samples is smaller than the number of features. In this setting, getting a good estimate for the variance of the noise is not possible. Provide an estimate of the noise variance in the constructor.
+Traceback (most recent call last):
+  File "/home/runner/workspace/analyze_features.py", line 138, in analyze_feature_importance
+    sv = explainer.shap_values(test_flat[i:i+1], nsamples=50)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_kernel.py", line 271, in shap_values
+    explanations.append(self.explain(data, **kwargs))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_kernel.py", line 482, in explain
+    vphi, vphi_var = self.solve(self.nsamples / self.max_samples, d)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_kernel.py", line 671, in solve
+    nonzero_inds = np.nonzero(model.fit(mask_aug, eyAdj_aug)[1].coef_)[0]
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/base.py", line 1365, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/pipeline.py", line 663, in fit
+    self._final_estimator.fit(Xt, y, **last_step_params["fit"])
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/base.py", line 1365, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/linear_model/_least_angle.py", line 2294, in fit
+    self.noise_variance_ = self._estimate_noise_variance(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/sklearn/linear_model/_least_angle.py", line 2334, in _estimate_noise_variance
+    raise ValueError(
+ValueError: You are using LassoLarsIC in the case where the number of samples is smaller than the number of features. In this setting, getting a good estimate for the variance of the noise is not possible. Provide an estimate of the noise variance in the constructor.
+    - Cleanup complete for SOL-USD. Memory usage: 68.8%
+
+================================================================================
+✅ ANALYSIS COMPLETE
+================================================================================
+Review the generated .png files in the 'feature_analysis' directory.
