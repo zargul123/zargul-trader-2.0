@@ -1,3 +1,4 @@
+
 import os
 import sys
 import shap
@@ -98,9 +99,8 @@ def analyze_feature_importance():
             sequence_length = STRATEGIES[strategy_name]['sequence_length']
             features = features_dict[symbol]
             
-            # Dynamically set sample sizes based on available memory
             mem = psutil.virtual_memory()
-            if mem.available > 2 * 1024**3:  # More than 2GB free
+            if mem.available > 2 * 1024**3:
                 background_samples = min(15, len(background_data[symbol]))
                 test_samples = min(7, len(test_data[symbol]))
                 print(f"    - High memory mode: using {background_samples} background and {test_samples} test samples.")
@@ -112,7 +112,6 @@ def analyze_feature_importance():
             background_flat = background_data[symbol][:background_samples].reshape(background_samples, -1)
             test_flat = test_data[symbol][:test_samples].reshape(test_samples, -1)
 
-            # Enhanced model prediction wrapper
             def model_predict(x):
                 x_reshaped = x.reshape((x.shape[0], sequence_length, len(features)))
                 preds = model.predict(x_reshaped, verbose=0)
@@ -122,7 +121,7 @@ def analyze_feature_importance():
                 return preds
 
             print("    - Creating optimized KernelExplainer...")
-            explainer = shap.KernelExplainer(model_predict, background_flat, link="identity")
+            explainer = shap.KernelExplainer(model_predict, background_flat, link="identity", feature_selection="none")
 
             print(f"    - Memory usage before SHAP: {psutil.virtual_memory().percent}%")
             print(f"    - Calculating SHAP values for {test_samples} samples...")
@@ -130,7 +129,7 @@ def analyze_feature_importance():
             shap_values_list = []
             high_memory_abort = False
             for i in tqdm(range(test_samples), desc=f"Explaining {symbol}"):
-                if psutil.virtual_memory().percent > 85: # Safer 85% threshold
+                if psutil.virtual_memory().percent > 85:
                     print(f"\n⚠️ High memory usage ({psutil.virtual_memory().percent}%) detected! Aborting SHAP for {symbol}.")
                     high_memory_abort = True
                     break
@@ -148,12 +147,10 @@ def analyze_feature_importance():
             shap_values_3d = shap_values.reshape((len(shap_values_list), sequence_length, len(features)))
             shap_values_avg = np.abs(shap_values_3d).mean(axis=1)
 
-            # SHAP Value Validation
             if np.isnan(shap_values_avg).any():
                 print("    ❌ Invalid SHAP values detected (NaNs). Skipping plot.")
                 continue
             
-            # Plotting Resilience Check
             if shap_values_avg.size == 0:
                 print("    ❌ Empty SHAP values array. Skipping plot.")
                 continue
@@ -180,7 +177,6 @@ def analyze_feature_importance():
             traceback.print_exc()
         
         finally:
-            # Aggressive cleanup
             del model, explainer, shap_values
             if 'shap_values_avg' in locals(): del shap_values_avg
             if 'shap_df' in locals(): del shap_df
