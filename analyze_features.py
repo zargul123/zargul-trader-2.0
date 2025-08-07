@@ -91,46 +91,39 @@ def analyze_feature_importance():
         if symbol not in background_data:
             continue
             
-        print(f"\n  --- Analyzing Model for: {symbol} ---")
+        print(f"
+  --- Analyzing Model for: {symbol} ---")
         
         for strategy_name in ai_analyst.models[symbol]:
             print(f"    - Strategy: {strategy_name}")
             model = ai_analyst.models[symbol][strategy_name]
 
-            # "Wake up" the model by running a single prediction. This is a robust way
-            # to ensure all layers are fully initialized before passing to SHAP.
-            model.predict(background_data[symbol][:1], verbose=0)
+            # Define a wrapper function for the model's prediction
+            # This is required for KernelExplainer, as it treats the model as a black box.
+            def f(X):
+                # The model expects input of shape (n_samples, sequence_length, n_features)
+                # KernelExplainer provides a 2D array (n_samples, sequence_length * n_features)
+                # We need to reshape it back to the model's expected 3D shape.
+                n_features = background_data[symbol].shape[2]
+                X_reshaped = X.reshape(-1, background_data[symbol].shape[1], n_features)
+                return model.predict(X_reshaped, verbose=0)
 
-            # To solve deep SHAP/TensorFlow compatibility issues, we use a robust,
-            # recursive function to find the primary output tensor, even if it's nested.
-            def get_first_tensor(output):
-                """Recursively extracts the first actual tensor from nested outputs."""
-                if hasattr(output, 'op') and output.op.type == 'Identity':
-                    return output.op.inputs[0]  # Bypass Identity layers
-                elif isinstance(output, (tuple, list)):
-                    return get_first_tensor(output[0])  # Unpack first element
-                else:
-                    return output  # Return raw tensor
-
-            # Use model.outputs (PLURAL) as the framework suggests.
-            primary_tensor = get_first_tensor(model.outputs)
-
-            # Pass the inputs and the single, raw output tensor directly to SHAP.
-            explainer = shap.DeepExplainer(
-                (model.inputs, primary_tensor),
-                background_data[symbol]
-            )
+            # Use KernelExplainer
+            # It's model-agnostic and more robust than DeepExplainer.
+            # We use a sample of the background data for summarization.
+            explainer = shap.KernelExplainer(f, shap.sample(background_data[symbol], 10))
             
             # Calculate SHAP values for our test data
+            # Note: KernelExplainer can be slower than DeepExplainer.
             shap_values = explainer.shap_values(test_data[symbol])
 
             # The output of shap_values is a list (one for each model output).
-            # We are interested in the primary output, which is the predicted price.
+            # We are interested in the primary output, which is the predicted price (output 0).
             # We also need to average the SHAP values over the sequence length.
             shap_values_avg = np.abs(shap_values[0]).mean(axis=1)
 
             # Create a DataFrame for easier plotting
-            feature_names = ['open', 'high', 'low', 'close', 'volume'] + TECHNICAL_INDICATORS
+            feature_names = ['open', 'high', 'low', 'close', 'volume'] + [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
             shap_df = pd.DataFrame(shap_values_avg, columns=feature_names)
 
             # --- Generate and Save Plot ---
