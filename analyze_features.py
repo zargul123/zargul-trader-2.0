@@ -137,11 +137,8 @@ def analyze_feature_importance():
                 if i % 2 == 0:
                     gc.collect()
             
-            if high_memory_abort:
-                continue # Skip to the next asset
-
-            if not shap_values_list:
-                print("    - No SHAP values were calculated. Skipping plot.")
+            if high_memory_abort or not shap_values_list:
+                print("    - No SHAP values were calculated or memory limit reached. Skipping plot for this asset.")
                 continue
 
             shap_values = np.vstack(shap_values_list)
