@@ -1,0 +1,41 @@
+[PHASE 3/3] Running SHAP analysis and generating plots...
+
+  --- Analyzing Model for: BTC-USD ---
+    - Using PCA to compress features for SHAP analysis.
+    - Compressing features to 9 components.
+    - Creating PermutationExplainer on PCA-compressed data...
+    - Calculating SHAP values for 5 samples...
+Explaining BTC-USD:   0%|                                                                                | 0/5 [00:08<?, ?it/s]
+❌ An unexpected error occurred while analyzing BTC-USD: The model produced 516 output rows when given 172 input rows! Check the implementation of the model you provided for errors.
+Traceback (most recent call last):
+  File "/home/runner/workspace/analyze_features.py", line 140, in analyze_feature_importance
+    explanation = explainer(test_pca[i:i+1])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_permutation.py", line 64, in __call__
+    return super().__call__(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_permutation.py", line 77, in __call__
+    return super().__call__(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_explainer.py", line 266, in __call__
+    row_result = self.explain_row(
+                 ^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/explainers/_permutation.py", line 133, in explain_row
+    outputs = fm(masks, zero_index=0, batch_size=batch_size)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/utils/_masked_model.py", line 60, in __call__
+    return self._delta_masking_call(masks, zero_index=zero_index, batch_size=batch_size)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/utils/_masked_model.py", line 207, in _delta_masking_call
+    _assert_output_input_match(subset_masked_inputs, outputs)
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shap/utils/_masked_model.py", line 269, in _assert_output_input_match
+    assert len(outputs) == len(inputs[0]), \
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: The model produced 516 output rows when given 172 input rows! Check the implementation of the model you provided for errors.
+Traceback (most recent call last):
+  File "/home/runner/workspace/analyze_features.py", line 181, in <module>
+    analyze_feature_importance()
+  File "/home/runner/workspace/analyze_features.py", line 171, in analyze_feature_importance
+    del model, explainer, shap_values
+                          ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'shap_values' where it is not associated with a value
