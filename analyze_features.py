@@ -117,18 +117,26 @@ def analyze_feature_importance():
             test_pca = pca.transform(test_flat)
 
             def pca_predict(x_pca):
+                # Step 1: Inverse PCA transform to get flattened features
                 x_flat = pca.inverse_transform(x_pca)
-                x_reshaped = x_flat.reshape(-1, sequence_length, len(features))
+                
+                # Step 2: Reshape back to the model's expected 3D input shape (samples, timesteps, features)
+                # Using x_pca.shape[0] is more explicit and robust for defining the number of samples.
+                x_reshaped = x_flat.reshape(x_pca.shape[0], sequence_length, len(features))
+                
+                # Step 3: Get model predictions
                 preds = model.predict(x_reshaped, verbose=0)
                 
-                # Handle different output types from Keras models
+                # Step 4: Handle different Keras output formats (like lists)
                 if isinstance(preds, (list, tuple)):
                     final_preds = preds[0]
                 else:
                     final_preds = preds
                 
-                # CRITICAL FIX: Ensure the output is a 1D array for the SHAP explainer
-                return final_preds.flatten()
+                # Step 5: CRITICAL FIX - The model outputs predictions for multiple classes (e.g., buy/sell/hold).
+                # SHAP expects a single output value per input sample. We select the primary prediction (at index 0)
+                # for each sample to create a 1D array of shape (n_samples,), which resolves the error.
+                return final_preds[:, 0]
 
             print("    - Creating PermutationExplainer on PCA-compressed data...")
             explainer = shap.PermutationExplainer(pca_predict, background_pca, max_evals=2*n_components+1)
