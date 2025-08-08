@@ -117,26 +117,25 @@ def analyze_feature_importance():
             test_pca = pca.transform(test_flat)
 
             def pca_predict(x_pca):
-                # Step 1: Inverse PCA transform to get flattened features
+                # Step 1: Inverse PCA transform
                 x_flat = pca.inverse_transform(x_pca)
                 
-                # Step 2: Reshape back to the model's expected 3D input shape (samples, timesteps, features)
-                # Using x_pca.shape[0] is more explicit and robust for defining the number of samples.
-                x_reshaped = x_flat.reshape(x_pca.shape[0], sequence_length, len(features))
+                # Step 2: CORRECT Reshape - maintain sample dimension
+                x_reshaped = x_flat.reshape(x_flat.shape[0], sequence_length, len(features))
                 
-                # Step 3: Get model predictions
+                # Step 3: Model prediction
                 preds = model.predict(x_reshaped, verbose=0)
                 
-                # Step 4: Handle different Keras output formats (like lists)
-                if isinstance(preds, (list, tuple)):
-                    final_preds = preds[0]
+                # Step 4: Handle output types
+                if isinstance(preds, tuple):
+                    final_preds = preds[0]  # Primary output
+                elif isinstance(preds, list):
+                    final_preds = preds[0]  # First output
                 else:
                     final_preds = preds
-                
-                # Step 5: CRITICAL FIX - The model outputs predictions for multiple classes (e.g., buy/sell/hold).
-                # SHAP expects a single output value per input sample. We select the primary prediction (at index 0)
-                # for each sample to create a 1D array of shape (n_samples,), which resolves the error.
-                return final_preds[:, 0]
+                    
+                # Step 5: Flatten to 1D array
+                return final_preds.flatten()
 
             print("    - Creating PermutationExplainer on PCA-compressed data...")
             explainer = shap.PermutationExplainer(pca_predict, background_pca, max_evals=2*n_components+1)
