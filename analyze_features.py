@@ -124,20 +124,20 @@ def analyze_feature_importance():
                 x_reshaped = x_flat.reshape(x_flat.shape[0], sequence_length, len(features))
                 
                 # Step 3: Model prediction
-                # Returns a tuple, e.g., (primary_output, auxiliary_output)
+                # Returns a tuple, e.g., (primary_output, auxiliary_output) or a single tensor
                 return model.predict(x_reshaped, verbose=0)
 
             def shap_wrapper(x_pca):
                 """
-                This wrapper adapts the multi-output model for SHAP by selecting
-                a single output to explain.
+                Return a single scalar per input row (the direction logit).
+                This wrapper handles both single-tensor and multi-output (tuple/list)
+                models and ensures the output is a 1D array for SHAP.
                 """
-                # Get the full model prediction
-                preds = pca_predict(x_pca)
-                
-                # Return only the primary output's second column (e.g., 'buy' signal)
-                # This is the specific scalar value SHAP will explain.
-                return preds[0][:, 1]
+                preds = pca_predict(x_pca)          # (n_samples, 3)  OR  [ (n_samples, 3), ... ]
+                # Handle both single-tensor and tuple/list outputs
+                if isinstance(preds, (tuple, list)):
+                    preds = preds[0]                # keep the primary head
+                return preds[:, 1]                  # shape (n_samples,)
 
             print("    - Creating PermutationExplainer on PCA-compressed data...")
             explainer = shap.PermutationExplainer(shap_wrapper, background_pca, max_evals=2*n_components+1)
