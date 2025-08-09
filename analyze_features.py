@@ -120,25 +120,27 @@ def analyze_feature_importance():
                 # Step 1: Inverse PCA transform
                 x_flat = pca.inverse_transform(x_pca)
                 
-                # Step 2: CORRECT Reshape - maintain sample dimension
+                # Step 2: Reshape to the original sequence format
                 x_reshaped = x_flat.reshape(x_flat.shape[0], sequence_length, len(features))
                 
                 # Step 3: Model prediction
-                preds = model.predict(x_reshaped, verbose=0)
+                # Returns a tuple, e.g., (primary_output, auxiliary_output)
+                return model.predict(x_reshaped, verbose=0)
+
+            def shap_wrapper(x_pca):
+                """
+                This wrapper adapts the multi-output model for SHAP by selecting
+                a single output to explain.
+                """
+                # Get the full model prediction
+                preds = pca_predict(x_pca)
                 
-                # Step 4: Handle output types
-                if isinstance(preds, tuple):
-                    final_preds = preds[0]  # Primary output
-                elif isinstance(preds, list):
-                    final_preds = preds[0]  # First output
-                else:
-                    final_preds = preds
-                    
-                # Step 5: Flatten to 1D array
-                return final_preds.flatten()
+                # Return only the primary output's second column (e.g., 'buy' signal)
+                # This is the specific scalar value SHAP will explain.
+                return preds[0][:, 1]
 
             print("    - Creating PermutationExplainer on PCA-compressed data...")
-            explainer = shap.PermutationExplainer(pca_predict, background_pca, max_evals=2*n_components+1)
+            explainer = shap.PermutationExplainer(shap_wrapper, background_pca, max_evals=2*n_components+1)
 
             print(f"    - Calculating SHAP values for {test_samples} samples...")
             
