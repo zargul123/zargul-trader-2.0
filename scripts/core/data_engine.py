@@ -80,6 +80,9 @@ class DataMaster:
             df['datetime'] = pd.to_datetime(df['datetime'])
             df = df.set_index('datetime').rename(columns=str.lower)
             
+            # Remove duplicate indices that cause reindexing errors
+            df = df[~df.index.duplicated(keep='first')]
+            
             for col in ['open', 'high', 'low', 'close', 'volume']:
                 if col in df.columns:
                     df[col] = pd.to_numeric(df[col], errors='coerce')
@@ -104,6 +107,8 @@ class DataMaster:
             df = df.rename(columns=str.lower)
             if df.index.tz is not None:
                 df.index = df.index.tz_localize(None)
+            # Remove duplicate indices that cause reindexing errors
+            df = df[~df.index.duplicated(keep='first')]
         return df
 
     def _add_technical_indicators(self, df):
