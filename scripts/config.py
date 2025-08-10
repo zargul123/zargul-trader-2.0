@@ -105,6 +105,42 @@ TRAINING_CONFIG = {
     'training_days': 1095           # Use 3 years of historical data for training
 }
 
+# Asset-specific, optimized model architectures
+MODEL_HYPERPARAMS = {
+    'BTC-USD': {
+        'n_layers': 1,
+        'learning_rate': 0.009886643874520377,
+        'units_layer_0': 251,
+        'dropout_layer_0': 0.35025264979998394
+    },
+    'ETH-USD': {
+        'n_layers': 3,
+        'learning_rate': 0.009847271267492321,
+        'units_layer_0': 52,
+        'dropout_layer_0': 0.4547476109205212,
+        'units_layer_1': 36,
+        'dropout_layer_1': 0.26953065823496686,
+        'units_layer_2': 206,
+        'dropout_layer_2': 0.15479272548181033
+    },
+    'SOL-USD': { # Using ETH's optimized params as a starting point
+        'n_layers': 3,
+        'learning_rate': 0.009847271267492321,
+        'units_layer_0': 52,
+        'dropout_layer_0': 0.4547476109205212,
+        'units_layer_1': 36,
+        'dropout_layer_1': 0.26953065823496686,
+        'units_layer_2': 206,
+        'dropout_layer_2': 0.15479272548181033
+    },
+    'default': { # Fallback for any other assets
+        'n_layers': 1,
+        'learning_rate': 0.005,
+        'units_layer_0': 128,
+        'dropout_layer_0': 0.3
+    }
+}
+
 
 # ==============================================================================
 # == API & ENVIRONMENT CONFIGURATION                                          ==
@@ -124,6 +160,21 @@ TWELVEDATA_MAPPING = {
     "SOL-USD": "SOL/USD",
 }
 
+# LunarCrush API Configuration for Social Sentiment Analysis
+LUNARCRUSH_CONFIG = {
+    'api_key': os.environ.get("LUNARCRUSH_API_KEY"),
+    'api_url': 'https://api.lunarcrush.com/v2',
+    # The specific, high-value metrics we will feed to our AI
+    'metrics_to_use': [
+        'galaxy_score',
+        'alt_rank',
+        'social_volume',
+        'social_dominance',
+        'bullish_sentiment',
+        'bearish_sentiment'
+    ]
+}
+
 # Technical indicators to be calculated and fed to the AI
 TECHNICAL_INDICATORS = [
     # --- Classic Indicators ---
@@ -132,8 +183,16 @@ TECHNICAL_INDICATORS = [
     'atr', 'stoch_k', 'stoch_d', 'adx', 'volume_ma',
     # --- Elite Engineered Features (Normalized & Derivative) ---
     'atr_norm', 'macd_norm', 'bollinger_width', 'ema_spread', 
-    'pct_change', 'log_return'
-]
+    'pct_change', 'log_return', 'adx' # Ensure ADX is here
+] + [f'lc_{metric}' for metric in LUNARCRUSH_CONFIG['metrics_to_use']]
+
+# Market Regime Filter Configuration
+REGIME_CONFIG = {
+    'adx_trending_threshold': 25,       # ADX value above which the market is considered "trending"
+    'entropy_chaotic_threshold': 1.5,   # Shannon Entropy value above which the market is "chaotic"
+    'entropy_window': 50,               # Number of candles to use for entropy calculation
+    'entropy_smoothing_alpha': 0.1      # Smoothing factor for the entropy EMA (lower is smoother)
+}
 
 # Suppress excessive TensorFlow logging
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'

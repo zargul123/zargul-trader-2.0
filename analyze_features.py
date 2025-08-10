@@ -116,31 +116,29 @@ def analyze_feature_importance():
             background_pca = pca.fit_transform(background_flat)
             test_pca = pca.transform(test_flat)
 
-            def pca_predict(x_pca):
+            def shap_predictor(x_pca):
+                """
+                This single, robust function handles the entire prediction process
+                for SHAP, from inverting PCA to formatting the model's output.
+                """
                 # Step 1: Inverse PCA transform
                 x_flat = pca.inverse_transform(x_pca)
                 
                 # Step 2: Reshape to the original sequence format
                 x_reshaped = x_flat.reshape(x_flat.shape[0], sequence_length, len(features))
                 
-                # Step 3: Model prediction
-                # Returns a tuple, e.g., (primary_output, auxiliary_output) or a single tensor
-                return model.predict(x_reshaped, verbose=0)
-
-            def shap_wrapper(x_pca):
-                """
-                Return a single scalar per input row (the direction logit).
-                This wrapper handles both single-tensor and multi-output (tuple/list)
-                models and ensures the output is a 1D array for SHAP.
-                """
-                preds = pca_predict(x_pca)          # (n_samples, 3)  OR  [ (n_samples, 3), ... ]
-                # Handle both single-tensor and tuple/list outputs
+                # Step 3: Get model prediction
+                preds = model.predict(x_reshaped, verbose=0)
+                
+                # Step 4: Handle both single-tensor and tuple/list outputs
                 if isinstance(preds, (tuple, list)):
-                    preds = preds[0]                # keep the primary head
-                return preds[:, 1]                  # shape (n_samples,)
+                    preds = preds[0]  # Keep the primary prediction head
+                
+                # Step 5: Return the single scalar output SHAP requires (1D array)
+                return preds[:, 1]
 
             print("    - Creating PermutationExplainer on PCA-compressed data...")
-            explainer = shap.PermutationExplainer(shap_wrapper, background_pca, max_evals=2*n_components+1)
+            explainer = shap.PermutationExplainer(shap_predictor, background_pca, max_evals=2*n_components+1)
 
             print(f"    - Calculating SHAP values for {test_samples} samples...")
             

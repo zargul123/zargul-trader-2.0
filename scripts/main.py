@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 import sys
 import os
+# --- Force load environment variables from .env file for Replit ---
+from dotenv import load_dotenv
+load_dotenv()
+# --------------------------------------------------------------------
 import time
 import argparse
 import warnings
@@ -19,9 +23,12 @@ from scripts.core.data_monitor import DataHealthMonitor
 from scripts.core.risk_engine import RiskManager
 from scripts.core.database_manager import DatabaseManager
 from scripts.core.csv_logger import CsvLogger
+from scripts.core.regime_filter import MarketRegimeFilter # <-- Import the new filter
+from scripts.config import ASSETS, STRATEGIES, REGIME_CONFIG # <-- Import the new config
 
 def goodbye():
     sys.stdout.flush()
+
 
 atexit.register(goodbye)
 
@@ -37,6 +44,9 @@ class ZargulTrader:
         self.update_interval = 300
         self.run_once = run_once
         self.cooldown_until = {} # Cooldown tracker
+        
+        # Create a separate regime filter instance for each asset to maintain state
+        self.regime_filters = {asset: MarketRegimeFilter() for asset in ASSETS}
         
         # Load open positions from the database, which is now the single source of truth
         self._load_open_positions()
@@ -172,6 +182,31 @@ class ZargulTrader:
                 if pred:
                     print(f"\n   --- Strategy: {strategy_name.upper()} ---")
                     self._print_prediction(pred)
+
+                    # =================================================
+                    # == NEW: MARKET REGIME & ENTROPY MASTER FILTER  ==
+                    # =================================================
+                    regime_filter = self.regime_filters[asset]
+                    regime = regime_filter.get_regime(
+                        df=df_strategy,
+                        adx_threshold=REGIME_CONFIG['adx_trending_threshold'],
+                        entropy_threshold=REGIME_CONFIG['entropy_chaotic_threshold'],
+                        entropy_window=REGIME_CONFIG['entropy_window'],
+                        smoothing_alpha=REGIME_CONFIG['entropy_smoothing_alpha']
+                    )
+                    print(f"   └ 📊 Market Regime Detected: {regime.upper()}")
+
+                    # For now, we assume all our strategies are trend-following.
+                    # This is the master gatekeeper.
+                    if regime == 'Chaotic':
+                        print("   └ ❌ Regime Rejection: Market is too random and unpredictable. No trades allowed.")
+                        continue # Skip to the next prediction
+                    
+                    if regime != 'Trending':
+                        print(f"   └ ❌ Regime Rejection: The '{strategy_name}' strategy requires a trending market. No trades allowed.")
+                        continue # Skip to the next prediction
+                    # =================================================
+
                     if self.risk_manager.should_execute(pred, strategy_name):
                         print(f"   └ ✅ Signal passed initial risk checks.")
 
