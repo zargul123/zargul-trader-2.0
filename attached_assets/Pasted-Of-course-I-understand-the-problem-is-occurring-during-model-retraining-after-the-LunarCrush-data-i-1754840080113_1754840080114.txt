@@ -1,0 +1,46 @@
+Of course. I understand the problem is occurring during model retraining after the LunarCrush data integration. I
+  will resolve it.
+
+
+  Based on the system's architecture, the error is almost certainly a "shape mismatch" issue. Here is a
+  step-by-step explanation of the problem and how I will fix it.
+
+
+  The Problem: Inconsistent Data Shape
+
+
+   1. Old Models, New Data: Your existing models (the .h5 files) and their corresponding scalers (the .joblib files)
+      were trained and saved before the LunarCrush features were added. They expect a certain number of input
+      features.
+   2. The Retraining Trigger: When you run the system, the DataEngine now fetches new data that includes the extra
+      LunarCrush columns.
+   3. The Crash: This new, wider data (with more columns) is then passed to the old, pre-trained scaler for the
+      prediction step. The scaler sees that the number of incoming features doesn't match the number it was
+      originally trained on, and it raises an error. This prevents the retraining from even starting properly.
+
+
+  The Solution: Enforcing a Canonical Feature Set
+
+
+  To fix this permanently and make the system more robust, I will modify the AIAnalyst to enforce a single,
+  canonical set of features for all operations (training and prediction). This ensures the data shape is always
+  consistent.
+
+
+  Here are the precise changes I will make in scripts/core/analysis_engine.py:
+
+
+   1. Create a Helper Method: I will add a new private method called _align_df_features. This function will take any
+      incoming data DataFrame and force it into the correct shape. It will:
+       * Use the feature list from your config.py as the single source of truth.
+       * Add any missing columns (e.g., if the LunarCrush API failed) and fill them with 0.
+       * Remove any columns that are not part of the official feature list.
+       * Ensure the columns are always in the exact same order.
+
+
+   2. Update The Training Logic: I will replace the dynamic feature selection in the _train_model method with a call
+      to this new, robust helper function.
+
+
+   3. Update The Prediction Logic: I will do the same in the predict method. This guarantees that the data fed to the
+      model for predictions has the exact same structure as the data it was trained on.
