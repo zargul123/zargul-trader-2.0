@@ -121,6 +121,9 @@ class DataMaster:
         
         df = df.copy()
         
+        # --- ROBUSTNESS: Remove duplicate columns before processing ---
+        df = df.loc[:,~df.columns.duplicated()]
+        
         # Ensure 'volume' column exists before calling pandas-ta, as it's required by some indicators.
         if 'volume' not in df.columns:
             print("⚠️ 'volume' column not found in data. Creating a placeholder column of zeros.")
@@ -179,6 +182,8 @@ class DataMaster:
         df['log_return'] = np.log(df['close'] / df['close'].shift())
 
         # --- FINAL CLEANUP ---
+        # Final check to remove any duplicates that may have been created
+        df = df.loc[:,~df.columns.duplicated()]
         df.ffill(inplace=True)
         df.bfill(inplace=True)
         df.fillna(0, inplace=True)
@@ -228,6 +233,7 @@ class DataMaster:
         if days is None:
             days = TRAINING_CONFIG['training_days']
 
+        # get_data() already adds all technical indicators. No need to call it again.
         df = self.get_data(symbol, timeframe)
 
         if df is None or df.empty:
@@ -238,4 +244,4 @@ class DataMaster:
             return pd.DataFrame()
         
         df = df.last(f'{days}D')
-        return self._add_technical_indicators(df)
+        return df

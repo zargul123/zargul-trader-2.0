@@ -43,6 +43,29 @@ class AIAnalyst:
         self.data = DataMaster()
         self._initialize_models()
 
+    def _align_df_features(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Aligns the DataFrame columns to the canonical feature list from the config.
+        This ensures data passed to the scaler/model always has the exact same shape
+        by adding missing columns with 0 and ensuring a consistent order.
+        """
+        # The full, canonical list of features the model expects.
+        base_features = ['open', 'high', 'low', 'close', 'volume']
+        # TECHNICAL_INDICATORS from config now includes the 'lc_' metrics.
+        all_features = base_features + TECHNICAL_INDICATORS
+        
+        # Use dict.fromkeys to get a unique list while preserving order
+        canonical_feature_list = list(dict.fromkeys(all_features))
+        
+        # Reindex the DataFrame to match the canonical list.
+        # This adds missing columns with NaN and removes unexpected ones.
+        aligned_df = df.reindex(columns=canonical_feature_list)
+        
+        # Fill any NaN values that resulted from missing columns (e.g., API failure)
+        aligned_df.fillna(0, inplace=True)
+        
+        return aligned_df.astype('float32')
+
     def _initialize_models(self):
         print("\n🤖 Initializing AI Analyst...")
         os.makedirs('trained_models', exist_ok=True)
@@ -124,8 +147,8 @@ class AIAnalyst:
             if df is None or df.empty:
                 raise ValueError(f"Cannot train {symbol} ({strategy_name}), no data available.")
 
-            features = ['open', 'high', 'low', 'close', 'volume'] + [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
-            df_features = df[features].astype('float32')
+            # Align DF to canonical feature list to ensure consistent shape
+            df_features = self._align_df_features(df)
 
             scaler = MinMaxScaler(feature_range=(0, 1))
             scaled_data = scaler.fit_transform(df_features.values)
@@ -215,14 +238,17 @@ class AIAnalyst:
             scaler = self.scalers[symbol][strategy_name]
             calibrator = self.calibrators[symbol][strategy_name]
             
-            features = ['open', 'high', 'low', 'close', 'volume'] + [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
             sequence_length = STRATEGIES[strategy_name]['sequence_length']
 
-            last_sequence_df = df[features].tail(sequence_length).astype('float32')
+            # Align DF to canonical feature list to ensure consistent shape
+            df_aligned = self._align_df_features(df)
+            last_sequence_df = df_aligned.tail(sequence_length)
+
             if len(last_sequence_df) < sequence_length: return None
 
             scaled_data = scaler.transform(last_sequence_df.values)
-            input_data = scaled_data.reshape(1, sequence_length, len(features))
+            # Use the DataFrame's shape for robustness
+            input_data = scaled_data.reshape(1, sequence_length, last_sequence_df.shape[1])
             
             # Returns a list of two arrays: [price_targets, trade_signal]
             raw_prediction = model.predict(input_data, verbose=0)
@@ -234,7 +260,7 @@ class AIAnalyst:
             calibrated_probs = calibrator.predict_proba(trade_signal_pred.reshape(1, -1))[0]
 
             # The predicted price is the first element of the price_targets output
-            dummy_row = np.zeros((1, len(features)))
+            dummy_row = np.zeros((1, last_sequence_df.shape[1]))
             dummy_row[0, 3] = price_targets_pred[0] # Predicted take_profit level
             predicted_price = scaler.inverse_transform(dummy_row)[0, 3]
             

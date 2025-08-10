@@ -183,7 +183,7 @@ TECHNICAL_INDICATORS = [
     'atr', 'stoch_k', 'stoch_d', 'adx', 'volume_ma',
     # --- Elite Engineered Features (Normalized & Derivative) ---
     'atr_norm', 'macd_norm', 'bollinger_width', 'ema_spread', 
-    'pct_change', 'log_return', 'adx' # Ensure ADX is here
+    'pct_change', 'log_return' # Ensure ADX is here
 ] + [f'lc_{metric}' for metric in LUNARCRUSH_CONFIG['metrics_to_use']]
 
 # Market Regime Filter Configuration
