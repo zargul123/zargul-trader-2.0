@@ -163,7 +163,7 @@ TWELVEDATA_MAPPING = {
 # LunarCrush API Configuration for Social Sentiment Analysis
 LUNARCRUSH_CONFIG = {
     'api_key': os.environ.get("LUNARCRUSH_API_KEY"),
-    'api_url': 'https://api.lunarcrush.com/v2',
+    'api_url': 'https://lunarcrush.com/api4',
     # The specific, high-value metrics we will feed to our AI
     'metrics_to_use': [
         'galaxy_score',

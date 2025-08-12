@@ -27,7 +27,7 @@ from sklearn.preprocessing import StandardScaler
 # --- Global Configuration ---
 N_TRIALS = 50  # Number of optimization trials to run
 EPOCHS = 20    # Number of epochs to train each model
-ASSET_TO_OPTIMIZE = "ETH-USD" # Asset to focus on for this optimization
+ASSET_TO_OPTIMIZE = "SOL-USD" # Asset to focus on for this optimization
 STRATEGY_NAME = "main" # Strategy to optimize
 
 def create_model(trial, input_shape, n_outputs):

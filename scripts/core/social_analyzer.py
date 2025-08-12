@@ -46,9 +46,8 @@ class SocialAnalyzer:
         # The LunarCrush API typically uses the asset's symbol, not the pair (e.g., 'BTC' instead of 'BTC-USD')
         asset_symbol = symbol.split('-')[0]
         
-        endpoint = f"{self.base_url}/assets"
+        endpoint = f"{self.base_url}/public/coins/{asset_symbol}/v1"
         params = {
-            'symbol': asset_symbol,
             'data_points': 1, # We only need the latest data point
             'interval': 'day'
         }
@@ -58,9 +57,9 @@ class SocialAnalyzer:
             response.raise_for_status()
             data = response.json()
 
-            if 'data' in data and data['data']:
-                # The relevant data is in the 'timeSeries' list for the first asset
-                metrics_data = data['data'][0].get('timeSeries', [{}])[0]
+            if 'data' in data:
+                # The relevant data is now directly in the 'data' object
+                metrics_data = data['data']
                 return {key: metrics_data.get(key, 0) for key in metrics_data}
             else:
                 print(f"⚠️ LunarCrush: No data found for symbol {asset_symbol}")
