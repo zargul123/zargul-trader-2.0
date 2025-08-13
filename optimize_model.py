@@ -10,9 +10,6 @@ import gc
 # --- Setup Project Environment ---
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TensorFlow logging
-os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'  # Disable OneDNN optimizations
-os.environ['TF_DISABLE_SEGMENT_REDUCTION_OP_DETERMINISM_EXCEPTIONS'] = '1'
-os.environ['TF_DISABLE_MKL'] = '1'  # Disable Intel MKL
 warnings.filterwarnings("ignore")
 
 # TensorFlow imports must be after the environment variable is set
