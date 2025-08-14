@@ -123,15 +123,11 @@ MODEL_HYPERPARAMS = {
         'units_layer_2': 206,
         'dropout_layer_2': 0.15479272548181033
     },
-    'SOL-USD': { # Using ETH's optimized params as a starting point
-        'n_layers': 3,
-        'learning_rate': 0.009847271267492321,
-        'units_layer_0': 52,
-        'dropout_layer_0': 0.4547476109205212,
-        'units_layer_1': 36,
-        'dropout_layer_1': 0.26953065823496686,
-        'units_layer_2': 206,
-        'dropout_layer_2': 0.15479272548181033
+    'SOL-USD': {
+        'n_layers': 1,
+        'learning_rate': 0.009906324714275988,
+        'units_layer_0': 151,
+        'dropout_layer_0': 0.13198466453039642
     },
     'default': { # Fallback for any other assets
         'n_layers': 1,

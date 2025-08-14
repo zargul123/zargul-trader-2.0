@@ -1,0 +1,46 @@
+## Project Overview
+
+This project is a sophisticated, multi-strategy, multi-asset algorithmic trading bot named "Zargul Trader". It is designed to run continuously, analyzing market data, making predictions using AI models, and executing trades based on a robust risk management framework.
+
+### Core Functionality
+
+The system operates in a continuous loop, performing the following actions for each configured asset (BTC-USD, ETH-USD, SOL-USD):
+
+1.  **Data Fetching**: It retrieves market data from TwelveData, with a fallback to Yahoo Finance. It also pulls in social sentiment data from LunarCrush.
+2.  **Feature Engineering**: It calculates a wide array of technical indicators (RSI, MACD, Bollinger Bands, etc.) and combines them with the social metrics to create a feature set for the AI.
+3.  **AI Prediction**: For each asset, it uses pre-trained AI models (one for each trading strategy) to predict future price movements, direction (long/short/hold), and its confidence in the prediction.
+4.  **Regime Filtering**: It analyzes the market to classify it as "Trending," "Ranging," or "Chaotic." It uses this to filter out trades in unfavorable market conditions.
+5.  **Risk Management**: Before executing a trade, it passes the AI signal through a rigorous risk manager that checks for minimum confidence, minimum price movement (based on ATR), and other strategy-specific rules. It also calculates stop-loss and take-profit levels.
+6.  **Multi-Timeframe (MTF) Confirmation**: For the main strategy, it confirms that a signal on a lower timeframe (e.g., 1-hour) aligns with the trend on a higher timeframe (e.g., 4-hour) before executing.
+7.  **Trade Execution & Management**: If a signal passes all filters, it opens a trade, storing the state in a SQLite database and logging it to CSV files. It continuously monitors open positions for take-profit, stop-loss, or reversal signals to close the trade.
+8.  **Auto-Training**: The system includes a separate script (`auto_trainer.py`) that runs on a schedule (e.g., weekly) or on-demand (if model confidence drops) to automatically retrain all AI models on the latest data.
+
+### Key Components & File Structure
+
+-   **`scripts/main.py`**: The main entry point of the application. It initializes all components and runs the main trading loop.
+-   **`scripts/config.py`**: A critical configuration file. It defines all trading strategies, risk parameters, assets to trade, API keys, and AI model hyperparameters. This is the "single source of truth" for the system's behavior.
+-   **`scripts/core/`**: This directory contains the core logic of the trading system.
+    -   **`data_engine.py`**: Responsible for fetching, cleaning, and preparing all market and social data.
+    -   **`analysis_engine.py`**: The "AI brain." It handles model creation, training, loading, and making predictions. It uses a sophisticated model architecture (Bi-LSTM with Attention) and a confidence calibration layer (Platt Scaling).
+    -   **`risk_engine.py`**: Enforces all risk management rules defined in `config.py`. Calculates position size, stop-loss/take-profit levels, and validates trade signals.
+    -   **`regime_filter.py`**: Implements the market regime detection logic using ADX and Shannon Entropy.
+    -   **`database_manager.py`**: Manages all interactions with the SQLite database for storing and retrieving trade information, ensuring data integrity.
+    -   **`csv_logger.py`**: Provides a secondary logging mechanism to human-readable CSV files (`trading_journal.csv`, `open_positions.csv`).
+-   **`auto_trainer.py`**: A standalone script that handles the automated retraining of the AI models.
+-   **`scripts/backtest/`**: Contains the backtesting engine, allowing strategies to be tested on historical data.
+-   **`trained_models/`**: This directory stores the serialized AI models (`.h5`), data scalers (`.joblib`), and confidence calibrators (`.joblib`) for each asset and strategy.
+-   **`trading_journal.db`**: The SQLite database file, acting as the primary, persistent storage for all trade data.
+-   **`requirements.txt` / `pyproject.toml`**: Define the Python project dependencies.
+
+### How It All Connects
+
+1.  `main.py` starts the `ZargulTrader` class.
+2.  `ZargulTrader` initializes `DataMaster`, `AIAnalyst`, `RiskManager`, `DatabaseManager`, etc.
+3.  `AIAnalyst` loads or trains models based on `config.py` and the contents of the `trained_models/` directory.
+4.  The main loop in `ZargulTrader` iterates through assets defined in `config.py`.
+5.  For each asset, it calls `DataMaster` to get the latest data.
+6.  The data is passed to `AIAnalyst` which returns a prediction.
+7.  The prediction is passed to the `MarketRegimeFilter`.
+8.  If the regime is favorable, the prediction is passed to `RiskManager`.
+9.  If the `RiskManager` approves, `ZargulTrader` opens a trade using `DatabaseManager` and `CsvLogger`.
+10. The loop continues, managing open positions or looking for new ones.
