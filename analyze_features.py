@@ -157,21 +157,46 @@ def analyze_feature_importance():
                 continue
 
             shap_values = np.vstack(shap_values_list)
-            
-            pc_feature_names = [f'PC_{i+1}' for i in range(shap_values.shape[1])]
-            shap_df = pd.DataFrame(shap_values, columns=pc_feature_names)
 
-            plt.figure(figsize=(12, 8))
-            shap.summary_plot(shap_df.values, feature_names=pc_feature_names, plot_type="bar", show=False)
-            plt.title(f'SHAP PCA Feature Importance for {symbol} ({strategy_name.upper()})')
-            plt.xlabel("Average SHAP Value (Impact on model output)")
+            # --- NEW: Map PCA Importance back to Original Features ---
+            print("    - Mapping PCA SHAP values back to original features...")
+            
+            # 1. Get the absolute mean SHAP value for each Principal Component
+            abs_shap_values = np.abs(shap_values)
+            pc_importance = np.mean(abs_shap_values, axis=0)
+
+            # 2. Get the PCA component loadings (how much each feature contributes to each PC)
+            # Shape: (n_components, n_features)
+            pca_loadings = pca.components_
+
+            # 3. Calculate the weighted importance for each original feature
+            # We multiply the importance of each PC by the absolute loading of each feature in that PC
+            feature_importance = np.dot(pc_importance, np.abs(pca_loadings))
+
+            # 4. Create a readable DataFrame for plotting
+            feature_names = features_dict[symbol]
+            importance_df = pd.DataFrame({
+                'feature': feature_names,
+                'importance': feature_importance
+            }).sort_values(by='importance', ascending=False)
+
+            print(f"    - Top 5 most important features for {symbol}:")
+            print(importance_df.head(5).to_string(index=False))
+            
+            # --- PLOTTING THE NEW, INTERPRETABLE RESULTS ---
+            plt.figure(figsize=(12, 10))
+            plt.barh(importance_df['feature'], importance_df['importance'], color='skyblue')
+            plt.xlabel("Mean Absolute SHAP Value (Calculated from PCA)")
+            plt.ylabel("Feature")
+            plt.title(f'Feature Importance for {symbol} ({strategy_name.upper()})')
+            plt.gca().invert_yaxis() # Display the most important feature at the top
             plt.tight_layout()
             
-            plot_path = f"feature_analysis/{symbol}_{strategy_name}_pca_feature_importance.png"
+            plot_path = f"feature_analysis/{symbol}_{strategy_name}_feature_importance.png"
             plt.savefig(plot_path)
             plt.close()
             
-            print(f"    ✅ Saved PCA feature importance plot to: {plot_path}")
+            print(f"    ✅ Saved INTERPRETABLE feature importance plot to: {plot_path}")
         
         except Exception as e:
             print(f"❌ An unexpected error occurred while analyzing {symbol}: {e}")
