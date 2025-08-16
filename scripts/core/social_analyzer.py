@@ -31,7 +31,8 @@ class SocialAnalyzer:
     @lru_cache(maxsize=128)
     def get_social_metrics(self, symbol: str, ttl_hash=None) -> dict:
         """
-        Fetches key social metrics for a given asset symbol from the LunarCrush API.
+        Fetches key social metrics for a given asset symbol from the LunarCrush API
+        using the modern v4 endpoint.
         The ttl_hash is used to bypass the cache for time-sensitive calls.
 
         Args:
@@ -43,13 +44,13 @@ class SocialAnalyzer:
         """
         del ttl_hash # Unused, but necessary for the caching mechanism
         
-        # The LunarCrush API typically uses the asset's symbol, not the pair (e.g., 'BTC' instead of 'BTC-USD')
         asset_symbol = symbol.split('-')[0]
         
-        endpoint = f"{self.base_url}/public/coins/list/v2"
+        # --- CORRECTED V4 ENDPOINT ---
+        # The new API allows direct querying for a specific symbol's data.
+        endpoint = f"{self.base_url}/coins/{asset_symbol}"
         params = {
-            'limit': 1000, # Fetch a large list to ensure our assets are included
-            'sort': 'market_cap_rank'
+            'data': 'assets' # Requesting the 'assets' data points which include social metrics
         }
         
         try:
@@ -57,24 +58,21 @@ class SocialAnalyzer:
             response.raise_for_status()
             data = response.json()
 
-            if 'data' in data and 'coins' in data['data']:
-                # Find our specific coin in the list
-                for coin in data['data']['coins']:
-                    if coin.get('s') == asset_symbol:
-                        # Found the coin, return its metrics
-                        return {key: coin.get(key, 0) for key in coin}
-                
-                print(f"⚠️ LunarCrush: Symbol {asset_symbol} not found in the returned list.")
-                return {}
+            # The new structure is typically nested under 'data' and 'assets'
+            if 'data' in data and 'assets' in data:
+                metrics = data['data']['assets']
+                # The keys might be slightly different in v4, so we safely get them.
+                # Example: 'galaxy_score', 'alt_rank', 'social_volume_24h', etc.
+                return {key: metrics.get(key, 0) for key in metrics}
             else:
-                print(f"⚠️ LunarCrush: 'data' or 'coins' key not found in response for {asset_symbol}")
+                print(f"⚠️ LunarCrush: 'data' or 'assets' key not found in v4 response for {asset_symbol}")
                 return {}
 
         except requests.exceptions.RequestException as e:
             print(f"❌ LunarCrush API request failed for {asset_symbol}: {e}")
             return {}
         except (KeyError, IndexError) as e:
-            print(f"❌ Failed to parse LunarCrush response for {asset_symbol}: {e}")
+            print(f"❌ Failed to parse LunarCrush v4 response for {asset_symbol}: {e}")
             return {}
 
 # Helper function to bypass lru_cache for time-sensitive data
