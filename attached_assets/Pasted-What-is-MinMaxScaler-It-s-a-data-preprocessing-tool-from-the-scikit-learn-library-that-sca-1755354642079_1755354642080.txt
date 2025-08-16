@@ -1,0 +1,34 @@
+What is `MinMaxScaler`? It's a data preprocessing tool from the scikit-learn library
+      that scales all data features to be within a specific range (usually 0 to 1).
+   2. How it Works: When you first use the scaler on your training data, you .fit() it. This
+      step learns the minimum and maximum values for each feature column. It then saves this
+      information, including the number of features it was trained on (in this case, 34).
+   3. The Conflict: The analyze_features.py script loads this already fitted scaler. However,
+      when it fetches new data to analyze, that data now has only 30 feature columns. When the
+       script tries to .transform() the new data, the scaler throws a ValueError because it
+      was expecting 34 columns but received 30.
+
+  The root cause is that the feature set has changed since the scaler was last saved. The
+  addition of LunarCrush data and other potential modifications to the DataMaster have
+  altered the number of columns being produced, creating an inconsistency.
+
+  The Solution
+
+  The solution is to ensure that the data fed into the scaler in analyze_features.py has
+  the exact same structure (number and order of columns) as the data used to train it.
+
+  The AIAnalyst class already contains a helper function, _align_df_features, designed for
+  this exact purpose. We need to incorporate this same logic into analyze_features.py.
+
+  I will now read the analyze_features.py file to apply the fix.
+ ╭──────────────────────────────────╮
+ │ ✔  ReadFile analyze_features.py  │
+ ╰──────────────────────────────────╯
+✦ Okay, I've reviewed analyze_features.py. As suspected, it fetches data and then immediately
+   tries to scale it without ensuring the feature set is consistent with what the AIAnalyst
+  uses for training.
+
+  I will now apply the fix. I'll insert the feature alignment logic directly into
+  analyze_features.py right after the data is fetched. This will guarantee that the
+  DataFrame has the correct 34 features in the correct order before it's passed to the
+  scaler, resolving the error.

@@ -164,10 +164,9 @@ LUNARCRUSH_CONFIG = {
     'metrics_to_use': [
         'galaxy_score',
         'alt_rank',
-        'social_volume',
+        'social_volume_24h',
         'social_dominance',
-        'bullish_sentiment',
-        'bearish_sentiment'
+        'sentiment'
     ]
 }
 
