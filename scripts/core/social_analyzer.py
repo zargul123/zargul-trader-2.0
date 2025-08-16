@@ -44,28 +44,25 @@ class SocialAnalyzer:
         """
         del ttl_hash # Unused, but necessary for the caching mechanism
         
-        asset_symbol = symbol.split('-')[0]
+        asset_symbol = symbol.split('-')[0].lower() # Use lowercase symbol as per API docs
         
-        # --- CORRECTED V4 ENDPOINT ---
-        # The new API allows direct querying for a specific symbol's data.
-        endpoint = f"{self.base_url}/coins/{asset_symbol}"
-        params = {
-            'data': 'assets' # Requesting the 'assets' data points which include social metrics
-        }
+        # --- FINAL CORRECTED V4 ENDPOINT (as per LunarCrush support) ---
+        endpoint = f"{self.base_url}/public/coins/{asset_symbol}/v1"
+        
+        # V4 endpoint for specific asset details does not require 'params'
+        # The required data is the default response.
         
         try:
-            response = self.session.get(endpoint, params=params, timeout=15)
+            response = self.session.get(endpoint, timeout=15)
             response.raise_for_status()
             data = response.json()
 
-            # The new structure is typically nested under 'data' and 'assets'
-            if 'data' in data and 'assets' in data:
-                metrics = data['data']['assets']
-                # The keys might be slightly different in v4, so we safely get them.
-                # Example: 'galaxy_score', 'alt_rank', 'social_volume_24h', etc.
+            # The new structure is nested under 'data'
+            if 'data' in data:
+                metrics = data['data']
                 return {key: metrics.get(key, 0) for key in metrics}
             else:
-                print(f"⚠️ LunarCrush: 'data' or 'assets' key not found in v4 response for {asset_symbol}")
+                print(f"⚠️ LunarCrush: 'data' key not found in v4 response for {asset_symbol}")
                 return {}
 
         except requests.exceptions.RequestException as e:
