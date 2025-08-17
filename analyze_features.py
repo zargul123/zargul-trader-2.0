@@ -64,7 +64,7 @@ def analyze_feature_importance():
         df_features = df[features].astype('float32')
         
         # --- SOLUTION: Use the AIAnalyst's own feature alignment method ---
-        df_features = ai_analyst._align_df_features(df_features, symbol, strategy_name)
+        df_features = ai_analyst._align_df_features(df_features)
         # --- END SOLUTION ---
 
         scaler = ai_analyst.scalers[symbol][strategy_name]
