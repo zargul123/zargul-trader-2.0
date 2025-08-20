@@ -1,0 +1,27 @@
+ fix this, I will make a small, safe change to the analyze_features.py script. After
+  the data alignment step, I will simply update the feature list to match the columns of
+  the now-standardized data. This ensures that the rest of the script uses the correct
+  number of features for all its calculations, resolving the error without altering the
+  core data processing or the model itself.
+
+  I will now apply this change.
+ ╭─────────────────────────────────────────────────────────────────────────────────────────╮
+ │ ?  Edit analyze_features.py:         df_features = df[featu... =>         df_featur… ←  │
+ │                                                                                         │
+ │ 63   features_dict[symbol] = features                                                   │
+ │ 64   df_features = df[features].astype('float32')                                       │
+ │ 65                                                                                      │
+ │ 66 - # --- SOLUTION: Use the AIAnalyst's own feature alignment method ---               │
+ │ 66 + # Align the dataframe. This might add new columns if any were missing.             │
+ │ 67   df_features = ai_analyst._align_df_features(df_features)                           │
+ │ 68 - # --- END SOLUTION ---                                                             │
+ │ 68                                                                                      │
+ │ 69 + # --- FIX: Update the feature list to match the final, aligned DataFra             │
+ │    ---                                                                                  │
+ │ 70 + features = df_features.columns.tolist()                                            │
+ │ 71 + features_dict[symbol] = features                                                   │
+ │ 72 + # --- END FIX ---                                                                  │
+ │ 73 +                                                                                    │
+ │ 74   scaler = ai_analyst.scalers[symbol][strategy_name]                                 │
+ │ 75   scaled_data = scaler.transform(df_features.values)                                 │
+ │ 76                                                           
