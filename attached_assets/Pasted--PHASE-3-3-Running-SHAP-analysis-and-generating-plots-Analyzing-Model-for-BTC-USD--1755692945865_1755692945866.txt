@@ -1,0 +1,35 @@
+[PHASE 3/3] Running SHAP analysis and generating plots...
+
+  --- Analyzing Model for: BTC-USD ---
+    - Using PCA to compress features for SHAP analysis.
+    - Compressing features to 9 components.
+    - Creating PermutationExplainer on PCA-compressed data...
+    - Calculating SHAP values for 5 samples...
+Explaining BTC-USD:   0%|                                                                        | 0/5 [00:15<?, ?it/s]
+❌ An unexpected error occurred while analyzing BTC-USD: cannot reshape array of size 255420 into shape (172,45,30)
+Traceback (most recent call last):
+  File "C:\Users\hp\documents\zargul-trader-2.0\analyze_features.py", line 151, in analyze_feature_importance
+    explanation = explainer(test_pca[i:i+1])
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\shap\explainers\_permutation.py", line 64, in __call__
+    return super().__call__(
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\shap\explainers\_permutation.py", line 77, in __call__
+    return super().__call__(
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\shap\explainers\_explainer.py", line 266, in __call__
+    row_result = self.explain_row(
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\shap\explainers\_permutation.py", line 133, in explain_row
+    outputs = fm(masks, zero_index=0, batch_size=batch_size)
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\shap\utils\_masked_model.py", line 60, in __call__
+    return self._delta_masking_call(masks, zero_index=zero_index, batch_size=batch_size)
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\shap\utils\_masked_model.py", line 206, in _delta_masking_call
+    outputs = self.model(*subset_masked_inputs)
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\shap\models\_model.py", line 21, in __call__
+    out = self.inner_model(*args)
+  File "C:\Users\hp\documents\zargul-trader-2.0\analyze_features.py", line 132, in shap_predictor
+    x_reshaped = x_flat.reshape(x_flat.shape[0], sequence_length, len(features))
+ValueError: cannot reshape array of size 255420 into shape (172,45,30)
+Traceback (most recent call last):
+  File "C:\Users\hp\documents\zargul-trader-2.0\analyze_features.py", line 217, in <module>
+    analyze_feature_importance()
+  File "C:\Users\hp\documents\zargul-trader-2.0\analyze_features.py", line 207, in analyze_feature_importance
+    del model, explainer, shap_values
+UnboundLocalError: local variable 'shap_values' referenced before assignment
