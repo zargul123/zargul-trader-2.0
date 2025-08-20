@@ -59,17 +59,13 @@ def analyze_feature_importance():
             print(f"  - ⚠️ Could not get data for {symbol}. Skipping.")
             continue
 
-        features = ['open', 'high', 'low', 'close', 'volume'] + [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
-        features_dict[symbol] = features
-        df_features = df[features].astype('float32')
-        
-        # Align the dataframe. This might add new columns if any were missing.
-        df_features = ai_analyst._align_df_features(df_features)
+        # Let the alignment function handle feature selection and ordering.
+        # This ensures we use the one, true "canonical" feature list.
+        df_features = ai_analyst._align_df_features(df)
 
-        # --- FIX: Update the feature list to match the final, aligned DataFrame ---
+        # Now, get the definitive feature list from the aligned DataFrame.
         features = df_features.columns.tolist()
         features_dict[symbol] = features
-        # --- END FIX ---
 
         scaler = ai_analyst.scalers[symbol][strategy_name]
         scaled_data = scaler.transform(df_features.values)
