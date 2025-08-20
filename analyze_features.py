@@ -59,21 +59,15 @@ def analyze_feature_importance():
             print(f"  - ⚠️ Could not get data for {symbol}. Skipping.")
             continue
 
-        # Follow the same feature selection and alignment process as the training pipeline
-        # to ensure 100% consistency.
-        
-        # Step 1: Define the initial feature set based on what's available in the data.
-        features = ['open', 'high', 'low', 'close', 'volume'] + [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
-        
-        # Step 2: Create a DataFrame containing only these features.
-        df_features = df[features].astype('float32')
-        
-        # Step 3: Align this feature-specific DataFrame. This adds missing columns (e.g., from LunarCrush)
-        # and guarantees the canonical order required by the model and scaler.
-        df_features = ai_analyst._align_df_features(df_features)
+        # To guarantee 100% consistency, this section now perfectly mirrors the
+        # data processing pipeline from the AIAnalyst's _train_model() function.
 
-        # Step 4: Now that the DataFrame is finalized, get the definitive, correctly-ordered feature list.
-        # This becomes the single source of truth for all subsequent steps (like SHAP).
+        # Step 1: The training pipeline passes the raw DataFrame directly to the alignment function.
+        # The function itself handles all feature selection, ordering, and filling of missing values.
+        df_features = ai_analyst._align_df_features(df)
+
+        # Step 2: Now that the DataFrame is correctly and fully featured, get the definitive
+        # list of columns. This becomes the single source of truth for the SHAP analysis.
         features = df_features.columns.tolist()
         features_dict[symbol] = features
 
