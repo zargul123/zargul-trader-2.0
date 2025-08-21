@@ -22,7 +22,7 @@ from scripts.core.analysis_engine import AIAnalyst
 from scripts.core.data_engine import DataMaster
 from scripts.config import ASSETS, STRATEGIES, TECHNICAL_INDICATORS
 
-def analyze_feature_importance():
+def analyze_feature_importance(train_models=True):
     """
     Trains the AI models and uses SHAP to analyze and visualize feature importance.
     This is a diagnostic script and does not affect live trading operations.
@@ -32,10 +32,16 @@ def analyze_feature_importance():
     print("="*80)
     
     # --- 1. Initialize and Train Models ---
-    print(f"\n[PHASE 1/3] Forcing model retraining for all assets...")
+    print(f"\n[PHASE 1/3] Model Training Phase")
     try:
-        ai_analyst = AIAnalyst(train_all=True)
-        print("✅ Model training complete.")
+        if train_models:
+            print("  - Training all models as requested...")
+            ai_analyst = AIAnalyst(train_all=True)
+            print("  - ✅ Model training complete.")
+        else:
+            print("  - Skipping training and loading existing models...")
+            ai_analyst = AIAnalyst(train_all=False)
+            print("  - ✅ Models loaded successfully.")
     except Exception as e:
         print(f"❌ CRITICAL ERROR during model training: {e}")
         print("Aborting analysis.")
@@ -224,4 +230,18 @@ def analyze_feature_importance():
     print("Review the generated .png files in the 'feature_analysis' directory.")
 
 if __name__ == "__main__":
-    analyze_feature_importance()
+    import argparse
+    parser = argparse.ArgumentParser(
+        description="Run SHAP feature importance analysis on trained models.",
+        formatter_class=argparse.RawTextHelpFormatter
+    )
+    parser.add_argument(
+        '--no-train', 
+        action='store_true', 
+        help="Skip the model training phase and use existing models.\n" \
+             "This is useful for quickly re-running analysis after a code change."
+    )
+    args = parser.parse_args()
+
+    # If --no-train is specified, train_models will be False.
+    analyze_feature_importance(train_models=not args.no_train)
