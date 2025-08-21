@@ -81,12 +81,17 @@ def analyze_feature_importance(strategy_to_run, train_models=True):
             features = df_features.columns.tolist()
             features_dict[symbol] = features
 
+            # HOTFIX: Handle inconsistent naming for BTC swing strategy
+            strategy_key = strategy_name
+            if symbol == 'BTC-USD' and strategy_name == 'swing':
+                strategy_key = 'btc-swing'
+
             # Ensure the model and scaler exist before proceeding
-            if symbol not in ai_analyst.scalers or strategy_name not in ai_analyst.scalers[symbol]:
-                print(f"  - ⚠️ Scaler for {symbol} ({strategy_name}) not found. Skipping.")
+            if symbol not in ai_analyst.scalers or strategy_key not in ai_analyst.scalers[symbol]:
+                print(f"  - ⚠️ Scaler for {symbol} ({strategy_key}) not found. Skipping.")
                 continue
             
-            scaler = ai_analyst.scalers[symbol][strategy_name]
+            scaler = ai_analyst.scalers[symbol][strategy_key]
             scaled_data = scaler.transform(df_features.values)
 
             X, _ = [], []
@@ -113,12 +118,17 @@ def analyze_feature_importance(strategy_to_run, train_models=True):
             
             try:
                 print(f"\n  --- Analyzing Model for: {symbol} ({strategy_name.upper()}) ---")
+
+                # HOTFIX: Handle inconsistent naming for BTC swing strategy
+                strategy_key = strategy_name
+                if symbol == 'BTC-USD' and strategy_name == 'swing':
+                    strategy_key = 'btc-swing'
                 
-                if not (symbol in ai_analyst.models and strategy_name in ai_analyst.models[symbol]):
-                    print(f"    - No model found for {symbol} ({strategy_name.upper()}). Skipping.")
+                if not (symbol in ai_analyst.models and strategy_key in ai_analyst.models[symbol]):
+                    print(f"    - No model found for {symbol} ({strategy_key.upper()}). Skipping.")
                     continue
 
-                model = ai_analyst.models[symbol][strategy_name]
+                model = ai_analyst.models[symbol][strategy_key]
                 sequence_length = STRATEGIES[strategy_name]['sequence_length']
                 features = features_dict[symbol]
                 
@@ -195,7 +205,7 @@ def analyze_feature_importance(strategy_to_run, train_models=True):
                 plt.gca().invert_yaxis()
                 plt.tight_layout()
                 
-                plot_path = f"feature_analysis/{symbol}_{strategy_name}_feature_importance.png"
+                plot_path = f"feature_analysis/{symbol}_{strategy_key}_feature_importance.png"
                 plt.savefig(plot_path)
                 plt.close()
                 
