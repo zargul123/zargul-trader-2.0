@@ -22,7 +22,7 @@ from scripts.core.analysis_engine import AIAnalyst
 from scripts.core.data_engine import DataMaster
 from scripts.config import ASSETS, STRATEGIES, TECHNICAL_INDICATORS
 
-def analyze_feature_importance(train_models=True):
+def analyze_feature_importance(strategy_to_run, train_models=True):
     """
     Trains the AI models and uses SHAP to analyze and visualize feature importance.
     This is a diagnostic script and does not affect live trading operations.
@@ -47,182 +47,171 @@ def analyze_feature_importance(train_models=True):
         print("Aborting analysis.")
         return
 
-    # --- 2. Prepare Data for SHAP Analysis ---
-    print("\n[PHASE 2/3] Preparing data for SHAP analysis...")
-    data_master = DataMaster()
-    background_data = {}
-    test_data = {}
-    features_dict = {}
+    # Determine which strategies to run
+    if strategy_to_run == 'all':
+        strategies_to_analyze = ['main', 'scalp', 'swing']
+    else:
+        strategies_to_analyze = [strategy_to_run]
 
-    for symbol in ASSETS:
-        print(f"  - Fetching and preparing data for {symbol}...")
-        strategy_name = 'main'
-        timeframe = STRATEGIES[strategy_name]['timeframe']
-        sequence_length = STRATEGIES[strategy_name]['sequence_length']
-        
-        df = data_master.get_training_data(symbol, timeframe)
-        if df is None or df.empty:
-            print(f"  - ⚠️ Could not get data for {symbol}. Skipping.")
-            continue
+    print(f"\nTargeting strategies: {', '.join(s.upper() for s in strategies_to_analyze)}")
 
-        # To guarantee 100% consistency, this section now perfectly mirrors the
-        # data processing pipeline from the AIAnalyst's _train_model() function.
+    for strategy_name in strategies_to_analyze:
+        print("\n" + "="*80)
+        print(f"🔬 ANALYZING STRATEGY: {strategy_name.upper()} 🔬")
+        print("="*80)
 
-        # Step 1: The training pipeline passes the raw DataFrame directly to the alignment function.
-        # The function itself handles all feature selection, ordering, and filling of missing values.
-        df_features = ai_analyst._align_df_features(df)
+        # --- 2. Prepare Data for SHAP Analysis ---
+        print(f"\n[PHASE 2/3] Preparing data for SHAP analysis ({strategy_name.upper()})...")
+        data_master = DataMaster()
+        background_data = {}
+        test_data = {}
+        features_dict = {}
 
-        # Step 2: Now that the DataFrame is correctly and fully featured, get the definitive
-        # list of columns. This becomes the single source of truth for the SHAP analysis.
-        features = df_features.columns.tolist()
-        features_dict[symbol] = features
-
-        scaler = ai_analyst.scalers[symbol][strategy_name]
-        scaled_data = scaler.transform(df_features.values)
-
-        X, _ = [], []
-        for i in range(sequence_length, len(scaled_data)):
-            X.append(scaled_data[i - sequence_length:i])
-        X = np.array(X)
-
-        background_data[symbol] = shap.sample(X, 20)
-        test_data[symbol] = shap.sample(X, 10)
-        
-    print("✅ Data preparation complete.")
-
-    # --- 3. Run SHAP Analysis and Generate Plots ---
-    print("\n[PHASE 3/3] Running SHAP analysis and generating plots...")
-    os.makedirs('feature_analysis', exist_ok=True)
-
-    for symbol in ASSETS:
-        if symbol not in background_data:
-            continue
-        
-        try:
-            print(f"\n  --- Analyzing Model for: {symbol} ---")
-            
-            strategy_name = 'main'
-            if not (symbol in ai_analyst.models and strategy_name in ai_analyst.models[symbol]):
-                print(f"    - No model found for {symbol}. Skipping.")
-                continue
-
-            model = ai_analyst.models[symbol][strategy_name]
+        for symbol in ASSETS:
+            print(f"  - Fetching and preparing data for {symbol}...")
+            timeframe = STRATEGIES[strategy_name]['timeframe']
             sequence_length = STRATEGIES[strategy_name]['sequence_length']
-            features = features_dict[symbol]
             
-            test_samples = min(5, len(test_data[symbol]))
-            background_samples = min(10, len(background_data[symbol]))
-
-            background_flat = background_data[symbol][:background_samples].reshape(background_samples, -1)
-            test_flat = test_data[symbol][:test_samples].reshape(test_samples, -1)
-
-            # --- PCA FALLBACK IMPLEMENTATION ---
-            print("    - Using PCA to compress features for SHAP analysis.")
-            
-            # Dynamically set n_components to be less than the number of samples
-            n_components = min(20, background_flat.shape[0] - 1)
-            if n_components < 1:
-                print("    - Not enough background samples to perform PCA. Skipping SHAP analysis.")
+            df = data_master.get_training_data(symbol, timeframe)
+            if df is None or df.empty:
+                print(f"  - ⚠️ Could not get data for {symbol}. Skipping.")
                 continue
 
-            print(f"    - Compressing features to {n_components} components.")
-            pca = PCA(n_components=n_components)
-            background_pca = pca.fit_transform(background_flat)
-            test_pca = pca.transform(test_flat)
+            df_features = ai_analyst._align_df_features(df)
+            features = df_features.columns.tolist()
+            features_dict[symbol] = features
 
-            def shap_predictor(x_pca):
-                """
-                This single, robust function handles the entire prediction process
-                for SHAP, from inverting PCA to formatting the model's output.
-                """
-                # Step 1: Inverse PCA transform
-                x_flat = pca.inverse_transform(x_pca)
-                
-                # Step 2: Reshape to the original sequence format
-                x_reshaped = x_flat.reshape(x_flat.shape[0], sequence_length, len(features))
-                
-                # Step 3: Get model prediction
-                preds = model.predict(x_reshaped, verbose=0)
-                
-                # Step 4: Handle both single-tensor and tuple/list outputs
-                if isinstance(preds, (tuple, list)):
-                    preds = preds[0]  # Keep the primary prediction head
-                
-                # Step 5: Return the single scalar output SHAP requires (1D array)
-                return preds[:, 1]
-
-            print("    - Creating PermutationExplainer on PCA-compressed data...")
-            explainer = shap.PermutationExplainer(shap_predictor, background_pca, max_evals=2*n_components+1)
-
-            print(f"    - Calculating SHAP values for {test_samples} samples...")
+            # Ensure the model and scaler exist before proceeding
+            if symbol not in ai_analyst.scalers or strategy_name not in ai_analyst.scalers[symbol]:
+                print(f"  - ⚠️ Scaler for {symbol} ({strategy_name}) not found. Skipping.")
+                continue
             
-            shap_values_list = []
-            for i in tqdm(range(test_samples), desc=f"Explaining {symbol}"):
-                explanation = explainer(test_pca[i:i+1])
-                shap_values_list.append(explanation.values)
+            scaler = ai_analyst.scalers[symbol][strategy_name]
+            scaled_data = scaler.transform(df_features.values)
+
+            X, _ = [], []
+            for i in range(sequence_length, len(scaled_data)):
+                X.append(scaled_data[i - sequence_length:i])
+            X = np.array(X)
+
+            if X.shape[0] < 30: # Ensure there's enough data for sampling
+                print(f"  - ⚠️ Insufficient data samples ({X.shape[0]}) for {symbol} ({strategy_name}). Skipping.")
+                continue
+
+            background_data[symbol] = shap.sample(X, 20)
+            test_data[symbol] = shap.sample(X, 10)
+            
+        print(f"✅ Data preparation complete for {strategy_name.upper()}.")
+
+        # --- 3. Run SHAP Analysis and Generate Plots ---
+        print(f"\n[PHASE 3/3] Running SHAP analysis and generating plots ({strategy_name.upper()})...")
+        os.makedirs('feature_analysis', exist_ok=True)
+
+        for symbol in ASSETS:
+            if symbol not in background_data:
+                continue
+            
+            try:
+                print(f"\n  --- Analyzing Model for: {symbol} ({strategy_name.upper()}) ---")
+                
+                if not (symbol in ai_analyst.models and strategy_name in ai_analyst.models[symbol]):
+                    print(f"    - No model found for {symbol} ({strategy_name.upper()}). Skipping.")
+                    continue
+
+                model = ai_analyst.models[symbol][strategy_name]
+                sequence_length = STRATEGIES[strategy_name]['sequence_length']
+                features = features_dict[symbol]
+                
+                test_samples = min(5, len(test_data[symbol]))
+                background_samples = min(10, len(background_data[symbol]))
+
+                background_flat = background_data[symbol][:background_samples].reshape(background_samples, -1)
+                test_flat = test_data[symbol][:test_samples].reshape(test_samples, -1)
+
+                # --- PCA FALLBACK IMPLEMENTATION ---
+                print("    - Using PCA to compress features for SHAP analysis.")
+                
+                n_components = min(20, background_flat.shape[0] - 1)
+                if n_components < 1:
+                    print("    - Not enough background samples to perform PCA. Skipping SHAP analysis.")
+                    continue
+
+                print(f"    - Compressing features to {n_components} components.")
+                pca = PCA(n_components=n_components)
+                background_pca = pca.fit_transform(background_flat)
+                test_pca = pca.transform(test_flat)
+
+                def shap_predictor(x_pca):
+                    x_flat = pca.inverse_transform(x_pca)
+                    x_reshaped = x_flat.reshape(x_flat.shape[0], sequence_length, len(features))
+                    preds = model.predict(x_reshaped, verbose=0)
+                    if isinstance(preds, (tuple, list)):
+                        preds = preds[0]
+                    return preds[:, 1]
+
+                print("    - Creating PermutationExplainer on PCA-compressed data...")
+                explainer = shap.PermutationExplainer(shap_predictor, background_pca, max_evals=2*n_components+1)
+
+                print(f"    - Calculating SHAP values for {test_samples} samples...")
+                
+                shap_values_list = []
+                for i in tqdm(range(test_samples), desc=f"Explaining {symbol} ({strategy_name})"):
+                    explanation = explainer(test_pca[i:i+1])
+                    shap_values_list.append(explanation.values)
+                    gc.collect()
+
+                if not shap_values_list:
+                    print("    - No SHAP values were calculated. Skipping plot.")
+                    continue
+
+                shap_values = np.vstack(shap_values_list)
+
+                # --- NEW: Map PCA Importance back to Original Features ---
+                print("    - Mapping PCA SHAP values back to original features...")
+                
+                abs_shap_values = np.abs(shap_values)
+                pc_importance = np.mean(abs_shap_values, axis=0)
+                pca_loadings = pca.components_
+                feature_importance_timestep = np.dot(pc_importance, np.abs(pca_loadings))
+                
+                n_features = len(features_dict[symbol])
+                aggregated_feature_importance = feature_importance_timestep.reshape(sequence_length, n_features).sum(axis=0)
+
+                feature_names = features_dict[symbol]
+                importance_df = pd.DataFrame({
+                    'feature': feature_names,
+                    'importance': aggregated_feature_importance
+                }).sort_values(by='importance', ascending=False)
+
+                print(f"    - Top 5 most important features for {symbol} ({strategy_name.upper()}):")
+                print(importance_df.head(5).to_string(index=False))
+                
+                # --- PLOTTING THE NEW, INTERPRETABLE RESULTS ---
+                plt.figure(figsize=(12, 10))
+                plt.barh(importance_df['feature'], importance_df['importance'], color='skyblue')
+                plt.xlabel("Mean Absolute SHAP Value (Calculated from PCA)")
+                plt.ylabel("Feature")
+                plt.title(f'Feature Importance for {symbol} ({strategy_name.upper()})')
+                plt.gca().invert_yaxis()
+                plt.tight_layout()
+                
+                plot_path = f"feature_analysis/{symbol}_{strategy_name}_feature_importance.png"
+                plt.savefig(plot_path)
+                plt.close()
+                
+                print(f"    ✅ Saved INTERPRETABLE feature importance plot to: {plot_path}")
+            
+            except Exception as e:
+                print(f"❌ An unexpected error occurred while analyzing {symbol} ({strategy_name.upper()}): {e}")
+                import traceback
+                traceback.print_exc()
+            
+            finally:
+                if 'model' in locals(): del model
+                if 'explainer' in locals(): del explainer
+                if 'shap_values' in locals(): del shap_values
                 gc.collect()
-
-            if not shap_values_list:
-                print("    - No SHAP values were calculated. Skipping plot.")
-                continue
-
-            shap_values = np.vstack(shap_values_list)
-
-            # --- NEW: Map PCA Importance back to Original Features ---
-            print("    - Mapping PCA SHAP values back to original features...")
-            
-            # 1. Get the absolute mean SHAP value for each Principal Component
-            abs_shap_values = np.abs(shap_values)
-            pc_importance = np.mean(abs_shap_values, axis=0)
-
-            # 2. Get the PCA component loadings (how much each feature contributes to each PC)
-            # Shape: (n_components, n_features)
-            pca_loadings = pca.components_
-
-            # 3. Calculate importance for each feature at each timestep
-            # This results in an array of shape (sequence_length * n_features,)
-            feature_importance_timestep = np.dot(pc_importance, np.abs(pca_loadings))
-
-            # 4. Aggregate importance across the time sequence for each feature
-            # Reshape to (sequence_length, n_features) and sum over the time axis (axis=0)
-            n_features = len(features_dict[symbol])
-            # sequence_length is already defined above
-            aggregated_feature_importance = feature_importance_timestep.reshape(sequence_length, n_features).sum(axis=0)
-
-            # 5. Create a readable DataFrame for plotting
-            feature_names = features_dict[symbol]
-            importance_df = pd.DataFrame({
-                'feature': feature_names,
-                'importance': aggregated_feature_importance
-            }).sort_values(by='importance', ascending=False)
-
-            print(f"    - Top 5 most important features for {symbol}:")
-            print(importance_df.head(5).to_string(index=False))
-            
-            # --- PLOTTING THE NEW, INTERPRETABLE RESULTS ---
-            plt.figure(figsize=(12, 10))
-            plt.barh(importance_df['feature'], importance_df['importance'], color='skyblue')
-            plt.xlabel("Mean Absolute SHAP Value (Calculated from PCA)")
-            plt.ylabel("Feature")
-            plt.title(f'Feature Importance for {symbol} ({strategy_name.upper()})')
-            plt.gca().invert_yaxis() # Display the most important feature at the top
-            plt.tight_layout()
-            
-            plot_path = f"feature_analysis/{symbol}_{strategy_name}_feature_importance.png"
-            plt.savefig(plot_path)
-            plt.close()
-            
-            print(f"    ✅ Saved INTERPRETABLE feature importance plot to: {plot_path}")
-        
-        except Exception as e:
-            print(f"❌ An unexpected error occurred while analyzing {symbol}: {e}")
-            import traceback
-            traceback.print_exc()
-        
-        finally:
-            del model, explainer, shap_values
-            gc.collect()
-            print(f"    - Cleanup complete for {symbol}.")
+                print(f"    - Cleanup complete for {symbol} ({strategy_name.upper()}).")
 
     print("\n" + "="*80)
     print("✅ ANALYSIS COMPLETE")
@@ -236,12 +225,18 @@ if __name__ == "__main__":
         formatter_class=argparse.RawTextHelpFormatter
     )
     parser.add_argument(
-        '--no-train', 
-        action='store_true', 
-        help="Skip the model training phase and use existing models.\n" \
-             "This is useful for quickly re-running analysis after a code change."
+        '--strategy',
+        type=str,
+        required=True,
+        choices=['main', 'scalp', 'swing', 'all'],
+        help="The trading strategy to analyze (e.g., 'main', 'scalp', 'swing') or 'all' for all strategies."
+    )
+    parser.add_argument(
+        '--no-train',
+        action='store_true',
+        help="Skip the model training phase and use existing models.\n             This is useful for quickly re-running analysis after a code change."
     )
     args = parser.parse_args()
 
     # If --no-train is specified, train_models will be False.
-    analyze_feature_importance(train_models=not args.no_train)
+    analyze_feature_importance(strategy_to_run=args.strategy, train_models=not args.no_train)
