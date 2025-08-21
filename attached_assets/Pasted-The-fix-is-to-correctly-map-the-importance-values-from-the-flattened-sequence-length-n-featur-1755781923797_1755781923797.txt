@@ -1,0 +1,40 @@
+The fix is to correctly map the importance values from the flattened (sequence_length * 
+  n_features) space back to the original n_features space. We can do this by aggregating
+  the importance scores for each feature across all the timesteps in the sequence.
+
+  Specifically, I will:
+   1. Reshape the array of importance values from (6000,) to (60, 100).
+   2. Sum the importance values along the time axis (axis=0). This will produce a final array
+      of (100,), where each value represents the total importance of a single feature across
+      the entire time sequence.
+   3. This new array of 100 importance values will now correctly match the 100 feature names.
+
+  This change is safe, localized, and does not affect the core SHAP calculation logic; it
+  only corrects the final aggregation step. I will now apply this fix.
+ ╭─────────────────────────────────────────────────────────────────────────────────────────╮
+ │ ?  Edit analyze_features.py:             # 3. Calculate the... =>             # 3. … ←  │
+ │                                                                                         │
+ │ ... first 8 lines hidden ...                                                            │
+ │ 177 + # This results in an array of shape (sequence_length * n_features,)               │
+ │ 178 + feature_importance_timestep = np.dot(pc_importance, np.abs                        │
+ │     (pca_loadings))                                                                     │
+ │ 179                                                                                     │
+ │ 180 - # 4. Create a readable DataFrame for plotting                                     │
+ │ 180 + # 4. Aggregate importance across the time sequence for each feature               │
+ │ 181 + # Reshape to (sequence_length, n_features) and sum over the time axis             │
+ │     (axis=0)                                                                            │
+ │ 182 + n_features = len(features_dict[symbol])                                           │
+ │ 183 + # sequence_length is already defined above                                        │
+ │ 184 + aggregated_feature_importance =                                                   │
+ │     feature_importance_timestep.reshape(sequence_length, n_features).sum                │
+ │     (axis=0)                                                                            │
+ │ 185 +                                                                                   │
+ │ 186 + # 5. Create a readable DataFrame for plotting                                     │
+ │ 187   feature_names = features_dict[symbol]                                             │
+ │ 188   importance_df = pd.DataFrame({                                                    │
+ │ 189       'feature': feature_names,                                                     │
+ │ 184 -     'importance': feature_importance                                              │
+ │ 190 +     'importance': aggregated_feature_importance                                   │
+ │ 191   }).sort_values(by='importance', ascending=False)                                  │
+ │ 192                                                                                     │
+ │ 193   print(f"    - Top 5 most important features for {symbol}:")    
