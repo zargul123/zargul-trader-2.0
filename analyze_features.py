@@ -173,15 +173,21 @@ def analyze_feature_importance():
             # Shape: (n_components, n_features)
             pca_loadings = pca.components_
 
-            # 3. Calculate the weighted importance for each original feature
-            # We multiply the importance of each PC by the absolute loading of each feature in that PC
-            feature_importance = np.dot(pc_importance, np.abs(pca_loadings))
+            # 3. Calculate importance for each feature at each timestep
+            # This results in an array of shape (sequence_length * n_features,)
+            feature_importance_timestep = np.dot(pc_importance, np.abs(pca_loadings))
 
-            # 4. Create a readable DataFrame for plotting
+            # 4. Aggregate importance across the time sequence for each feature
+            # Reshape to (sequence_length, n_features) and sum over the time axis (axis=0)
+            n_features = len(features_dict[symbol])
+            # sequence_length is already defined above
+            aggregated_feature_importance = feature_importance_timestep.reshape(sequence_length, n_features).sum(axis=0)
+
+            # 5. Create a readable DataFrame for plotting
             feature_names = features_dict[symbol]
             importance_df = pd.DataFrame({
                 'feature': feature_names,
-                'importance': feature_importance
+                'importance': aggregated_feature_importance
             }).sort_values(by='importance', ascending=False)
 
             print(f"    - Top 5 most important features for {symbol}:")
