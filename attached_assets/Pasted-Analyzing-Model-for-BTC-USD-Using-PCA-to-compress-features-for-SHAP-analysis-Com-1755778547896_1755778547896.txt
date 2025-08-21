@@ -1,0 +1,69 @@
+Analyzing Model for: BTC-USD ---
+    - Using PCA to compress features for SHAP analysis.
+    - Compressing features to 9 components.
+    - Creating PermutationExplainer on PCA-compressed data...
+    - Calculating SHAP values for 5 samples...
+PermutationExplainer explainer: 2it [00:16, 16.14s/it]
+Explaining BTC-USD: 100%|████████████████████████████████████████████████████████████████| 5/5 [00:20<00:00,  4.04s/it]
+    - Mapping PCA SHAP values back to original features...
+❌ An unexpected error occurred while analyzing BTC-USD: All arrays must be of the same length
+Traceback (most recent call last):
+  File "C:\Users\hp\documents\zargul-trader-2.0\analyze_features.py", line 182, in analyze_feature_importance
+    importance_df = pd.DataFrame({
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\pandas\core\frame.py", line 778, in __init__
+    mgr = dict_to_mgr(data, index, columns, dtype=dtype, copy=copy, typ=manager)
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\pandas\core\internals\construction.py", line 503, in dict_to_mgr
+    return arrays_to_mgr(arrays, columns, index, dtype=dtype, typ=typ, consolidate=copy)
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\pandas\core\internals\construction.py", line 114, in arrays_to_mgr
+    index = _extract_index(arrays)
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\pandas\core\internals\construction.py", line 677, in _extract_index
+    raise ValueError("All arrays must be of the same length")
+ValueError: All arrays must be of the same length
+    - Cleanup complete for BTC-USD.
+
+  --- Analyzing Model for: ETH-USD ---
+    - Using PCA to compress features for SHAP analysis.
+    - Compressing features to 9 components.
+    - Creating PermutationExplainer on PCA-compressed data...
+    - Calculating SHAP values for 5 samples...
+Explaining ETH-USD: 100%|████████████████████████████████████████████████████████████████| 5/5 [00:04<00:00,  1.22it/s]
+    - Mapping PCA SHAP values back to original features...
+❌ An unexpected error occurred while analyzing ETH-USD: All arrays must be of the same length
+Traceback (most recent call last):
+  File "C:\Users\hp\documents\zargul-trader-2.0\analyze_features.py", line 182, in analyze_feature_importance
+    importance_df = pd.DataFrame({
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\pandas\core\frame.py", line 778, in __init__
+    mgr = dict_to_mgr(data, index, columns, dtype=dtype, copy=copy, typ=manager)
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\pandas\core\internals\construction.py", line 503, in dict_to_mgr
+    return arrays_to_mgr(arrays, columns, index, dtype=dtype, typ=typ, consolidate=copy)
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\pandas\core\internals\construction.py", line 114, in arrays_to_mgr
+    index = _extract_index(arrays)
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\pandas\core\internals\construction.py", line 677, in _extract_index
+    raise ValueError("All arrays must be of the same length")
+ValueError: All arrays must be of the same length
+    - Cleanup complete for ETH-USD.
+
+  --- Analyzing Model for: SOL-USD ---
+    - Using PCA to compress features for SHAP analysis.
+    - Compressing features to 9 components.
+    - Creating PermutationExplainer on PCA-compressed data...
+    - Calculating SHAP values for 5 samples...
+Explaining SOL-USD: 100%|████████████████████████████████████████████████████████████████| 5/5 [00:03<00:00,  1.33it/s]
+    - Mapping PCA SHAP values back to original features...
+❌ An unexpected error occurred while analyzing SOL-USD: All arrays must be of the same length
+Traceback (most recent call last):
+  File "C:\Users\hp\documents\zargul-trader-2.0\analyze_features.py", line 182, in analyze_feature_importance
+    importance_df = pd.DataFrame({
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\pandas\core\frame.py", line 778, in __init__
+    mgr = dict_to_mgr(data, index, columns, dtype=dtype, copy=copy, typ=manager)
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\pandas\core\internals\construction.py", line 503, in dict_to_mgr
+    return arrays_to_mgr(arrays, columns, index, dtype=dtype, typ=typ, consolidate=copy)
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\pandas\core\internals\construction.py", line 114, in arrays_to_mgr
+    index = _extract_index(arrays)
+  File "C:\Users\hp\documents\zargul-trader-2.0\venv\lib\site-packages\pandas\core\internals\construction.py", line 677, in _extract_index
+    raise ValueError("All arrays must be of the same length")
+ValueError: All arrays must be of the same length
+    - Cleanup complete for SOL-USD.
+
+================================================================================
+✅ ANALYSIS COMPLETE
