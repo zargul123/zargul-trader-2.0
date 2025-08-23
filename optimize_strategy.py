@@ -42,7 +42,7 @@ def calculate_historical_regimes(df: pd.DataFrame) -> pd.Series:
     # 1. Calculate rolling entropy
     price_returns = df['close'].pct_change().fillna(0)
     rolling_entropy = price_returns.rolling(window=REGIME_CONFIG['entropy_window']).apply(
-        _calculate_shannon_entropy, raw=True
+        _calculate_shannon_entropy, raw=True, kwargs={'window': REGIME_CONFIG['entropy_window']}
     )
     
     # 2. Smooth the entropy using an Exponential Moving Average
