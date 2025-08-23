@@ -43,7 +43,7 @@ STRATEGIES = {
         'dynamic_exit': True
     },
     'scalp': {
-        'enabled': False,            # This strategy is disabled by default
+        'enabled': True,            # This strategy is temporarily enabled for optimization
         'timeframe': '15m',
         'atr_threshold_multiplier': 1.0,
         'long_threshold': 0.5,       # Sensible default for scalping (0.5%)
