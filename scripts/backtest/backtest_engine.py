@@ -54,13 +54,15 @@ class BacktestEngine:
         print(f"📅 Data loaded for {symbol}: {len(df)} candles from {df.index[0]} to {df.index[-1]}")
         return df
 
-    def run_backtest(self, symbol, strategy_type, days):
+    def run_backtest(self, symbol, strategy_type, days, data_df=None, temp_strategy_config=None):
         """
-        Runs a backtest for a given symbol and strategy, simulating the live trade management logic.
+        Runs a backtest for a given symbol and strategy.
+        Can use pre-loaded data and a temporary strategy config for optimization.
         """
         self.trade_history = []
         try:
-            strategy_config = STRATEGIES.get(strategy_type)
+            # Use the temporary config if provided (for optimization), otherwise use the global one
+            strategy_config = temp_strategy_config if temp_strategy_config else STRATEGIES.get(strategy_type)
             if not strategy_config:
                 print(f"❌ Unknown strategy: {strategy_type}")
                 return get_empty_metrics()
@@ -70,7 +72,14 @@ class BacktestEngine:
                 return get_empty_metrics()
 
             print(f"\n🔧 Running backtest for {symbol} with '{strategy_type}' strategy.")
-            df = self.load_data(symbol, days, strategy_config['timeframe']) # Pass the timeframe string
+            
+            # Use the provided DataFrame if it exists, otherwise load data normally
+            if data_df is not None:
+                df = data_df
+                print(f"📅 Using pre-loaded data with {len(df)} candles.")
+            else:
+                df = self.load_data(symbol, days, strategy_config['timeframe']) # Pass the timeframe string
+            
             if df.empty:
                 return get_empty_metrics()
 

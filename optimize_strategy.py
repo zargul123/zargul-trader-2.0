@@ -104,9 +104,18 @@ def objective(trial, asset, strategy_name, regime_df):
         strategy_config['risk_reward_ratio'] = trial.suggest_float('risk_reward_ratio', 1.0, 5.0, step=0.25)
 
         # --- 2. Run the Backtest ---
-        # The backtest engine will use the temporary config for this run
-        backtest_engine = BacktestEngine(regime_df, strategy_config)
-        results = backtest_engine.run_backtest()
+        # Instantiate the engine in the modern way
+        backtest_engine = BacktestEngine()
+        
+        # Call the upgraded run_backtest method with our pre-filtered data
+        # and temporary strategy configuration.
+        results = backtest_engine.run_backtest(
+            symbol=asset,
+            strategy_type=strategy_name,
+            days=0, # Not used when providing a dataframe, but required
+            data_df=regime_df,
+            temp_strategy_config=strategy_config
+        )
 
         # --- 3. Return the Objective Metric ---
         if results is None or results['total_trades'] == 0:
