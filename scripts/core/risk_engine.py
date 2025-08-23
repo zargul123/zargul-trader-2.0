@@ -111,7 +111,7 @@ class RiskManager:
         # Cap position size to a max of 10% of portfolio
         return min(position_size, 0.10)
 
-    def should_execute(self, prediction, strategy_name):
+    def should_execute(self, prediction, strategy_name, debug=False):
         """
         Validates if a trade should be executed based on the rules
         from the STRATEGIES dictionary in config.py.
@@ -119,7 +119,7 @@ class RiskManager:
         """
         rules = STRATEGIES.get(strategy_name)
         if not rules:
-            print(f"   -  RiskManager: No rules found for strategy '{strategy_name}'.")
+            if debug: print(f"   -  RiskManager: No rules found for strategy '{strategy_name}'.")
             return False
 
         confidence = armor_get(prediction, 'confidence', 0)
@@ -131,12 +131,12 @@ class RiskManager:
 
         # 1. Confidence Check (applies to all strategies)
         if confidence < rules['min_confidence']:
-            print(f"   - RiskManager: Confidence ({confidence:.2f}) is below threshold ({rules['min_confidence']}).")
+            if debug: print(f"   - RiskManager: Confidence ({confidence:.2f}) is below threshold ({rules['min_confidence']}).")
             return False
 
         # 2. Direction Check
         if direction == 'hold':
-            print("   - RiskManager: Signal is 'hold'.")
+            if debug: print("   - RiskManager: Signal is 'hold'.")
             return False
 
         # 3. Dynamic ATR Threshold Check (Primary Logic)
@@ -144,22 +144,22 @@ class RiskManager:
             required_move_abs = atr * atr_multiplier
             predicted_move_abs = abs(current_price * (pct_change / 100))
             
-            print(f"   - RiskManager (ATR Check): Required Move: ${required_move_abs:.4f}, Predicted Move: ${predicted_move_abs:.4f}")
+            if debug: print(f"   - RiskManager (ATR Check): Required Move: ${required_move_abs:.4f}, Predicted Move: ${predicted_move_abs:.4f}")
 
             if predicted_move_abs < required_move_abs:
-                print(f"   - RiskManager: Predicted move does not meet ATR-based threshold for '{strategy_name}'.")
+                if debug: print(f"   - RiskManager: Predicted move does not meet ATR-based threshold for '{strategy_name}'.")
                 return False
         
         # 4. Static Percentage Threshold Check (Fallback Logic)
         else:
-            print("   - RiskManager (Static Check): Using fallback percentage thresholds.")
+            if debug: print("   - RiskManager (Static Check): Using fallback percentage thresholds.")
             if direction == 'long' and pct_change < rules['long_threshold']:
-                print(f"   - RiskManager: Predicted change ({pct_change:.2f}%) is below long threshold ({rules['long_threshold']}%).")
+                if debug: print(f"   - RiskManager: Predicted change ({pct_change:.2f}%) is below long threshold ({rules['long_threshold']}%).")
                 return False
             if direction == 'short' and pct_change > -rules['short_threshold']:
-                print(f"   - RiskManager: Predicted change ({pct_change:.2f}%) is above short threshold ({-rules['short_threshold']}%).")
+                if debug: print(f"   - RiskManager: Predicted change ({pct_change:.2f}%) is above short threshold ({-rules['short_threshold']}%).")
                 return False
             
         # If all checks pass
-        print(f"   - RiskManager: Signal for {direction.upper()} {prediction['asset']} passed all checks.")
+        if debug: print(f"   - RiskManager: Signal for {direction.upper()} {prediction['asset']} passed all checks.")
         return True

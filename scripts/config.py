@@ -10,6 +10,7 @@ import os
 
 STRATEGIES = {
     'main': {
+        'enabled': True,
         'timeframe': '1h',
         'atr_threshold_multiplier': 1.5, # Trade if predicted move > 1.5 * ATR
         'long_threshold': 2.5,       # Aim for 2.5% up moves
@@ -20,6 +21,7 @@ STRATEGIES = {
         'dynamic_exit': True         
     },
     'swing': {
+        'enabled': True,
         'timeframe': '4h',
         'atr_threshold_multiplier': 1.5, # Trade if predicted move > 1.5 * ATR
         'long_threshold': 1.2,       # Lowered threshold for more swing opportunities
@@ -30,6 +32,7 @@ STRATEGIES = {
         'dynamic_exit': True
     },
     'btc-swing': {
+        'enabled': True,
         'timeframe': '4h',
         'atr_threshold_multiplier': 1.0, # BTC is volatile, require less of a multiplier
         'long_threshold': 2.0,       # Bigger target for BTC swings
@@ -40,13 +43,14 @@ STRATEGIES = {
         'dynamic_exit': True
     },
     'scalp': {
+        'enabled': False,            # This strategy is disabled by default
         'timeframe': '15m',
-        'atr_threshold_multiplier': 1.0, # Scalping is about small, quick moves
-        'long_threshold': 999,       # Impossible threshold - effectively disables scalping
-        'short_threshold': 999,      # Impossible threshold - effectively disables scalping
-        'min_confidence': 0.99,      # Nearly impossible confidence requirement
-        'sequence_length': 90,
-        'hold_period_hours': 0.5,    
+        'atr_threshold_multiplier': 1.0,
+        'long_threshold': 0.5,       # Sensible default for scalping (0.5%)
+        'short_threshold': 0.5,      # Sensible default for scalping (0.5%)
+        'min_confidence': 0.75,      # Sensible default confidence
+        'sequence_length': 30,       # Scalping uses shorter sequences
+        'hold_period_hours': 1,      # 1-hour max hold for a scalp
         'dynamic_exit': True
     }
 }
@@ -61,6 +65,12 @@ ASSETS = ["BTC-USD", "ETH-USD", "SOL-USD"]
 
 # General risk management
 RISK_PER_TRADE = 0.02  # Risk 2% of (pretend) capital on any single trade
+
+# Backtesting-specific settings for realistic simulation
+BACKTEST_CONFIG = {
+    'fees_pct': 0.001,           # 0.1% fee per trade (buy/sell)
+    'slippage_pct': 0.0005       # 0.05% slippage per trade
+}
 
 # General Risk Configuration
 RISK_CONFIG = {

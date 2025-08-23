@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 
 from scripts.core.data_engine import DataMaster
 from scripts.core.analysis_engine import AIAnalyst
-from scripts.config import STRATEGIES
+from scripts.config import STRATEGIES, BACKTEST_CONFIG
 from scripts.backtest.metrics import calculate_all_metrics, get_empty_metrics
 from scripts.core.risk_engine import RiskManager
 
@@ -65,8 +65,12 @@ class BacktestEngine:
                 print(f"❌ Unknown strategy: {strategy_type}")
                 return get_empty_metrics()
 
+            if not strategy_config.get('enabled', True):
+                print(f"⚠️ Strategy '{strategy_type}' is disabled in config. Skipping.")
+                return get_empty_metrics()
+
             print(f"\n🔧 Running backtest for {symbol} with '{strategy_type}' strategy.")
-            df = self.load_data(symbol, days, strategy_config['timeframe'])
+            df = self.load_data(symbol, days, strategy_config['timeframe']) # Pass the timeframe string
             if df.empty:
                 return get_empty_metrics()
 
@@ -82,30 +86,23 @@ class BacktestEngine:
                 current_price = current_candle['close']
                 current_time = df.index[i]
                 
-                # ---- POSITION MANAGEMENT LOGIC ----
+                # ---- POSITION MANAGEMENT LOGIC (PROFESSIONAL & REALISTIC) ----
                 if open_position:
                     outcome = None
                     exit_price = None
 
-                    # 1. Check for Stop Loss or Take Profit
+                    # --- REALISTIC SL/TP CHECK (FIXES LOOK-AHEAD BIAS) ---
+                    # We must check for the stop-loss first, as it has priority in a single candle.
                     if open_position['direction'] == 'long':
-                        if current_candle['high'] >= open_position['take_profit']:
-                            outcome, exit_price = 'TAKE_PROFIT', open_position['take_profit']
-                        elif current_candle['low'] <= open_position['stop_loss']:
+                        if current_candle['low'] <= open_position['stop_loss']:
                             outcome, exit_price = 'STOP_LOSS', open_position['stop_loss']
+                        elif current_candle['high'] >= open_position['take_profit']:
+                            outcome, exit_price = 'TAKE_PROFIT', open_position['take_profit']
                     else: # short
-                        if current_candle['low'] <= open_position['take_profit']:
-                            outcome, exit_price = 'TAKE_PROFIT', open_position['take_profit']
-                        elif current_candle['high'] >= open_position['stop_loss']:
+                        if current_candle['high'] >= open_position['stop_loss']:
                             outcome, exit_price = 'STOP_LOSS', open_position['stop_loss']
-                    
-                    # 2. Check for Reversal Signal (simplified for backtesting)
-                    if not outcome:
-                        # A more complex simulation could re-run the model here.
-                        # For now, we use a simple time-based exit if SL/TP is not hit.
-                        hold_hours = strategy_config.get('hold_period_hours', 24 * 5) # 5-day hold default
-                        if current_time >= open_position['entry_time'] + pd.Timedelta(hours=hold_hours):
-                            outcome, exit_price = 'TIME_EXIT', current_price
+                        elif current_candle['low'] <= open_position['take_profit']:
+                            outcome, exit_price = 'TAKE_PROFIT', open_position['take_profit']
 
                     if outcome:
                         self._close_trade(open_position, exit_price, current_time, outcome)
@@ -117,9 +114,9 @@ class BacktestEngine:
                     
                     prediction = self.analyst.predict(symbol, window_data, strategy_name=strategy_type)
 
-                    if prediction and self.risk_manager.should_execute(prediction, strategy_type):
+                    if prediction and self.risk_manager.should_execute(prediction, strategy_type, debug=self.debug):
                         print(f"🎯 {current_time}: Opening {prediction['direction'].upper()} trade at ${current_price:.2f}")
-                        open_position = self._open_trade(prediction, current_time, strategy_type, window_data)
+                        open_position = self._open_trade(prediction, current_time, strategy_config, window_data)
 
             # Final Metrics Calculation
             print(f"\n✅ Backtest scan complete for {symbol}.")
@@ -136,12 +133,18 @@ class BacktestEngine:
             print(traceback.format_exc())
             return get_empty_metrics()
 
-    def _open_trade(self, prediction, entry_time, strategy_name, df):
-        """Creates a new virtual position."""
+    def _open_trade(self, prediction, entry_time, strategy_config, df):
+        """Creates a new virtual position with slippage."""
         entry_price = prediction['current_price']
         direction = prediction['direction']
         
-        rules = STRATEGIES[strategy_name]
+        # --- REALISTIC SLIPPAGE SIMULATION ---
+        slippage = entry_price * BACKTEST_CONFIG['slippage_pct']
+        if direction == 'long':
+            entry_price += slippage # We buy slightly higher
+        else:
+            entry_price -= slippage # We sell slightly lower
+        
         levels = self.risk_manager.calculate_levels(prediction, df)
 
         position = {
@@ -151,20 +154,27 @@ class BacktestEngine:
             'entry_time': entry_time,
             'stop_loss': levels['stop_loss'],
             'take_profit': levels['take_profit'],
-            'strategy_name': strategy_name,
+            'strategy_name': strategy_config.get('name', 'Unnamed'),
             'confidence': prediction['confidence']
         }
         return position
 
     def _close_trade(self, position, exit_price, exit_time, outcome):
-        """Closes the virtual position and logs the trade."""
-        pnl = 0
-        fees = 0.001 # 0.1% fee
+        """Closes the virtual position and logs the trade, including fees."""
         
+        # --- REALISTIC FEE CALCULATION ---
+        entry_value = position['entry_price']
+        exit_value = exit_price
+        
+        # Apply fees on both entry and exit
+        total_fees = (entry_value * BACKTEST_CONFIG['fees_pct']) + (exit_value * BACKTEST_CONFIG['fees_pct'])
+
         if position['direction'] == 'long':
-            pnl = ((exit_price - position['entry_price']) / position['entry_price']) - fees
+            pnl = ((exit_price - position['entry_price']) / position['entry_price'])
         else: # short
-            pnl = ((position['entry_price'] - exit_price) / position['entry_price']) - fees
+            pnl = ((position['entry_price'] - exit_price) / position['entry_price'])
+            
+        pnl_net = pnl - (total_fees / entry_value)
 
         trade = {
             'symbol': position['asset'],
@@ -173,14 +183,14 @@ class BacktestEngine:
             'entry_price': position['entry_price'],
             'exit_price': exit_price,
             'type': position['direction'],
-            'pnl': pnl * 100, # As percentage
+            'pnl': pnl_net * 100, # As percentage
             'status': 'closed',
             'outcome': outcome,
             'confidence': position['confidence']
         }
         self.trade_history.append(trade)
-        result_emoji = "✅" if pnl > 0 else "❌"
-        print(f"{result_emoji} {exit_time}: Closing {position['direction'].upper()} trade. Outcome: {outcome}. PnL: {pnl*100:.2f}%")
+        result_emoji = "✅" if pnl_net > 0 else "❌"
+        print(f"{result_emoji} {exit_time}: Closing {position['direction'].upper()} trade. Outcome: {outcome}. Net PnL: {pnl_net*100:.2f}%")
 
     def generate_report(self, symbol):
         """Create a text-based report."""
