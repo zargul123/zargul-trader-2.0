@@ -99,7 +99,8 @@ def objective(trial, asset, strategy_name, regime_df):
 
         # Define the search space for each parameter
         strategy_config['min_confidence'] = trial.suggest_float('min_confidence', 0.60, 0.95, step=0.01)
-        strategy_config['sequence_length'] = trial.suggest_int('sequence_length', 20, 150, step=5)
+        # NOTE: sequence_length is NOT optimized here as it's part of the model's architecture.
+        # strategy_config['sequence_length'] = trial.suggest_int('sequence_length', 20, 150, step=5)
         strategy_config['atr_threshold_multiplier'] = trial.suggest_float('atr_threshold_multiplier', 0.5, 3.0, step=0.1)
         strategy_config['risk_reward_ratio'] = trial.suggest_float('risk_reward_ratio', 1.0, 5.0, step=0.25)
 
