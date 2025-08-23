@@ -14,12 +14,7 @@ project_root = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, project_root)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TensorFlow logging
 
-# --- DEBUGGING: Print the Python path to diagnose import issues ---
-print(f"Project Root added to path: {project_root}")
-print("Current Python Path:", sys.path)
-# ----------------------------------------------------------------
-
-from scripts.core.backtest_engine import BacktestEngine
+from scripts.backtest.backtest_engine import BacktestEngine
 from scripts.core.data_engine import DataMaster
 from scripts.core.regime_filter import MarketRegimeFilter
 from scripts.config import ASSETS, STRATEGIES
