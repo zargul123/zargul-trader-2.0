@@ -115,29 +115,80 @@ TRAINING_CONFIG = {
     'training_days': 1095           # Use 3 years of historical data for training
 }
 
-# Asset-specific, optimized model architectures
+# Asset-specific, optimized model architectures.
+# Each asset has a dictionary of strategies, allowing for fine-tuned models per use case.
 MODEL_HYPERPARAMS = {
     'BTC-USD': {
-        'n_layers': 1,
-        'learning_rate': 0.009886643874520377,
-        'units_layer_0': 251,
-        'dropout_layer_0': 0.35025264979998394
+        'main': {
+            'n_layers': 1,
+            'learning_rate': 0.009886643874520377,
+            'units_layer_0': 251,
+            'dropout_layer_0': 0.35025264979998394
+        },
+        'scalp': { # Placeholder: Using main's params as a default
+            'n_layers': 1,
+            'learning_rate': 0.009886643874520377,
+            'units_layer_0': 251,
+            'dropout_layer_0': 0.35025264979998394
+        },
+        'btc-swing': { # Placeholder: Using main's params as a default
+            'n_layers': 1,
+            'learning_rate': 0.009886643874520377,
+            'units_layer_0': 251,
+            'dropout_layer_0': 0.35025264979998394
+        }
     },
     'ETH-USD': {
-        'n_layers': 3,
-        'learning_rate': 0.009847271267492321,
-        'units_layer_0': 52,
-        'dropout_layer_0': 0.4547476109205212,
-        'units_layer_1': 36,
-        'dropout_layer_1': 0.26953065823496686,
-        'units_layer_2': 206,
-        'dropout_layer_2': 0.15479272548181033
+        'main': {
+            'n_layers': 3,
+            'learning_rate': 0.009847271267492321,
+            'units_layer_0': 52,
+            'dropout_layer_0': 0.4547476109205212,
+            'units_layer_1': 36,
+            'dropout_layer_1': 0.26953065823496686,
+            'units_layer_2': 206,
+            'dropout_layer_2': 0.15479272548181033
+        },
+        'scalp': { # Placeholder: Using main's params as a default
+            'n_layers': 3,
+            'learning_rate': 0.009847271267492321,
+            'units_layer_0': 52,
+            'dropout_layer_0': 0.4547476109205212,
+            'units_layer_1': 36,
+            'dropout_layer_1': 0.26953065823496686,
+            'units_layer_2': 206,
+            'dropout_layer_2': 0.15479272548181033
+        },
+        'swing': { # Placeholder: Using main's params as a default
+            'n_layers': 3,
+            'learning_rate': 0.009847271267492321,
+            'units_layer_0': 52,
+            'dropout_layer_0': 0.4547476109205212,
+            'units_layer_1': 36,
+            'dropout_layer_1': 0.26953065823496686,
+            'units_layer_2': 206,
+            'dropout_layer_2': 0.15479272548181033
+        }
     },
     'SOL-USD': {
-        'n_layers': 1,
-        'learning_rate': 0.009906324714275988,
-        'units_layer_0': 151,
-        'dropout_layer_0': 0.13198466453039642
+        'main': {
+            'n_layers': 1,
+            'learning_rate': 0.009906324714275988,
+            'units_layer_0': 151,
+            'dropout_layer_0': 0.13198466453039642
+        },
+        'scalp': { # Placeholder: Using main's params as a default
+            'n_layers': 1,
+            'learning_rate': 0.009906324714275988,
+            'units_layer_0': 151,
+            'dropout_layer_0': 0.13198466453039642
+        },
+        'swing': { # Placeholder: Using main's params as a default
+            'n_layers': 1,
+            'learning_rate': 0.009906324714275988,
+            'units_layer_0': 151,
+            'dropout_layer_0': 0.13198466453039642
+        }
     },
     'default': { # Fallback for any other assets
         'n_layers': 1,

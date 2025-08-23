@@ -98,14 +98,15 @@ class AIAnalyst:
                     except Exception as e:
                         print(f"❌ Failed to load components for {symbol} ({strategy_name}): {e}")
 
-    def _create_advanced_model(self, symbol, input_shape, n_outputs):
+    def _create_advanced_model(self, symbol, strategy_name, input_shape, n_outputs):
         """
         Creates a Keras model with hyperparameters dynamically loaded from the config
-        based on the asset symbol.
+        based on the asset symbol and strategy name.
         """
-        # --- 1. Load Hyperparameters ---
-        params = MODEL_HYPERPARAMS.get(symbol, MODEL_HYPERPARAMS['default'])
-        print(f"   - Building model for {symbol} with {params['n_layers']} LSTM layer(s).")
+        # --- 1. Load Hyperparameters with a robust fallback system ---
+        asset_params = MODEL_HYPERPARAMS.get(symbol, {})
+        params = asset_params.get(strategy_name, asset_params.get('main', MODEL_HYPERPARAMS['default']))
+        print(f"   - Building model for {symbol} ({strategy_name}) with {params['n_layers']} LSTM layer(s).")
 
         # --- 2. Build Model Dynamically ---
         inputs = tf.keras.layers.Input(shape=input_shape)
@@ -187,7 +188,7 @@ class AIAnalyst:
             y_train = {'price_targets': y_pt_train, 'trade_signal': y_sig_train}
             y_val = {'price_targets': y_pt_val, 'trade_signal': y_sig_val}
 
-            model = self._create_advanced_model(symbol, (X_train.shape[1], X_train.shape[2]), n_outputs=y_sig_train.shape[1])
+            model = self._create_advanced_model(symbol, strategy_name, (X_train.shape[1], X_train.shape[2]), n_outputs=y_sig_train.shape[1])
             es = EarlyStopping(monitor='val_loss', patience=TRAINING_CONFIG['early_stop_patience'], restore_best_weights=True)
             
             # Use .h5 format to avoid Keras native format issues with ModelCheckpoint
