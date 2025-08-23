@@ -8,7 +8,9 @@ import numpy as np
 from copy import deepcopy
 
 # --- Setup Project Environment ---
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Add the project's root directory to the Python path
+# This ensures that imports like 'from scripts.core...' work correctly
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TensorFlow logging
 
 from scripts.core.backtest_engine import BacktestEngine
