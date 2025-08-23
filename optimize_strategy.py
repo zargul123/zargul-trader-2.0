@@ -16,11 +16,49 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TensorFlow logging
 
 from scripts.backtest.backtest_engine import BacktestEngine
 from scripts.core.data_engine import DataMaster
-from scripts.core.regime_filter import MarketRegimeFilter
-from scripts.config import ASSETS, STRATEGIES
+from scripts.config import ASSETS, STRATEGIES, REGIME_CONFIG
 
 # --- Constants ---
 OPTIMIZED_RESULTS_FILE = 'optimized_strategies.json'
+
+def _calculate_shannon_entropy(series, window):
+    """Helper function to calculate entropy for a rolling window."""
+    # Discretize returns into bins
+    bins = pd.cut(series, bins=[-np.inf, -0.005, 0, 0.005, np.inf], labels=False, right=False)
+    # Calculate probabilities of each bin
+    counts = np.bincount(bins, minlength=4)
+    probabilities = counts / len(series)
+    # Filter out zero probabilities to avoid log(0) errors
+    probabilities = probabilities[probabilities > 0]
+    # Shannon Entropy formula
+    return -np.sum(probabilities * np.log2(probabilities))
+
+def calculate_historical_regimes(df: pd.DataFrame) -> pd.Series:
+    """
+    Calculates the market regime for each row in a historical DataFrame.
+    This is a vectorized operation for backtesting/optimization.
+    """
+    print("-- Calculating historical market regimes...")
+    # 1. Calculate rolling entropy
+    price_returns = df['close'].pct_change().fillna(0)
+    rolling_entropy = price_returns.rolling(window=REGIME_CONFIG['entropy_window']).apply(
+        _calculate_shannon_entropy, raw=True
+    )
+    
+    # 2. Smooth the entropy using an Exponential Moving Average
+    smoothed_entropy = rolling_entropy.ewm(alpha=REGIME_CONFIG['entropy_smoothing_alpha']).mean()
+
+    # 3. Define conditions for each regime
+    is_chaotic = smoothed_entropy > REGIME_CONFIG['entropy_chaotic_threshold']
+    is_trending = df['adx'] > REGIME_CONFIG['adx_trending_threshold']
+
+    # 4. Assign regimes based on priority (Chaos > Trending > Ranging)
+    regimes = pd.Series("Ranging", index=df.index)
+    regimes[is_trending] = "Trending"
+    regimes[is_chaotic] = "Chaotic"
+    
+    print("-- Regime calculation complete.")
+    return regimes
 
 def load_regime_data(asset, timeframe, regime_type):
     """
@@ -33,8 +71,11 @@ def load_regime_data(asset, timeframe, regime_type):
     if df is None or df.empty:
         raise ValueError(f"Could not load historical data for {asset}.")
 
-    regime_filter = MarketRegimeFilter()
-    df['regime'] = regime_filter.add_regime_column(df)
+    # Use the new vectorized function to classify every row
+    df['regime'] = calculate_historical_regimes(df)
+    
+    # Drop initial rows where indicators/regimes might be NaN
+    df.dropna(inplace=True)
     
     filtered_df = df[df['regime'] == regime_type].copy()
     
@@ -45,6 +86,7 @@ def load_regime_data(asset, timeframe, regime_type):
 
     print(f"-- Found {len(filtered_df)} candles for the '{regime_type}' regime --")
     return filtered_df
+
 
 def objective(trial, asset, strategy_name, regime_df):
     """
