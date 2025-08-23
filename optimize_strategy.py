@@ -29,7 +29,7 @@ def load_regime_data(asset, timeframe, regime_type):
     print(f"\n-- Loading and filtering data for {asset} in {regime_type} regime --")
     data_master = DataMaster()
     # Load a substantial amount of data to ensure enough points for the regime
-    df = data_master.get_historical_data(asset, timeframe, "3 years")
+    df = data_master.get_training_data(asset, timeframe, days=1095) # 1095 days = 3 years
     if df is None or df.empty:
         raise ValueError(f"Could not load historical data for {asset}.")
 
