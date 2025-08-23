@@ -10,8 +10,14 @@ from copy import deepcopy
 # --- Setup Project Environment ---
 # Add the project's root directory to the Python path
 # This ensures that imports like 'from scripts.core...' work correctly
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+project_root = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, project_root)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TensorFlow logging
+
+# --- DEBUGGING: Print the Python path to diagnose import issues ---
+print(f"Project Root added to path: {project_root}")
+print("Current Python Path:", sys.path)
+# ----------------------------------------------------------------
 
 from scripts.core.backtest_engine import BacktestEngine
 from scripts.core.data_engine import DataMaster
