@@ -16,7 +16,7 @@ from scripts.core.risk_engine import RiskManager
 
 class BacktestEngine:
     def __init__(self, debug=False):
-        self.analyst = AIAnalyst()
+        # self.analyst = AIAnalyst() # DEFERRED: Analyst will be initialized within run_backtest
         self.data = DataMaster()
         self.risk_manager = RiskManager()
         self.debug = debug
@@ -59,6 +59,12 @@ class BacktestEngine:
         Runs a backtest for a given symbol and strategy.
         Can use pre-loaded data and a temporary strategy config for optimization.
         """
+        # --- STRATEGY-SPECIFIC INITIALIZATION ---
+        # Initialize the Analyst here to load ONLY the required model.
+        # This is the key change for performance.
+        analyst = AIAnalyst(symbol=symbol, strategy_type=strategy_type)
+        # -----------------------------------------
+
         self.trade_history = []
         try:
             # Use the temporary config if provided (for optimization), otherwise use the global one
@@ -121,11 +127,12 @@ class BacktestEngine:
                 if not open_position:
                     window_data = df.iloc[i - sequence_length : i]
                     
-                    prediction = self.analyst.predict(symbol, window_data, strategy_name=strategy_type)
+                    prediction = analyst.predict(symbol, window_data, strategy_name=strategy_type)
 
                     if prediction and self.risk_manager.should_execute(prediction, strategy_type, debug=self.debug):
                         print(f"🎯 {current_time}: Opening {prediction['direction'].upper()} trade at ${current_price:.2f}")
                         open_position = self._open_trade(prediction, current_time, strategy_config, window_data)
+
 
             # Final Metrics Calculation
             print(f"\n✅ Backtest scan complete for {symbol}.")

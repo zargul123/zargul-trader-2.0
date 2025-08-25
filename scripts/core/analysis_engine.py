@@ -34,14 +34,23 @@ class AttentionLayer(tf.keras.layers.Layer):
         return super().get_config()
 
 class AIAnalyst:
-    def __init__(self, train_all=False):
-        self.models = {symbol: {} for symbol in ASSETS}
-        self.scalers = {symbol: {} for symbol in ASSETS}
-        self.calibrators = {symbol: {} for symbol in ASSETS} # For Platt Scaling
-        self.prediction_functions = {symbol: {} for symbol in ASSETS}
+    def __init__(self, train_all=False, symbol=None, strategy_type=None):
+        self.models = {s: {} for s in ASSETS}
+        self.scalers = {s: {} for s in ASSETS}
+        self.calibrators = {s: {} for s in ASSETS}
+        self.prediction_functions = {s: {} for s in ASSETS}
         self.train_all = train_all
         self.data = DataMaster()
-        self._initialize_models()
+        
+        # This is the core of the change. We decide WHICH models to load.
+        if symbol and strategy_type:
+            # If a specific symbol and strategy are provided, only load that one.
+            # This is the new, efficient path for backtesting.
+            self._initialize_models(specific_symbol=symbol, specific_strategy=strategy_type)
+        else:
+            # Otherwise, run the original logic to load all models.
+            # This preserves the behavior for the main trading bot.
+            self._initialize_models()
 
     def _align_df_features(self, df: pd.DataFrame) -> pd.DataFrame:
         """
@@ -66,22 +75,37 @@ class AIAnalyst:
         
         return aligned_df.astype('float32')
 
-    def _initialize_models(self):
+    def _initialize_models(self, specific_symbol=None, specific_strategy=None):
+        """
+        Initializes models. If specific_symbol and specific_strategy are provided,
+        it only loads/trains that specific model. Otherwise, it loads all models.
+        """
         print("\n🤖 Initializing AI Analyst...")
         os.makedirs('trained_models', exist_ok=True)
-        for symbol in ASSETS:
-            strategies_for_symbol = ['main', 'scalp']
-            if symbol == 'BTC-USD':
-                strategies_for_symbol.append('btc-swing')
+
+        # If a specific model is requested, create a targeted list of one
+        if specific_symbol and specific_strategy:
+            symbols_to_load = [specific_symbol]
+        else:
+            symbols_to_load = ASSETS
+
+        for symbol in symbols_to_load:
+            # Determine which strategies to load for the current symbol
+            if specific_symbol and specific_strategy:
+                strategies_to_load = [specific_strategy]
             else:
-                strategies_for_symbol.append('swing')
-            
-            for strategy_name in strategies_for_symbol:
-                model_path = f'trained_models/{symbol}_{strategy_name}_model.h5' # Use .h5 format
+                # Original logic to determine all strategies for a symbol
+                strategies_to_load = ['main', 'scalp']
+                if symbol == 'BTC-USD':
+                    strategies_to_load.append('btc-swing')
+                else:
+                    strategies_to_load.append('swing')
+
+            for strategy_name in strategies_to_load:
+                model_path = f'trained_models/{symbol}_{strategy_name}_model.h5'
                 scaler_path = f'trained_models/{symbol}_{strategy_name}_scaler.joblib'
                 calibrator_path = f'trained_models/{symbol}_{strategy_name}_calibrator.joblib'
-                
-                # Train if any of the three files are missing or if train_all is True
+
                 if self.train_all or not all(os.path.exists(p) for p in [model_path, scaler_path, calibrator_path]):
                     print(f"🔧 No pre-trained model/scaler/calibrator for {symbol} ({strategy_name}) or retraining requested.")
                     try:
@@ -91,7 +115,7 @@ class AIAnalyst:
                 else:
                     print(f"🧠 Loading pre-trained model, scaler, and calibrator for {symbol} ({strategy_name})...")
                     try:
-                        self.models[symbol][strategy_name] = load_model(model_path) # No custom_objects needed for .h5
+                        self.models[symbol][strategy_name] = load_model(model_path)
                         self.scalers[symbol][strategy_name] = load(scaler_path)
                         self.calibrators[symbol][strategy_name] = load(calibrator_path)
                         print(f"   - ✅ Components for {symbol} ({strategy_name}) loaded successfully.")
