@@ -158,7 +158,7 @@ def run_optimization(asset, strategy, regime, trials):
     # Use a lambda to pass the extra 'backtest_engine' argument to the objective function.
     objective_func = lambda trial: objective(trial, strategy, regime_df, backtest_engine)
     
-    study.optimize(objective_func, n_trials=trials, n_jobs=-1, show_progress_bar=True)
+    study.optimize(objective_func, n_trials=trials, n_jobs=1, show_progress_bar=True)
 
     # --- 4. Process and Save Results ---
     print("\n" + "="*80)
