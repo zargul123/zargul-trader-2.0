@@ -15,6 +15,7 @@ sys.path.insert(0, project_root)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TensorFlow logging
 
 from scripts.backtest.backtest_engine import BacktestEngine
+from scripts.core.analysis_engine import AIAnalyst
 from scripts.core.data_engine import DataMaster
 from scripts.config import ASSETS, STRATEGIES, REGIME_CONFIG
 
@@ -88,56 +89,43 @@ def load_regime_data(asset, timeframe, regime_type):
     return filtered_df
 
 
-def objective(trial, asset, strategy_name, regime_df):
+def objective(trial, strategy_name, regime_df, backtest_engine):
     """
     The core Optuna objective function.
+    It now receives a pre-initialized backtest_engine for efficiency.
     """
     try:
         # --- 1. Suggest Parameters ---
-        # Create a deepcopy to avoid modifying the global config
         strategy_config = deepcopy(STRATEGIES[strategy_name])
-
-        # Define the search space for each parameter
         strategy_config['min_confidence'] = trial.suggest_float('min_confidence', 0.60, 0.95, step=0.01)
-        # NOTE: sequence_length is NOT optimized here as it's part of the model's architecture.
-        # strategy_config['sequence_length'] = trial.suggest_int('sequence_length', 20, 150, step=5)
         strategy_config['atr_threshold_multiplier'] = trial.suggest_float('atr_threshold_multiplier', 0.5, 3.0, step=0.1)
         strategy_config['risk_reward_ratio'] = trial.suggest_float('risk_reward_ratio', 1.0, 5.0, step=0.25)
 
         # --- 2. Run the Backtest ---
-        # Instantiate the engine in the modern way
-        backtest_engine = BacktestEngine()
-        
-        # Call the upgraded run_backtest method with our pre-filtered data
-        # and temporary strategy configuration.
+        # The engine is already created, so we just call the method.
+        asset = backtest_engine.analyst.models.keys().__iter__().__next__() # Get asset from analyst
         results = backtest_engine.run_backtest(
             symbol=asset,
             strategy_type=strategy_name,
-            days=0, # Not used when providing a dataframe, but required
+            days=0,
             data_df=regime_df,
             temp_strategy_config=strategy_config
         )
 
         # --- 3. Return the Objective Metric ---
         if results is None or results['total_trades'] == 0:
-            # Penalize parameter sets that result in no trades or errors
             return -10.0 
 
-        # We want to maximize Sharpe Ratio, but also ensure profitability
         sharpe_ratio = results.get('sharpe_ratio', 0)
         profit_factor = results.get('profit_factor', 0)
 
-        # If Sharpe is negative (losing strategy), penalize it heavily
         if sharpe_ratio < 0:
-            return sharpe_ratio * 2 # Make it more negative
+            return sharpe_ratio * 2
         
-        # Favor strategies that are both profitable and have good risk-adjusted returns
-        # This simple combination helps guide Optuna to more robust solutions
         return sharpe_ratio * (1 + (profit_factor / 10))
 
     except Exception as e:
         print(f"An error occurred during trial: {e}")
-        # Return a large negative number to penalize failing trials
         return -100.0
 
 def run_optimization(asset, strategy, regime, trials):
@@ -157,13 +145,22 @@ def run_optimization(asset, strategy, regime, trials):
         print(f"❌ ERROR: {e}")
         return
 
-    # --- 2. Run Optuna Study ---
+    # --- 2. Initialize Engines ONCE for Efficiency ---
+    print(f"\n-- Pre-initializing AI Analyst and Backtest Engine for {asset} ({strategy}) --")
+    # Load the specific model required for this optimization run.
+    analyst = AIAnalyst(symbol=asset, strategy_type=strategy)
+    # Provide the pre-loaded analyst to the backtest engine.
+    backtest_engine = BacktestEngine(analyst=analyst)
+    print("-- Engines are ready. --")
+
+    # --- 3. Run Optuna Study ---
     study = optuna.create_study(direction="maximize")
-    objective_func = lambda trial: objective(trial, asset, strategy, regime_df)
+    # Use a lambda to pass the extra 'backtest_engine' argument to the objective function.
+    objective_func = lambda trial: objective(trial, strategy, regime_df, backtest_engine)
     
     study.optimize(objective_func, n_trials=trials, n_jobs=-1, show_progress_bar=True)
 
-    # --- 3. Process and Save Results ---
+    # --- 4. Process and Save Results ---
     print("\n" + "="*80)
     print("✨ OPTIMIZATION COMPLETE ✨")
     print(f"Best Sharpe Ratio Achieved: {study.best_value:.4f}")
@@ -180,13 +177,11 @@ def run_optimization(asset, strategy, regime, trials):
         all_results = {}
 
     # Update dictionary with new results
-    # This nested structure ensures we don't overwrite other results
     if asset not in all_results:
         all_results[asset] = {}
     if strategy not in all_results[asset]:
         all_results[asset][strategy] = {}
     
-    # Store the best params and the final Sharpe ratio
     result_data = best_params
     result_data['sharpe_ratio'] = study.best_value
     all_results[asset][strategy][regime] = result_data

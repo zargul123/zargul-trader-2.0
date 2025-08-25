@@ -15,8 +15,12 @@ from scripts.backtest.metrics import calculate_all_metrics, get_empty_metrics
 from scripts.core.risk_engine import RiskManager
 
 class BacktestEngine:
-    def __init__(self, debug=False):
-        # self.analyst = AIAnalyst() # DEFERRED: Analyst will be initialized within run_backtest
+    def __init__(self, analyst: AIAnalyst = None, debug=False):
+        """
+        Initializes the BacktestEngine.
+        Can optionally be passed a pre-initialized AIAnalyst for efficiency.
+        """
+        self.analyst = analyst  # Can be None
         self.data = DataMaster()
         self.risk_manager = RiskManager()
         self.debug = debug
@@ -59,11 +63,13 @@ class BacktestEngine:
         Runs a backtest for a given symbol and strategy.
         Can use pre-loaded data and a temporary strategy config for optimization.
         """
-        # --- STRATEGY-SPECIFIC INITIALIZATION ---
-        # Initialize the Analyst here to load ONLY the required model.
-        # This is the key change for performance.
-        analyst = AIAnalyst(symbol=symbol, strategy_type=strategy_type)
-        # -----------------------------------------
+        # --- ANALYST INITIALIZATION LOGIC ---
+        # If an analyst was provided during __init__, use it.
+        # Otherwise, create a new one on-the-fly. This ensures backwards compatibility.
+        analyst_to_use = self.analyst
+        if analyst_to_use is None:
+            analyst_to_use = AIAnalyst(symbol=symbol, strategy_type=strategy_type)
+        # ------------------------------------
 
         self.trade_history = []
         try:
@@ -127,11 +133,12 @@ class BacktestEngine:
                 if not open_position:
                     window_data = df.iloc[i - sequence_length : i]
                     
-                    prediction = analyst.predict(symbol, window_data, strategy_name=strategy_type)
+                    prediction = analyst_to_use.predict(symbol, window_data, strategy_name=strategy_type)
 
                     if prediction and self.risk_manager.should_execute(prediction, strategy_type, debug=self.debug):
                         print(f"🎯 {current_time}: Opening {prediction['direction'].upper()} trade at ${current_price:.2f}")
                         open_position = self._open_trade(prediction, current_time, strategy_config, window_data)
+
 
 
             # Final Metrics Calculation
