@@ -161,7 +161,7 @@ def run_optimization(asset, strategy, regime, trials):
     study = optuna.create_study(direction="maximize")
     objective_func = lambda trial: objective(trial, asset, strategy, regime_df)
     
-    study.optimize(objective_func, n_trials=trials, show_progress_bar=True)
+    study.optimize(objective_func, n_trials=trials, n_jobs=-1, show_progress_bar=True)
 
     # --- 3. Process and Save Results ---
     print("\n" + "="*80)
