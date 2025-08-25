@@ -125,11 +125,15 @@ MODEL_HYPERPARAMS = {
             'units_layer_0': 251,
             'dropout_layer_0': 0.35025264979998394
         },
-        'scalp': { # Placeholder: Using main's params as a default
-            'n_layers': 1,
-            'learning_rate': 0.009886643874520377,
-            'units_layer_0': 251,
-            'dropout_layer_0': 0.35025264979998394
+        'scalp': {
+            'n_layers': 3,
+            'learning_rate': 0.009982953155109069,
+            'units_layer_0': 238,
+            'dropout_layer_0': 0.35081521888366163,
+            'units_layer_1': 92,
+            'dropout_layer_1': 0.49685851840612133,
+            'units_layer_2': 248,
+            'dropout_layer_2': 0.4932229889671592
         },
         'btc-swing': { # Placeholder: Using main's params as a default
             'n_layers': 1,
