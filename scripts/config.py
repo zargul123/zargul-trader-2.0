@@ -44,12 +44,12 @@ STRATEGIES = {
     },
     'scalp': {
         'enabled': True,            # This strategy is temporarily enabled for optimization
-        'timeframe': '15m',
+        'timeframe': '5m',
         'atr_threshold_multiplier': 1.0,
         'long_threshold': 0.5,       # Sensible default for scalping (0.5%)
         'short_threshold': 0.5,      # Sensible default for scalping (0.5%)
         'min_confidence': 0.75,      # Sensible default confidence
-        'sequence_length': 30,       # Scalping uses shorter sequences
+        'sequence_length': 10,       # Scalping uses shorter sequences
         'hold_period_hours': 1,      # 1-hour max hold for a scalp
         'dynamic_exit': True
     }

@@ -24,11 +24,11 @@ from scripts.config import ASSETS, STRATEGIES, TECHNICAL_INDICATORS
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
+import argparse
+
 # --- Global Configuration ---
 N_TRIALS = 50  # Number of optimization trials to run
 EPOCHS = 20    # Number of epochs to train each model
-ASSET_TO_OPTIMIZE = "SOL-USD" # Asset to focus on for this optimization
-STRATEGY_NAME = "main" # Strategy to optimize
 
 def create_model(trial, input_shape, n_outputs):
     """
@@ -103,26 +103,27 @@ def objective(trial, X_train, y_train, X_val, y_val):
 
     return val_loss
 
-def run_optimization():
+def run_optimization(asset_to_optimize, strategy_name):
     """
     Main function to run the hyperparameter optimization.
     """
     print("="*80)
     print("🤖 INITIATING AI MODEL HYPERPARAMETER OPTIMIZATION 🤖")
-    print(f"Asset: {ASSET_TO_OPTIMIZE}, Strategy: {STRATEGY_NAME}")
+    print(f"Asset: {asset_to_optimize}, Strategy: {strategy_name}")
     print(f"Running {N_TRIALS} trials of {EPOCHS} epochs each.")
     print("="*80)
 
     # --- 1. Load and Prepare Data ---
     print("\n[PHASE 1/3] Loading and preparing data...")
     data_master = DataMaster()
-    timeframe = STRATEGIES[STRATEGY_NAME]['timeframe']
-    sequence_length = STRATEGIES[STRATEGY_NAME]['sequence_length']
+    timeframe = STRATEGIES[strategy_name]['timeframe']
+    sequence_length = STRATEGIES[strategy_name]['sequence_length']
     
-    df = data_master.get_training_data(ASSET_TO_OPTIMIZE, timeframe, days=365*3) # 3 years of data
+    df = data_master.get_training_data(asset_to_optimize, timeframe, days=365*3) # 3 years of data
     if df is None or df.empty:
-        print(f"❌ Could not get data for {ASSET_TO_OPTIMIZE}. Aborting.")
+        print(f"❌ Could not get data for {asset_to_optimize}. Aborting.")
         return
+
 
     features = ['open', 'high', 'low', 'close', 'volume'] + [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
     df_features = df[features].astype('float32')
