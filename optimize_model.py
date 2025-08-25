@@ -194,4 +194,23 @@ def run_optimization(asset_to_optimize, strategy_name):
     print("You can now use these hyperparameters to update the model in 'scripts/core/analysis_engine.py'.")
 
 if __name__ == "__main__":
-    run_optimization()
+    parser = argparse.ArgumentParser(
+        description="Run hyperparameter optimization for a specific asset and strategy.",
+        formatter_class=argparse.RawTextHelpFormatter
+    )
+    parser.add_argument(
+        '--asset',
+        type=str,
+        required=True,
+        help="The asset to optimize (e.g., 'BTC-USD')."
+    )
+    parser.add_argument(
+        '--strategy',
+        type=str,
+        required=True,
+        choices=STRATEGIES.keys(),
+        help="The strategy to optimize (e.g., 'main', 'scalp')."
+    )
+    args = parser.parse_args()
+    
+    run_optimization(args.asset, args.strategy)
