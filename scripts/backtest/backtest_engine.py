@@ -135,6 +135,11 @@ class BacktestEngine:
                     
                     prediction = analyst_to_use.predict(symbol, window_data, strategy_name=strategy_type)
 
+                    # --- [DEBUG] PRINT RAW AI SIGNAL ---
+                    if prediction and prediction['direction'] != 'hold':
+                        print(f"  [DEBUG] AI Signal @ {current_time}: Dir={prediction['direction']}, Conf={prediction['confidence']:.2f}, Move={prediction['pct_change']:.2f}%")
+                    # ------------------------------------
+
                     if prediction and self.risk_manager.should_execute(prediction, strategy_type, debug=self.debug):
                         print(f"🎯 {current_time}: Opening {prediction['direction'].upper()} trade at ${current_price:.2f}")
                         open_position = self._open_trade(prediction, current_time, strategy_config, window_data)

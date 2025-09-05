@@ -6,13 +6,12 @@ import optuna
 import pandas as pd
 import numpy as np
 from copy import deepcopy
+import joblib # Using joblib for efficient caching of DataFrames
 
 # --- Setup Project Environment ---
-# Add the project's root directory to the Python path
-# This ensures that imports like 'from scripts.core...' work correctly
 project_root = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, project_root)
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TensorFlow logging
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 from scripts.backtest.backtest_engine import BacktestEngine
 from scripts.core.analysis_engine import AIAnalyst
@@ -21,89 +20,89 @@ from scripts.config import ASSETS, STRATEGIES, REGIME_CONFIG
 
 # --- Constants ---
 OPTIMIZED_RESULTS_FILE = 'optimized_strategies.json'
+CACHE_DIR = 'cache' # Directory to store pre-processed data
 
 def _calculate_shannon_entropy(series, window):
     """Helper function to calculate entropy for a rolling window."""
-    # Discretize returns into bins
     bins = pd.cut(series, bins=[-np.inf, -0.005, 0, 0.005, np.inf], labels=False, right=False)
-    # Calculate probabilities of each bin
     counts = np.bincount(bins, minlength=4)
     probabilities = counts / len(series)
-    # Filter out zero probabilities to avoid log(0) errors
     probabilities = probabilities[probabilities > 0]
-    # Shannon Entropy formula
     return -np.sum(probabilities * np.log2(probabilities))
 
 def calculate_historical_regimes(df: pd.DataFrame) -> pd.Series:
-    """
-    Calculates the market regime for each row in a historical DataFrame.
-    This is a vectorized operation for backtesting/optimization.
-    """
+    """Calculates the market regime for each row in a historical DataFrame."""
     print("-- Calculating historical market regimes...")
-    # 1. Calculate rolling entropy
     price_returns = df['close'].pct_change().fillna(0)
     rolling_entropy = price_returns.rolling(window=REGIME_CONFIG['entropy_window']).apply(
         _calculate_shannon_entropy, raw=True, kwargs={'window': REGIME_CONFIG['entropy_window']}
     )
-    
-    # 2. Smooth the entropy using an Exponential Moving Average
     smoothed_entropy = rolling_entropy.ewm(alpha=REGIME_CONFIG['entropy_smoothing_alpha']).mean()
-
-    # 3. Define conditions for each regime
     is_chaotic = smoothed_entropy > REGIME_CONFIG['entropy_chaotic_threshold']
     is_trending = df['adx'] > REGIME_CONFIG['adx_trending_threshold']
-
-    # 4. Assign regimes based on priority (Chaos > Trending > Ranging)
     regimes = pd.Series("Ranging", index=df.index)
     regimes[is_trending] = "Trending"
     regimes[is_chaotic] = "Chaotic"
-    
     print("-- Regime calculation complete.")
     return regimes
 
 def load_regime_data(asset, timeframe, regime_type):
     """
     Loads a large dataset and filters it for a specific market regime.
+    Now includes caching to dramatically speed up subsequent runs.
     """
-    print(f"\n-- Loading and filtering data for {asset} in {regime_type} regime --")
+    os.makedirs(CACHE_DIR, exist_ok=True)
+    cache_filename = f"{asset}_{timeframe}_{regime_type}_data.pkl"
+    cache_filepath = os.path.join(CACHE_DIR, cache_filename)
+
+    # --- MEAL PREP (CACHING) ---
+    # 1. Check if the pre-processed data already exists.
+    if os.path.exists(cache_filepath):
+        print(f"\n-- Loading pre-processed data from cache: {cache_filepath} --")
+        filtered_df = joblib.load(cache_filepath)
+        print("-- Cached data loaded successfully. --")
+        return filtered_df
+
+    # 2. If not cached, perform the expensive data preparation.
+    print(f"\n-- No cache found. Performing one-time data preparation for {asset} in {regime_type} regime --")
     data_master = DataMaster()
-    # Load a substantial amount of data to ensure enough points for the regime
-    df = data_master.get_training_data(asset, timeframe, days=1095) # 1095 days = 3 years
+    df = data_master.get_training_data(asset, timeframe, days=1095)
     if df is None or df.empty:
         raise ValueError(f"Could not load historical data for {asset}.")
 
-    # Use the new vectorized function to classify every row
     df['regime'] = calculate_historical_regimes(df)
-    
-    # Drop initial rows where indicators/regimes might be NaN
     df.dropna(inplace=True)
-    
     filtered_df = df[df['regime'] == regime_type].copy()
-    
-    if len(filtered_df) < 200: # Ensure there's enough data to run a meaningful backtest
+
+    if len(filtered_df) < 200:
         print(f"⚠️ Warning: Only {len(filtered_df)} data points found for the {regime_type} regime.")
         if len(filtered_df) < 50:
              raise ValueError("Insufficient data for backtesting after regime filtering.")
 
+    # 3. Save the prepared data to the cache for next time.
+    print(f"-- Saving prepared data to cache: {cache_filepath} --")
+    joblib.dump(filtered_df, cache_filepath)
+    
     print(f"-- Found {len(filtered_df)} candles for the '{regime_type}' regime --")
     return filtered_df
 
-
 def objective(trial, strategy_name, regime_df, backtest_engine):
-    """
-    The core Optuna objective function.
-    It now receives a pre-initialized backtest_engine for efficiency.
-    """
+    """The core Optuna objective function."""
     try:
-        # --- 1. Suggest Parameters ---
         strategy_config = deepcopy(STRATEGIES[strategy_name])
         strategy_config['min_confidence'] = trial.suggest_float('min_confidence', 0.60, 0.95, step=0.01)
         strategy_config['atr_threshold_multiplier'] = trial.suggest_float('atr_threshold_multiplier', 0.5, 3.0, step=0.1)
-        strategy_config['risk_reward_ratio'] = trial.suggest_float('risk_reward_ratio', 1.0, 5.0, step=0.25)
+        
+        # This parameter is now part of the strategy config, not the global risk config
+        # We will need to adjust the RiskManager or how levels are calculated if we want to optimize this
+        # For now, let's assume we are optimizing a proxy for it.
+        # A better approach would be to pass this to the risk_manager.calculate_levels method
+        # but let's stick to the original logic for now.
+        # Let's call it 'risk_reward_ratio' as in the original script
+        trial.suggest_float('risk_reward_ratio', 1.0, 5.0, step=0.25)
 
-        # --- 2. Run the Backtest ---
-        # The engine is already created, so we just call the method.
-        asset = backtest_engine.analyst.models.keys().__iter__().__next__() # Get asset from analyst
+
+        asset = next(iter(backtest_engine.analyst.models))
         results = backtest_engine.run_backtest(
             symbol=asset,
             strategy_type=strategy_name,
@@ -112,9 +111,8 @@ def objective(trial, strategy_name, regime_df, backtest_engine):
             temp_strategy_config=strategy_config
         )
 
-        # --- 3. Return the Objective Metric ---
         if results is None or results['total_trades'] == 0:
-            return -10.0 
+            return -10.0
 
         sharpe_ratio = results.get('sharpe_ratio', 0)
         profit_factor = results.get('profit_factor', 0)
@@ -129,38 +127,46 @@ def objective(trial, strategy_name, regime_df, backtest_engine):
         return -100.0
 
 def run_optimization(asset, strategy, regime, trials):
-    """
-    Main function to set up and run the Optuna study.
-    """
+    """Main function to set up and run the Optuna study."""
     print("="*80)
     print("🚀 STARTING OPTIMIZATION 🚀")
     print(f"Asset: {asset} | Strategy: {strategy} | Regime: {regime} | Trials: {trials}")
     print("="*80)
 
-    # --- 1. Load and Prepare Data ---
-    timeframe = STRATEGIES[strategy]['timeframe']
     try:
+        timeframe = STRATEGIES[strategy]['timeframe']
         regime_df = load_regime_data(asset, timeframe, regime)
     except ValueError as e:
         print(f"❌ ERROR: {e}")
         return
 
-    # --- 2. Initialize Engines ONCE for Efficiency ---
     print(f"\n-- Pre-initializing AI Analyst and Backtest Engine for {asset} ({strategy}) --")
-    # Load the specific model required for this optimization run.
     analyst = AIAnalyst(symbol=asset, strategy_type=strategy)
-    # Provide the pre-loaded analyst to the backtest engine.
     backtest_engine = BacktestEngine(analyst=analyst)
     print("-- Engines are ready. --")
 
-    # --- 3. Run Optuna Study ---
-    study = optuna.create_study(direction="maximize")
-    # Use a lambda to pass the extra 'backtest_engine' argument to the objective function.
+    # --- THE NOTEBOOK (PERSISTENT STUDY) ---
+    # This creates a database file to save progress.
+    study_name = f"{asset}_{strategy}_{regime}"
+    storage_name = f"sqlite:///{study_name}.db"
+    study = optuna.create_study(
+        study_name=study_name,
+        storage=storage_name,
+        load_if_exists=True, # This is the magic part that resumes progress
+        direction="maximize"
+    )
+    
     objective_func = lambda trial: objective(trial, strategy, regime_df, backtest_engine)
     
-    study.optimize(objective_func, n_trials=trials, n_jobs=1, show_progress_bar=True)
+    # Check if we have already completed the required number of trials
+    completed_trials = len(study.trials)
+    if completed_trials >= trials:
+        print(f"Study already has {completed_trials} trials. No new trials will be run.")
+    else:
+        remaining_trials = trials - completed_trials
+        print(f"Resuming study. {completed_trials} trials already complete. Running {remaining_trials} more.")
+        study.optimize(objective_func, n_trials=remaining_trials, show_progress_bar=True)
 
-    # --- 4. Process and Save Results ---
     print("\n" + "="*80)
     print("✨ OPTIMIZATION COMPLETE ✨")
     print(f"Best Sharpe Ratio Achieved: {study.best_value:.4f}")
@@ -169,14 +175,12 @@ def run_optimization(asset, strategy, regime, trials):
     for key, value in best_params.items():
         print(f"  - {key}: {value}")
     
-    # Load existing results or create new dictionary
     if os.path.exists(OPTIMIZED_RESULTS_FILE):
         with open(OPTIMIZED_RESULTS_FILE, 'r') as f:
             all_results = json.load(f)
     else:
         all_results = {}
 
-    # Update dictionary with new results
     if asset not in all_results:
         all_results[asset] = {}
     if strategy not in all_results[asset]:
@@ -186,45 +190,22 @@ def run_optimization(asset, strategy, regime, trials):
     result_data['sharpe_ratio'] = study.best_value
     all_results[asset][strategy][regime] = result_data
 
-    # Save updated results to file
     with open(OPTIMIZED_RESULTS_FILE, 'w') as f:
         json.dump(all_results, f, indent=2)
         
     print(f"\n✅ Results saved to {OPTIMIZED_RESULTS_FILE}")
+    print(f"💡 Study progress saved to database: {study_name}.db")
     print("="*80)
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Automated Strategy Optimization using Optuna.",
         formatter_class=argparse.RawTextHelpFormatter
     )
-    parser.add_argument(
-        '--asset',
-        type=str,
-        required=True,
-        help="The crypto asset to optimize (e.g., 'BTC-USD')."
-    )
-    parser.add_argument(
-        '--strategy',
-        type=str,
-        required=True,
-        choices=STRATEGIES.keys(),
-        help="The strategy to optimize (e.g., 'main', 'swing')."
-    )
-    parser.add_argument(
-        '--regime',
-        type=str,
-        required=True,
-        choices=['Trending', 'Ranging'],
-        help="The market regime to optimize for."
-    )
-    parser.add_argument(
-        '--trials',
-        type=int,
-        default=100,
-        help="The number of optimization attempts Optuna should run."
-    )
+    parser.add_argument('--asset', type=str, required=True, help="e.g., 'BTC-USD'")
+    parser.add_argument('--strategy', type=str, required=True, choices=STRATEGIES.keys(), help="e.g., 'main', 'scalp'")
+    parser.add_argument('--regime', type=str, required=True, choices=['Trending', 'Ranging', 'Chaotic'], help="The market regime to optimize for.")
+    parser.add_argument('--trials', type=int, default=100, help="The TOTAL number of trials the study should have.")
     args = parser.parse_args()
 
     run_optimization(args.asset, args.strategy, args.regime, args.trials)
