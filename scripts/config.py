@@ -49,7 +49,7 @@ STRATEGIES = {
         'long_threshold': 0.5,       # Sensible default for scalping (0.5%)
         'short_threshold': 0.5,      # Sensible default for scalping (0.5%)
         'min_confidence': 0.75,      # Sensible default confidence
-        'sequence_length': 10,       # Scalping uses shorter sequences
+                'sequence_length': 22,       # Scalping uses shorter sequences
         'hold_period_hours': 1,      # 1-hour max hold for a scalp
         'dynamic_exit': True
     }
