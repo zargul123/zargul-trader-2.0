@@ -14,7 +14,7 @@ from sklearn.model_selection import train_test_split
 from joblib import dump, load
 
 from scripts.core.data_engine import DataMaster
-from scripts.config import ASSETS, TECHNICAL_INDICATORS, TRAINING_CONFIG, STRATEGIES
+from scripts.config import ASSETS, TECHNICAL_INDICATORS, TRAINING_CONFIG, STRATEGIES, MODEL_HYPERPARAMS
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -43,6 +43,29 @@ class AIAnalyst:
         self.data = DataMaster()
         self._initialize_models()
 
+    def _align_df_features(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Aligns the DataFrame columns to the canonical feature list from the config.
+        This ensures data passed to the scaler/model always has the exact same shape
+        by adding missing columns with 0 and ensuring a consistent order.
+        """
+        # The full, canonical list of features the model expects.
+        base_features = ['open', 'high', 'low', 'close', 'volume']
+        # TECHNICAL_INDICATORS from config now includes the 'lc_' metrics.
+        all_features = base_features + TECHNICAL_INDICATORS
+        
+        # Use dict.fromkeys to get a unique list while preserving order
+        canonical_feature_list = list(dict.fromkeys(all_features))
+        
+        # Reindex the DataFrame to match the canonical list.
+        # This adds missing columns with NaN and removes unexpected ones.
+        aligned_df = df.reindex(columns=canonical_feature_list)
+        
+        # Fill any NaN values that resulted from missing columns (e.g., API failure)
+        aligned_df.fillna(0, inplace=True)
+        
+        return aligned_df.astype('float32')
+
     def _initialize_models(self):
         print("\n🤖 Initializing AI Analyst...")
         os.makedirs('trained_models', exist_ok=True)
@@ -54,7 +77,7 @@ class AIAnalyst:
                 strategies_for_symbol.append('swing')
             
             for strategy_name in strategies_for_symbol:
-                model_path = f'trained_models/{symbol}_{strategy_name}_model.keras'
+                model_path = f'trained_models/{symbol}_{strategy_name}_model.h5' # Use .h5 format
                 scaler_path = f'trained_models/{symbol}_{strategy_name}_scaler.joblib'
                 calibrator_path = f'trained_models/{symbol}_{strategy_name}_calibrator.joblib'
                 
@@ -68,25 +91,53 @@ class AIAnalyst:
                 else:
                     print(f"🧠 Loading pre-trained model, scaler, and calibrator for {symbol} ({strategy_name})...")
                     try:
-                        self.models[symbol][strategy_name] = load_model(model_path, custom_objects={'AttentionLayer': AttentionLayer})
+                        self.models[symbol][strategy_name] = load_model(model_path) # No custom_objects needed for .h5
                         self.scalers[symbol][strategy_name] = load(scaler_path)
                         self.calibrators[symbol][strategy_name] = load(calibrator_path)
                         print(f"   - ✅ Components for {symbol} ({strategy_name}) loaded successfully.")
                     except Exception as e:
                         print(f"❌ Failed to load components for {symbol} ({strategy_name}): {e}")
 
-    def _create_advanced_model(self, input_shape, symbol):
-        model = Sequential([
-            Conv1D(64, 5, activation='relu', input_shape=input_shape),
-            Bidirectional(LSTM(128, return_sequences=True)) if symbol in ["BTC-USD", "ETH-USD"] else LSTM(64, return_sequences=False),
-            AttentionLayer() if symbol in ["BTC-USD", "ETH-USD"] else Dropout(0.2),
-            Dense(256, activation='swish') if symbol in ["BTC-USD", "ETH-USD"] else Dense(128, activation='relu'),
-            Dropout(0.2),
-            Dense(3)
-        ])
-        lr = 0.0001 if symbol in ["BTC-USD", "ETH-USD"] else 0.0002
-        optimizer = AdamW(learning_rate=lr, clipnorm=1.0)
-        model.compile(optimizer=optimizer, loss='mse', metrics=['mae'])
+    def _create_advanced_model(self, symbol, strategy_name, input_shape, n_outputs):
+        """
+        Creates a Keras model with hyperparameters dynamically loaded from the config
+        based on the asset symbol and strategy name.
+        """
+        # --- 1. Load Hyperparameters with a robust fallback system ---
+        asset_params = MODEL_HYPERPARAMS.get(symbol, {})
+        params = asset_params.get(strategy_name, asset_params.get('main', MODEL_HYPERPARAMS['default']))
+        print(f"   - Building model for {symbol} ({strategy_name}) with {params['n_layers']} LSTM layer(s).")
+
+        # --- 2. Build Model Dynamically ---
+        inputs = tf.keras.layers.Input(shape=input_shape)
+        x = inputs
+        
+        for i in range(params['n_layers']):
+            units = params[f'units_layer_{i}']
+            dropout = params[f'dropout_layer_{i}']
+            return_sequences = (i < params['n_layers'] - 1) # Return sequences for all but the last LSTM layer
+            
+            x = tf.keras.layers.Bidirectional(
+                tf.keras.layers.LSTM(units, return_sequences=return_sequences)
+            )(x)
+            x = tf.keras.layers.Dropout(dropout)(x)
+
+        # --- 3. Output Layers ---
+        output1 = tf.keras.layers.Dense(2, name='price_targets')(x)
+        output2 = tf.keras.layers.Dense(n_outputs, activation='softmax', name='trade_signal')(x)
+
+        model = tf.keras.models.Model(inputs=inputs, outputs=[output1, output2])
+        
+        optimizer = tf.keras.optimizers.Adam(learning_rate=params['learning_rate'])
+        
+        model.compile(
+            optimizer=optimizer,
+            loss={
+                'price_targets': 'mse',
+                'trade_signal': 'categorical_crossentropy'
+            },
+            metrics={'trade_signal': 'accuracy'}
+        )
         return model
 
     def _train_model(self, symbol, strategy_name):
@@ -97,43 +148,67 @@ class AIAnalyst:
             if df is None or df.empty:
                 raise ValueError(f"Cannot train {symbol} ({strategy_name}), no data available.")
 
-            features = ['open', 'high', 'low', 'close', 'volume'] + [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
-            df_features = df[features].astype('float32')
+            # Align DF to canonical feature list to ensure consistent shape
+            df_features = self._align_df_features(df)
 
             scaler = MinMaxScaler(feature_range=(0, 1))
             scaled_data = scaler.fit_transform(df_features.values)
 
             sequence_length = STRATEGIES[strategy_name]['sequence_length']
-            X, y = [], []
+            X, y_pt, y_sig = [], [], []
+
+            # --- Create Labels for the new dual-output model ---
+            # Simplified labeling for training purposes
+            future_price = pd.Series(scaled_data[:, 3]).shift(-5).fillna(method='ffill')
+            price_change = future_price - scaled_data[:, 3]
+
+            # Output 1: Price Targets [take_profit, stop_loss]
+            price_targets = np.zeros((len(scaled_data), 2))
+            price_targets[:, 0] = future_price
+            price_targets[:, 1] = scaled_data[:, 3] * 0.98 # Simplified Stop Loss
+
+            # Output 2: Trade Signal [Buy, Sell, Hold]
+            trade_signal = np.zeros((len(scaled_data), 3))
+            trade_signal[price_change > 0.01, 0] = 1  # Buy
+            trade_signal[price_change < -0.01, 1] = 1 # Sell
+            trade_signal[np.abs(price_change) <= 0.01, 2] = 1 # Hold
+
             for i in range(sequence_length, len(scaled_data)):
                 X.append(scaled_data[i - sequence_length:i])
-                # Target y is [price, direction (1=up, 0=down), avg_price]
-                y.append([scaled_data[i, 3], 1 if scaled_data[i, 3] > scaled_data[i-1, 3] else 0, np.mean(scaled_data[i-5:i, 3])])
-            X, y = np.array(X), np.array(y)
+                y_pt.append(price_targets[i])
+                y_sig.append(trade_signal[i])
+            
+            X, y_pt, y_sig = np.array(X), np.array(y_pt), np.array(y_sig)
 
             # Split data for main model training and for calibrator training
-            X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+            X_train, X_val, y_pt_train, y_pt_val, y_sig_train, y_sig_val = train_test_split(
+                X, y_pt, y_sig, test_size=0.2, random_state=42
+            )
+            
+            y_train = {'price_targets': y_pt_train, 'trade_signal': y_sig_train}
+            y_val = {'price_targets': y_pt_val, 'trade_signal': y_sig_val}
 
-            model = self._create_advanced_model((X_train.shape[1], X_train.shape[2]), symbol)
+            model = self._create_advanced_model(symbol, strategy_name, (X_train.shape[1], X_train.shape[2]), n_outputs=y_sig_train.shape[1])
             es = EarlyStopping(monitor='val_loss', patience=TRAINING_CONFIG['early_stop_patience'], restore_best_weights=True)
             
-            model_path = f'trained_models/{symbol}_{strategy_name}_model.keras' # Use .keras format
+            # Use .h5 format to avoid Keras native format issues with ModelCheckpoint
+            model_path = f'trained_models/{symbol}_{strategy_name}_model.h5'
             scaler_path = f'trained_models/{symbol}_{strategy_name}_scaler.joblib'
             calibrator_path = f'trained_models/{symbol}_{strategy_name}_calibrator.joblib'
             
-            checkpoint = ModelCheckpoint(model_path, save_best_only=True, monitor='val_mae', mode='min')
+            # Explicitly save in h5 format
+            checkpoint = ModelCheckpoint(model_path, save_best_only=True, monitor='val_trade_signal_accuracy', mode='max', save_format='h5')
 
             model.fit(X_train, y_train, epochs=TRAINING_CONFIG['epochs'], batch_size=TRAINING_CONFIG['batch_size'], validation_data=(X_val, y_val), callbacks=[es, checkpoint], verbose=1)
 
             # --- PLATT SCALING CALIBRATOR TRAINING ---
             print(f"   - Training confidence calibrator for {symbol} ({strategy_name})...")
-            # Get the raw, uncalibrated outputs from the main model on the validation set
             val_predictions_raw = model.predict(X_val)
             
-            # The input for the calibrator is the model's raw output for the direction prediction
-            calibrator_X = val_predictions_raw[:, 1].reshape(-1, 1) 
-            # The target is the actual direction from the validation set
-            calibrator_y = y_val[:, 1]
+            # The input for the calibrator is the softmax output of the trade_signal head
+            calibrator_X = val_predictions_raw[1] 
+            # The target is the actual class index (0, 1, or 2)
+            calibrator_y = np.argmax(y_sig_val, axis=1)
 
             calibrator = LogisticRegression(solver='liblinear')
             calibrator.fit(calibrator_X, calibrator_y)
@@ -155,6 +230,7 @@ class AIAnalyst:
             traceback.print_exc()
             raise
 
+
     def predict(self, symbol, df, strategy_name='main'):
         if not all(k in self.models.get(symbol, {}) for k in [strategy_name]):
             return None
@@ -163,40 +239,51 @@ class AIAnalyst:
             scaler = self.scalers[symbol][strategy_name]
             calibrator = self.calibrators[symbol][strategy_name]
             
-            features = ['open', 'high', 'low', 'close', 'volume'] + [indi for indi in TECHNICAL_INDICATORS if indi in df.columns]
             sequence_length = STRATEGIES[strategy_name]['sequence_length']
 
-            last_sequence_df = df[features].tail(sequence_length).astype('float32')
+            # Align DF to canonical feature list to ensure consistent shape
+            df_aligned = self._align_df_features(df)
+            last_sequence_df = df_aligned.tail(sequence_length)
+
             if len(last_sequence_df) < sequence_length: return None
 
             scaled_data = scaler.transform(last_sequence_df.values)
-            input_data = scaled_data.reshape(1, sequence_length, len(features))
+            # Use the DataFrame's shape for robustness
+            input_data = scaled_data.reshape(1, sequence_length, last_sequence_df.shape[1])
             
-            raw_prediction = model.predict(input_data, verbose=0)[0]
+            # Returns a list of two arrays: [price_targets, trade_signal]
+            raw_prediction = model.predict(input_data, verbose=0)
+            price_targets_pred = raw_prediction[0][0]
+            trade_signal_pred = raw_prediction[1][0]
 
             # --- GET CALIBRATED CONFIDENCE ---
-            # Get the raw score for the direction prediction
-            direction_score = raw_prediction[1].reshape(-1, 1)
-            # Get probabilities [P(down), P(up)] from the calibrator
-            calibrated_probs = calibrator.predict_proba(direction_score)[0]
+            # Get probabilities [P(buy), P(sell), P(hold)] from the calibrator
+            calibrated_probs = calibrator.predict_proba(trade_signal_pred.reshape(1, -1))[0]
 
-            dummy_row = np.zeros((1, len(features)))
-            dummy_row[0, 3] = raw_prediction[0]
+            # The predicted price is the first element of the price_targets output
+            dummy_row = np.zeros((1, last_sequence_df.shape[1]))
+            dummy_row[0, 3] = price_targets_pred[0] # Predicted take_profit level
             predicted_price = scaler.inverse_transform(dummy_row)[0, 3]
+            
             current_price = df['close'].iloc[-1].item()
             pct_change = ((predicted_price - current_price) / current_price) * 100
             
-            # Determine direction and get the corresponding calibrated confidence
-            if predicted_price > current_price:
+            # Determine direction from the class with the highest probability
+            signal_index = np.argmax(calibrated_probs)
+            if signal_index == 0: # Buy
                 direction = 'long'
-                confidence = calibrated_probs[1] # Probability of 'up' (class 1)
-            else:
+                confidence = calibrated_probs[0]
+            elif signal_index == 1: # Sell
                 direction = 'short'
-                confidence = calibrated_probs[0] # Probability of 'down' (class 0)
+                confidence = calibrated_probs[1]
+            else: # Hold
+                direction = 'hold'
+                confidence = calibrated_probs[2]
 
+            # Override direction for tiny moves, but use the hold confidence
             if abs(pct_change) < 0.05:
                 direction = 'hold'
-                confidence *= 0.5 # Reduce confidence for tiny moves
+                confidence = calibrated_probs[2]
 
             return {
                 'asset': symbol, 
