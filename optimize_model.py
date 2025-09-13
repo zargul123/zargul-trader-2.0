@@ -146,13 +146,16 @@ def run_optimization(asset_to_optimize, strategy_name):
     y_signal[np.abs(price_change) <= df['close'] * 0.01, 2] = 1 # Hold
 
     # --- Scale and Create Sequences ---
-    scaler = StandardScaler()
-    scaled_data = scaler.fit_transform(df_features.loc[df.index])
+    feature_scaler = StandardScaler()
+    target_scaler = StandardScaler() # <-- Scaler for the price targets
+    
+    scaled_features = feature_scaler.fit_transform(df_features.loc[df.index])
+    scaled_targets = target_scaler.fit_transform(price_targets) # <-- Scale the targets
 
     X, y_pt, y_sig = [], [], []
-    for i in range(sequence_length, len(scaled_data)):
-        X.append(scaled_data[i - sequence_length:i])
-        y_pt.append(price_targets[i])
+    for i in range(sequence_length, len(scaled_features)):
+        X.append(scaled_features[i - sequence_length:i])
+        y_pt.append(scaled_targets[i]) # <-- Use scaled targets
         y_sig.append(y_signal[i])
         
     X = np.array(X)
