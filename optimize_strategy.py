@@ -108,7 +108,8 @@ def objective(trial, strategy_name, regime_df, backtest_engine):
             strategy_type=strategy_name,
             days=0,
             data_df=regime_df,
-            temp_strategy_config=strategy_config
+            temp_strategy_config=strategy_config,
+            debug=True # Always run in debug mode to see the logic
         )
 
         if results is None or results['total_trades'] == 0:
