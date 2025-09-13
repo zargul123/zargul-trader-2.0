@@ -16,7 +16,7 @@ STRATEGIES = {
         'long_threshold': 2.5,       # Aim for 2.5% up moves
         'short_threshold': 2.5,      # Aim for 2.5% down moves
         'min_confidence': 0.90,      # AI must be 90% sure
-        'sequence_length': 45,       # Shorter memory, faster reaction
+        'sequence_length': 20,       # Shorter memory, faster reaction
         'hold_period_hours': 8,      
         'dynamic_exit': True         
     },
