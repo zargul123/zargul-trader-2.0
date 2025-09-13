@@ -17,7 +17,7 @@ deploymentTarget = "gce"
 ignorePorts = true
 
 [workflows]
-runButton = "Run Trading System"
+runButton = "Project"
 
 [[workflows.workflow]]
 name = "Train Models"
@@ -125,6 +125,26 @@ args = "pkill -f \"scripts/main.py\""
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "PYTHONPATH=$PYTHONPATH:$PWD python scripts/main.py --train-all --run-once"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Trading System"
+
+[[workflows.workflow]]
+name = "Trading System"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd scripts && python main.py"
+
+[workflows.workflow.metadata]
+outputType = "console"
 
 [[ports]]
 localPort = 5000
