@@ -58,7 +58,7 @@ class BacktestEngine:
         print(f"📅 Data loaded for {symbol}: {len(df)} candles from {df.index[0]} to {df.index[-1]}")
         return df
 
-    def run_backtest(self, symbol, strategy_type, days, data_df=None, temp_strategy_config=None):
+    def run_backtest(self, symbol, strategy_type, days, data_df=None, temp_strategy_config=None, debug=False):
         """
         Runs a backtest for a given symbol and strategy.
         Can use pre-loaded data and a temporary strategy config for optimization.
@@ -140,7 +140,7 @@ class BacktestEngine:
                         print(f"  [DEBUG] AI Signal @ {current_time}: Dir={prediction['direction']}, Conf={prediction['confidence']:.2f}, Move={prediction['pct_change']:.2f}%")
                     # ------------------------------------
 
-                    if prediction and self.risk_manager.should_execute(prediction, strategy_type, debug=self.debug):
+                    if prediction and self.risk_manager.should_execute(prediction, strategy_type, debug=debug):
                         print(f"🎯 {current_time}: Opening {prediction['direction'].upper()} trade at ${current_price:.2f}")
                         open_position = self._open_trade(prediction, current_time, strategy_config, window_data)
 
