@@ -121,9 +121,9 @@ MODEL_HYPERPARAMS = {
     'BTC-USD': {
         'main': {
             'n_layers': 1,
-            'learning_rate': 0.009886643874520377,
-            'units_layer_0': 251,
-            'dropout_layer_0': 0.35025264979998394
+            'learning_rate': 0.001394224585333133,
+            'units_layer_0': 89,
+            'dropout_layer_0': 0.24254440958679202
         },
         'scalp': {
             'n_layers': 3,
