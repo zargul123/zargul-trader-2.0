@@ -114,4 +114,49 @@ def run_diagnostics():
 
         print(f"\n--> Analyzing the first {CANDLES_TO_ANALYZE} candles for signals...")
         print(f"--> Using baseline rules: min_confidence={min_conf}, atr_multiplier={atr_mult}")
-        print("-
+        print("-"*80)
+        print("{:<22} {:<7} {:<6} {:<7} {:<7} {:<15} {:<12} {}".format(
+            "Timestamp", "Direction", "Conf", "Move%", "ATR", "Required Move%", "Conf Pass?", "ATR Pass?"
+        ))
+        print("-"*80)
+
+        for i in range(sequence_length, min(len(df), sequence_length + CANDLES_TO_ANALYZE)):
+            window_data = df.iloc[i - sequence_length : i]
+            current_time = df.index[i]
+            
+            prediction = analyst.predict(ASSET_TO_DIAGNOSE, window_data, strategy_name=STRATEGY_TO_DIAGNOSE)
+
+            if prediction and prediction['direction'] != 'hold':
+                # --- Perform the checks ---
+                conf_pass = prediction['confidence'] >= min_conf
+                
+                required_move_abs = prediction['atr'] * atr_mult
+                predicted_move_abs = abs(prediction['current_price'] * (prediction['pct_change'] / 100))
+                atr_pass = predicted_move_abs >= required_move_abs
+                
+                # --- Convert required move to percentage for easier comparison ---
+                required_move_pct = (required_move_abs / prediction['current_price']) * 100 if prediction['current_price'] > 0 else 0
+
+                # --- Print the detailed report line ---
+                print(
+                    f"{str(current_time):<22} "
+                    f"{prediction['direction'].upper():<7} "
+                    f"{prediction['confidence']:.2f}  "
+                    f"{prediction['pct_change']:.2f}%  "
+                    f"{prediction['atr']:.4f} "
+                    f"{required_move_pct:.2f}%           "
+                    f"{('✅ PASS' if conf_pass else '❌ FAIL'):<12} "
+                    f"{('✅ PASS' if atr_pass else '❌ FAIL')}"
+                )
+
+        print("-"*80)
+        print("✅ Diagnostic complete.")
+        print("="*80)
+
+    except Exception as e:
+        print(f"\n🔥 An error occurred during diagnostics: {e}")
+        import traceback
+        traceback.print_exc()
+
+if __name__ == "__main__":
+    run_diagnostics()
