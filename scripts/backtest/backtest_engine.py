@@ -58,7 +58,7 @@ class BacktestEngine:
         print(f"📅 Data loaded for {symbol}: {len(df)} candles from {df.index[0]} to {df.index[-1]}")
         return df
 
-    def run_backtest(self, symbol, strategy_type, days, data_df=None, temp_strategy_config=None):
+    def run_backtest(self, symbol, strategy_type, days, data_df=None, temp_strategy_config=None, temp_risk_config=None):
         """
         Runs a backtest for a given symbol and strategy.
         Can use pre-loaded data and a temporary strategy config for optimization.
@@ -137,7 +137,7 @@ class BacktestEngine:
 
                     if prediction and self.risk_manager.should_execute(prediction, strategy_type, debug=self.debug):
                         print(f"🎯 {current_time}: Opening {prediction['direction'].upper()} trade at ${current_price:.2f}")
-                        open_position = self._open_trade(prediction, current_time, strategy_config, window_data)
+                        open_position = self._open_trade(prediction, current_time, strategy_config, window_data, temp_risk_config)
 
 
 
@@ -156,7 +156,7 @@ class BacktestEngine:
             print(traceback.format_exc())
             return get_empty_metrics()
 
-    def _open_trade(self, prediction, entry_time, strategy_config, df):
+    def _open_trade(self, prediction, entry_time, strategy_config, df, risk_config_override=None):
         """Creates a new virtual position with slippage."""
         entry_price = prediction['current_price']
         direction = prediction['direction']
@@ -168,7 +168,16 @@ class BacktestEngine:
         else:
             entry_price -= slippage # We sell slightly lower
         
-        levels = self.risk_manager.calculate_levels(prediction, df)
+        # Use override values if provided, otherwise they will be None
+        tp_override = risk_config_override.get('tp_atr_multiplier') if risk_config_override else None
+        sl_override = risk_config_override.get('sl_atr_multiplier') if risk_config_override else None
+
+        levels = self.risk_manager.calculate_levels(
+            prediction, 
+            df, 
+            tp_atr_mult_override=tp_override, 
+            sl_atr_mult_override=sl_override
+        )
 
         position = {
             'asset': prediction['asset'],

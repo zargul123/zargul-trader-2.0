@@ -89,38 +89,43 @@ def load_regime_data(asset, timeframe, regime_type):
 def objective(trial, strategy_name, regime_df, backtest_engine):
     """The core Optuna objective function."""
     try:
+        # --- 1. Define the full search space for both entry and exit rules ---
         strategy_config = deepcopy(STRATEGIES[strategy_name])
+        
+        # Entry Rules
         strategy_config['min_confidence'] = trial.suggest_float('min_confidence', 0.55, 0.85, step=0.01)
         strategy_config['atr_threshold_multiplier'] = trial.suggest_float('atr_threshold_multiplier', 0.25, 2.5, step=0.05)
         
-        # This parameter is now part of the strategy config, not the global risk config
-        # We will need to adjust the RiskManager or how levels are calculated if we want to optimize this
-        # For now, let's assume we are optimizing a proxy for it.
-        # A better approach would be to pass this to the risk_manager.calculate_levels method
-        # but let's stick to the original logic for now.
-        # Let's call it 'risk_reward_ratio' as in the original script
-        trial.suggest_float('risk_reward_ratio', 1.0, 5.0, step=0.25)
+        # Exit Rules (The new, empowered part)
+        risk_config = {
+            'tp_atr_multiplier': trial.suggest_float('tp_atr_multiplier', 0.5, 3.0, step=0.1),
+            'sl_atr_multiplier': trial.suggest_float('sl_atr_multiplier', 0.25, 2.0, step=0.05)
+        }
 
-
+        # --- 2. Run the backtest with the temporary configurations ---
         asset = next(iter(backtest_engine.analyst.models))
         results = backtest_engine.run_backtest(
             symbol=asset,
             strategy_type=strategy_name,
             days=0,
             data_df=regime_df,
-            temp_strategy_config=strategy_config
+            temp_strategy_config=strategy_config,
+            temp_risk_config=risk_config # Pass the temporary exit rules
         )
 
-        if results is None or results['total_trades'] == 0:
+        # --- 3. Evaluate the results ---
+        if results is None or results['total_trades'] < 5: # Ensure a minimum number of trades
             return -10.0
 
         sharpe_ratio = results.get('sharpe_ratio', 0)
         profit_factor = results.get('profit_factor', 0)
 
+        # Heavily penalize strategies with negative Sharpe ratios
         if sharpe_ratio < 0:
-            return sharpe_ratio * 2
-        
-        return sharpe_ratio * (1 + (profit_factor / 10))
+            return -5.0 + sharpe_ratio # e.g., -5.5 for a Sharpe of -0.5
+
+        # Reward strategies with high profit factors and Sharpe ratios
+        return (sharpe_ratio * 0.7) + (profit_factor * 0.3)
 
     except Exception as e:
         print(f"An error occurred during trial: {e}")

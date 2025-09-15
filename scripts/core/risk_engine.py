@@ -15,12 +15,13 @@ class RiskManager:
         true_range = np.maximum(high_low, np.maximum(high_close, low_close))
         return true_range.rolling(period).mean().iloc[-1]
 
-    def calculate_levels(self, prediction, df):
+    def calculate_levels(self, prediction, df, tp_atr_mult_override=None, sl_atr_mult_override=None):
         """
         Calculates Stop Loss and Take Profit levels based on ATR.
         - Stop Loss is based on config 'atr_multiplier'.
         - Take Profit is based on config 'tp_atr_multiplier'.
         - Falls back to percentage/RR ratio if ATR is unavailable.
+        - Allows for override values for optimization purposes.
         """
         sl_config = RISK_CONFIG.get('stop_loss', {})
         sl_type = sl_config.get('type', 'atr') # Prioritize ATR
@@ -34,8 +35,8 @@ class RiskManager:
         # --- 1. CALCULATE SL/TP DISTANCES ---
         if sl_type == 'atr' and atr > 0:
             # Primary Logic: ATR-based distances
-            sl_atr_multiplier = sl_config.get('atr_multiplier', 1.5)
-            tp_atr_multiplier = RISK_CONFIG.get('tp_atr_multiplier', 2.0)
+            sl_atr_multiplier = sl_atr_mult_override if sl_atr_mult_override is not None else sl_config.get('atr_multiplier', 1.5)
+            tp_atr_multiplier = tp_atr_mult_override if tp_atr_mult_override is not None else RISK_CONFIG.get('tp_atr_multiplier', 2.0)
             
             stop_loss_distance = atr * sl_atr_multiplier
             take_profit_distance = atr * tp_atr_multiplier
