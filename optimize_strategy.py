@@ -90,7 +90,7 @@ def objective(trial, strategy_name, regime_df, backtest_engine):
     """The core Optuna objective function."""
     try:
         strategy_config = deepcopy(STRATEGIES[strategy_name])
-                strategy_config['min_confidence'] = trial.suggest_float('min_confidence', 0.55, 0.85, step=0.01)
+        strategy_config['min_confidence'] = trial.suggest_float('min_confidence', 0.55, 0.85, step=0.01)
         strategy_config['atr_threshold_multiplier'] = trial.suggest_float('atr_threshold_multiplier', 0.25, 2.5, step=0.05)
         
         # This parameter is now part of the strategy config, not the global risk config
