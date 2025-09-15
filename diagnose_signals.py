@@ -114,11 +114,11 @@ def run_diagnostics():
 
         print(f"\n--> Analyzing the first {CANDLES_TO_ANALYZE} candles for signals...")
         print(f"--> Using baseline rules: min_confidence={min_conf}, atr_multiplier={atr_mult}")
-        print("-"*80)
-        print("{:<22} {:<7} {:<6} {:<7} {:<7} {:<15} {:<12} {}".format(
-            "Timestamp", "Direction", "Conf", "Move%", "ATR", "Required Move%", "Conf Pass?", "ATR Pass?"
+        print("-" * 110)
+        print("{:<22} {:<7} {:<6} {:<7} {:<7} {:<15} {:<12} {:<12} {:<15}".format(
+            "Timestamp", "Direction", "Conf", "Move%", "ATR", "Required Move%", "Conf Pass?", "ATR Pass?", "Simulated Outcome"
         ))
-        print("-"*80)
+        print("-" * 110)
 
         for i in range(sequence_length, min(len(df), sequence_length + CANDLES_TO_ANALYZE)):
             window_data = df.iloc[i - sequence_length : i]
@@ -137,6 +137,35 @@ def run_diagnostics():
                 # --- Convert required move to percentage for easier comparison ---
                 required_move_pct = (required_move_abs / prediction['current_price']) * 100 if prediction['current_price'] > 0 else 0
 
+                # --- NEW: SIMULATE TRADE OUTCOME ---
+                outcome = "-"
+                if conf_pass and atr_pass:
+                    levels = risk_manager.calculate_levels(prediction, window_data)
+                    sl_price = levels['stop_loss']
+                    tp_price = levels['take_profit']
+                    
+                    sim_outcome = "TIMEOUT" # Default if neither SL nor TP is hit
+                    # Look ahead up to 50 candles
+                    future_candles = df.iloc[i + 1 : i + 1 + 50]
+
+                    for _, candle in future_candles.iterrows():
+                        if prediction['direction'] == 'long':
+                            if candle['low'] <= sl_price:
+                                sim_outcome = "LOSS"
+                                break
+                            if candle['high'] >= tp_price:
+                                sim_outcome = "WIN"
+                                break
+                        elif prediction['direction'] == 'short':
+                            if candle['high'] >= sl_price:
+                                sim_outcome = "LOSS"
+                                break
+                            if candle['low'] <= tp_price:
+                                sim_outcome = "WIN"
+                                break
+                    outcome = sim_outcome
+                # --- END OF NEW SIMULATION LOGIC ---
+
                 # --- Print the detailed report line ---
                 print(
                     f"{str(current_time):<22} "
@@ -146,7 +175,8 @@ def run_diagnostics():
                     f"{prediction['atr']:.4f} "
                     f"{required_move_pct:.2f}%           "
                     f"{('✅ PASS' if conf_pass else '❌ FAIL'):<12} "
-                    f"{('✅ PASS' if atr_pass else '❌ FAIL')}"
+                    f"{('✅ PASS' if atr_pass else '❌ FAIL'):<12} "
+                    f"{outcome:<15}"
                 )
 
         print("-"*80)
