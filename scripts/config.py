@@ -15,12 +15,13 @@ STRATEGIES = {
             'atr_threshold_multiplier': 1.5,
             'long_threshold': 2.5,
             'short_threshold': 2.5,
-            'min_confidence': 0.60, # Lowered from 0.75 for diagnostics
+            'min_confidence': 0.60,
             'sequence_length': 20,
             'hold_period_hours': 8,
             'dynamic_exit': True,
-            'sl_atr_multiplier': 2.0, # EXPERIMENT: Widened from 1.5
-            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
+            'sl_atr_multiplier': 1.5, # Reverted from experiment
+            'tp_atr_multiplier': 2.0,
+            'invert_signal': True # PERMANENT FIX: Invert the AI's signal
         },
         'btc-swing': {
             'enabled': True,

@@ -187,6 +187,15 @@ class ZargulTrader:
                     print(f"\n   --- Strategy: {strategy_name.upper()} ---")
                     self._print_prediction(pred)
 
+                    # --- PERMANENT FIX: Check if the signal should be inverted ---
+                    strategy_config = STRATEGIES[asset][strategy_name]
+                    if strategy_config.get('invert_signal', False):
+                        original_direction = pred['direction']
+                        if original_direction in ['long', 'short']:
+                            pred['direction'] = 'short' if original_direction == 'long' else 'long'
+                            print(f"   └ 🔄 Signal Inverted: Original '{original_direction.upper()}' -> New '{pred['direction'].upper()}'")
+                    # ---------------------------------------------------------
+
                     # =================================================
                     # == NEW: MARKET REGIME & ENTROPY MASTER FILTER  ==
                     # =================================================

@@ -165,15 +165,13 @@ class BacktestEngine:
     def _open_trade(self, prediction, entry_time, strategy_config, df, risk_config_override=None):
         """Creates a new virtual position with slippage."""
         entry_price = prediction['current_price']
-        original_direction = prediction['direction']
+        direction = prediction['direction']
 
-        # --- EXPERIMENT: Flip the signal ---
-        # This is a temporary diagnostic to test if the signal is inverted.
-        flipped_direction = 'short' if original_direction == 'long' else 'long'
-        print(f"*** EXPERIMENT: Flipping signal from {original_direction.upper()} to {flipped_direction.upper()} ***")
-        direction = flipped_direction
-        # --- END EXPERIMENT ---
-
+        # --- PERMANENT FIX: Check if the signal should be inverted based on strategy config ---
+        if strategy_config.get('invert_signal', False):
+            direction = 'short' if direction == 'long' else 'long'
+        # ------------------------------------------------------------------------------------
+        
         # --- REALISTIC SLIPPAGE SIMULATION ---
         slippage = entry_price * BACKTEST_CONFIG['slippage_pct']
         if direction == 'long':
