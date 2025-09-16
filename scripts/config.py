@@ -15,7 +15,7 @@ STRATEGIES = {
             'atr_threshold_multiplier': 1.5,
             'long_threshold': 2.5,
             'short_threshold': 2.5,
-            'min_confidence': 0.75, # Lowered from 0.90 for initial testing
+            'min_confidence': 0.60, # Lowered from 0.75 for diagnostics
             'sequence_length': 20, # Set to 20 as requested
             'hold_period_hours': 8,
             'dynamic_exit': True
