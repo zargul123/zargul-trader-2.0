@@ -142,7 +142,8 @@ class BacktestEngine:
                     prediction = analyst_to_use.predict(symbol, window_data, strategy_name=strategy_type)
 
                     if prediction and self.risk_manager.should_execute(prediction, symbol, strategy_type, debug=self.debug):
-                        print(f"🎯 {current_time}: Opening {prediction['direction'].upper()} trade at ${current_price:.2f}")
+                        if self.debug:
+                            print(f"🎯 {current_time}: Opening {prediction['direction'].upper()} trade at ${current_price:.2f}")
                         open_position = self._open_trade(prediction, current_time, strategy_config, window_data, temp_risk_config)
 
 
