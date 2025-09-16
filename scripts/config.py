@@ -16,9 +16,11 @@ STRATEGIES = {
             'long_threshold': 2.5,
             'short_threshold': 2.5,
             'min_confidence': 0.60, # Lowered from 0.75 for diagnostics
-            'sequence_length': 20, # Set to 20 as requested
+            'sequence_length': 20,
             'hold_period_hours': 8,
-            'dynamic_exit': True
+            'dynamic_exit': True,
+            'sl_atr_multiplier': 2.0, # EXPERIMENT: Widened from 1.5
+            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
         },
         'btc-swing': {
             'enabled': True,
@@ -29,7 +31,9 @@ STRATEGIES = {
             'min_confidence': 0.90,
             'sequence_length': 90,
             'hold_period_hours': 24,
-            'dynamic_exit': True
+            'dynamic_exit': True,
+            'sl_atr_multiplier': 1.5, # Moved from RISK_CONFIG
+            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
         },
         'scalp': {
             'enabled': True,
@@ -40,7 +44,9 @@ STRATEGIES = {
             'min_confidence': 0.75,
             'sequence_length': 22,
             'hold_period_hours': 1,
-            'dynamic_exit': True
+            'dynamic_exit': True,
+            'sl_atr_multiplier': 1.5, # Moved from RISK_CONFIG
+            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
         }
     },
     "ETH-USD": {
@@ -53,7 +59,9 @@ STRATEGIES = {
             'min_confidence': 0.90,
             'sequence_length': 20,
             'hold_period_hours': 8,
-            'dynamic_exit': True
+            'dynamic_exit': True,
+            'sl_atr_multiplier': 1.5, # Moved from RISK_CONFIG
+            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
         },
         'swing': {
             'enabled': True,
@@ -64,7 +72,9 @@ STRATEGIES = {
             'min_confidence': 0.85,
             'sequence_length': 90,
             'hold_period_hours': 24,
-            'dynamic_exit': True
+            'dynamic_exit': True,
+            'sl_atr_multiplier': 1.5, # Moved from RISK_CONFIG
+            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
         },
         'scalp': {
             'enabled': True,
@@ -75,7 +85,9 @@ STRATEGIES = {
             'min_confidence': 0.75,
             'sequence_length': 22,
             'hold_period_hours': 1,
-            'dynamic_exit': True
+            'dynamic_exit': True,
+            'sl_atr_multiplier': 1.5, # Moved from RISK_CONFIG
+            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
         }
     },
     "SOL-USD": {
@@ -88,7 +100,9 @@ STRATEGIES = {
             'min_confidence': 0.90,
             'sequence_length': 20,
             'hold_period_hours': 8,
-            'dynamic_exit': True
+            'dynamic_exit': True,
+            'sl_atr_multiplier': 1.5, # Moved from RISK_CONFIG
+            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
         },
         'swing': {
             'enabled': True,
@@ -99,7 +113,9 @@ STRATEGIES = {
             'min_confidence': 0.85,
             'sequence_length': 90,
             'hold_period_hours': 24,
-            'dynamic_exit': True
+            'dynamic_exit': True,
+            'sl_atr_multiplier': 1.5, # Moved from RISK_CONFIG
+            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
         },
         'scalp': {
             'enabled': True,
@@ -110,7 +126,9 @@ STRATEGIES = {
             'min_confidence': 0.75,
             'sequence_length': 22,
             'hold_period_hours': 1,
-            'dynamic_exit': True
+            'dynamic_exit': True,
+            'sl_atr_multiplier': 1.5, # Moved from RISK_CONFIG
+            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
         }
     }
 }
@@ -135,10 +153,8 @@ BACKTEST_CONFIG = {
 # General Risk Configuration
 RISK_CONFIG = {
     'risk_reward_ratio': 1.33, # Fallback R/R, derived from 2.0 / 1.5
-    'tp_atr_multiplier': 2.0,    # New: Take Profit is 2.0 * ATR
     'stop_loss': {
         'type': 'atr',               # 'atr' or 'percentage'
-        'atr_multiplier': 1.5,       # Stop Loss is 1.5 * ATR
         'percentage': 1.5            # Fallback percentage if ATR fails
     },
     'max_daily_drawdown': 0.10, # Max 10% loss in a day

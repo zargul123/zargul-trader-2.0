@@ -180,7 +180,8 @@ class BacktestEngine:
 
         levels = self.risk_manager.calculate_levels(
             prediction, 
-            df, 
+            df,
+            strategy_config=strategy_config,
             tp_atr_mult_override=tp_override, 
             sl_atr_mult_override=sl_override
         )

@@ -258,7 +258,7 @@ class ZargulTrader:
         asset = prediction['asset']
         trade_id = f"{datetime.now().strftime('%Y%m%d%H%M%S')}-{asset}"
         rules = STRATEGIES[asset][strategy_name]
-        levels = self.risk_manager.calculate_levels(prediction, df)
+        levels = self.risk_manager.calculate_levels(prediction, df, strategy_config=rules)
 
         position_entry = {
             'trade_id': trade_id, 'asset': asset, 'direction': prediction['direction'],
