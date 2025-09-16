@@ -55,15 +55,12 @@ def load_regime_data(asset, timeframe, regime_type):
     cache_filename = f"{asset}_{timeframe}_{regime_type}_data.pkl"
     cache_filepath = os.path.join(CACHE_DIR, cache_filename)
 
-    # --- MEAL PREP (CACHING) ---
-    # 1. Check if the pre-processed data already exists.
     if os.path.exists(cache_filepath):
         print(f"\n-- Loading pre-processed data from cache: {cache_filepath} --")
         filtered_df = joblib.load(cache_filepath)
         print("-- Cached data loaded successfully. --")
         return filtered_df
 
-    # 2. If not cached, perform the expensive data preparation.
     print(f"\n-- No cache found. Performing one-time data preparation for {asset} in {regime_type} regime --")
     data_master = DataMaster()
     df = data_master.get_training_data(asset, timeframe, days=1095)
@@ -79,56 +76,53 @@ def load_regime_data(asset, timeframe, regime_type):
         if len(filtered_df) < 50:
              raise ValueError("Insufficient data for backtesting after regime filtering.")
 
-    # 3. Save the prepared data to the cache for next time.
     print(f"-- Saving prepared data to cache: {cache_filepath} --")
     joblib.dump(filtered_df, cache_filepath)
     
     print(f"-- Found {len(filtered_df)} candles for the '{regime_type}' regime --")
     return filtered_df
 
-def objective(trial, strategy_name, regime_df, backtest_engine):
+def objective(trial, asset, strategy_name, regime_df, backtest_engine):
     """The core Optuna objective function."""
     try:
         # --- 1. Define the full search space for both entry and exit rules ---
-        strategy_config = deepcopy(STRATEGIES[strategy_name])
+        # CORRECTED: Deepcopy the specific asset's strategy config
+        strategy_config = deepcopy(STRATEGIES[asset][strategy_name])
         
         # Entry Rules
         strategy_config['min_confidence'] = trial.suggest_float('min_confidence', 0.55, 0.85, step=0.01)
         strategy_config['atr_threshold_multiplier'] = trial.suggest_float('atr_threshold_multiplier', 0.25, 2.5, step=0.05)
         
-        # Exit Rules (The new, empowered part)
-        risk_config = {
-            'tp_atr_multiplier': trial.suggest_float('tp_atr_multiplier', 0.5, 3.0, step=0.1),
-            'sl_atr_multiplier': trial.suggest_float('sl_atr_multiplier', 0.25, 2.0, step=0.05)
-        }
-
+        # Exit Rules (now part of the strategy_config)
+        strategy_config['tp_atr_multiplier'] = trial.suggest_float('tp_atr_multiplier', 0.5, 4.0, step=0.1)
+        strategy_config['sl_atr_multiplier'] = trial.suggest_float('sl_atr_multiplier', 0.25, 3.0, step=0.05)
+        
         # --- 2. Run the backtest with the temporary configurations ---
-        asset = next(iter(backtest_engine.analyst.models))
         results = backtest_engine.run_backtest(
             symbol=asset,
             strategy_type=strategy_name,
             days=0,
             data_df=regime_df,
             temp_strategy_config=strategy_config,
-            temp_risk_config=risk_config # Pass the temporary exit rules
+            temp_risk_config=None # Risk config is now fully within strategy_config
         )
 
         # --- 3. Evaluate the results ---
-        if results is None or results['total_trades'] < 5: # Ensure a minimum number of trades
+        if results is None or results['total_trades'] < 10: # Ensure a minimum number of trades
             return -10.0
 
         sharpe_ratio = results.get('sharpe_ratio', 0)
         profit_factor = results.get('profit_factor', 0)
 
-        # Heavily penalize strategies with negative Sharpe ratios
         if sharpe_ratio < 0:
-            return -5.0 + sharpe_ratio # e.g., -5.5 for a Sharpe of -0.5
+            return -5.0 + sharpe_ratio
 
-        # Reward strategies with high profit factors and Sharpe ratios
         return (sharpe_ratio * 0.7) + (profit_factor * 0.3)
 
     except Exception as e:
         print(f"An error occurred during trial: {e}")
+        import traceback
+        traceback.print_exc()
         return -100.0
 
 def run_optimization(asset, strategy, regime, trials):
@@ -139,8 +133,12 @@ def run_optimization(asset, strategy, regime, trials):
     print("="*80)
 
     try:
-        timeframe = STRATEGIES[strategy]['timeframe']
+        # CORRECTED: Look up timeframe in the new nested structure
+        timeframe = STRATEGIES[asset][strategy]['timeframe']
         regime_df = load_regime_data(asset, timeframe, regime)
+    except KeyError:
+        print(f"❌ ERROR: Strategy '{strategy}' not found for asset '{asset}' in config.py.")
+        return
     except ValueError as e:
         print(f"❌ ERROR: {e}")
         return
@@ -150,20 +148,18 @@ def run_optimization(asset, strategy, regime, trials):
     backtest_engine = BacktestEngine(analyst=analyst)
     print("-- Engines are ready. --")
 
-    # --- THE NOTEBOOK (PERSISTENT STUDY) ---
-    # This creates a database file to save progress.
     study_name = f"{asset}_{strategy}_{regime}"
     storage_name = f"sqlite:///{study_name}.db"
     study = optuna.create_study(
         study_name=study_name,
         storage=storage_name,
-        load_if_exists=True, # This is the magic part that resumes progress
+        load_if_exists=True,
         direction="maximize"
     )
     
-    objective_func = lambda trial: objective(trial, strategy, regime_df, backtest_engine)
+    # Pass the asset name to the objective function
+    objective_func = lambda trial: objective(trial, asset, strategy, regime_df, backtest_engine)
     
-    # Check if we have already completed the required number of trials
     completed_trials = len(study.trials)
     if completed_trials >= trials:
         print(f"Study already has {completed_trials} trials. No new trials will be run.")
@@ -174,7 +170,7 @@ def run_optimization(asset, strategy, regime, trials):
 
     print("\n" + "="*80)
     print("✨ OPTIMIZATION COMPLETE ✨")
-    print(f"Best Sharpe Ratio Achieved: {study.best_value:.4f}")
+    print(f"Best Score Achieved: {study.best_value:.4f}")
     print("Best Parameters Found:")
     best_params = study.best_params
     for key, value in best_params.items():
@@ -192,7 +188,7 @@ def run_optimization(asset, strategy, regime, trials):
         all_results[asset][strategy] = {}
     
     result_data = best_params
-    result_data['sharpe_ratio'] = study.best_value
+    result_data['score'] = study.best_value
     all_results[asset][strategy][regime] = result_data
 
     with open(OPTIMIZED_RESULTS_FILE, 'w') as f:
@@ -203,12 +199,20 @@ def run_optimization(asset, strategy, regime, trials):
     print("="*80)
 
 if __name__ == "__main__":
+    # --- CORRECTED: Create a unique list of all possible strategy names for argparse ---
+    all_strategies = set()
+    for asset_strategies in STRATEGIES.values():
+        for strategy_name in asset_strategies.keys():
+            all_strategies.add(strategy_name)
+    strategy_choices = sorted(list(all_strategies))
+    # --------------------------------------------------------------------
+
     parser = argparse.ArgumentParser(
         description="Automated Strategy Optimization using Optuna.",
         formatter_class=argparse.RawTextHelpFormatter
     )
-    parser.add_argument('--asset', type=str, required=True, help="e.g., 'BTC-USD'")
-    parser.add_argument('--strategy', type=str, required=True, choices=STRATEGIES.keys(), help="e.g., 'main', 'scalp'")
+    parser.add_argument('--asset', type=str, required=True, choices=ASSETS, help="e.g., 'BTC-USD'")
+    parser.add_argument('--strategy', type=str, required=True, choices=strategy_choices, help="e.g., 'main', 'scalp'")
     parser.add_argument('--regime', type=str, required=True, choices=['Trending', 'Ranging', 'Chaotic'], help="The market regime to optimize for.")
     parser.add_argument('--trials', type=int, default=100, help="The TOTAL number of trials the study should have.")
     args = parser.parse_args()
