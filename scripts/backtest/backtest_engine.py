@@ -222,7 +222,25 @@ class BacktestEngine:
         }
         self.trade_history.append(trade)
         result_emoji = "✅" if pnl_net > 0 else "❌"
-        print(f"{result_emoji} {exit_time}: Closing {position['direction'].upper()} trade. Outcome: {outcome}. Net PnL: {pnl_net*100:.2f}%")
+        
+        # --- DETAILED TRADE LOGGING ---
+        print("\n" + "="*60)
+        print(f"TRADE CLOSED: {position['asset']} - {position['direction'].upper()}")
+        print(f"  - Entry Time:    {position['entry_time']}")
+        print(f"  - Exit Time:     {exit_time}")
+        print(f"  - Duration:      {exit_time - position['entry_time']}")
+        print("-" * 20)
+        print(f"  - Entry Price:   ${position['entry_price']:.4f}")
+        print(f"  - Exit Price:    ${exit_price:.4f}")
+        print(f"  - Stop Loss:     ${position['stop_loss']:.4f}")
+        print(f"  - Take Profit:   ${position['take_profit']:.4f}")
+        print("-" * 20)
+        print(f"  - AI Confidence: {position['confidence']:.2%}")
+        print(f"  - Outcome:       {outcome}")
+        print(f"  - PnL (Net):     {pnl_net:.4%}")
+        print(f"  - Emoji:         {result_emoji}")
+        print("="*60 + "\n")
+        # --- END DETAILED LOGGING ---
 
     def generate_report(self, symbol):
         """Create a text-based report."""
