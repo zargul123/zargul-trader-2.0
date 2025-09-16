@@ -263,7 +263,7 @@ class AIAnalyst:
             scaler = self.scalers[symbol][strategy_name]
             calibrator = self.calibrators[symbol][strategy_name]
             
-            sequence_length = STRATEGIES[strategy_name]['sequence_length']
+            sequence_length = STRATEGIES[symbol][strategy_name]['sequence_length']
 
             # Align DF to canonical feature list to ensure consistent shape
             df_aligned = self._align_df_features(df)
