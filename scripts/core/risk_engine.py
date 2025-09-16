@@ -112,15 +112,15 @@ class RiskManager:
         # Cap position size to a max of 10% of portfolio
         return min(position_size, 0.10)
 
-    def should_execute(self, prediction, strategy_name, debug=False):
+    def should_execute(self, prediction, asset, strategy_name, debug=False):
         """
         Validates if a trade should be executed based on the rules
         from the STRATEGIES dictionary in config.py.
         This now includes a dynamic ATR-based threshold check.
         """
-        rules = STRATEGIES.get(strategy_name)
+        rules = STRATEGIES.get(asset, {}).get(strategy_name)
         if not rules:
-            if debug: print(f"   -  RiskManager: No rules found for strategy '{strategy_name}'.")
+            if debug: print(f"   -  RiskManager: No rules found for strategy '{strategy_name}' on asset '{asset}'.")
             return False
 
         confidence = armor_get(prediction, 'confidence', 0)

@@ -7,51 +7,111 @@ import os
 # This dictionary is the ONLY place where strategy rules are defined.
 # Both the live bot (main.py) and the simulator (backtest_engine.py)
 # will read their rules from here to ensure 100% consistency.
-
 STRATEGIES = {
-    'main': {
-        'enabled': True,
-        'timeframe': '1h',
-        'atr_threshold_multiplier': 1.5, # Trade if predicted move > 1.5 * ATR
-        'long_threshold': 2.5,       # Aim for 2.5% up moves
-        'short_threshold': 2.5,      # Aim for 2.5% down moves
-        'min_confidence': 0.90,      # AI must be 90% sure
-        'sequence_length': 20,       # Shorter memory, faster reaction
-        'hold_period_hours': 8,      
-        'dynamic_exit': True         
+    "BTC-USD": {
+        'main': {
+            'enabled': True,
+            'timeframe': '1h',
+            'atr_threshold_multiplier': 1.5,
+            'long_threshold': 2.5,
+            'short_threshold': 2.5,
+            'min_confidence': 0.75, # Lowered from 0.90 for initial testing
+            'sequence_length': 20, # Set to 20 as requested
+            'hold_period_hours': 8,
+            'dynamic_exit': True
+        },
+        'btc-swing': {
+            'enabled': True,
+            'timeframe': '4h',
+            'atr_threshold_multiplier': 1.0,
+            'long_threshold': 2.0,
+            'short_threshold': 2.0,
+            'min_confidence': 0.90,
+            'sequence_length': 90,
+            'hold_period_hours': 24,
+            'dynamic_exit': True
+        },
+        'scalp': {
+            'enabled': True,
+            'timeframe': '5m',
+            'atr_threshold_multiplier': 1.0,
+            'long_threshold': 0.5,
+            'short_threshold': 0.5,
+            'min_confidence': 0.75,
+            'sequence_length': 22,
+            'hold_period_hours': 1,
+            'dynamic_exit': True
+        }
     },
-    'swing': {
-        'enabled': True,
-        'timeframe': '4h',
-        'atr_threshold_multiplier': 1.5, # Trade if predicted move > 1.5 * ATR
-        'long_threshold': 1.2,       # Lowered threshold for more swing opportunities
-        'short_threshold': 1.2,      # Lowered threshold for more swing opportunities
-        'min_confidence': 0.85,      # Increased confidence for higher quality trades
-        'sequence_length': 90,
-        'hold_period_hours': 24,     
-        'dynamic_exit': True
+    "ETH-USD": {
+        'main': {
+            'enabled': True,
+            'timeframe': '1h',
+            'atr_threshold_multiplier': 1.5,
+            'long_threshold': 2.5,
+            'short_threshold': 2.5,
+            'min_confidence': 0.90,
+            'sequence_length': 20,
+            'hold_period_hours': 8,
+            'dynamic_exit': True
+        },
+        'swing': {
+            'enabled': True,
+            'timeframe': '4h',
+            'atr_threshold_multiplier': 1.5,
+            'long_threshold': 1.2,
+            'short_threshold': 1.2,
+            'min_confidence': 0.85,
+            'sequence_length': 90,
+            'hold_period_hours': 24,
+            'dynamic_exit': True
+        },
+        'scalp': {
+            'enabled': True,
+            'timeframe': '5m',
+            'atr_threshold_multiplier': 1.0,
+            'long_threshold': 0.5,
+            'short_threshold': 0.5,
+            'min_confidence': 0.75,
+            'sequence_length': 22,
+            'hold_period_hours': 1,
+            'dynamic_exit': True
+        }
     },
-    'btc-swing': {
-        'enabled': True,
-        'timeframe': '4h',
-        'atr_threshold_multiplier': 1.0, # BTC is volatile, require less of a multiplier
-        'long_threshold': 2.0,       # Bigger target for BTC swings
-        'short_threshold': 2.0,      # Bigger target for BTC swings
-        'min_confidence': 0.90,      # Stricter confidence for BTC
-        'sequence_length': 90,
-        'hold_period_hours': 24,     
-        'dynamic_exit': True
-    },
-    'scalp': {
-        'enabled': True,            # This strategy is temporarily enabled for optimization
-        'timeframe': '5m',
-        'atr_threshold_multiplier': 1.0,
-        'long_threshold': 0.5,       # Sensible default for scalping (0.5%)
-        'short_threshold': 0.5,      # Sensible default for scalping (0.5%)
-        'min_confidence': 0.75,      # Sensible default confidence
-                'sequence_length': 22,       # Scalping uses shorter sequences
-        'hold_period_hours': 1,      # 1-hour max hold for a scalp
-        'dynamic_exit': True
+    "SOL-USD": {
+        'main': {
+            'enabled': True,
+            'timeframe': '1h',
+            'atr_threshold_multiplier': 1.5,
+            'long_threshold': 2.5,
+            'short_threshold': 2.5,
+            'min_confidence': 0.90,
+            'sequence_length': 20,
+            'hold_period_hours': 8,
+            'dynamic_exit': True
+        },
+        'swing': {
+            'enabled': True,
+            'timeframe': '4h',
+            'atr_threshold_multiplier': 1.5,
+            'long_threshold': 1.2,
+            'short_threshold': 1.2,
+            'min_confidence': 0.85,
+            'sequence_length': 90,
+            'hold_period_hours': 24,
+            'dynamic_exit': True
+        },
+        'scalp': {
+            'enabled': True,
+            'timeframe': '5m',
+            'atr_threshold_multiplier': 1.0,
+            'long_threshold': 0.5,
+            'short_threshold': 0.5,
+            'min_confidence': 0.75,
+            'sequence_length': 22,
+            'hold_period_hours': 1,
+            'dynamic_exit': True
+        }
     }
 }
 

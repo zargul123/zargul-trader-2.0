@@ -50,7 +50,8 @@ class BacktestEngine:
 
         df = df.sort_index()
 
-        required_sequence_length = STRATEGIES.get('main', {}).get('sequence_length', 60)
+        # Correctly get the sequence length for the specific strategy and symbol
+        required_sequence_length = STRATEGIES.get(symbol, {}).get('main', {}).get('sequence_length', 60)
         if len(df) < required_sequence_length:
             print(f"⚠️ Insufficient data for {symbol}. Need at least {required_sequence_length} candles, but got {len(df)}.")
             return pd.DataFrame()
@@ -74,13 +75,18 @@ class BacktestEngine:
         self.trade_history = []
         try:
             # Use the temporary config if provided (for optimization), otherwise use the global one
-            strategy_config = temp_strategy_config if temp_strategy_config else STRATEGIES.get(strategy_type)
+            if temp_strategy_config:
+                strategy_config = temp_strategy_config
+            else:
+                # Correctly fetch the nested strategy config for the specific asset
+                strategy_config = STRATEGIES.get(symbol, {}).get(strategy_type)
+
             if not strategy_config:
-                print(f"❌ Unknown strategy: {strategy_type}")
+                print(f"❌ Unknown strategy '{strategy_type}' for asset '{symbol}'")
                 return get_empty_metrics()
 
             if not strategy_config.get('enabled', True):
-                print(f"⚠️ Strategy '{strategy_type}' is disabled in config. Skipping.")
+                print(f"⚠️ Strategy '{strategy_type}' is disabled in config for {symbol}. Skipping.")
                 return get_empty_metrics()
 
             print(f"\n🔧 Running backtest for {symbol} with '{strategy_type}' strategy.")
@@ -135,7 +141,7 @@ class BacktestEngine:
                     
                     prediction = analyst_to_use.predict(symbol, window_data, strategy_name=strategy_type)
 
-                    if prediction and self.risk_manager.should_execute(prediction, strategy_type, debug=self.debug):
+                    if prediction and self.risk_manager.should_execute(prediction, symbol, strategy_type, debug=self.debug):
                         print(f"🎯 {current_time}: Opening {prediction['direction'].upper()} trade at ${current_price:.2f}")
                         open_position = self._open_trade(prediction, current_time, strategy_config, window_data, temp_risk_config)
 

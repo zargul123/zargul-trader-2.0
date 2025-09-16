@@ -85,7 +85,7 @@ class ZargulTrader:
         asset = position['asset']
         print(f"   - Managing open {position['direction'].upper()} position for {asset}.")
         
-        main_timeframe = STRATEGIES['main']['timeframe']
+        main_timeframe = STRATEGIES[asset]['main']['timeframe']
         df = self.data.get_data(asset, main_timeframe)
         if df is None or df.empty:
             print(f"   - ❌ Skipping position management for {asset} due to data failure.")
@@ -132,7 +132,7 @@ class ZargulTrader:
                 self._print_prediction(prediction)
                 if (position['direction'] == 'long' and prediction['direction'] == 'short') or \
                    (position['direction'] == 'short' and prediction['direction'] == 'long'):
-                    if self.risk_manager.should_execute(prediction, 'main'):
+                    if self.risk_manager.should_execute(prediction, asset, 'main'):
                         outcome = 'REVERSAL_CLOSE'
 
         if outcome:
@@ -142,7 +142,9 @@ class ZargulTrader:
 
     def _look_for_new_trade(self, asset):
         try:
-            main_timeframe = STRATEGIES['main']['timeframe']
+            # Get the config for the 'main' strategy for the specific asset
+            asset_main_strategy = STRATEGIES[asset]['main']
+            main_timeframe = asset_main_strategy['timeframe']
             df = self.data.get_data(asset, main_timeframe)
 
             if df is None:
@@ -151,7 +153,7 @@ class ZargulTrader:
 
             self.data_monitor.log_result(self.data.last_used_source, not df.empty)
 
-            if len(df) < STRATEGIES['main']['sequence_length']:
+            if len(df) < asset_main_strategy['sequence_length']:
                 print(f"   - ⚠️ Insufficient data for {asset} on {main_timeframe} timeframe. Skipping analysis.")
                 return
 
@@ -164,8 +166,10 @@ class ZargulTrader:
                 strategies_to_run.append('swing')
 
             for strategy_name in strategies_to_run:
-                if strategy_name not in STRATEGIES: continue
-                strategy_config = STRATEGIES[strategy_name]
+                # Ensure the asset has this strategy defined
+                if strategy_name not in STRATEGIES.get(asset, {}): continue
+                
+                strategy_config = STRATEGIES[asset][strategy_name]
                 timeframe = strategy_config['timeframe']
                 df_strategy = self.data.get_data(asset, timeframe)
 
@@ -207,13 +211,15 @@ class ZargulTrader:
                         continue # Skip to the next prediction
                     # =================================================
 
-                    if self.risk_manager.should_execute(pred, strategy_name):
+                    if self.risk_manager.should_execute(pred, asset, strategy_name):
                         print(f"   └ ✅ Signal passed initial risk checks.")
 
                         # --- MTF CONFIRMATION FILTER ---
                         if strategy_name == 'main':
                             print("   └ 🧠 Applying Multi-Timeframe (MTF) Confirmation Filter...")
-                            higher_timeframe = STRATEGIES['swing']['timeframe'] # 4h
+                            # Determine the correct swing strategy name for the asset
+                            swing_strategy_name = 'btc-swing' if asset == 'BTC-USD' else 'swing'
+                            higher_timeframe = STRATEGIES[asset][swing_strategy_name]['timeframe']
                             df_higher = self.data.get_data(asset, higher_timeframe)
 
                             if df_higher is None or df_higher.empty or 'ema_50' not in df_higher.columns:
@@ -249,12 +255,13 @@ class ZargulTrader:
             traceback.print_exc()
 
     def _open_trade(self, prediction, strategy_name, df):
-        trade_id = f"{datetime.now().strftime('%Y%m%d%H%M%S')}-{prediction['asset']}"
-        rules = STRATEGIES[strategy_name]
+        asset = prediction['asset']
+        trade_id = f"{datetime.now().strftime('%Y%m%d%H%M%S')}-{asset}"
+        rules = STRATEGIES[asset][strategy_name]
         levels = self.risk_manager.calculate_levels(prediction, df)
 
         position_entry = {
-            'trade_id': trade_id, 'asset': prediction['asset'], 'direction': prediction['direction'],
+            'trade_id': trade_id, 'asset': asset, 'direction': prediction['direction'],
             'entry_price': prediction['current_price'], 'strategy_name': strategy_name,
             'timestamp': prediction['timestamp'], 'stop_loss': levels.get('stop_loss', 0),
             'take_profit': levels.get('take_profit', 0),
@@ -289,7 +296,7 @@ class ZargulTrader:
 
         # --- INITIATE COOLDOWN ---
         try:
-            timeframe = STRATEGIES[strategy_name]['timeframe']
+            timeframe = STRATEGIES[asset][strategy_name]['timeframe']
             if 'h' in timeframe:
                 candle_period = timedelta(hours=int(timeframe.replace('h', '')))
             elif 'm' in timeframe:
