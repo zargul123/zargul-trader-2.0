@@ -1,0 +1,2864 @@
+================================================================================
+DETAILED SL/TP VERIFICATION RESULTS
+================================================================================
+
+TRADE #1
+--------------------------------------------------
+Entry Time: 2025-08-20 00:00:00
+Direction: SHORT
+Entry Price: $112,799.76
+Stop Loss: $111,676.92
+Take Profit: $114,035.46
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-20 08:00:00
+
+
+================================================================================
+
+TRADE #2
+--------------------------------------------------
+Entry Time: 2025-08-20 01:00:00
+Direction: SHORT
+Entry Price: $113,140.40
+Stop Loss: $112,030.49
+Take Profit: $114,363.51
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-20 03:00:00
+
+
+================================================================================
+
+TRADE #3
+--------------------------------------------------
+Entry Time: 2025-08-20 02:00:00
+Direction: SHORT
+Entry Price: $112,939.17
+Stop Loss: $111,791.77
+Take Profit: $114,199.57
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-20 15:00:00
+
+
+================================================================================
+
+TRADE #4
+--------------------------------------------------
+Entry Time: 2025-08-20 03:00:00
+Direction: SHORT
+Entry Price: $113,381.88
+Stop Loss: $112,236.43
+Take Profit: $114,640.77
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-20 04:00:00
+
+
+================================================================================
+
+TRADE #5
+--------------------------------------------------
+Entry Time: 2025-08-20 04:00:00
+Direction: SHORT
+Entry Price: $113,465.17
+Stop Loss: $112,358.40
+Take Profit: $114,685.46
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-20 05:00:00
+
+
+================================================================================
+
+TRADE #6
+--------------------------------------------------
+Entry Time: 2025-08-20 05:00:00
+Direction: SHORT
+Entry Price: $113,576.27
+Stop Loss: $112,516.54
+Take Profit: $114,749.64
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-20 06:00:00
+
+
+================================================================================
+
+TRADE #7
+--------------------------------------------------
+Entry Time: 2025-08-20 06:00:00
+Direction: SHORT
+Entry Price: $113,657.62
+Stop Loss: $112,633.59
+Take Profit: $114,795.37
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-20 07:00:00
+
+
+================================================================================
+
+TRADE #8
+--------------------------------------------------
+Entry Time: 2025-08-20 07:00:00
+Direction: SHORT
+Entry Price: $113,602.03
+Stop Loss: $112,618.23
+Take Profit: $114,699.49
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-20 08:00:00
+
+
+================================================================================
+
+TRADE #9
+--------------------------------------------------
+Entry Time: 2025-08-20 08:00:00
+Direction: SHORT
+Entry Price: $113,435.15
+Stop Loss: $112,466.19
+Take Profit: $114,517.61
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-20 22:00:00
+
+
+================================================================================
+
+TRADE #10
+--------------------------------------------------
+Entry Time: 2025-08-20 09:00:00
+Direction: SHORT
+Entry Price: $113,943.26
+Stop Loss: $112,955.98
+Take Profit: $115,044.54
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-20 10:00:00
+
+
+================================================================================
+
+TRADE #11
+--------------------------------------------------
+Entry Time: 2025-08-20 10:00:00
+Direction: SHORT
+Entry Price: $113,625.72
+Stop Loss: $112,655.99
+Take Profit: $114,709.13
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-21 01:00:00
+
+
+================================================================================
+
+TRADE #12
+--------------------------------------------------
+Entry Time: 2025-08-21 15:00:00
+Direction: SHORT
+Entry Price: $113,204.26
+Stop Loss: $112,090.64
+Take Profit: $114,431.14
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-21 19:00:00
+
+
+================================================================================
+
+TRADE #13
+--------------------------------------------------
+Entry Time: 2025-08-21 16:00:00
+Direction: SHORT
+Entry Price: $112,706.06
+Stop Loss: $111,560.53
+Take Profit: $113,964.35
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+🔄 NEUTRAL: Swapping SL/TP would not change the outcome
+
+================================================================================
+
+TRADE #14
+--------------------------------------------------
+Entry Time: 2025-08-21 17:00:00
+Direction: SHORT
+Entry Price: $112,298.75
+Stop Loss: $111,144.51
+Take Profit: $113,565.35
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-22 14:00:00
+
+
+================================================================================
+
+TRADE #15
+--------------------------------------------------
+Entry Time: 2025-08-21 18:00:00
+Direction: SHORT
+Entry Price: $112,333.46
+Stop Loss: $111,205.98
+Take Profit: $113,573.32
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-22 14:00:00
+
+
+================================================================================
+
+TRADE #16
+--------------------------------------------------
+Entry Time: 2025-08-21 19:00:00
+Direction: SHORT
+Entry Price: $112,514.82
+Stop Loss: $111,402.91
+Take Profit: $113,739.31
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+🔄 NEUTRAL: Swapping SL/TP would not change the outcome
+
+================================================================================
+
+TRADE #17
+--------------------------------------------------
+Entry Time: 2025-08-21 20:00:00
+Direction: SHORT
+Entry Price: $112,104.21
+Stop Loss: $110,968.67
+Take Profit: $113,351.91
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-22 02:00:00
+
+
+================================================================================
+
+TRADE #18
+--------------------------------------------------
+Entry Time: 2025-08-21 21:00:00
+Direction: SHORT
+Entry Price: $112,355.95
+Stop Loss: $111,191.11
+Take Profit: $113,633.21
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-22 14:00:00
+
+
+================================================================================
+
+TRADE #19
+--------------------------------------------------
+Entry Time: 2025-08-21 22:00:00
+Direction: SHORT
+Entry Price: $112,534.31
+Stop Loss: $111,364.56
+Take Profit: $113,816.66
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+🔄 NEUTRAL: Swapping SL/TP would not change the outcome
+
+================================================================================
+
+TRADE #20
+--------------------------------------------------
+Entry Time: 2025-08-21 23:00:00
+Direction: SHORT
+Entry Price: $112,414.73
+Stop Loss: $111,287.58
+Take Profit: $113,654.36
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-22 14:00:00
+
+
+================================================================================
+
+TRADE #21
+--------------------------------------------------
+Entry Time: 2025-08-22 00:00:00
+Direction: SHORT
+Entry Price: $112,424.06
+Stop Loss: $111,343.22
+Take Profit: $113,617.38
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-22 14:00:00
+
+
+================================================================================
+
+TRADE #22
+--------------------------------------------------
+Entry Time: 2025-08-22 01:00:00
+Direction: SHORT
+Entry Price: $112,541.22
+Stop Loss: $111,488.13
+Take Profit: $113,706.91
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+🔄 NEUTRAL: Swapping SL/TP would not change the outcome
+
+================================================================================
+
+TRADE #23
+--------------------------------------------------
+Entry Time: 2025-08-22 02:00:00
+Direction: SHORT
+Entry Price: $112,747.41
+Stop Loss: $111,687.44
+Take Profit: $113,920.18
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+🔄 NEUTRAL: Swapping SL/TP would not change the outcome
+
+================================================================================
+
+TRADE #24
+--------------------------------------------------
+Entry Time: 2025-08-22 03:00:00
+Direction: SHORT
+Entry Price: $113,060.83
+Stop Loss: $111,972.64
+Take Profit: $114,262.14
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+🔄 NEUTRAL: Swapping SL/TP would not change the outcome
+
+================================================================================
+
+TRADE #25
+--------------------------------------------------
+Entry Time: 2025-08-22 04:00:00
+Direction: SHORT
+Entry Price: $112,834.47
+Stop Loss: $111,746.38
+Take Profit: $114,035.46
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+🔄 NEUTRAL: Swapping SL/TP would not change the outcome
+
+================================================================================
+
+TRADE #26
+--------------------------------------------------
+Entry Time: 2025-08-22 05:00:00
+Direction: SHORT
+Entry Price: $112,742.61
+Stop Loss: $111,656.50
+Take Profit: $113,941.52
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+🔄 NEUTRAL: Swapping SL/TP would not change the outcome
+
+================================================================================
+
+TRADE #27
+--------------------------------------------------
+Entry Time: 2025-08-22 06:00:00
+Direction: SHORT
+Entry Price: $113,134.34
+Stop Loss: $112,066.43
+Take Profit: $114,315.45
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+🔄 NEUTRAL: Swapping SL/TP would not change the outcome
+
+================================================================================
+
+TRADE #28
+--------------------------------------------------
+Entry Time: 2025-08-22 07:00:00
+Direction: SHORT
+Entry Price: $112,898.50
+Stop Loss: $111,831.81
+Take Profit: $114,078.15
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+🔄 NEUTRAL: Swapping SL/TP would not change the outcome
+
+================================================================================
+
+TRADE #29
+--------------------------------------------------
+Entry Time: 2025-08-22 08:00:00
+Direction: SHORT
+Entry Price: $112,986.23
+Stop Loss: $111,953.82
+Take Profit: $114,131.68
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+🔄 NEUTRAL: Swapping SL/TP would not change the outcome
+
+================================================================================
+
+TRADE #30
+--------------------------------------------------
+Entry Time: 2025-08-22 09:00:00
+Direction: SHORT
+Entry Price: $112,887.86
+Stop Loss: $111,878.76
+Take Profit: $114,009.90
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+🔄 NEUTRAL: Swapping SL/TP would not change the outcome
+
+================================================================================
+
+TRADE #31
+--------------------------------------------------
+Entry Time: 2025-08-23 15:00:00
+Direction: SHORT
+Entry Price: $114,524.58
+Stop Loss: $113,590.75
+Take Profit: $115,572.99
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-24 02:00:00
+
+
+================================================================================
+
+TRADE #32
+--------------------------------------------------
+Entry Time: 2025-08-23 16:00:00
+Direction: SHORT
+Entry Price: $114,712.62
+Stop Loss: $113,790.27
+Take Profit: $115,749.73
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Neither SL nor TP was hit in the time period
+  ⚪ UNCLEAR - NEITHER_HIT
+
+
+================================================================================
+
+TRADE #33
+--------------------------------------------------
+Entry Time: 2025-08-23 17:00:00
+Direction: SHORT
+Entry Price: $114,909.91
+Stop Loss: $113,996.97
+Take Profit: $115,937.81
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Neither SL nor TP was hit in the time period
+  ⚪ UNCLEAR - NEITHER_HIT
+
+
+================================================================================
+
+TRADE #34
+--------------------------------------------------
+Entry Time: 2025-08-23 18:00:00
+Direction: SHORT
+Entry Price: $114,997.37
+Stop Loss: $114,121.50
+Take Profit: $115,988.30
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-24 19:00:00
+
+
+================================================================================
+
+TRADE #35
+--------------------------------------------------
+Entry Time: 2025-08-23 19:00:00
+Direction: SHORT
+Entry Price: $115,051.09
+Stop Loss: $114,219.77
+Take Profit: $115,997.51
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-24 16:00:00
+
+
+================================================================================
+
+TRADE #36
+--------------------------------------------------
+Entry Time: 2025-08-23 20:00:00
+Direction: SHORT
+Entry Price: $115,040.94
+Stop Loss: $114,253.48
+Take Profit: $115,943.50
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-24 16:00:00
+
+
+================================================================================
+
+TRADE #37
+--------------------------------------------------
+Entry Time: 2025-08-23 21:00:00
+Direction: SHORT
+Entry Price: $115,231.35
+Stop Loss: $114,469.94
+Take Profit: $116,108.04
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-24 14:00:00
+
+
+================================================================================
+
+TRADE #38
+--------------------------------------------------
+Entry Time: 2025-08-23 22:00:00
+Direction: SHORT
+Entry Price: $114,926.31
+Stop Loss: $114,176.63
+Take Profit: $115,790.97
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-24 17:00:00
+
+
+================================================================================
+
+TRADE #39
+--------------------------------------------------
+Entry Time: 2025-08-23 23:00:00
+Direction: SHORT
+Entry Price: $115,220.81
+Stop Loss: $114,483.79
+Take Profit: $116,073.11
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-24 13:00:00
+
+
+================================================================================
+
+TRADE #40
+--------------------------------------------------
+Entry Time: 2025-08-24 00:00:00
+Direction: SHORT
+Entry Price: $115,326.18
+Stop Loss: $114,617.33
+Take Profit: $116,150.41
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-24 01:00:00
+
+
+================================================================================
+
+TRADE #41
+--------------------------------------------------
+Entry Time: 2025-08-24 01:00:00
+Direction: SHORT
+Entry Price: $115,272.32
+Stop Loss: $114,582.94
+Take Profit: $116,077.04
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-24 08:00:00
+
+
+================================================================================
+
+TRADE #42
+--------------------------------------------------
+Entry Time: 2025-08-24 02:00:00
+Direction: SHORT
+Entry Price: $115,364.75
+Stop Loss: $114,672.79
+Take Profit: $116,172.13
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-24 03:00:00
+
+
+================================================================================
+
+TRADE #43
+--------------------------------------------------
+Entry Time: 2025-08-24 17:00:00
+Direction: SHORT
+Entry Price: $114,172.50
+Stop Loss: $113,546.64
+Take Profit: $114,912.58
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-24 19:00:00
+
+
+================================================================================
+
+TRADE #44
+--------------------------------------------------
+Entry Time: 2025-08-24 18:00:00
+Direction: SHORT
+Entry Price: $114,314.82
+Stop Loss: $113,690.44
+Take Profit: $115,053.58
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-24 19:00:00
+
+
+================================================================================
+
+TRADE #45
+--------------------------------------------------
+Entry Time: 2025-08-24 19:00:00
+Direction: SHORT
+Entry Price: $114,525.22
+Stop Loss: $113,862.41
+Take Profit: $115,302.61
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - TP hit at 2025-08-24 20:00:00
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-24 20:00:00
+
+🔄 NEUTRAL: Swapping SL/TP would not change the outcome
+
+================================================================================
+
+TRADE #46
+--------------------------------------------------
+Entry Time: 2025-08-24 20:00:00
+Direction: SHORT
+Entry Price: $112,531.81
+Stop Loss: $111,330.94
+Take Profit: $113,845.26
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-25 08:00:00
+
+
+================================================================================
+
+TRADE #47
+--------------------------------------------------
+Entry Time: 2025-08-24 21:00:00
+Direction: SHORT
+Entry Price: $112,707.91
+Stop Loss: $111,401.54
+Take Profit: $114,127.04
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-25 08:00:00
+
+
+================================================================================
+
+TRADE #48
+--------------------------------------------------
+Entry Time: 2025-08-24 22:00:00
+Direction: SHORT
+Entry Price: $112,919.28
+Stop Loss: $111,563.53
+Take Profit: $114,388.01
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-25 07:00:00
+
+
+================================================================================
+
+TRADE #49
+--------------------------------------------------
+Entry Time: 2025-08-24 23:00:00
+Direction: SHORT
+Entry Price: $113,377.55
+Stop Loss: $111,996.36
+Take Profit: $114,872.18
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-25 05:00:00
+
+
+================================================================================
+
+TRADE #50
+--------------------------------------------------
+Entry Time: 2025-08-25 00:00:00
+Direction: SHORT
+Entry Price: $113,421.26
+Stop Loss: $112,095.01
+Take Profit: $114,860.99
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-25 05:00:00
+
+
+================================================================================
+
+TRADE #51
+--------------------------------------------------
+Entry Time: 2025-08-25 01:00:00
+Direction: SHORT
+Entry Price: $112,571.75
+Stop Loss: $111,148.99
+Take Profit: $114,107.13
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-25 09:00:00
+
+
+================================================================================
+
+TRADE #52
+--------------------------------------------------
+Entry Time: 2025-08-25 02:00:00
+Direction: SHORT
+Entry Price: $113,002.11
+Stop Loss: $111,608.52
+Take Profit: $114,508.76
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-25 07:00:00
+
+
+================================================================================
+
+TRADE #53
+--------------------------------------------------
+Entry Time: 2025-08-25 16:00:00
+Direction: SHORT
+Entry Price: $112,130.94
+Stop Loss: $110,690.89
+Take Profit: $113,683.17
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-25 19:00:00
+
+
+================================================================================
+
+TRADE #54
+--------------------------------------------------
+Entry Time: 2025-08-25 17:00:00
+Direction: SHORT
+Entry Price: $112,443.78
+Stop Loss: $110,980.24
+Take Profit: $114,019.82
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-25 18:00:00
+
+
+================================================================================
+
+TRADE #55
+--------------------------------------------------
+Entry Time: 2025-08-25 18:00:00
+Direction: SHORT
+Entry Price: $112,378.68
+Stop Loss: $110,930.54
+Take Profit: $113,939.26
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-25 19:00:00
+
+
+================================================================================
+
+TRADE #56
+--------------------------------------------------
+Entry Time: 2025-08-25 19:00:00
+Direction: SHORT
+Entry Price: $112,328.83
+Stop Loss: $110,931.92
+Take Profit: $113,838.12
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-25 20:00:00
+
+
+================================================================================
+
+TRADE #57
+--------------------------------------------------
+Entry Time: 2025-08-25 20:00:00
+Direction: SHORT
+Entry Price: $110,638.07
+Stop Loss: $109,087.19
+Take Profit: $112,299.65
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-26 02:00:00
+
+
+================================================================================
+
+TRADE #58
+--------------------------------------------------
+Entry Time: 2025-08-25 21:00:00
+Direction: SHORT
+Entry Price: $109,517.59
+Stop Loss: $107,839.91
+Take Profit: $111,304.85
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-26 20:00:00
+
+
+================================================================================
+
+TRADE #59
+--------------------------------------------------
+Entry Time: 2025-08-25 22:00:00
+Direction: SHORT
+Entry Price: $109,841.44
+Stop Loss: $108,141.34
+Take Profit: $111,651.44
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-26 22:00:00
+
+
+================================================================================
+
+TRADE #60
+--------------------------------------------------
+Entry Time: 2025-08-25 23:00:00
+Direction: SHORT
+Entry Price: $110,105.95
+Stop Loss: $108,427.81
+Take Profit: $111,894.25
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-26 22:00:00
+
+
+================================================================================
+
+TRADE #61
+--------------------------------------------------
+Entry Time: 2025-08-26 00:00:00
+Direction: SHORT
+Entry Price: $110,072.68
+Stop Loss: $108,447.49
+Take Profit: $111,807.99
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-26 22:00:00
+
+
+================================================================================
+
+TRADE #62
+--------------------------------------------------
+Entry Time: 2025-08-26 01:00:00
+Direction: SHORT
+Entry Price: $109,050.93
+Stop Loss: $107,373.01
+Take Profit: $110,837.95
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-26 18:00:00
+
+
+================================================================================
+
+TRADE #63
+--------------------------------------------------
+Entry Time: 2025-08-26 02:00:00
+Direction: SHORT
+Entry Price: $109,860.13
+Stop Loss: $108,125.66
+Take Profit: $111,704.52
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-26 22:00:00
+
+
+================================================================================
+
+TRADE #64
+--------------------------------------------------
+Entry Time: 2025-08-26 03:00:00
+Direction: SHORT
+Entry Price: $109,673.27
+Stop Loss: $107,991.82
+Take Profit: $111,464.44
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-26 21:00:00
+
+
+================================================================================
+
+TRADE #65
+--------------------------------------------------
+Entry Time: 2025-08-26 04:00:00
+Direction: SHORT
+Entry Price: $109,845.02
+Stop Loss: $108,215.02
+Take Profit: $111,584.92
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-26 21:00:00
+
+
+================================================================================
+
+TRADE #66
+--------------------------------------------------
+Entry Time: 2025-08-26 05:00:00
+Direction: SHORT
+Entry Price: $110,054.14
+Stop Loss: $108,493.52
+Take Profit: $111,724.86
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-26 09:00:00
+
+
+================================================================================
+
+TRADE #67
+--------------------------------------------------
+Entry Time: 2025-08-26 06:00:00
+Direction: SHORT
+Entry Price: $110,157.12
+Stop Loss: $108,670.61
+Take Profit: $111,753.85
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-26 07:00:00
+
+
+================================================================================
+
+TRADE #68
+--------------------------------------------------
+Entry Time: 2025-08-26 07:00:00
+Direction: SHORT
+Entry Price: $109,952.83
+Stop Loss: $108,510.97
+Take Profit: $111,504.69
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-26 08:00:00
+
+
+================================================================================
+
+TRADE #69
+--------------------------------------------------
+Entry Time: 2025-08-26 08:00:00
+Direction: SHORT
+Entry Price: $110,247.36
+Stop Loss: $108,798.61
+Take Profit: $111,806.41
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-26 09:00:00
+
+
+================================================================================
+
+TRADE #70
+--------------------------------------------------
+Entry Time: 2025-08-26 09:00:00
+Direction: SHORT
+Entry Price: $110,053.97
+Stop Loss: $108,646.59
+Take Profit: $111,571.45
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-26 10:00:00
+
+
+================================================================================
+
+TRADE #71
+--------------------------------------------------
+Entry Time: 2025-08-26 10:00:00
+Direction: SHORT
+Entry Price: $110,109.41
+Stop Loss: $108,751.00
+Take Profit: $111,577.98
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-26 11:00:00
+
+
+================================================================================
+
+TRADE #72
+--------------------------------------------------
+Entry Time: 2025-08-26 11:00:00
+Direction: SHORT
+Entry Price: $110,168.78
+Stop Loss: $108,858.84
+Take Profit: $111,588.94
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-26 12:00:00
+
+
+================================================================================
+
+TRADE #73
+--------------------------------------------------
+Entry Time: 2025-08-26 12:00:00
+Direction: SHORT
+Entry Price: $109,821.06
+Stop Loss: $108,510.02
+Take Profit: $111,241.98
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-26 20:00:00
+
+
+================================================================================
+
+TRADE #74
+--------------------------------------------------
+Entry Time: 2025-08-26 13:00:00
+Direction: SHORT
+Entry Price: $110,150.50
+Stop Loss: $108,763.86
+Take Profit: $111,647.34
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-26 22:00:00
+
+
+================================================================================
+
+TRADE #75
+--------------------------------------------------
+Entry Time: 2025-08-26 14:00:00
+Direction: SHORT
+Entry Price: $110,026.02
+Stop Loss: $108,608.85
+Take Profit: $111,553.27
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-26 21:00:00
+
+
+================================================================================
+
+TRADE #76
+--------------------------------------------------
+Entry Time: 2025-08-26 15:00:00
+Direction: SHORT
+Entry Price: $110,294.82
+Stop Loss: $108,874.35
+Take Profit: $111,825.65
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-26 22:00:00
+
+
+================================================================================
+
+TRADE #77
+--------------------------------------------------
+Entry Time: 2025-08-26 16:00:00
+Direction: SHORT
+Entry Price: $109,602.23
+Stop Loss: $108,141.77
+Take Profit: $111,172.35
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-26 19:00:00
+
+
+================================================================================
+
+TRADE #78
+--------------------------------------------------
+Entry Time: 2025-08-27 16:00:00
+Direction: SHORT
+Entry Price: $111,971.95
+Stop Loss: $110,782.48
+Take Profit: $113,273.44
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-27 17:00:00
+
+
+================================================================================
+
+TRADE #79
+--------------------------------------------------
+Entry Time: 2025-08-27 17:00:00
+Direction: SHORT
+Entry Price: $112,075.66
+Stop Loss: $110,873.83
+Take Profit: $113,389.63
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-27 18:00:00
+
+
+================================================================================
+
+TRADE #80
+--------------------------------------------------
+Entry Time: 2025-08-27 18:00:00
+Direction: SHORT
+Entry Price: $112,293.53
+Stop Loss: $111,100.06
+Take Profit: $113,599.34
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-27 19:00:00
+
+
+================================================================================
+
+TRADE #81
+--------------------------------------------------
+Entry Time: 2025-08-29 03:00:00
+Direction: SHORT
+Entry Price: $111,379.85
+Stop Loss: $110,325.66
+Take Profit: $112,545.48
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-29 08:00:00
+
+
+================================================================================
+
+TRADE #82
+--------------------------------------------------
+Entry Time: 2025-08-29 04:00:00
+Direction: SHORT
+Entry Price: $111,656.37
+Stop Loss: $110,605.69
+Take Profit: $112,818.77
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-29 07:00:00
+
+
+================================================================================
+
+TRADE #83
+--------------------------------------------------
+Entry Time: 2025-08-29 05:00:00
+Direction: SHORT
+Entry Price: $111,456.80
+Stop Loss: $110,421.56
+Take Profit: $112,603.56
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-29 08:00:00
+
+
+================================================================================
+
+TRADE #84
+--------------------------------------------------
+Entry Time: 2025-08-29 06:00:00
+Direction: SHORT
+Entry Price: $111,261.42
+Stop Loss: $110,238.50
+Take Profit: $112,395.66
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-29 08:00:00
+
+
+================================================================================
+
+TRADE #85
+--------------------------------------------------
+Entry Time: 2025-08-29 07:00:00
+Direction: SHORT
+Entry Price: $111,231.98
+Stop Loss: $110,221.85
+Take Profit: $112,353.39
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-29 08:00:00
+
+
+================================================================================
+
+TRADE #86
+--------------------------------------------------
+Entry Time: 2025-08-29 08:00:00
+Direction: SHORT
+Entry Price: $109,965.04
+Stop Loss: $108,832.58
+Take Profit: $111,207.52
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-29 12:00:00
+
+
+================================================================================
+
+TRADE #87
+--------------------------------------------------
+Entry Time: 2025-08-29 09:00:00
+Direction: SHORT
+Entry Price: $109,570.39
+Stop Loss: $108,424.65
+Take Profit: $110,825.75
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-29 12:00:00
+
+
+================================================================================
+
+TRADE #88
+--------------------------------------------------
+Entry Time: 2025-08-29 10:00:00
+Direction: SHORT
+Entry Price: $109,711.03
+Stop Loss: $108,575.29
+Take Profit: $110,956.53
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-29 12:00:00
+
+
+================================================================================
+
+TRADE #89
+--------------------------------------------------
+Entry Time: 2025-08-29 11:00:00
+Direction: SHORT
+Entry Price: $109,948.77
+Stop Loss: $108,856.13
+Take Profit: $111,151.41
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-08-29 12:00:00
+
+
+================================================================================
+
+TRADE #90
+--------------------------------------------------
+Entry Time: 2025-08-29 12:00:00
+Direction: SHORT
+Entry Price: $110,060.30
+Stop Loss: $109,002.50
+Take Profit: $111,228.22
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-29 14:00:00
+
+
+================================================================================
+
+TRADE #91
+--------------------------------------------------
+Entry Time: 2025-08-29 13:00:00
+Direction: SHORT
+Entry Price: $110,676.41
+Stop Loss: $109,493.72
+Take Profit: $111,969.84
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-29 14:00:00
+
+
+================================================================================
+
+TRADE #92
+--------------------------------------------------
+Entry Time: 2025-08-29 14:00:00
+Direction: SHORT
+Entry Price: $109,045.45
+Stop Loss: $107,680.02
+Take Profit: $110,519.98
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-29 18:00:00
+
+
+================================================================================
+
+TRADE #93
+--------------------------------------------------
+Entry Time: 2025-08-29 15:00:00
+Direction: SHORT
+Entry Price: $108,133.28
+Stop Loss: $106,663.21
+Take Profit: $109,711.53
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Neither SL nor TP was hit in the time period
+  ⚪ UNCLEAR - NEITHER_HIT
+
+
+================================================================================
+
+TRADE #94
+--------------------------------------------------
+Entry Time: 2025-08-29 17:00:00
+Direction: SHORT
+Entry Price: $108,649.42
+Stop Loss: $107,210.71
+Take Profit: $110,196.83
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-29 20:00:00
+
+
+================================================================================
+
+TRADE #95
+--------------------------------------------------
+Entry Time: 2025-08-29 18:00:00
+Direction: SHORT
+Entry Price: $108,412.89
+Stop Loss: $106,996.98
+Take Profit: $109,937.26
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-29 22:00:00
+
+
+================================================================================
+
+TRADE #96
+--------------------------------------------------
+Entry Time: 2025-08-29 19:00:00
+Direction: SHORT
+Entry Price: $108,081.43
+Stop Loss: $106,709.93
+Take Profit: $109,561.07
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Neither SL nor TP was hit in the time period
+  ⚪ UNCLEAR - NEITHER_HIT
+
+
+================================================================================
+
+TRADE #97
+--------------------------------------------------
+Entry Time: 2025-08-29 20:00:00
+Direction: SHORT
+Entry Price: $108,159.87
+Stop Loss: $106,768.86
+Take Profit: $109,659.10
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Neither SL nor TP was hit in the time period
+  ⚪ UNCLEAR - NEITHER_HIT
+
+
+================================================================================
+
+TRADE #98
+--------------------------------------------------
+Entry Time: 2025-08-30 07:00:00
+Direction: SHORT
+Entry Price: $108,260.87
+Stop Loss: $107,106.38
+Take Profit: $109,523.68
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Neither SL nor TP was hit in the time period
+  ⚪ UNCLEAR - NEITHER_HIT
+
+
+================================================================================
+
+TRADE #99
+--------------------------------------------------
+Entry Time: 2025-08-30 08:00:00
+Direction: SHORT
+Entry Price: $108,464.98
+Stop Loss: $107,337.25
+Take Profit: $109,701.23
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Neither SL nor TP was hit in the time period
+  ⚪ UNCLEAR - NEITHER_HIT
+
+
+================================================================================
+
+TRADE #100
+--------------------------------------------------
+Entry Time: 2025-08-31 16:00:00
+Direction: SHORT
+Entry Price: $108,748.84
+Stop Loss: $108,111.14
+Take Profit: $109,495.34
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-01 01:00:00
+
+
+================================================================================
+
+TRADE #101
+--------------------------------------------------
+Entry Time: 2025-08-31 17:00:00
+Direction: SHORT
+Entry Price: $108,860.37
+Stop Loss: $108,211.62
+Take Profit: $109,618.04
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-31 18:00:00
+
+
+================================================================================
+
+TRADE #102
+--------------------------------------------------
+Entry Time: 2025-08-31 18:00:00
+Direction: SHORT
+Entry Price: $108,935.61
+Stop Loss: $108,314.68
+Take Profit: $109,665.54
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-31 19:00:00
+
+
+================================================================================
+
+TRADE #103
+--------------------------------------------------
+Entry Time: 2025-08-31 19:00:00
+Direction: SHORT
+Entry Price: $109,083.84
+Stop Loss: $108,465.91
+Take Profit: $109,810.91
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-31 20:00:00
+
+
+================================================================================
+
+TRADE #104
+--------------------------------------------------
+Entry Time: 2025-08-31 20:00:00
+Direction: SHORT
+Entry Price: $108,878.15
+Stop Loss: $108,270.50
+Take Profit: $109,594.74
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-31 21:00:00
+
+
+================================================================================
+
+TRADE #105
+--------------------------------------------------
+Entry Time: 2025-08-31 21:00:00
+Direction: SHORT
+Entry Price: $109,071.30
+Stop Loss: $108,472.97
+Take Profit: $109,778.75
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-31 22:00:00
+
+
+================================================================================
+
+TRADE #106
+--------------------------------------------------
+Entry Time: 2025-08-31 22:00:00
+Direction: SHORT
+Entry Price: $108,991.49
+Stop Loss: $108,413.55
+Take Profit: $109,678.47
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-08-31 23:00:00
+
+
+================================================================================
+
+TRADE #107
+--------------------------------------------------
+Entry Time: 2025-08-31 23:00:00
+Direction: SHORT
+Entry Price: $108,831.11
+Stop Loss: $108,228.45
+Take Profit: $109,542.65
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-01 00:00:00
+
+
+================================================================================
+
+TRADE #108
+--------------------------------------------------
+Entry Time: 2025-09-04 12:00:00
+Direction: SHORT
+Entry Price: $110,788.82
+Stop Loss: $109,852.53
+Take Profit: $111,835.95
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-04 14:00:00
+
+
+================================================================================
+
+TRADE #109
+--------------------------------------------------
+Entry Time: 2025-09-04 13:00:00
+Direction: SHORT
+Entry Price: $110,908.02
+Stop Loss: $109,955.23
+Take Profit: $111,971.77
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-04 14:00:00
+
+
+================================================================================
+
+TRADE #110
+--------------------------------------------------
+Entry Time: 2025-09-04 14:00:00
+Direction: SHORT
+Entry Price: $110,422.14
+Stop Loss: $109,428.88
+Take Profit: $111,525.88
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-04 16:00:00
+
+
+================================================================================
+
+TRADE #111
+--------------------------------------------------
+Entry Time: 2025-09-04 15:00:00
+Direction: SHORT
+Entry Price: $109,795.37
+Stop Loss: $108,758.51
+Take Profit: $110,942.09
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-09-04 22:00:00
+
+
+================================================================================
+
+TRADE #112
+--------------------------------------------------
+Entry Time: 2025-09-04 16:00:00
+Direction: SHORT
+Entry Price: $109,450.57
+Stop Loss: $108,412.41
+Take Profit: $110,598.23
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-09-04 22:00:00
+
+
+================================================================================
+
+TRADE #113
+--------------------------------------------------
+Entry Time: 2025-09-04 17:00:00
+Direction: SHORT
+Entry Price: $109,379.78
+Stop Loss: $108,367.42
+Take Profit: $110,501.58
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-09-04 21:00:00
+
+
+================================================================================
+
+TRADE #114
+--------------------------------------------------
+Entry Time: 2025-09-04 18:00:00
+Direction: SHORT
+Entry Price: $109,734.44
+Stop Loss: $108,726.66
+Take Profit: $110,851.99
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-09-04 22:00:00
+
+
+================================================================================
+
+TRADE #115
+--------------------------------------------------
+Entry Time: 2025-09-04 19:00:00
+Direction: SHORT
+Entry Price: $109,928.48
+Stop Loss: $108,922.02
+Take Profit: $111,044.92
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-09-04 22:00:00
+
+
+================================================================================
+
+TRADE #116
+--------------------------------------------------
+Entry Time: 2025-09-04 20:00:00
+Direction: SHORT
+Entry Price: $109,753.41
+Stop Loss: $108,764.36
+Take Profit: $110,852.26
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-09-04 22:00:00
+
+
+================================================================================
+
+TRADE #117
+--------------------------------------------------
+Entry Time: 2025-09-04 21:00:00
+Direction: SHORT
+Entry Price: $110,356.17
+Stop Loss: $109,345.32
+Take Profit: $111,477.44
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-09-04 22:00:00
+
+
+================================================================================
+
+TRADE #118
+--------------------------------------------------
+Entry Time: 2025-09-04 22:00:00
+Direction: SHORT
+Entry Price: $110,434.88
+Stop Loss: $109,467.12
+Take Profit: $111,513.14
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+🔄 NEUTRAL: Swapping SL/TP would not change the outcome
+
+================================================================================
+
+TRADE #119
+--------------------------------------------------
+Entry Time: 2025-09-04 23:00:00
+Direction: SHORT
+Entry Price: $111,430.34
+Stop Loss: $110,376.94
+Take Profit: $112,595.22
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-05 00:00:00
+
+
+================================================================================
+
+TRADE #120
+--------------------------------------------------
+Entry Time: 2025-09-06 02:00:00
+Direction: SHORT
+Entry Price: $110,822.97
+Stop Loss: $109,660.52
+Take Profit: $112,096.30
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-06 06:00:00
+
+
+================================================================================
+
+TRADE #121
+--------------------------------------------------
+Entry Time: 2025-09-06 03:00:00
+Direction: SHORT
+Entry Price: $111,164.10
+Stop Loss: $110,018.79
+Take Profit: $112,420.63
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-06 04:00:00
+
+
+================================================================================
+
+TRADE #122
+--------------------------------------------------
+Entry Time: 2025-09-06 04:00:00
+Direction: SHORT
+Entry Price: $111,037.98
+Stop Loss: $109,934.04
+Take Profit: $112,253.02
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-06 05:00:00
+
+
+================================================================================
+
+TRADE #123
+--------------------------------------------------
+Entry Time: 2025-09-06 05:00:00
+Direction: SHORT
+Entry Price: $110,819.59
+Stop Loss: $109,754.42
+Take Profit: $111,995.64
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-06 06:00:00
+
+
+================================================================================
+
+TRADE #124
+--------------------------------------------------
+Entry Time: 2025-09-06 06:00:00
+Direction: SHORT
+Entry Price: $110,667.76
+Stop Loss: $109,656.46
+Take Profit: $111,789.78
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Neither SL nor TP was hit in the time period
+  ⚪ UNCLEAR - NEITHER_HIT
+
+
+================================================================================
+
+TRADE #125
+--------------------------------------------------
+Entry Time: 2025-09-06 07:00:00
+Direction: SHORT
+Entry Price: $110,704.17
+Stop Loss: $109,751.00
+Take Profit: $111,768.10
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Neither SL nor TP was hit in the time period
+  ⚪ UNCLEAR - NEITHER_HIT
+
+
+================================================================================
+
+TRADE #126
+--------------------------------------------------
+Entry Time: 2025-09-06 08:00:00
+Direction: SHORT
+Entry Price: $110,783.29
+Stop Loss: $109,888.40
+Take Profit: $111,789.02
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Neither SL nor TP was hit in the time period
+  ⚪ UNCLEAR - NEITHER_HIT
+
+
+================================================================================
+
+TRADE #127
+--------------------------------------------------
+Entry Time: 2025-09-06 09:00:00
+Direction: SHORT
+Entry Price: $110,901.06
+Stop Loss: $110,044.85
+Take Profit: $111,868.23
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-06 20:00:00
+
+
+================================================================================
+
+TRADE #128
+--------------------------------------------------
+Entry Time: 2025-09-06 10:00:00
+Direction: SHORT
+Entry Price: $110,644.68
+Stop Loss: $109,816.58
+Take Profit: $111,583.48
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Neither SL nor TP was hit in the time period
+  ⚪ UNCLEAR - NEITHER_HIT
+
+
+================================================================================
+
+TRADE #129
+--------------------------------------------------
+Entry Time: 2025-09-06 11:00:00
+Direction: SHORT
+Entry Price: $110,733.69
+Stop Loss: $109,949.62
+Take Profit: $111,628.54
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-06 23:00:00
+
+
+================================================================================
+
+TRADE #130
+--------------------------------------------------
+Entry Time: 2025-09-06 15:00:00
+Direction: SHORT
+Entry Price: $110,766.60
+Stop Loss: $110,099.80
+Take Profit: $111,544.22
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-06 20:00:00
+
+
+================================================================================
+
+TRADE #131
+--------------------------------------------------
+Entry Time: 2025-09-06 16:00:00
+Direction: SHORT
+Entry Price: $110,343.18
+Stop Loss: $109,657.36
+Take Profit: $111,139.40
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-09-07 08:00:00
+
+
+================================================================================
+
+TRADE #132
+--------------------------------------------------
+Entry Time: 2025-09-06 23:00:00
+Direction: SHORT
+Entry Price: $110,146.31
+Stop Loss: $109,568.68
+Take Profit: $110,834.14
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-09-07 07:00:00
+
+
+================================================================================
+
+TRADE #133
+--------------------------------------------------
+Entry Time: 2025-09-07 00:00:00
+Direction: SHORT
+Entry Price: $110,157.49
+Stop Loss: $109,599.52
+Take Profit: $110,825.68
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-09-07 07:00:00
+
+
+================================================================================
+
+TRADE #134
+--------------------------------------------------
+Entry Time: 2025-09-07 01:00:00
+Direction: SHORT
+Entry Price: $110,330.50
+Stop Loss: $109,788.10
+Take Profit: $110,983.28
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-09-07 08:00:00
+
+
+================================================================================
+
+TRADE #135
+--------------------------------------------------
+Entry Time: 2025-09-07 02:00:00
+Direction: SHORT
+Entry Price: $110,519.28
+Stop Loss: $109,981.65
+Take Profit: $111,167.49
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-07 03:00:00
+
+
+================================================================================
+
+TRADE #136
+--------------------------------------------------
+Entry Time: 2025-09-07 03:00:00
+Direction: SHORT
+Entry Price: $110,623.29
+Stop Loss: $110,091.87
+Take Profit: $111,265.39
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-07 04:00:00
+
+
+================================================================================
+
+TRADE #137
+--------------------------------------------------
+Entry Time: 2025-09-07 04:00:00
+Direction: SHORT
+Entry Price: $110,586.39
+Stop Loss: $110,074.43
+Take Profit: $111,208.99
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-07 05:00:00
+
+
+================================================================================
+
+TRADE #138
+--------------------------------------------------
+Entry Time: 2025-09-07 05:00:00
+Direction: SHORT
+Entry Price: $110,509.21
+Stop Loss: $110,015.49
+Take Profit: $111,113.49
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-07 06:00:00
+
+
+================================================================================
+
+TRADE #139
+--------------------------------------------------
+Entry Time: 2025-09-09 08:00:00
+Direction: SHORT
+Entry Price: $112,943.43
+Stop Loss: $112,060.74
+Take Profit: $113,939.12
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-09 09:00:00
+
+
+================================================================================
+
+TRADE #140
+--------------------------------------------------
+Entry Time: 2025-09-09 09:00:00
+Direction: SHORT
+Entry Price: $112,943.51
+Stop Loss: $112,087.38
+Take Profit: $113,912.64
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-09 10:00:00
+
+
+================================================================================
+
+TRADE #141
+--------------------------------------------------
+Entry Time: 2025-09-09 10:00:00
+Direction: SHORT
+Entry Price: $112,905.45
+Stop Loss: $112,089.37
+Take Profit: $113,834.49
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-09 11:00:00
+
+
+================================================================================
+
+TRADE #142
+--------------------------------------------------
+Entry Time: 2025-09-10 02:00:00
+Direction: SHORT
+Entry Price: $110,953.81
+Stop Loss: $110,068.06
+Take Profit: $111,950.56
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Stop Loss was hit first - LOSS
+  ❌ LOSS - Swapped SL hit at 2025-09-10 06:00:00
+
+
+================================================================================
+
+TRADE #143
+--------------------------------------------------
+Entry Time: 2025-09-10 03:00:00
+Direction: SHORT
+Entry Price: $111,351.17
+Stop Loss: $110,453.42
+Take Profit: $112,360.32
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-10 04:00:00
+
+
+================================================================================
+
+TRADE #144
+--------------------------------------------------
+Entry Time: 2025-09-10 04:00:00
+Direction: SHORT
+Entry Price: $111,485.59
+Stop Loss: $110,620.76
+Take Profit: $112,461.96
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-10 05:00:00
+
+
+================================================================================
+
+TRADE #145
+--------------------------------------------------
+Entry Time: 2025-09-10 05:00:00
+Direction: SHORT
+Entry Price: $111,462.11
+Stop Loss: $110,626.67
+Take Profit: $112,409.07
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-10 06:00:00
+
+
+================================================================================
+
+TRADE #146
+--------------------------------------------------
+Entry Time: 2025-09-10 06:00:00
+Direction: SHORT
+Entry Price: $111,522.76
+Stop Loss: $110,699.04
+Take Profit: $112,458.06
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+🔄 NEUTRAL: Swapping SL/TP would not change the outcome
+
+================================================================================
+
+TRADE #147
+--------------------------------------------------
+Entry Time: 2025-09-10 07:00:00
+Direction: SHORT
+Entry Price: $111,731.32
+Stop Loss: $110,888.23
+Take Profit: $112,686.19
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+🔄 NEUTRAL: Swapping SL/TP would not change the outcome
+
+================================================================================
+
+TRADE #148
+--------------------------------------------------
+Entry Time: 2025-09-10 08:00:00
+Direction: SHORT
+Entry Price: $112,480.55
+Stop Loss: $111,582.01
+Take Profit: $113,491.63
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-10 09:00:00
+
+
+================================================================================
+
+TRADE #149
+--------------------------------------------------
+Entry Time: 2025-09-10 09:00:00
+Direction: SHORT
+Entry Price: $112,310.67
+Stop Loss: $111,404.71
+Take Profit: $113,328.99
+
+ORIGINAL STRATEGY (Current SL/TP):
+  Result: SL and TP hit at same time
+  ⚪ UNCLEAR - SAME_TIME
+
+SWAPPED STRATEGY (If SL became TP and TP became SL):
+  Result: Take Profit was hit first - WIN
+  ✅ WIN - Swapped TP hit at 2025-09-10 10:00:00
+
+
+================================================================================
+
+SUMMARY RESULTS:
+========================================
+Total Trades Analyzed: 149
+
+ORIGINAL STRATEGY:
+  Wins: 1
+  Win Rate: 0.7%
+
+SWAPPED STRATEGY (SL↔TP):
+  Wins: 83
+  Win Rate: 55.7%
+
+🚀 SWAPPING SL/TP IMPROVES WIN RATE BY 55.0 PERCENTAGE POINTS!
