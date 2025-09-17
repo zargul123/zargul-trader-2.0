@@ -23,7 +23,13 @@ def run_simple_backtest():
     # Initialize the AI Analyst specifically for the model we need.
     # This is much faster than loading all models.
     print("\nInitializing AI Analyst for the specific model...")
-    analyst = AIAnalyst(symbol=symbol, strategy_type=strategy)
+    
+    # Auto-train BTC main model if missing
+    import os
+    model_files = [f'trained_models/{symbol}_{strategy}_model.h5', f'trained_models/{symbol}_{strategy}_scaler.joblib', f'trained_models/{symbol}_{strategy}_calibrator.joblib']
+    train_needed = not all(os.path.exists(f) for f in model_files)
+    
+    analyst = AIAnalyst(symbol=symbol, strategy_type=strategy, train_all=train_needed)
     print("✅ AI Analyst ready.")
 
     # Initialize the backtest engine with the pre-loaded analyst
