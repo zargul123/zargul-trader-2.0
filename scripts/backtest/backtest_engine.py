@@ -171,6 +171,10 @@ class BacktestEngine:
         # --- PERMANENT FIX: Check if the signal should be inverted based on strategy config ---
         if strategy_config.get('invert_signal', False):
             direction = 'short' if direction == 'long' else 'long'
+            # 🚨 CRITICAL BUG FIX: Update prediction object with inverted direction
+            # so calculate_levels uses the correct direction for SL/TP calculation
+            prediction = prediction.copy()  # Don't modify original prediction
+            prediction['direction'] = direction
         # ------------------------------------------------------------------------------------
         
         # --- REALISTIC SLIPPAGE SIMULATION ---
@@ -185,7 +189,7 @@ class BacktestEngine:
         sl_override = risk_config_override.get('sl_atr_multiplier') if risk_config_override else None
 
         levels = self.risk_manager.calculate_levels(
-            prediction, 
+            prediction,  # Now contains the correct (possibly inverted) direction
             df,
             strategy_config=strategy_config,
             tp_atr_mult_override=tp_override, 
