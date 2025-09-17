@@ -1,0 +1,7 @@
+BACKTEST VERIFICATION - SUSPICIOUS PATTERNS
+==================================================
+
+1. ALL trades are exactly 1 hour - may indicate simplified backtesting
+2. SL/TP directions appear inverted for SHORT trades
+3. PnL calculation inconsistencies found: 149 trades
+4. Extremely high win rate: 99.33% - may indicate overfitting or data issues
