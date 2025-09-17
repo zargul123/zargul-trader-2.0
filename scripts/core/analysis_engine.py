@@ -168,7 +168,7 @@ class AIAnalyst:
         start_time = time.time()
         print(f"   - Starting training for {symbol} ({strategy_name})...")
         try:
-            df = self.data.get_training_data(symbol, STRATEGIES[strategy_name]['timeframe'])
+            df = self.data.get_training_data(symbol, STRATEGIES[symbol][strategy_name]['timeframe'])
             if df is None or df.empty:
                 raise ValueError(f"Cannot train {symbol} ({strategy_name}), no data available.")
 
@@ -178,7 +178,7 @@ class AIAnalyst:
             scaler = MinMaxScaler(feature_range=(0, 1))
             scaled_data = scaler.fit_transform(df_features.values)
 
-            sequence_length = STRATEGIES[strategy_name]['sequence_length']
+            sequence_length = STRATEGIES[symbol][strategy_name]['sequence_length']
             X, y_pt, y_sig = [], [], []
 
             # --- Create Labels for the new dual-output model ---
