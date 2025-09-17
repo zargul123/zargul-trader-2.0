@@ -1,0 +1,3791 @@
+================================================================================
+DETAILED TRADE-BY-TRADE MARKET VERIFICATION
+================================================================================
+
+TRADE #1
+----------------------------------------
+Entry Time: 2025-08-20 00:00:00
+Exit Time:  2025-08-20 01:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,799.76
+  Exit Price:  $111,676.92
+  PnL:         0.995%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,197.00
+  Exit Price:  $112,995.67
+  Actual PnL:  0.178%
+
+DIFFERENCES:
+  Entry Price Diff: 0.352%
+  Exit Price Diff:  1.181%
+  PnL Difference:   -0.818%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #2
+----------------------------------------
+Entry Time: 2025-08-20 01:00:00
+Exit Time:  2025-08-20 02:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $113,140.40
+  Exit Price:  $112,030.49
+  PnL:         0.981%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,995.67
+  Exit Price:  $113,438.60
+  Actual PnL:  -0.392%
+
+DIFFERENCES:
+  Entry Price Diff: 0.128%
+  Exit Price Diff:  1.257%
+  PnL Difference:   -1.373%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #3
+----------------------------------------
+Entry Time: 2025-08-20 02:00:00
+Exit Time:  2025-08-20 03:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,939.17
+  Exit Price:  $111,791.77
+  PnL:         1.016%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,438.60
+  Exit Price:  $113,521.93
+  Actual PnL:  -0.073%
+
+DIFFERENCES:
+  Entry Price Diff: 0.442%
+  Exit Price Diff:  1.548%
+  PnL Difference:   -1.089%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #4
+----------------------------------------
+Entry Time: 2025-08-20 03:00:00
+Exit Time:  2025-08-20 04:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $113,381.88
+  Exit Price:  $112,236.43
+  PnL:         1.010%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,521.93
+  Exit Price:  $113,633.09
+  Actual PnL:  -0.098%
+
+DIFFERENCES:
+  Entry Price Diff: 0.124%
+  Exit Price Diff:  1.244%
+  PnL Difference:   -1.108%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #5
+----------------------------------------
+Entry Time: 2025-08-20 04:00:00
+Exit Time:  2025-08-20 05:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $113,465.17
+  Exit Price:  $112,358.40
+  PnL:         0.975%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,633.09
+  Exit Price:  $113,714.48
+  Actual PnL:  -0.072%
+
+DIFFERENCES:
+  Entry Price Diff: 0.148%
+  Exit Price Diff:  1.207%
+  PnL Difference:   -1.047%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #6
+----------------------------------------
+Entry Time: 2025-08-20 05:00:00
+Exit Time:  2025-08-20 06:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $113,576.27
+  Exit Price:  $112,516.54
+  PnL:         0.933%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,714.48
+  Exit Price:  $113,658.86
+  Actual PnL:  0.049%
+
+DIFFERENCES:
+  Entry Price Diff: 0.122%
+  Exit Price Diff:  1.015%
+  PnL Difference:   -0.884%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #7
+----------------------------------------
+Entry Time: 2025-08-20 06:00:00
+Exit Time:  2025-08-20 07:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $113,657.62
+  Exit Price:  $112,633.59
+  PnL:         0.901%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,658.86
+  Exit Price:  $113,491.90
+  Actual PnL:  0.147%
+
+DIFFERENCES:
+  Entry Price Diff: 0.001%
+  Exit Price Diff:  0.762%
+  PnL Difference:   -0.754%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #8
+----------------------------------------
+Entry Time: 2025-08-20 07:00:00
+Exit Time:  2025-08-20 08:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $113,602.03
+  Exit Price:  $112,618.23
+  PnL:         0.866%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,491.90
+  Exit Price:  $114,000.26
+  Actual PnL:  -0.448%
+
+DIFFERENCES:
+  Entry Price Diff: 0.097%
+  Exit Price Diff:  1.227%
+  PnL Difference:   -1.314%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #9
+----------------------------------------
+Entry Time: 2025-08-20 08:00:00
+Exit Time:  2025-08-20 09:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $113,435.15
+  Exit Price:  $112,466.19
+  PnL:         0.854%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $114,000.26
+  Exit Price:  $113,682.56
+  Actual PnL:  0.279%
+
+DIFFERENCES:
+  Entry Price Diff: 0.498%
+  Exit Price Diff:  1.082%
+  PnL Difference:   -0.576%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #10
+----------------------------------------
+Entry Time: 2025-08-20 09:00:00
+Exit Time:  2025-08-20 10:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $113,943.26
+  Exit Price:  $112,955.98
+  PnL:         0.867%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,682.56
+  Exit Price:  $113,774.64
+  Actual PnL:  -0.081%
+
+DIFFERENCES:
+  Entry Price Diff: 0.229%
+  Exit Price Diff:  0.725%
+  PnL Difference:   -0.947%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #11
+----------------------------------------
+Entry Time: 2025-08-20 10:00:00
+Exit Time:  2025-08-20 11:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $113,625.72
+  Exit Price:  $112,655.99
+  PnL:         0.853%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,774.64
+  Exit Price:  $113,667.96
+  Actual PnL:  0.094%
+
+DIFFERENCES:
+  Entry Price Diff: 0.131%
+  Exit Price Diff:  0.898%
+  PnL Difference:   -0.760%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #12
+----------------------------------------
+Entry Time: 2025-08-21 15:00:00
+Exit Time:  2025-08-21 16:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $113,204.26
+  Exit Price:  $112,090.64
+  PnL:         0.984%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,762.44
+  Exit Price:  $112,354.93
+  Actual PnL:  0.361%
+
+DIFFERENCES:
+  Entry Price Diff: 0.390%
+  Exit Price Diff:  0.236%
+  PnL Difference:   -0.622%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #13
+----------------------------------------
+Entry Time: 2025-08-21 16:00:00
+Exit Time:  2025-08-21 17:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,706.06
+  Exit Price:  $111,560.53
+  PnL:         1.016%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,354.93
+  Exit Price:  $112,389.65
+  Actual PnL:  -0.031%
+
+DIFFERENCES:
+  Entry Price Diff: 0.312%
+  Exit Price Diff:  0.743%
+  PnL Difference:   -1.047%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #14
+----------------------------------------
+Entry Time: 2025-08-21 17:00:00
+Exit Time:  2025-08-21 18:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,298.75
+  Exit Price:  $111,144.51
+  PnL:         1.028%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,389.65
+  Exit Price:  $112,571.11
+  Actual PnL:  -0.161%
+
+DIFFERENCES:
+  Entry Price Diff: 0.081%
+  Exit Price Diff:  1.284%
+  PnL Difference:   -1.189%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #15
+----------------------------------------
+Entry Time: 2025-08-21 18:00:00
+Exit Time:  2025-08-21 19:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,333.46
+  Exit Price:  $111,205.98
+  PnL:         1.004%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,571.11
+  Exit Price:  $112,160.29
+  Actual PnL:  0.365%
+
+DIFFERENCES:
+  Entry Price Diff: 0.212%
+  Exit Price Diff:  0.858%
+  PnL Difference:   -0.639%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #16
+----------------------------------------
+Entry Time: 2025-08-21 19:00:00
+Exit Time:  2025-08-21 20:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,514.82
+  Exit Price:  $111,402.91
+  PnL:         0.988%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,160.29
+  Exit Price:  $112,412.16
+  Actual PnL:  -0.225%
+
+DIFFERENCES:
+  Entry Price Diff: 0.315%
+  Exit Price Diff:  0.906%
+  PnL Difference:   -1.213%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #17
+----------------------------------------
+Entry Time: 2025-08-21 20:00:00
+Exit Time:  2025-08-21 21:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,104.21
+  Exit Price:  $110,968.67
+  PnL:         1.013%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,412.16
+  Exit Price:  $112,590.61
+  Actual PnL:  -0.159%
+
+DIFFERENCES:
+  Entry Price Diff: 0.275%
+  Exit Price Diff:  1.462%
+  PnL Difference:   -1.172%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #18
+----------------------------------------
+Entry Time: 2025-08-21 21:00:00
+Exit Time:  2025-08-21 22:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,355.95
+  Exit Price:  $111,191.11
+  PnL:         1.037%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,590.61
+  Exit Price:  $112,470.97
+  Actual PnL:  0.106%
+
+DIFFERENCES:
+  Entry Price Diff: 0.209%
+  Exit Price Diff:  1.151%
+  PnL Difference:   -0.930%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #19
+----------------------------------------
+Entry Time: 2025-08-21 22:00:00
+Exit Time:  2025-08-21 23:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,534.31
+  Exit Price:  $111,364.56
+  PnL:         1.040%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,470.97
+  Exit Price:  $112,480.30
+  Actual PnL:  -0.008%
+
+DIFFERENCES:
+  Entry Price Diff: 0.056%
+  Exit Price Diff:  1.002%
+  PnL Difference:   -1.048%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #20
+----------------------------------------
+Entry Time: 2025-08-21 23:00:00
+Exit Time:  2025-08-22 00:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,414.73
+  Exit Price:  $111,287.58
+  PnL:         1.003%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,480.30
+  Exit Price:  $112,597.52
+  Actual PnL:  -0.104%
+
+DIFFERENCES:
+  Entry Price Diff: 0.058%
+  Exit Price Diff:  1.177%
+  PnL Difference:   -1.107%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #21
+----------------------------------------
+Entry Time: 2025-08-22 00:00:00
+Exit Time:  2025-08-22 01:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,424.06
+  Exit Price:  $111,343.22
+  PnL:         0.961%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,597.52
+  Exit Price:  $112,803.81
+  Actual PnL:  -0.183%
+
+DIFFERENCES:
+  Entry Price Diff: 0.154%
+  Exit Price Diff:  1.312%
+  PnL Difference:   -1.145%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #22
+----------------------------------------
+Entry Time: 2025-08-22 01:00:00
+Exit Time:  2025-08-22 02:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,541.22
+  Exit Price:  $111,488.13
+  PnL:         0.936%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,803.81
+  Exit Price:  $113,117.39
+  Actual PnL:  -0.278%
+
+DIFFERENCES:
+  Entry Price Diff: 0.233%
+  Exit Price Diff:  1.461%
+  PnL Difference:   -1.214%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #23
+----------------------------------------
+Entry Time: 2025-08-22 02:00:00
+Exit Time:  2025-08-22 03:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,747.41
+  Exit Price:  $111,687.44
+  PnL:         0.940%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,117.39
+  Exit Price:  $112,890.92
+  Actual PnL:  0.200%
+
+DIFFERENCES:
+  Entry Price Diff: 0.328%
+  Exit Price Diff:  1.078%
+  PnL Difference:   -0.740%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #24
+----------------------------------------
+Entry Time: 2025-08-22 03:00:00
+Exit Time:  2025-08-22 04:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $113,060.83
+  Exit Price:  $111,972.64
+  PnL:         0.963%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,890.92
+  Exit Price:  $112,799.01
+  Actual PnL:  0.081%
+
+DIFFERENCES:
+  Entry Price Diff: 0.150%
+  Exit Price Diff:  0.738%
+  PnL Difference:   -0.881%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #25
+----------------------------------------
+Entry Time: 2025-08-22 04:00:00
+Exit Time:  2025-08-22 05:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,834.47
+  Exit Price:  $111,746.38
+  PnL:         0.964%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,799.01
+  Exit Price:  $113,190.94
+  Actual PnL:  -0.347%
+
+DIFFERENCES:
+  Entry Price Diff: 0.031%
+  Exit Price Diff:  1.293%
+  PnL Difference:   -1.312%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #26
+----------------------------------------
+Entry Time: 2025-08-22 05:00:00
+Exit Time:  2025-08-22 06:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,742.61
+  Exit Price:  $111,656.50
+  PnL:         0.963%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,190.94
+  Exit Price:  $112,954.98
+  Actual PnL:  0.208%
+
+DIFFERENCES:
+  Entry Price Diff: 0.398%
+  Exit Price Diff:  1.163%
+  PnL Difference:   -0.755%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #27
+----------------------------------------
+Entry Time: 2025-08-22 06:00:00
+Exit Time:  2025-08-22 07:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $113,134.34
+  Exit Price:  $112,066.43
+  PnL:         0.944%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,954.98
+  Exit Price:  $113,042.75
+  Actual PnL:  -0.078%
+
+DIFFERENCES:
+  Entry Price Diff: 0.159%
+  Exit Price Diff:  0.871%
+  PnL Difference:   -1.022%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #28
+----------------------------------------
+Entry Time: 2025-08-22 07:00:00
+Exit Time:  2025-08-22 08:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,898.50
+  Exit Price:  $111,831.81
+  PnL:         0.945%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,042.75
+  Exit Price:  $112,944.33
+  Actual PnL:  0.087%
+
+DIFFERENCES:
+  Entry Price Diff: 0.128%
+  Exit Price Diff:  0.995%
+  PnL Difference:   -0.858%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #29
+----------------------------------------
+Entry Time: 2025-08-22 08:00:00
+Exit Time:  2025-08-22 09:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,986.23
+  Exit Price:  $111,953.82
+  PnL:         0.914%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,944.33
+  Exit Price:  $113,007.00
+  Actual PnL:  -0.055%
+
+DIFFERENCES:
+  Entry Price Diff: 0.037%
+  Exit Price Diff:  0.941%
+  PnL Difference:   -0.969%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #30
+----------------------------------------
+Entry Time: 2025-08-22 09:00:00
+Exit Time:  2025-08-22 10:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,887.86
+  Exit Price:  $111,878.76
+  PnL:         0.894%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,007.00
+  Exit Price:  $112,491.65
+  Actual PnL:  0.456%
+
+DIFFERENCES:
+  Entry Price Diff: 0.106%
+  Exit Price Diff:  0.548%
+  PnL Difference:   -0.438%
+
+
+================================================================================
+
+TRADE #31
+----------------------------------------
+Entry Time: 2025-08-23 15:00:00
+Exit Time:  2025-08-23 16:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $114,524.58
+  Exit Price:  $113,590.75
+  PnL:         0.815%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $114,770.00
+  Exit Price:  $114,967.39
+  Actual PnL:  -0.172%
+
+DIFFERENCES:
+  Entry Price Diff: 0.214%
+  Exit Price Diff:  1.212%
+  PnL Difference:   -0.987%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #32
+----------------------------------------
+Entry Time: 2025-08-23 16:00:00
+Exit Time:  2025-08-23 17:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $114,712.62
+  Exit Price:  $113,790.27
+  PnL:         0.804%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $114,967.39
+  Exit Price:  $115,054.90
+  Actual PnL:  -0.076%
+
+DIFFERENCES:
+  Entry Price Diff: 0.222%
+  Exit Price Diff:  1.111%
+  PnL Difference:   -0.880%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #33
+----------------------------------------
+Entry Time: 2025-08-23 17:00:00
+Exit Time:  2025-08-23 18:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $114,909.91
+  Exit Price:  $113,996.97
+  PnL:         0.794%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $115,054.90
+  Exit Price:  $115,108.64
+  Actual PnL:  -0.047%
+
+DIFFERENCES:
+  Entry Price Diff: 0.126%
+  Exit Price Diff:  0.975%
+  PnL Difference:   -0.841%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #34
+----------------------------------------
+Entry Time: 2025-08-23 18:00:00
+Exit Time:  2025-08-23 19:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $114,997.37
+  Exit Price:  $114,121.50
+  PnL:         0.762%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $115,108.64
+  Exit Price:  $115,098.49
+  Actual PnL:  0.009%
+
+DIFFERENCES:
+  Entry Price Diff: 0.097%
+  Exit Price Diff:  0.856%
+  PnL Difference:   -0.753%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #35
+----------------------------------------
+Entry Time: 2025-08-23 19:00:00
+Exit Time:  2025-08-23 20:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $115,051.09
+  Exit Price:  $114,219.77
+  PnL:         0.723%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $115,098.49
+  Exit Price:  $115,288.99
+  Actual PnL:  -0.166%
+
+DIFFERENCES:
+  Entry Price Diff: 0.041%
+  Exit Price Diff:  0.936%
+  PnL Difference:   -0.888%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #36
+----------------------------------------
+Entry Time: 2025-08-23 20:00:00
+Exit Time:  2025-08-23 21:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $115,040.94
+  Exit Price:  $114,253.48
+  PnL:         0.684%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $115,288.99
+  Exit Price:  $114,983.80
+  Actual PnL:  0.265%
+
+DIFFERENCES:
+  Entry Price Diff: 0.216%
+  Exit Price Diff:  0.639%
+  PnL Difference:   -0.420%
+
+
+================================================================================
+
+TRADE #37
+----------------------------------------
+Entry Time: 2025-08-23 21:00:00
+Exit Time:  2025-08-23 22:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $115,231.35
+  Exit Price:  $114,469.94
+  PnL:         0.661%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $114,983.80
+  Exit Price:  $115,278.45
+  Actual PnL:  -0.256%
+
+DIFFERENCES:
+  Entry Price Diff: 0.215%
+  Exit Price Diff:  0.706%
+  PnL Difference:   -0.917%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #38
+----------------------------------------
+Entry Time: 2025-08-23 22:00:00
+Exit Time:  2025-08-23 23:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $114,926.31
+  Exit Price:  $114,176.63
+  PnL:         0.652%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $115,278.45
+  Exit Price:  $115,383.87
+  Actual PnL:  -0.091%
+
+DIFFERENCES:
+  Entry Price Diff: 0.306%
+  Exit Price Diff:  1.057%
+  PnL Difference:   -0.744%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #39
+----------------------------------------
+Entry Time: 2025-08-23 23:00:00
+Exit Time:  2025-08-24 00:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $115,220.81
+  Exit Price:  $114,483.79
+  PnL:         0.640%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $115,383.87
+  Exit Price:  $115,329.99
+  Actual PnL:  0.047%
+
+DIFFERENCES:
+  Entry Price Diff: 0.142%
+  Exit Price Diff:  0.739%
+  PnL Difference:   -0.593%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #40
+----------------------------------------
+Entry Time: 2025-08-24 00:00:00
+Exit Time:  2025-08-24 01:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $115,326.18
+  Exit Price:  $114,617.33
+  PnL:         0.615%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $115,329.99
+  Exit Price:  $115,422.46
+  Actual PnL:  -0.080%
+
+DIFFERENCES:
+  Entry Price Diff: 0.003%
+  Exit Price Diff:  0.702%
+  PnL Difference:   -0.695%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #41
+----------------------------------------
+Entry Time: 2025-08-24 01:00:00
+Exit Time:  2025-08-24 02:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $115,272.32
+  Exit Price:  $114,582.94
+  PnL:         0.598%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $115,422.46
+  Exit Price:  $114,955.01
+  Actual PnL:  0.405%
+
+DIFFERENCES:
+  Entry Price Diff: 0.130%
+  Exit Price Diff:  0.325%
+  PnL Difference:   -0.193%
+
+
+================================================================================
+
+TRADE #42
+----------------------------------------
+Entry Time: 2025-08-24 02:00:00
+Exit Time:  2025-08-24 03:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $115,364.75
+  Exit Price:  $114,672.79
+  PnL:         0.600%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $114,955.01
+  Exit Price:  $114,986.76
+  Actual PnL:  -0.028%
+
+DIFFERENCES:
+  Entry Price Diff: 0.355%
+  Exit Price Diff:  0.274%
+  PnL Difference:   -0.627%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #43
+----------------------------------------
+Entry Time: 2025-08-24 17:00:00
+Exit Time:  2025-08-24 18:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $114,172.50
+  Exit Price:  $113,546.64
+  PnL:         0.548%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $114,372.01
+  Exit Price:  $114,582.51
+  Actual PnL:  -0.184%
+
+DIFFERENCES:
+  Entry Price Diff: 0.175%
+  Exit Price Diff:  0.912%
+  PnL Difference:   -0.732%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #44
+----------------------------------------
+Entry Time: 2025-08-24 18:00:00
+Exit Time:  2025-08-24 19:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $114,314.82
+  Exit Price:  $113,690.44
+  PnL:         0.546%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $114,582.51
+  Exit Price:  $112,588.10
+  Actual PnL:  1.741%
+
+DIFFERENCES:
+  Entry Price Diff: 0.234%
+  Exit Price Diff:  0.970%
+  PnL Difference:   1.194%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #45
+----------------------------------------
+Entry Time: 2025-08-24 19:00:00
+Exit Time:  2025-08-24 20:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $114,525.22
+  Exit Price:  $115,302.61
+  PnL:         -0.679%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,588.10
+  Exit Price:  $112,764.29
+  Actual PnL:  -0.156%
+
+DIFFERENCES:
+  Entry Price Diff: 1.691%
+  Exit Price Diff:  2.201%
+  PnL Difference:   0.522%
+
+⚠️  LARGE ENTRY PRICE DISCREPANCY!
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #46
+----------------------------------------
+Entry Time: 2025-08-24 20:00:00
+Exit Time:  2025-08-24 21:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,531.81
+  Exit Price:  $111,330.94
+  PnL:         1.067%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,764.29
+  Exit Price:  $112,975.77
+  Actual PnL:  -0.188%
+
+DIFFERENCES:
+  Entry Price Diff: 0.207%
+  Exit Price Diff:  1.477%
+  PnL Difference:   -1.255%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #47
+----------------------------------------
+Entry Time: 2025-08-24 21:00:00
+Exit Time:  2025-08-24 22:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,707.91
+  Exit Price:  $111,401.54
+  PnL:         1.159%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,975.77
+  Exit Price:  $113,434.27
+  Actual PnL:  -0.406%
+
+DIFFERENCES:
+  Entry Price Diff: 0.238%
+  Exit Price Diff:  1.825%
+  PnL Difference:   -1.565%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #48
+----------------------------------------
+Entry Time: 2025-08-24 22:00:00
+Exit Time:  2025-08-24 23:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,919.28
+  Exit Price:  $111,563.53
+  PnL:         1.201%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,434.27
+  Exit Price:  $113,478.00
+  Actual PnL:  -0.039%
+
+DIFFERENCES:
+  Entry Price Diff: 0.456%
+  Exit Price Diff:  1.716%
+  PnL Difference:   -1.239%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #49
+----------------------------------------
+Entry Time: 2025-08-24 23:00:00
+Exit Time:  2025-08-25 00:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $113,377.55
+  Exit Price:  $111,996.36
+  PnL:         1.218%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,478.00
+  Exit Price:  $112,628.06
+  Actual PnL:  0.749%
+
+DIFFERENCES:
+  Entry Price Diff: 0.089%
+  Exit Price Diff:  0.564%
+  PnL Difference:   -0.469%
+
+
+================================================================================
+
+TRADE #50
+----------------------------------------
+Entry Time: 2025-08-25 00:00:00
+Exit Time:  2025-08-25 01:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $113,421.26
+  Exit Price:  $112,095.01
+  PnL:         1.169%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,628.06
+  Exit Price:  $113,058.64
+  Actual PnL:  -0.382%
+
+DIFFERENCES:
+  Entry Price Diff: 0.699%
+  Exit Price Diff:  0.860%
+  PnL Difference:   -1.552%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #51
+----------------------------------------
+Entry Time: 2025-08-25 01:00:00
+Exit Time:  2025-08-25 02:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,571.75
+  Exit Price:  $111,148.99
+  PnL:         1.264%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,058.64
+  Exit Price:  $113,384.20
+  Actual PnL:  -0.288%
+
+DIFFERENCES:
+  Entry Price Diff: 0.433%
+  Exit Price Diff:  2.011%
+  PnL Difference:   -1.552%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #52
+----------------------------------------
+Entry Time: 2025-08-25 02:00:00
+Exit Time:  2025-08-25 03:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $113,002.11
+  Exit Price:  $111,608.52
+  PnL:         1.233%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,384.20
+  Exit Price:  $112,883.89
+  Actual PnL:  0.441%
+
+DIFFERENCES:
+  Entry Price Diff: 0.338%
+  Exit Price Diff:  1.143%
+  PnL Difference:   -0.792%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #53
+----------------------------------------
+Entry Time: 2025-08-25 16:00:00
+Exit Time:  2025-08-25 17:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,130.94
+  Exit Price:  $110,690.89
+  PnL:         1.284%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,500.03
+  Exit Price:  $112,434.90
+  Actual PnL:  0.058%
+
+DIFFERENCES:
+  Entry Price Diff: 0.329%
+  Exit Price Diff:  1.576%
+  PnL Difference:   -1.226%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #54
+----------------------------------------
+Entry Time: 2025-08-25 17:00:00
+Exit Time:  2025-08-25 18:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,443.78
+  Exit Price:  $110,980.24
+  PnL:         1.302%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,434.90
+  Exit Price:  $112,385.02
+  Actual PnL:  0.044%
+
+DIFFERENCES:
+  Entry Price Diff: 0.008%
+  Exit Price Diff:  1.266%
+  PnL Difference:   -1.257%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #55
+----------------------------------------
+Entry Time: 2025-08-25 18:00:00
+Exit Time:  2025-08-25 19:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,378.68
+  Exit Price:  $110,930.54
+  PnL:         1.289%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,385.02
+  Exit Price:  $110,693.42
+  Actual PnL:  1.505%
+
+DIFFERENCES:
+  Entry Price Diff: 0.006%
+  Exit Price Diff:  0.214%
+  PnL Difference:   0.217%
+
+
+================================================================================
+
+TRADE #56
+----------------------------------------
+Entry Time: 2025-08-25 19:00:00
+Exit Time:  2025-08-25 20:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,328.83
+  Exit Price:  $110,931.92
+  PnL:         1.244%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,693.42
+  Exit Price:  $109,572.38
+  Actual PnL:  1.013%
+
+DIFFERENCES:
+  Entry Price Diff: 1.456%
+  Exit Price Diff:  1.226%
+  PnL Difference:   -0.231%
+
+⚠️  LARGE ENTRY PRICE DISCREPANCY!
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+
+================================================================================
+
+TRADE #57
+----------------------------------------
+Entry Time: 2025-08-25 20:00:00
+Exit Time:  2025-08-25 21:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,638.07
+  Exit Price:  $109,087.19
+  PnL:         1.402%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,572.38
+  Exit Price:  $109,896.39
+  Actual PnL:  -0.296%
+
+DIFFERENCES:
+  Entry Price Diff: 0.963%
+  Exit Price Diff:  0.742%
+  PnL Difference:   -1.698%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #58
+----------------------------------------
+Entry Time: 2025-08-25 21:00:00
+Exit Time:  2025-08-25 22:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,517.59
+  Exit Price:  $107,839.91
+  PnL:         1.532%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,896.39
+  Exit Price:  $110,161.03
+  Actual PnL:  -0.241%
+
+DIFFERENCES:
+  Entry Price Diff: 0.346%
+  Exit Price Diff:  2.152%
+  PnL Difference:   -1.773%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #59
+----------------------------------------
+Entry Time: 2025-08-25 22:00:00
+Exit Time:  2025-08-25 23:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,841.44
+  Exit Price:  $108,141.34
+  PnL:         1.548%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,161.03
+  Exit Price:  $110,127.74
+  Actual PnL:  0.030%
+
+DIFFERENCES:
+  Entry Price Diff: 0.291%
+  Exit Price Diff:  1.837%
+  PnL Difference:   -1.518%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #60
+----------------------------------------
+Entry Time: 2025-08-25 23:00:00
+Exit Time:  2025-08-26 00:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,105.95
+  Exit Price:  $108,427.81
+  PnL:         1.524%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,127.74
+  Exit Price:  $109,105.48
+  Actual PnL:  0.928%
+
+DIFFERENCES:
+  Entry Price Diff: 0.020%
+  Exit Price Diff:  0.625%
+  PnL Difference:   -0.596%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #61
+----------------------------------------
+Entry Time: 2025-08-26 00:00:00
+Exit Time:  2025-08-26 01:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,072.68
+  Exit Price:  $108,447.49
+  PnL:         1.476%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,105.48
+  Exit Price:  $109,915.09
+  Actual PnL:  -0.742%
+
+DIFFERENCES:
+  Entry Price Diff: 0.879%
+  Exit Price Diff:  1.353%
+  PnL Difference:   -2.219%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #62
+----------------------------------------
+Entry Time: 2025-08-26 01:00:00
+Exit Time:  2025-08-26 02:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,050.93
+  Exit Price:  $107,373.01
+  PnL:         1.539%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,915.09
+  Exit Price:  $109,728.13
+  Actual PnL:  0.170%
+
+DIFFERENCES:
+  Entry Price Diff: 0.792%
+  Exit Price Diff:  2.193%
+  PnL Difference:   -1.369%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #63
+----------------------------------------
+Entry Time: 2025-08-26 02:00:00
+Exit Time:  2025-08-26 03:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,860.13
+  Exit Price:  $108,125.66
+  PnL:         1.579%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,728.13
+  Exit Price:  $109,899.97
+  Actual PnL:  -0.157%
+
+DIFFERENCES:
+  Entry Price Diff: 0.120%
+  Exit Price Diff:  1.641%
+  PnL Difference:   -1.735%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #64
+----------------------------------------
+Entry Time: 2025-08-26 03:00:00
+Exit Time:  2025-08-26 04:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,673.27
+  Exit Price:  $107,991.82
+  PnL:         1.533%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,899.97
+  Exit Price:  $110,109.19
+  Actual PnL:  -0.190%
+
+DIFFERENCES:
+  Entry Price Diff: 0.207%
+  Exit Price Diff:  1.961%
+  PnL Difference:   -1.723%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #65
+----------------------------------------
+Entry Time: 2025-08-26 04:00:00
+Exit Time:  2025-08-26 05:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,845.02
+  Exit Price:  $108,215.02
+  PnL:         1.484%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,109.19
+  Exit Price:  $110,212.23
+  Actual PnL:  -0.094%
+
+DIFFERENCES:
+  Entry Price Diff: 0.240%
+  Exit Price Diff:  1.846%
+  PnL Difference:   -1.577%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #66
+----------------------------------------
+Entry Time: 2025-08-26 05:00:00
+Exit Time:  2025-08-26 06:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,054.14
+  Exit Price:  $108,493.52
+  PnL:         1.418%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,212.23
+  Exit Price:  $110,007.83
+  Actual PnL:  0.185%
+
+DIFFERENCES:
+  Entry Price Diff: 0.144%
+  Exit Price Diff:  1.396%
+  PnL Difference:   -1.233%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #67
+----------------------------------------
+Entry Time: 2025-08-26 06:00:00
+Exit Time:  2025-08-26 07:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,157.12
+  Exit Price:  $108,670.61
+  PnL:         1.349%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,007.83
+  Exit Price:  $110,302.51
+  Actual PnL:  -0.268%
+
+DIFFERENCES:
+  Entry Price Diff: 0.136%
+  Exit Price Diff:  1.502%
+  PnL Difference:   -1.617%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #68
+----------------------------------------
+Entry Time: 2025-08-26 07:00:00
+Exit Time:  2025-08-26 08:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,952.83
+  Exit Price:  $108,510.97
+  PnL:         1.311%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,302.51
+  Exit Price:  $110,109.02
+  Actual PnL:  0.175%
+
+DIFFERENCES:
+  Entry Price Diff: 0.318%
+  Exit Price Diff:  1.473%
+  PnL Difference:   -1.136%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #69
+----------------------------------------
+Entry Time: 2025-08-26 08:00:00
+Exit Time:  2025-08-26 09:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,247.36
+  Exit Price:  $108,798.61
+  PnL:         1.314%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,109.02
+  Exit Price:  $110,164.49
+  Actual PnL:  -0.050%
+
+DIFFERENCES:
+  Entry Price Diff: 0.125%
+  Exit Price Diff:  1.255%
+  PnL Difference:   -1.364%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #70
+----------------------------------------
+Entry Time: 2025-08-26 09:00:00
+Exit Time:  2025-08-26 10:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,053.97
+  Exit Price:  $108,646.59
+  PnL:         1.279%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,164.49
+  Exit Price:  $110,223.89
+  Actual PnL:  -0.054%
+
+DIFFERENCES:
+  Entry Price Diff: 0.100%
+  Exit Price Diff:  1.452%
+  PnL Difference:   -1.333%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #71
+----------------------------------------
+Entry Time: 2025-08-26 10:00:00
+Exit Time:  2025-08-26 11:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,109.41
+  Exit Price:  $108,751.00
+  PnL:         1.234%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,223.89
+  Exit Price:  $109,876.00
+  Actual PnL:  0.316%
+
+DIFFERENCES:
+  Entry Price Diff: 0.104%
+  Exit Price Diff:  1.034%
+  PnL Difference:   -0.918%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #72
+----------------------------------------
+Entry Time: 2025-08-26 11:00:00
+Exit Time:  2025-08-26 12:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,168.78
+  Exit Price:  $108,858.84
+  PnL:         1.189%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,876.00
+  Exit Price:  $110,205.60
+  Actual PnL:  -0.300%
+
+DIFFERENCES:
+  Entry Price Diff: 0.266%
+  Exit Price Diff:  1.237%
+  PnL Difference:   -1.489%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #73
+----------------------------------------
+Entry Time: 2025-08-26 12:00:00
+Exit Time:  2025-08-26 13:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,821.06
+  Exit Price:  $108,510.02
+  PnL:         1.194%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,205.60
+  Exit Price:  $110,081.06
+  Actual PnL:  0.113%
+
+DIFFERENCES:
+  Entry Price Diff: 0.350%
+  Exit Price Diff:  1.448%
+  PnL Difference:   -1.081%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #74
+----------------------------------------
+Entry Time: 2025-08-26 13:00:00
+Exit Time:  2025-08-26 14:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,150.50
+  Exit Price:  $108,763.86
+  PnL:         1.259%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,081.06
+  Exit Price:  $110,350.00
+  Actual PnL:  -0.244%
+
+DIFFERENCES:
+  Entry Price Diff: 0.063%
+  Exit Price Diff:  1.458%
+  PnL Difference:   -1.503%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #75
+----------------------------------------
+Entry Time: 2025-08-26 14:00:00
+Exit Time:  2025-08-26 15:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,026.02
+  Exit Price:  $108,608.85
+  PnL:         1.288%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,350.00
+  Exit Price:  $109,657.06
+  Actual PnL:  0.628%
+
+DIFFERENCES:
+  Entry Price Diff: 0.294%
+  Exit Price Diff:  0.965%
+  PnL Difference:   -0.660%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #76
+----------------------------------------
+Entry Time: 2025-08-26 15:00:00
+Exit Time:  2025-08-26 16:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,294.82
+  Exit Price:  $108,874.35
+  PnL:         1.288%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,657.06
+  Exit Price:  $110,159.26
+  Actual PnL:  -0.458%
+
+DIFFERENCES:
+  Entry Price Diff: 0.578%
+  Exit Price Diff:  1.180%
+  PnL Difference:   -1.746%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #77
+----------------------------------------
+Entry Time: 2025-08-26 16:00:00
+Exit Time:  2025-08-26 17:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,602.23
+  Exit Price:  $108,141.77
+  PnL:         1.333%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,159.26
+  Exit Price:  $109,993.39
+  Actual PnL:  0.151%
+
+DIFFERENCES:
+  Entry Price Diff: 0.508%
+  Exit Price Diff:  1.712%
+  PnL Difference:   -1.182%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #78
+----------------------------------------
+Entry Time: 2025-08-27 16:00:00
+Exit Time:  2025-08-27 17:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $111,971.95
+  Exit Price:  $110,782.48
+  PnL:         1.062%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,131.73
+  Exit Price:  $112,349.70
+  Actual PnL:  -0.194%
+
+DIFFERENCES:
+  Entry Price Diff: 0.143%
+  Exit Price Diff:  1.415%
+  PnL Difference:   -1.257%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #79
+----------------------------------------
+Entry Time: 2025-08-27 17:00:00
+Exit Time:  2025-08-27 18:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,075.66
+  Exit Price:  $110,873.83
+  PnL:         1.072%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,349.70
+  Exit Price:  $111,962.60
+  Actual PnL:  0.345%
+
+DIFFERENCES:
+  Entry Price Diff: 0.245%
+  Exit Price Diff:  0.982%
+  PnL Difference:   -0.728%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #80
+----------------------------------------
+Entry Time: 2025-08-27 18:00:00
+Exit Time:  2025-08-27 19:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,293.53
+  Exit Price:  $111,100.06
+  PnL:         1.063%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $111,962.60
+  Exit Price:  $112,078.96
+  Actual PnL:  -0.104%
+
+DIFFERENCES:
+  Entry Price Diff: 0.295%
+  Exit Price Diff:  0.881%
+  PnL Difference:   -1.167%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #81
+----------------------------------------
+Entry Time: 2025-08-29 03:00:00
+Exit Time:  2025-08-29 04:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $111,379.85
+  Exit Price:  $110,325.66
+  PnL:         0.947%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $111,712.23
+  Exit Price:  $111,512.56
+  Actual PnL:  0.179%
+
+DIFFERENCES:
+  Entry Price Diff: 0.298%
+  Exit Price Diff:  1.076%
+  PnL Difference:   -0.768%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #82
+----------------------------------------
+Entry Time: 2025-08-29 04:00:00
+Exit Time:  2025-08-29 05:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $111,656.37
+  Exit Price:  $110,605.69
+  PnL:         0.941%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $111,512.56
+  Exit Price:  $111,317.08
+  Actual PnL:  0.175%
+
+DIFFERENCES:
+  Entry Price Diff: 0.129%
+  Exit Price Diff:  0.643%
+  PnL Difference:   -0.766%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #83
+----------------------------------------
+Entry Time: 2025-08-29 05:00:00
+Exit Time:  2025-08-29 06:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $111,456.80
+  Exit Price:  $110,421.56
+  PnL:         0.929%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $111,317.08
+  Exit Price:  $111,287.62
+  Actual PnL:  0.026%
+
+DIFFERENCES:
+  Entry Price Diff: 0.125%
+  Exit Price Diff:  0.784%
+  PnL Difference:   -0.902%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #84
+----------------------------------------
+Entry Time: 2025-08-29 06:00:00
+Exit Time:  2025-08-29 07:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $111,261.42
+  Exit Price:  $110,238.50
+  PnL:         0.919%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $111,287.62
+  Exit Price:  $110,020.05
+  Actual PnL:  1.139%
+
+DIFFERENCES:
+  Entry Price Diff: 0.024%
+  Exit Price Diff:  0.198%
+  PnL Difference:   0.220%
+
+
+================================================================================
+
+TRADE #85
+----------------------------------------
+Entry Time: 2025-08-29 07:00:00
+Exit Time:  2025-08-29 08:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $111,231.98
+  Exit Price:  $110,221.85
+  PnL:         0.908%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,020.05
+  Exit Price:  $109,625.20
+  Actual PnL:  0.359%
+
+DIFFERENCES:
+  Entry Price Diff: 1.090%
+  Exit Price Diff:  0.541%
+  PnL Difference:   -0.549%
+
+⚠️  LARGE ENTRY PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #86
+----------------------------------------
+Entry Time: 2025-08-29 08:00:00
+Exit Time:  2025-08-29 09:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,965.04
+  Exit Price:  $108,832.58
+  PnL:         1.030%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,625.20
+  Exit Price:  $109,765.91
+  Actual PnL:  -0.128%
+
+DIFFERENCES:
+  Entry Price Diff: 0.309%
+  Exit Price Diff:  0.858%
+  PnL Difference:   -1.158%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #87
+----------------------------------------
+Entry Time: 2025-08-29 09:00:00
+Exit Time:  2025-08-29 10:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,570.39
+  Exit Price:  $108,424.65
+  PnL:         1.046%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,765.91
+  Exit Price:  $110,003.77
+  Actual PnL:  -0.217%
+
+DIFFERENCES:
+  Entry Price Diff: 0.178%
+  Exit Price Diff:  1.456%
+  PnL Difference:   -1.262%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #88
+----------------------------------------
+Entry Time: 2025-08-29 10:00:00
+Exit Time:  2025-08-29 11:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,711.03
+  Exit Price:  $108,575.29
+  PnL:         1.035%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,003.77
+  Exit Price:  $110,115.36
+  Actual PnL:  -0.101%
+
+DIFFERENCES:
+  Entry Price Diff: 0.267%
+  Exit Price Diff:  1.418%
+  PnL Difference:   -1.137%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #89
+----------------------------------------
+Entry Time: 2025-08-29 11:00:00
+Exit Time:  2025-08-29 12:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,948.77
+  Exit Price:  $108,856.13
+  PnL:         0.994%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,115.36
+  Exit Price:  $110,731.78
+  Actual PnL:  -0.560%
+
+DIFFERENCES:
+  Entry Price Diff: 0.152%
+  Exit Price Diff:  1.723%
+  PnL Difference:   -1.554%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #90
+----------------------------------------
+Entry Time: 2025-08-29 12:00:00
+Exit Time:  2025-08-29 13:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,060.30
+  Exit Price:  $109,002.50
+  PnL:         0.961%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,731.78
+  Exit Price:  $109,100.00
+  Actual PnL:  1.474%
+
+DIFFERENCES:
+  Entry Price Diff: 0.610%
+  Exit Price Diff:  0.089%
+  PnL Difference:   0.513%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #91
+----------------------------------------
+Entry Time: 2025-08-29 13:00:00
+Exit Time:  2025-08-29 14:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,676.41
+  Exit Price:  $109,493.72
+  PnL:         1.069%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,100.00
+  Exit Price:  $108,187.37
+  Actual PnL:  0.837%
+
+DIFFERENCES:
+  Entry Price Diff: 1.424%
+  Exit Price Diff:  1.193%
+  PnL Difference:   -0.232%
+
+⚠️  LARGE ENTRY PRICE DISCREPANCY!
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+
+================================================================================
+
+TRADE #92
+----------------------------------------
+Entry Time: 2025-08-29 14:00:00
+Exit Time:  2025-08-29 15:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,045.45
+  Exit Price:  $107,680.02
+  PnL:         1.252%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $108,187.37
+  Exit Price:  $108,396.96
+  Actual PnL:  -0.194%
+
+DIFFERENCES:
+  Entry Price Diff: 0.787%
+  Exit Price Diff:  0.666%
+  PnL Difference:   -1.446%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #93
+----------------------------------------
+Entry Time: 2025-08-29 15:00:00
+Exit Time:  2025-08-29 16:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $108,133.28
+  Exit Price:  $106,663.21
+  PnL:         1.359%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $108,396.96
+  Exit Price:  $108,703.77
+  Actual PnL:  -0.283%
+
+DIFFERENCES:
+  Entry Price Diff: 0.244%
+  Exit Price Diff:  1.913%
+  PnL Difference:   -1.643%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #94
+----------------------------------------
+Entry Time: 2025-08-29 17:00:00
+Exit Time:  2025-08-29 18:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $108,649.42
+  Exit Price:  $107,210.71
+  PnL:         1.324%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $108,467.12
+  Exit Price:  $108,135.50
+  Actual PnL:  0.306%
+
+DIFFERENCES:
+  Entry Price Diff: 0.168%
+  Exit Price Diff:  0.863%
+  PnL Difference:   -1.018%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #95
+----------------------------------------
+Entry Time: 2025-08-29 18:00:00
+Exit Time:  2025-08-29 19:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $108,412.89
+  Exit Price:  $106,996.98
+  PnL:         1.306%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $108,135.50
+  Exit Price:  $108,213.98
+  Actual PnL:  -0.073%
+
+DIFFERENCES:
+  Entry Price Diff: 0.256%
+  Exit Price Diff:  1.137%
+  PnL Difference:   -1.379%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #96
+----------------------------------------
+Entry Time: 2025-08-29 19:00:00
+Exit Time:  2025-08-29 20:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $108,081.43
+  Exit Price:  $106,709.93
+  PnL:         1.269%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $108,213.98
+  Exit Price:  $107,791.60
+  Actual PnL:  0.390%
+
+DIFFERENCES:
+  Entry Price Diff: 0.123%
+  Exit Price Diff:  1.014%
+  PnL Difference:   -0.879%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #97
+----------------------------------------
+Entry Time: 2025-08-29 20:00:00
+Exit Time:  2025-08-29 21:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $108,159.87
+  Exit Price:  $106,768.86
+  PnL:         1.286%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $107,791.60
+  Exit Price:  $108,451.91
+  Actual PnL:  -0.613%
+
+DIFFERENCES:
+  Entry Price Diff: 0.340%
+  Exit Price Diff:  1.576%
+  PnL Difference:   -1.899%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #98
+----------------------------------------
+Entry Time: 2025-08-30 07:00:00
+Exit Time:  2025-08-30 08:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $108,260.87
+  Exit Price:  $107,106.38
+  PnL:         1.066%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $108,519.24
+  Exit Price:  $108,562.10
+  Actual PnL:  -0.039%
+
+DIFFERENCES:
+  Entry Price Diff: 0.239%
+  Exit Price Diff:  1.359%
+  PnL Difference:   -1.106%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #99
+----------------------------------------
+Entry Time: 2025-08-30 08:00:00
+Exit Time:  2025-08-30 09:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $108,464.98
+  Exit Price:  $107,337.25
+  PnL:         1.040%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $108,562.10
+  Exit Price:  $108,513.85
+  Actual PnL:  0.044%
+
+DIFFERENCES:
+  Entry Price Diff: 0.090%
+  Exit Price Diff:  1.096%
+  PnL Difference:   -0.995%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #100
+----------------------------------------
+Entry Time: 2025-08-31 16:00:00
+Exit Time:  2025-08-31 17:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $108,748.84
+  Exit Price:  $108,111.14
+  PnL:         0.586%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $108,914.83
+  Exit Price:  $108,990.11
+  Actual PnL:  -0.069%
+
+DIFFERENCES:
+  Entry Price Diff: 0.153%
+  Exit Price Diff:  0.813%
+  PnL Difference:   -0.656%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #101
+----------------------------------------
+Entry Time: 2025-08-31 17:00:00
+Exit Time:  2025-08-31 18:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $108,860.37
+  Exit Price:  $108,211.62
+  PnL:         0.596%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $108,990.11
+  Exit Price:  $109,138.41
+  Actual PnL:  -0.136%
+
+DIFFERENCES:
+  Entry Price Diff: 0.119%
+  Exit Price Diff:  0.856%
+  PnL Difference:   -0.732%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #102
+----------------------------------------
+Entry Time: 2025-08-31 18:00:00
+Exit Time:  2025-08-31 19:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $108,935.61
+  Exit Price:  $108,314.68
+  PnL:         0.570%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,138.41
+  Exit Price:  $108,932.62
+  Actual PnL:  0.189%
+
+DIFFERENCES:
+  Entry Price Diff: 0.186%
+  Exit Price Diff:  0.571%
+  PnL Difference:   -0.381%
+
+
+================================================================================
+
+TRADE #103
+----------------------------------------
+Entry Time: 2025-08-31 19:00:00
+Exit Time:  2025-08-31 20:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,083.84
+  Exit Price:  $108,465.91
+  PnL:         0.567%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $108,932.62
+  Exit Price:  $109,125.86
+  Actual PnL:  -0.177%
+
+DIFFERENCES:
+  Entry Price Diff: 0.139%
+  Exit Price Diff:  0.608%
+  PnL Difference:   -0.744%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #104
+----------------------------------------
+Entry Time: 2025-08-31 20:00:00
+Exit Time:  2025-08-31 21:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $108,878.15
+  Exit Price:  $108,270.50
+  PnL:         0.558%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,125.86
+  Exit Price:  $109,046.01
+  Actual PnL:  0.073%
+
+DIFFERENCES:
+  Entry Price Diff: 0.228%
+  Exit Price Diff:  0.716%
+  PnL Difference:   -0.485%
+
+
+================================================================================
+
+TRADE #105
+----------------------------------------
+Entry Time: 2025-08-31 21:00:00
+Exit Time:  2025-08-31 22:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,071.30
+  Exit Price:  $108,472.97
+  PnL:         0.549%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,046.01
+  Exit Price:  $108,885.55
+  Actual PnL:  0.147%
+
+DIFFERENCES:
+  Entry Price Diff: 0.023%
+  Exit Price Diff:  0.380%
+  PnL Difference:   -0.401%
+
+
+================================================================================
+
+TRADE #106
+----------------------------------------
+Entry Time: 2025-08-31 22:00:00
+Exit Time:  2025-08-31 23:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $108,991.49
+  Exit Price:  $108,413.55
+  PnL:         0.530%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $108,885.55
+  Exit Price:  $108,247.95
+  Actual PnL:  0.586%
+
+DIFFERENCES:
+  Entry Price Diff: 0.097%
+  Exit Price Diff:  0.153%
+  PnL Difference:   0.055%
+
+
+================================================================================
+
+TRADE #107
+----------------------------------------
+Entry Time: 2025-08-31 23:00:00
+Exit Time:  2025-09-01 00:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $108,831.11
+  Exit Price:  $108,228.45
+  PnL:         0.554%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $108,247.95
+  Exit Price:  $108,218.50
+  Actual PnL:  0.027%
+
+DIFFERENCES:
+  Entry Price Diff: 0.536%
+  Exit Price Diff:  0.009%
+  PnL Difference:   -0.527%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #108
+----------------------------------------
+Entry Time: 2025-09-04 12:00:00
+Exit Time:  2025-09-04 13:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,788.82
+  Exit Price:  $109,852.53
+  PnL:         0.845%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,963.50
+  Exit Price:  $110,477.38
+  Actual PnL:  0.438%
+
+DIFFERENCES:
+  Entry Price Diff: 0.158%
+  Exit Price Diff:  0.569%
+  PnL Difference:   -0.407%
+
+
+================================================================================
+
+TRADE #109
+----------------------------------------
+Entry Time: 2025-09-04 13:00:00
+Exit Time:  2025-09-04 14:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,908.02
+  Exit Price:  $109,955.23
+  PnL:         0.859%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,477.38
+  Exit Price:  $109,850.30
+  Actual PnL:  0.568%
+
+DIFFERENCES:
+  Entry Price Diff: 0.388%
+  Exit Price Diff:  0.095%
+  PnL Difference:   -0.291%
+
+
+================================================================================
+
+TRADE #110
+----------------------------------------
+Entry Time: 2025-09-04 14:00:00
+Exit Time:  2025-09-04 15:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,422.14
+  Exit Price:  $109,428.88
+  PnL:         0.899%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,850.30
+  Exit Price:  $109,505.32
+  Actual PnL:  0.314%
+
+DIFFERENCES:
+  Entry Price Diff: 0.518%
+  Exit Price Diff:  0.070%
+  PnL Difference:   -0.585%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #111
+----------------------------------------
+Entry Time: 2025-09-04 15:00:00
+Exit Time:  2025-09-04 16:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,795.37
+  Exit Price:  $108,758.51
+  PnL:         0.944%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,505.32
+  Exit Price:  $109,434.50
+  Actual PnL:  0.065%
+
+DIFFERENCES:
+  Entry Price Diff: 0.264%
+  Exit Price Diff:  0.622%
+  PnL Difference:   -0.880%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #112
+----------------------------------------
+Entry Time: 2025-09-04 16:00:00
+Exit Time:  2025-09-04 17:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,450.57
+  Exit Price:  $108,412.41
+  PnL:         0.949%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,434.50
+  Exit Price:  $109,789.33
+  Actual PnL:  -0.324%
+
+DIFFERENCES:
+  Entry Price Diff: 0.015%
+  Exit Price Diff:  1.270%
+  PnL Difference:   -1.273%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #113
+----------------------------------------
+Entry Time: 2025-09-04 17:00:00
+Exit Time:  2025-09-04 18:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,379.78
+  Exit Price:  $108,367.42
+  PnL:         0.925%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,789.33
+  Exit Price:  $109,983.47
+  Actual PnL:  -0.177%
+
+DIFFERENCES:
+  Entry Price Diff: 0.374%
+  Exit Price Diff:  1.491%
+  PnL Difference:   -1.102%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #114
+----------------------------------------
+Entry Time: 2025-09-04 18:00:00
+Exit Time:  2025-09-04 19:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,734.44
+  Exit Price:  $108,726.66
+  PnL:         0.918%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,983.47
+  Exit Price:  $109,808.31
+  Actual PnL:  0.159%
+
+DIFFERENCES:
+  Entry Price Diff: 0.227%
+  Exit Price Diff:  0.995%
+  PnL Difference:   -0.759%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #115
+----------------------------------------
+Entry Time: 2025-09-04 19:00:00
+Exit Time:  2025-09-04 20:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,928.48
+  Exit Price:  $108,922.02
+  PnL:         0.916%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $109,808.31
+  Exit Price:  $110,411.38
+  Actual PnL:  -0.549%
+
+DIFFERENCES:
+  Entry Price Diff: 0.109%
+  Exit Price Diff:  1.367%
+  PnL Difference:   -1.465%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #116
+----------------------------------------
+Entry Time: 2025-09-04 20:00:00
+Exit Time:  2025-09-04 21:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $109,753.41
+  Exit Price:  $108,764.36
+  PnL:         0.901%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,411.38
+  Exit Price:  $110,490.13
+  Actual PnL:  -0.071%
+
+DIFFERENCES:
+  Entry Price Diff: 0.600%
+  Exit Price Diff:  1.587%
+  PnL Difference:   -0.973%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #117
+----------------------------------------
+Entry Time: 2025-09-04 21:00:00
+Exit Time:  2025-09-04 22:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,356.17
+  Exit Price:  $109,345.32
+  PnL:         0.916%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,490.13
+  Exit Price:  $111,486.08
+  Actual PnL:  -0.901%
+
+DIFFERENCES:
+  Entry Price Diff: 0.121%
+  Exit Price Diff:  1.958%
+  PnL Difference:   -1.817%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #118
+----------------------------------------
+Entry Time: 2025-09-04 22:00:00
+Exit Time:  2025-09-04 23:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,434.88
+  Exit Price:  $109,467.12
+  PnL:         0.876%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $111,486.08
+  Exit Price:  $110,720.79
+  Actual PnL:  0.686%
+
+DIFFERENCES:
+  Entry Price Diff: 0.952%
+  Exit Price Diff:  1.145%
+  PnL Difference:   -0.190%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+
+================================================================================
+
+TRADE #119
+----------------------------------------
+Entry Time: 2025-09-04 23:00:00
+Exit Time:  2025-09-05 00:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $111,430.34
+  Exit Price:  $110,376.94
+  PnL:         0.945%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,720.79
+  Exit Price:  $110,459.22
+  Actual PnL:  0.236%
+
+DIFFERENCES:
+  Entry Price Diff: 0.637%
+  Exit Price Diff:  0.075%
+  PnL Difference:   -0.709%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #120
+----------------------------------------
+Entry Time: 2025-09-06 02:00:00
+Exit Time:  2025-09-06 03:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,822.97
+  Exit Price:  $109,660.52
+  PnL:         1.049%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $111,219.71
+  Exit Price:  $111,093.53
+  Actual PnL:  0.113%
+
+DIFFERENCES:
+  Entry Price Diff: 0.358%
+  Exit Price Diff:  1.307%
+  PnL Difference:   -0.935%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #121
+----------------------------------------
+Entry Time: 2025-09-06 03:00:00
+Exit Time:  2025-09-06 04:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $111,164.10
+  Exit Price:  $110,018.79
+  PnL:         1.030%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $111,093.53
+  Exit Price:  $110,875.03
+  Actual PnL:  0.197%
+
+DIFFERENCES:
+  Entry Price Diff: 0.063%
+  Exit Price Diff:  0.778%
+  PnL Difference:   -0.834%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #122
+----------------------------------------
+Entry Time: 2025-09-06 04:00:00
+Exit Time:  2025-09-06 05:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $111,037.98
+  Exit Price:  $109,934.04
+  PnL:         0.994%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,875.03
+  Exit Price:  $110,723.12
+  Actual PnL:  0.137%
+
+DIFFERENCES:
+  Entry Price Diff: 0.147%
+  Exit Price Diff:  0.718%
+  PnL Difference:   -0.857%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #123
+----------------------------------------
+Entry Time: 2025-09-06 05:00:00
+Exit Time:  2025-09-06 06:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,819.59
+  Exit Price:  $109,754.42
+  PnL:         0.961%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,723.12
+  Exit Price:  $110,759.55
+  Actual PnL:  -0.033%
+
+DIFFERENCES:
+  Entry Price Diff: 0.087%
+  Exit Price Diff:  0.916%
+  PnL Difference:   -0.994%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #124
+----------------------------------------
+Entry Time: 2025-09-06 06:00:00
+Exit Time:  2025-09-06 07:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,667.76
+  Exit Price:  $109,656.46
+  PnL:         0.914%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,759.55
+  Exit Price:  $110,838.71
+  Actual PnL:  -0.071%
+
+DIFFERENCES:
+  Entry Price Diff: 0.083%
+  Exit Price Diff:  1.078%
+  PnL Difference:   -0.985%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #125
+----------------------------------------
+Entry Time: 2025-09-06 07:00:00
+Exit Time:  2025-09-06 08:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,704.17
+  Exit Price:  $109,751.00
+  PnL:         0.861%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,838.71
+  Exit Price:  $110,956.54
+  Actual PnL:  -0.106%
+
+DIFFERENCES:
+  Entry Price Diff: 0.122%
+  Exit Price Diff:  1.098%
+  PnL Difference:   -0.967%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #126
+----------------------------------------
+Entry Time: 2025-09-06 08:00:00
+Exit Time:  2025-09-06 09:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,783.29
+  Exit Price:  $109,888.40
+  PnL:         0.808%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,956.54
+  Exit Price:  $110,700.03
+  Actual PnL:  0.231%
+
+DIFFERENCES:
+  Entry Price Diff: 0.156%
+  Exit Price Diff:  0.739%
+  PnL Difference:   -0.577%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #127
+----------------------------------------
+Entry Time: 2025-09-06 09:00:00
+Exit Time:  2025-09-06 10:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,901.06
+  Exit Price:  $110,044.85
+  PnL:         0.772%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,700.03
+  Exit Price:  $110,789.08
+  Actual PnL:  -0.080%
+
+DIFFERENCES:
+  Entry Price Diff: 0.181%
+  Exit Price Diff:  0.676%
+  PnL Difference:   -0.852%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #128
+----------------------------------------
+Entry Time: 2025-09-06 10:00:00
+Exit Time:  2025-09-06 11:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,644.68
+  Exit Price:  $109,816.58
+  PnL:         0.748%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,789.08
+  Exit Price:  $110,796.75
+  Actual PnL:  -0.007%
+
+DIFFERENCES:
+  Entry Price Diff: 0.131%
+  Exit Price Diff:  0.893%
+  PnL Difference:   -0.755%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #129
+----------------------------------------
+Entry Time: 2025-09-06 11:00:00
+Exit Time:  2025-09-06 12:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,733.69
+  Exit Price:  $109,949.62
+  PnL:         0.708%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,796.75
+  Exit Price:  $110,839.29
+  Actual PnL:  -0.038%
+
+DIFFERENCES:
+  Entry Price Diff: 0.057%
+  Exit Price Diff:  0.809%
+  PnL Difference:   -0.746%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #130
+----------------------------------------
+Entry Time: 2025-09-06 15:00:00
+Exit Time:  2025-09-06 16:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,766.60
+  Exit Price:  $110,099.80
+  PnL:         0.602%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,398.38
+  Exit Price:  $110,288.98
+  Actual PnL:  0.099%
+
+DIFFERENCES:
+  Entry Price Diff: 0.332%
+  Exit Price Diff:  0.172%
+  PnL Difference:   -0.503%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #131
+----------------------------------------
+Entry Time: 2025-09-06 16:00:00
+Exit Time:  2025-09-06 17:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,343.18
+  Exit Price:  $109,657.36
+  PnL:         0.622%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,288.98
+  Exit Price:  $110,176.79
+  Actual PnL:  0.102%
+
+DIFFERENCES:
+  Entry Price Diff: 0.049%
+  Exit Price Diff:  0.474%
+  PnL Difference:   -0.520%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #132
+----------------------------------------
+Entry Time: 2025-09-06 23:00:00
+Exit Time:  2025-09-07 00:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,146.31
+  Exit Price:  $109,568.68
+  PnL:         0.524%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,212.60
+  Exit Price:  $110,385.69
+  Actual PnL:  -0.157%
+
+DIFFERENCES:
+  Entry Price Diff: 0.060%
+  Exit Price Diff:  0.746%
+  PnL Difference:   -0.681%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #133
+----------------------------------------
+Entry Time: 2025-09-07 00:00:00
+Exit Time:  2025-09-07 01:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,157.49
+  Exit Price:  $109,599.52
+  PnL:         0.506%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,385.69
+  Exit Price:  $110,574.57
+  Actual PnL:  -0.171%
+
+DIFFERENCES:
+  Entry Price Diff: 0.207%
+  Exit Price Diff:  0.890%
+  PnL Difference:   -0.678%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #134
+----------------------------------------
+Entry Time: 2025-09-07 01:00:00
+Exit Time:  2025-09-07 02:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,330.50
+  Exit Price:  $109,788.10
+  PnL:         0.492%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,574.57
+  Exit Price:  $110,678.63
+  Actual PnL:  -0.094%
+
+DIFFERENCES:
+  Entry Price Diff: 0.221%
+  Exit Price Diff:  0.811%
+  PnL Difference:   -0.586%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #135
+----------------------------------------
+Entry Time: 2025-09-07 02:00:00
+Exit Time:  2025-09-07 03:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,519.28
+  Exit Price:  $109,981.65
+  PnL:         0.486%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,678.63
+  Exit Price:  $110,641.71
+  Actual PnL:  0.033%
+
+DIFFERENCES:
+  Entry Price Diff: 0.144%
+  Exit Price Diff:  0.600%
+  PnL Difference:   -0.453%
+
+
+================================================================================
+
+TRADE #136
+----------------------------------------
+Entry Time: 2025-09-07 03:00:00
+Exit Time:  2025-09-07 04:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,623.29
+  Exit Price:  $110,091.87
+  PnL:         0.480%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,641.71
+  Exit Price:  $110,564.49
+  Actual PnL:  0.070%
+
+DIFFERENCES:
+  Entry Price Diff: 0.017%
+  Exit Price Diff:  0.429%
+  PnL Difference:   -0.411%
+
+
+================================================================================
+
+TRADE #137
+----------------------------------------
+Entry Time: 2025-09-07 04:00:00
+Exit Time:  2025-09-07 05:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,586.39
+  Exit Price:  $110,074.43
+  PnL:         0.463%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,564.49
+  Exit Price:  $110,667.08
+  Actual PnL:  -0.093%
+
+DIFFERENCES:
+  Entry Price Diff: 0.020%
+  Exit Price Diff:  0.538%
+  PnL Difference:   -0.556%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #138
+----------------------------------------
+Entry Time: 2025-09-07 05:00:00
+Exit Time:  2025-09-07 06:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,509.21
+  Exit Price:  $110,015.49
+  PnL:         0.447%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $110,667.08
+  Exit Price:  $110,517.48
+  Actual PnL:  0.135%
+
+DIFFERENCES:
+  Entry Price Diff: 0.143%
+  Exit Price Diff:  0.456%
+  PnL Difference:   -0.312%
+
+
+================================================================================
+
+TRADE #139
+----------------------------------------
+Entry Time: 2025-09-09 08:00:00
+Exit Time:  2025-09-09 09:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,943.43
+  Exit Price:  $112,060.74
+  PnL:         0.781%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $113,000.01
+  Exit Price:  $112,961.93
+  Actual PnL:  0.034%
+
+DIFFERENCES:
+  Entry Price Diff: 0.050%
+  Exit Price Diff:  0.804%
+  PnL Difference:   -0.748%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #140
+----------------------------------------
+Entry Time: 2025-09-09 09:00:00
+Exit Time:  2025-09-09 10:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,943.51
+  Exit Price:  $112,087.38
+  PnL:         0.758%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,961.93
+  Exit Price:  $112,735.96
+  Actual PnL:  0.200%
+
+DIFFERENCES:
+  Entry Price Diff: 0.016%
+  Exit Price Diff:  0.579%
+  PnL Difference:   -0.558%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #141
+----------------------------------------
+Entry Time: 2025-09-09 10:00:00
+Exit Time:  2025-09-09 11:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,905.45
+  Exit Price:  $112,089.37
+  PnL:         0.723%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,735.96
+  Exit Price:  $112,439.83
+  Actual PnL:  0.263%
+
+DIFFERENCES:
+  Entry Price Diff: 0.150%
+  Exit Price Diff:  0.313%
+  PnL Difference:   -0.460%
+
+
+================================================================================
+
+TRADE #142
+----------------------------------------
+Entry Time: 2025-09-10 02:00:00
+Exit Time:  2025-09-10 03:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $110,953.81
+  Exit Price:  $110,068.06
+  PnL:         0.798%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $111,406.87
+  Exit Price:  $111,541.36
+  Actual PnL:  -0.121%
+
+DIFFERENCES:
+  Entry Price Diff: 0.408%
+  Exit Price Diff:  1.339%
+  PnL Difference:   -0.919%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #143
+----------------------------------------
+Entry Time: 2025-09-10 03:00:00
+Exit Time:  2025-09-10 04:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $111,351.17
+  Exit Price:  $110,453.42
+  PnL:         0.806%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $111,541.36
+  Exit Price:  $111,517.87
+  Actual PnL:  0.021%
+
+DIFFERENCES:
+  Entry Price Diff: 0.171%
+  Exit Price Diff:  0.964%
+  PnL Difference:   -0.785%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #144
+----------------------------------------
+Entry Time: 2025-09-10 04:00:00
+Exit Time:  2025-09-10 05:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $111,485.59
+  Exit Price:  $110,620.76
+  PnL:         0.776%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $111,517.87
+  Exit Price:  $111,578.55
+  Actual PnL:  -0.054%
+
+DIFFERENCES:
+  Entry Price Diff: 0.029%
+  Exit Price Diff:  0.866%
+  PnL Difference:   -0.830%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #145
+----------------------------------------
+Entry Time: 2025-09-10 05:00:00
+Exit Time:  2025-09-10 06:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $111,462.11
+  Exit Price:  $110,626.67
+  PnL:         0.750%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $111,578.55
+  Exit Price:  $111,787.21
+  Actual PnL:  -0.187%
+
+DIFFERENCES:
+  Entry Price Diff: 0.104%
+  Exit Price Diff:  1.049%
+  PnL Difference:   -0.937%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #146
+----------------------------------------
+Entry Time: 2025-09-10 06:00:00
+Exit Time:  2025-09-10 07:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $111,522.76
+  Exit Price:  $110,699.04
+  PnL:         0.739%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $111,787.21
+  Exit Price:  $112,536.82
+  Actual PnL:  -0.671%
+
+DIFFERENCES:
+  Entry Price Diff: 0.237%
+  Exit Price Diff:  1.660%
+  PnL Difference:   -1.409%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #147
+----------------------------------------
+Entry Time: 2025-09-10 07:00:00
+Exit Time:  2025-09-10 08:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $111,731.32
+  Exit Price:  $110,888.23
+  PnL:         0.755%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,536.82
+  Exit Price:  $112,366.85
+  Actual PnL:  0.151%
+
+DIFFERENCES:
+  Entry Price Diff: 0.721%
+  Exit Price Diff:  1.333%
+  PnL Difference:   -0.604%
+
+⚠️  LARGE EXIT PRICE DISCREPANCY!
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #148
+----------------------------------------
+Entry Time: 2025-09-10 08:00:00
+Exit Time:  2025-09-10 09:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,480.55
+  Exit Price:  $111,582.01
+  PnL:         0.799%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,366.85
+  Exit Price:  $112,261.56
+  Actual PnL:  0.094%
+
+DIFFERENCES:
+  Entry Price Diff: 0.101%
+  Exit Price Diff:  0.609%
+  PnL Difference:   -0.705%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+TRADE #149
+----------------------------------------
+Entry Time: 2025-09-10 09:00:00
+Exit Time:  2025-09-10 10:00:00
+Direction:  SHORT
+
+BACKTEST DATA:
+  Entry Price: $112,310.67
+  Exit Price:  $111,404.71
+  PnL:         0.807%
+
+ACTUAL MARKET DATA (Historical File):
+  Entry Price: $112,261.56
+  Exit Price:  $112,262.04
+  Actual PnL:  -0.000%
+
+DIFFERENCES:
+  Entry Price Diff: 0.044%
+  Exit Price Diff:  0.770%
+  PnL Difference:   -0.807%
+
+⚠️  SIGNIFICANT PnL DIFFERENCE!
+
+================================================================================
+
+SUMMARY:
+Total Trades: 149
+Successfully Verified: 149
+Verification Rate: 100.0%
