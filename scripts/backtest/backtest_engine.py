@@ -141,6 +141,10 @@ class BacktestEngine:
                     
                     prediction = analyst_to_use.predict(symbol, window_data, strategy_name=strategy_type)
 
+                    # 🔍 DEBUG: Show detailed AI prediction before RiskManager evaluation
+                    if prediction and self.debug:
+                        print(f"🤖 AI Prediction: {prediction['direction']} | Confidence: {prediction['confidence']:.2f} | Change: {prediction.get('pct_change', 0):.3f}%")
+
                     if prediction and self.risk_manager.should_execute(prediction, symbol, strategy_type, debug=self.debug):
                         if self.debug:
                             print(f"🎯 {current_time}: Opening {prediction['direction'].upper()} trade at ${current_price:.2f}")
