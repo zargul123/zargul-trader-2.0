@@ -300,10 +300,6 @@ class AIAnalyst:
             price_targets_pred = raw_prediction[0][0]
             trade_signal_pred = raw_prediction[1][0]
 
-            # --- GET CALIBRATED CONFIDENCE ---
-            # Get probabilities [P(buy), P(sell), P(hold)] from the calibrator
-            calibrated_probs = calibrator.predict_proba(trade_signal_pred.reshape(1, -1))[0]
-
             # The predicted price is the first element of the price_targets output
             dummy_row = np.zeros((1, last_sequence_df.shape[1]))
             dummy_row[0, 3] = price_targets_pred[0] # Predicted take_profit level
@@ -312,21 +308,29 @@ class AIAnalyst:
             current_price = df['close'].iloc[-1].item()
             pct_change = ((predicted_price - current_price) / current_price) * 100
             
-            # --- NEW, SIMPLIFIED LOGIC: Trust the pct_change signal ---
-            # The price prediction head is more reliable than the classifier head.
-            # We will derive the direction directly from its output.
+            # --- FINAL FIX: Derive confidence from the reliable pct_change signal ---
+            # The calibrator and the classifier head are unreliable. Confidence should
+            # be proportional to the magnitude of the predicted price move.
             
-            move_threshold = 0.1 # A tiny 0.1% move is enough to be considered a signal
-            
+            # 1. Determine direction from pct_change
+            move_threshold = 0.1 # 0.1% move is the minimum to consider a signal
             if pct_change > move_threshold:
                 direction = 'long'
-                confidence = calibrated_probs[0] # Confidence for a 'long' signal
             elif pct_change < -move_threshold:
                 direction = 'short'
-                confidence = calibrated_probs[1] # Confidence for a 'short' signal
             else:
                 direction = 'hold'
-                confidence = calibrated_probs[2] # Confidence for a 'hold' signal
+
+            # 2. Calculate confidence based on the size of the move
+            # A 5% move is considered very high confidence (near 1.0)
+            # This function scales the confidence so it grows fast initially and then levels off.
+            max_expected_move = 5.0 
+            confidence = (1 - np.exp(-abs(pct_change) / max_expected_move * 5))
+            
+            # For hold signals, confidence is inverted: a smaller move is a more confident hold.
+            if direction == 'hold':
+                confidence = 1 - confidence
+
 
             return {
                 'asset': symbol, 
