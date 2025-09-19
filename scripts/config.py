@@ -12,124 +12,205 @@ STRATEGIES = {
         'main': {
             'enabled': True,
             'timeframe': '1h',
-            'atr_threshold_multiplier': 1.5,
-            'long_threshold': 2.5,
-            'short_threshold': 2.5,
-            'min_confidence': 0.60,
             'sequence_length': 20,
-            'hold_period_hours': 8,
-            'dynamic_exit': True,
-            'sl_atr_multiplier': 1.5, # Reverted from experiment
-            'tp_atr_multiplier': 2.0,
-            'invert_signal': True # PERMANENT FIX: Invert the AI's signal
+            'invert_signal': True,
+            "Trending": {
+                'atr_threshold_multiplier': 1.5,
+                'long_threshold': 2.5,
+                'short_threshold': 2.5,
+                'min_confidence': 0.60,
+                'sl_atr_multiplier': 1.5,
+                'tp_atr_multiplier': 2.0,
+            },
+            "Ranging": {
+                'atr_threshold_multiplier': 1.0,
+                'long_threshold': 1.0,
+                'short_threshold': 1.0,
+                'min_confidence': 0.70,
+                'sl_atr_multiplier': 1.0,
+                'tp_atr_multiplier': 1.0,
+            },
+            "Chaotic": {'enabled': False}
         },
         'btc-swing': {
             'enabled': True,
             'timeframe': '4h',
-            'atr_threshold_multiplier': 1.0,
-            'long_threshold': 2.0,
-            'short_threshold': 2.0,
-            'min_confidence': 0.90,
             'sequence_length': 90,
-            'hold_period_hours': 24,
-            'dynamic_exit': True,
-            'sl_atr_multiplier': 1.5, # Moved from RISK_CONFIG
-            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
+            "Trending": {
+                'atr_threshold_multiplier': 1.0,
+                'long_threshold': 2.0,
+                'short_threshold': 2.0,
+                'min_confidence': 0.90,
+                'sl_atr_multiplier': 1.5,
+                'tp_atr_multiplier': 2.0
+            },
+            "Ranging": {
+                'atr_threshold_multiplier': 1.0,
+                'long_threshold': 1.0,
+                'short_threshold': 1.0,
+                'min_confidence': 0.70,
+                'sl_atr_multiplier': 1.0,
+                'tp_atr_multiplier': 1.0,
+            },
+            "Chaotic": {'enabled': False}
         },
         'scalp': {
             'enabled': True,
             'timeframe': '5m',
-            'atr_threshold_multiplier': 1.0,
-            'long_threshold': 0.5,
-            'short_threshold': 0.5,
-            'min_confidence': 0.75,
             'sequence_length': 22,
-            'hold_period_hours': 1,
-            'dynamic_exit': True,
-            'sl_atr_multiplier': 1.5, # Moved from RISK_CONFIG
-            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
+            "Trending": {
+                'atr_threshold_multiplier': 1.0,
+                'long_threshold': 0.5,
+                'short_threshold': 0.5,
+                'min_confidence': 0.75,
+                'sl_atr_multiplier': 1.5,
+                'tp_atr_multiplier': 2.0
+            },
+            "Ranging": {
+                'atr_threshold_multiplier': 1.0,
+                'long_threshold': 0.3,
+                'short_threshold': 0.3,
+                'min_confidence': 0.70,
+                'sl_atr_multiplier': 1.0,
+                'tp_atr_multiplier': 0.8,
+            },
+            "Chaotic": {'enabled': False}
         }
     },
     "ETH-USD": {
         'main': {
             'enabled': True,
             'timeframe': '1h',
-            'atr_threshold_multiplier': 1.5,
-            'long_threshold': 2.5,
-            'short_threshold': 2.5,
-            'min_confidence': 0.90,
             'sequence_length': 20,
-            'hold_period_hours': 8,
-            'dynamic_exit': True,
-            'sl_atr_multiplier': 1.5, # Moved from RISK_CONFIG
-            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
+            "Trending": {
+                'atr_threshold_multiplier': 1.5,
+                'long_threshold': 2.5,
+                'short_threshold': 2.5,
+                'min_confidence': 0.90,
+                'sl_atr_multiplier': 1.5,
+                'tp_atr_multiplier': 2.0
+            },
+            "Ranging": {
+                'atr_threshold_multiplier': 1.0,
+                'long_threshold': 1.0,
+                'short_threshold': 1.0,
+                'min_confidence': 0.70,
+                'sl_atr_multiplier': 1.0,
+                'tp_atr_multiplier': 1.0,
+            },
+            "Chaotic": {'enabled': False}
         },
         'swing': {
             'enabled': True,
             'timeframe': '4h',
-            'atr_threshold_multiplier': 1.5,
-            'long_threshold': 1.2,
-            'short_threshold': 1.2,
-            'min_confidence': 0.85,
             'sequence_length': 90,
-            'hold_period_hours': 24,
-            'dynamic_exit': True,
-            'sl_atr_multiplier': 1.5, # Moved from RISK_CONFIG
-            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
+            "Trending": {
+                'atr_threshold_multiplier': 1.5,
+                'long_threshold': 1.2,
+                'short_threshold': 1.2,
+                'min_confidence': 0.85,
+                'sl_atr_multiplier': 1.5,
+                'tp_atr_multiplier': 2.0
+            },
+            "Ranging": {
+                'atr_threshold_multiplier': 1.0,
+                'long_threshold': 1.0,
+                'short_threshold': 1.0,
+                'min_confidence': 0.70,
+                'sl_atr_multiplier': 1.0,
+                'tp_atr_multiplier': 1.0,
+            },
+            "Chaotic": {'enabled': False}
         },
         'scalp': {
             'enabled': True,
             'timeframe': '5m',
-            'atr_threshold_multiplier': 1.0,
-            'long_threshold': 0.5,
-            'short_threshold': 0.5,
-            'min_confidence': 0.75,
             'sequence_length': 22,
-            'hold_period_hours': 1,
-            'dynamic_exit': True,
-            'sl_atr_multiplier': 1.5, # Moved from RISK_CONFIG
-            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
+            "Trending": {
+                'atr_threshold_multiplier': 1.0,
+                'long_threshold': 0.5,
+                'short_threshold': 0.5,
+                'min_confidence': 0.75,
+                'sl_atr_multiplier': 1.5,
+                'tp_atr_multiplier': 2.0
+            },
+            "Ranging": {
+                'atr_threshold_multiplier': 1.0,
+                'long_threshold': 0.3,
+                'short_threshold': 0.3,
+                'min_confidence': 0.70,
+                'sl_atr_multiplier': 1.0,
+                'tp_atr_multiplier': 0.8,
+            },
+            "Chaotic": {'enabled': False}
         }
     },
     "SOL-USD": {
         'main': {
             'enabled': True,
             'timeframe': '1h',
-            'atr_threshold_multiplier': 1.5,
-            'long_threshold': 2.5,
-            'short_threshold': 2.5,
-            'min_confidence': 0.90,
             'sequence_length': 20,
-            'hold_period_hours': 8,
-            'dynamic_exit': True,
-            'sl_atr_multiplier': 1.5, # Moved from RISK_CONFIG
-            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
+            "Trending": {
+                'atr_threshold_multiplier': 1.5,
+                'long_threshold': 2.5,
+                'short_threshold': 2.5,
+                'min_confidence': 0.90,
+                'sl_atr_multiplier': 1.5,
+                'tp_atr_multiplier': 2.0
+            },
+            "Ranging": {
+                'atr_threshold_multiplier': 1.0,
+                'long_threshold': 1.0,
+                'short_threshold': 1.0,
+                'min_confidence': 0.70,
+                'sl_atr_multiplier': 1.0,
+                'tp_atr_multiplier': 1.0,
+            },
+            "Chaotic": {'enabled': False}
         },
         'swing': {
             'enabled': True,
             'timeframe': '4h',
-            'atr_threshold_multiplier': 1.5,
-            'long_threshold': 1.2,
-            'short_threshold': 1.2,
-            'min_confidence': 0.85,
             'sequence_length': 90,
-            'hold_period_hours': 24,
-            'dynamic_exit': True,
-            'sl_atr_multiplier': 1.5, # Moved from RISK_CONFIG
-            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
+            "Trending": {
+                'atr_threshold_multiplier': 1.5,
+                'long_threshold': 1.2,
+                'short_threshold': 1.2,
+                'min_confidence': 0.85,
+                'sl_atr_multiplier': 1.5,
+                'tp_atr_multiplier': 2.0
+            },
+            "Ranging": {
+                'atr_threshold_multiplier': 1.0,
+                'long_threshold': 1.0,
+                'short_threshold': 1.0,
+                'min_confidence': 0.70,
+                'sl_atr_multiplier': 1.0,
+                'tp_atr_multiplier': 1.0,
+            },
+            "Chaotic": {'enabled': False}
         },
         'scalp': {
             'enabled': True,
             'timeframe': '5m',
-            'atr_threshold_multiplier': 1.0,
-            'long_threshold': 0.5,
-            'short_threshold': 0.5,
-            'min_confidence': 0.75,
             'sequence_length': 22,
-            'hold_period_hours': 1,
-            'dynamic_exit': True,
-            'sl_atr_multiplier': 1.5, # Moved from RISK_CONFIG
-            'tp_atr_multiplier': 2.0  # Moved from RISK_CONFIG
+            "Trending": {
+                'atr_threshold_multiplier': 1.0,
+                'long_threshold': 0.5,
+                'short_threshold': 0.5,
+                'min_confidence': 0.75,
+                'sl_atr_multiplier': 1.5,
+                'tp_atr_multiplier': 2.0
+            },
+            "Ranging": {
+                'atr_threshold_multiplier': 1.0,
+                'long_threshold': 0.3,
+                'short_threshold': 0.3,
+                'min_confidence': 0.70,
+                'sl_atr_multiplier': 1.0,
+                'tp_atr_multiplier': 0.8,
+            },
+            "Chaotic": {'enabled': False}
         }
     }
 }

@@ -15,14 +15,16 @@ class RiskManager:
         true_range = np.maximum(high_low, np.maximum(high_close, low_close))
         return true_range.rolling(period).mean().iloc[-1]
 
-    def calculate_levels(self, prediction, df, strategy_config, tp_atr_mult_override=None, sl_atr_mult_override=None):
+    def calculate_levels(self, prediction, df, strategy_config, regime, tp_atr_mult_override=None, sl_atr_mult_override=None):
         """
         Calculates Stop Loss and Take Profit levels based on ATR.
-        - Stop Loss is based on config 'sl_atr_multiplier' from the strategy.
-        - Take Profit is based on config 'tp_atr_multiplier' from the strategy.
+        - Uses regime-specific rules from the strategy_config.
         - Falls back to percentage/RR ratio if ATR is unavailable.
         - Allows for override values for optimization purposes.
         """
+        # Get the correct rulebook for the current market regime
+        regime_rules = strategy_config.get(regime, {})
+        
         sl_config = RISK_CONFIG.get('stop_loss', {})
         sl_type = sl_config.get('type', 'atr') # Prioritize ATR
         current_price = prediction['current_price']
@@ -35,8 +37,8 @@ class RiskManager:
         # --- 1. CALCULATE SL/TP DISTANCES ---
         if sl_type == 'atr' and atr > 0:
             # Primary Logic: ATR-based distances from the specific strategy config
-            sl_atr_multiplier = sl_atr_mult_override if sl_atr_mult_override is not None else strategy_config.get('sl_atr_multiplier', 1.5)
-            tp_atr_multiplier = tp_atr_mult_override if tp_atr_mult_override is not None else strategy_config.get('tp_atr_multiplier', 2.0)
+            sl_atr_multiplier = sl_atr_mult_override if sl_atr_mult_override is not None else regime_rules.get('sl_atr_multiplier', 1.5)
+            tp_atr_multiplier = tp_atr_mult_override if tp_atr_mult_override is not None else regime_rules.get('tp_atr_multiplier', 2.0)
             
             stop_loss_distance = atr * sl_atr_multiplier
             take_profit_distance = atr * tp_atr_multiplier
@@ -112,15 +114,25 @@ class RiskManager:
         # Cap position size to a max of 10% of portfolio
         return min(position_size, 0.10)
 
-    def should_execute(self, prediction, asset, strategy_name, debug=False):
+    def should_execute(self, prediction, asset, strategy_name, regime, debug=False):
         """
-        Validates if a trade should be executed based on the rules
-        from the STRATEGIES dictionary in config.py.
-        This now includes a dynamic ATR-based threshold check.
+        Validates if a trade should be executed based on the regime-specific
+        rules from the STRATEGIES dictionary in config.py.
         """
-        rules = STRATEGIES.get(asset, {}).get(strategy_name)
+        strategy_rules = STRATEGIES.get(asset, {}).get(strategy_name)
+        if not strategy_rules:
+            if debug: print(f"   - RiskManager: No rules found for strategy '{strategy_name}' on asset '{asset}'.")
+            return False
+
+        # Get the specific rulebook for the current market regime
+        rules = strategy_rules.get(regime)
         if not rules:
-            if debug: print(f"   -  RiskManager: No rules found for strategy '{strategy_name}' on asset '{asset}'.")
+            if debug: print(f"   - RiskManager: No rules found for regime '{regime}' in strategy '{strategy_name}'.")
+            return False
+            
+        # 0. Regime Enabled Check
+        if not rules.get('enabled', True):
+            if debug: print(f"   - RiskManager: Trading is disabled for regime '{regime}'.")
             return False
 
         confidence = armor_get(prediction, 'confidence', 0)
@@ -130,9 +142,9 @@ class RiskManager:
         atr = armor_get(prediction, 'atr', 0)
         atr_multiplier = rules.get('atr_threshold_multiplier')
 
-        # 1. Confidence Check (applies to all strategies)
+        # 1. Confidence Check
         if confidence < rules['min_confidence']:
-            if debug: print(f"   - RiskManager: Confidence ({confidence:.2f}) is below threshold ({rules['min_confidence']}).")
+            if debug: print(f"   - RiskManager: Confidence ({confidence:.2f}) is below regime threshold ({rules['min_confidence']}).")
             return False
 
         # 2. Direction Check

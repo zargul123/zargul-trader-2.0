@@ -10,9 +10,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 
 from scripts.core.data_engine import DataMaster
 from scripts.core.analysis_engine import AIAnalyst
-from scripts.config import STRATEGIES, BACKTEST_CONFIG
+from scripts.config import STRATEGIES, BACKTEST_CONFIG, REGIME_CONFIG
 from scripts.backtest.metrics import calculate_all_metrics, get_empty_metrics
 from scripts.core.risk_engine import RiskManager
+from scripts.core.regime_filter import MarketRegimeFilter
 
 class BacktestEngine:
     def __init__(self, analyst: AIAnalyst = None, debug=False):
@@ -75,11 +76,7 @@ class BacktestEngine:
         self.trade_history = []
         try:
             # Use the temporary config if provided (for optimization), otherwise use the global one
-            if temp_strategy_config:
-                strategy_config = temp_strategy_config
-            else:
-                # Correctly fetch the nested strategy config for the specific asset
-                strategy_config = STRATEGIES.get(symbol, {}).get(strategy_type)
+            strategy_config = temp_strategy_config or STRATEGIES.get(symbol, {}).get(strategy_type)
 
             if not strategy_config:
                 print(f"❌ Unknown strategy '{strategy_type}' for asset '{symbol}'")
@@ -102,7 +99,8 @@ class BacktestEngine:
                 return get_empty_metrics()
 
             # --- Backtesting State ---
-            open_position = None # This is our "virtual notebook"
+            open_position = None 
+            regime_filter = MarketRegimeFilter()
             # -------------------------
 
             sequence_length = strategy_config.get('sequence_length', 60)
@@ -119,7 +117,6 @@ class BacktestEngine:
                     exit_price = None
 
                     # --- REALISTIC SL/TP CHECK (FIXES LOOK-AHEAD BIAS) ---
-                    # We must check for the stop-loss first, as it has priority in a single candle.
                     if open_position['direction'] == 'long':
                         if current_candle['low'] <= open_position['stop_loss']:
                             outcome, exit_price = 'STOP_LOSS', open_position['stop_loss']
@@ -141,14 +138,20 @@ class BacktestEngine:
                     
                     prediction = analyst_to_use.predict(symbol, window_data, strategy_name=strategy_type)
 
-                    # 🔍 DEBUG: Show detailed AI prediction before RiskManager evaluation
                     if prediction and self.debug:
                         print(f"🤖 AI Prediction: {prediction['direction']} | Confidence: {prediction['confidence']:.2f} | Change: {prediction.get('pct_change', 0):.3f}%")
 
-                    if prediction and self.risk_manager.should_execute(prediction, symbol, strategy_type, debug=self.debug):
+                    # Determine regime for the current window
+                    regime = regime_filter.get_regime(
+                        df=window_data,
+                        adx_threshold=REGIME_CONFIG['adx_trending_threshold'],
+                        entropy_threshold=REGIME_CONFIG['entropy_chaotic_threshold']
+                    )
+
+                    if prediction and self.risk_manager.should_execute(prediction, symbol, strategy_type, regime, debug=self.debug):
                         if self.debug:
                             print(f"🎯 {current_time}: Opening {prediction['direction'].upper()} trade at ${current_price:.2f}")
-                        open_position = self._open_trade(prediction, current_time, strategy_config, window_data, temp_risk_config)
+                        open_position = self._open_trade(prediction, current_time, strategy_config, window_data, regime, temp_risk_config)
 
 
 
@@ -167,7 +170,7 @@ class BacktestEngine:
             print(traceback.format_exc())
             return get_empty_metrics()
 
-    def _open_trade(self, prediction, entry_time, strategy_config, df, risk_config_override=None):
+    def _open_trade(self, prediction, entry_time, strategy_config, df, regime, risk_config_override=None):
         """Creates a new virtual position with slippage."""
         entry_price = prediction['current_price']
         direction = prediction['direction']
@@ -175,27 +178,26 @@ class BacktestEngine:
         # --- PERMANENT FIX: Check if the signal should be inverted based on strategy config ---
         if strategy_config.get('invert_signal', False):
             direction = 'short' if direction == 'long' else 'long'
-            # 🚨 CRITICAL BUG FIX: Update prediction object with inverted direction
-            # so calculate_levels uses the correct direction for SL/TP calculation
-            prediction = prediction.copy()  # Don't modify original prediction
+            prediction = prediction.copy()
             prediction['direction'] = direction
         # ------------------------------------------------------------------------------------
         
         # --- REALISTIC SLIPPAGE SIMULATION ---
         slippage = entry_price * BACKTEST_CONFIG['slippage_pct']
         if direction == 'long':
-            entry_price += slippage # We buy slightly higher
+            entry_price += slippage
         else:
-            entry_price -= slippage # We sell slightly lower
+            entry_price -= slippage
         
         # Use override values if provided, otherwise they will be None
         tp_override = risk_config_override.get('tp_atr_multiplier') if risk_config_override else None
         sl_override = risk_config_override.get('sl_atr_multiplier') if risk_config_override else None
 
         levels = self.risk_manager.calculate_levels(
-            prediction,  # Now contains the correct (possibly inverted) direction
+            prediction,
             df,
             strategy_config=strategy_config,
+            regime=regime,
             tp_atr_mult_override=tp_override, 
             sl_atr_mult_override=sl_override
         )

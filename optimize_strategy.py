@@ -82,32 +82,36 @@ def load_regime_data(asset, timeframe, regime_type):
     print(f"-- Found {len(filtered_df)} candles for the '{regime_type}' regime --")
     return filtered_df
 
-def objective(trial, asset, strategy_name, regime_df, backtest_engine):
+def objective(trial, asset, strategy_name, regime, regime_df, backtest_engine):
     """The core Optuna objective function."""
     try:
-        # --- 1. Define the full search space for both entry and exit rules ---
-        # CORRECTED: Deepcopy the specific asset's strategy config
-        strategy_config = deepcopy(STRATEGIES[asset][strategy_name])
+        # --- 1. Create a temporary config for this trial ---
+        # Load the base strategy config
+        temp_strategy_config = deepcopy(STRATEGIES[asset][strategy_name])
         
-        # Entry Rules
-        strategy_config['min_confidence'] = trial.suggest_float('min_confidence', 0.55, 0.85, step=0.01)
-        strategy_config['atr_threshold_multiplier'] = trial.suggest_float('atr_threshold_multiplier', 0.25, 2.5, step=0.05)
+        # --- 2. Define the search space and apply it to the correct regime ---
+        # These parameters will be optimized ONLY for the specified regime
+        regime_params = {
+            'min_confidence': trial.suggest_float('min_confidence', 0.55, 0.85, step=0.01),
+            'atr_threshold_multiplier': trial.suggest_float('atr_threshold_multiplier', 0.25, 2.5, step=0.05),
+            'tp_atr_multiplier': trial.suggest_float('tp_atr_multiplier', 0.5, 4.0, step=0.1),
+            'sl_atr_multiplier': trial.suggest_float('sl_atr_multiplier', 0.25, 3.0, step=0.05)
+        }
         
-        # Exit Rules (now part of the strategy_config)
-        strategy_config['tp_atr_multiplier'] = trial.suggest_float('tp_atr_multiplier', 0.5, 4.0, step=0.1)
-        strategy_config['sl_atr_multiplier'] = trial.suggest_float('sl_atr_multiplier', 0.25, 3.0, step=0.05)
+        # Update the temporary config with the trial parameters for the target regime
+        temp_strategy_config[regime].update(regime_params)
         
-        # --- 2. Run the backtest with the temporary configurations ---
+        # --- 3. Run the backtest with the temporary configuration ---
         results = backtest_engine.run_backtest(
             symbol=asset,
             strategy_type=strategy_name,
             days=0,
             data_df=regime_df,
-            temp_strategy_config=strategy_config,
-            temp_risk_config=None # Risk config is now fully within strategy_config
+            temp_strategy_config=temp_strategy_config,
+            temp_risk_config=None
         )
 
-        # --- 3. Evaluate the results ---
+        # --- 4. Evaluate the results ---
         if results is None or results['total_trades'] < 10: # Ensure a minimum number of trades
             return -10.0
 

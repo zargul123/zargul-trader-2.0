@@ -209,19 +209,10 @@ class ZargulTrader:
                     )
                     print(f"   └ 📊 Market Regime Detected: {regime.upper()}")
 
-                    # For now, we assume all our strategies are trend-following.
                     # This is the master gatekeeper.
-                    if regime == 'Chaotic':
-                        print("   └ ❌ Regime Rejection: Market is too random and unpredictable. No trades allowed.")
-                        continue # Skip to the next prediction
-                    
-                    if regime != 'Trending':
-                        print(f"   └ ❌ Regime Rejection: The '{strategy_name}' strategy requires a trending market. No trades allowed.")
-                        continue # Skip to the next prediction
-                    # =================================================
-
-                    if self.risk_manager.should_execute(pred, asset, strategy_name):
-                        print(f"   └ ✅ Signal passed initial risk checks.")
+                    # The should_execute function is now regime-aware.
+                    if self.risk_manager.should_execute(pred, asset, strategy_name, regime):
+                        print(f"   └ ✅ Signal passed initial risk checks for {regime.upper()} regime.")
 
                         # --- MTF CONFIRMATION FILTER ---
                         if strategy_name == 'main':
@@ -246,7 +237,7 @@ class ZargulTrader:
                             if (signal_direction == 'long' and is_uptrend) or \
                                (signal_direction == 'short' and is_downtrend):
                                 print(f"   └ ✅ MTF Confirmation: 1h signal aligns with 4h trend ({'UP' if is_uptrend else 'DOWN'}). Opening trade.")
-                                self._open_trade(pred, strategy_name, df_strategy)
+                                self._open_trade(pred, strategy_name, df_strategy, regime)
                                 return # Trade opened, exit loop for this asset
                             else:
                                 print(f"   └ ❌ MTF Rejection: 1h signal '{signal_direction}' conflicts with 4h trend ({'UP' if is_uptrend else 'DOWN'}).")
@@ -254,20 +245,24 @@ class ZargulTrader:
                         # For other strategies, open trade directly without MTF check
                         else:
                             print(f"   └ ✅ NEW TRADE SIGNAL! ({strategy_name.upper()} does not require MTF). Opening trade.")
-                            self._open_trade(pred, strategy_name, df_strategy)
+                            self._open_trade(pred, strategy_name, df_strategy, regime)
                             return # Trade opened, exit loop for this asset
                     else:
-                        print(f"   └ ⚠️ Signal rejected by risk manager or strategy rules.")
+                        print(f"   └ ⚠️ Signal rejected by risk manager or strategy rules for {regime.upper()} regime.")
         except Exception as e:
             print(f"💥 A critical error occurred while analyzing {asset}: {e}")
             import traceback
             traceback.print_exc()
 
-    def _open_trade(self, prediction, strategy_name, df):
+    def _open_trade(self, prediction, strategy_name, df, regime):
         asset = prediction['asset']
         trade_id = f"{datetime.now().strftime('%Y%m%d%H%M%S')}-{asset}"
-        rules = STRATEGIES[asset][strategy_name]
-        levels = self.risk_manager.calculate_levels(prediction, df, strategy_config=rules)
+        
+        # Get the entire strategy config, not just the regime-specific part
+        strategy_config = STRATEGIES[asset][strategy_name]
+        
+        # Pass the full config and the regime to the risk manager
+        levels = self.risk_manager.calculate_levels(prediction, df, strategy_config, regime)
 
         position_entry = {
             'trade_id': trade_id, 'asset': asset, 'direction': prediction['direction'],
