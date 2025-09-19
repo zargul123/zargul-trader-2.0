@@ -182,20 +182,40 @@ class AIAnalyst:
             X, y_pt, y_sig = [], [], []
 
             # --- Create Labels for the new dual-output model ---
-            # Simplified labeling for training purposes
-            future_price = pd.Series(scaled_data[:, 3]).shift(-5).fillna(method='ffill')
-            price_change = future_price - scaled_data[:, 3]
+            # FIXED: Use RAW percentage returns instead of scaled differences
+            raw_close = df_features.iloc[:, 3].values  # Raw close prices BEFORE scaling
+            future_close = pd.Series(raw_close).shift(-5).fillna(method='ffill').values
+            percent_return = (future_close - raw_close) / raw_close
+            
+            # Use percentage-based thresholds appropriate for timeframe
+            timeframe = STRATEGIES[symbol][strategy_name]['timeframe']
+            if timeframe == '1h':
+                threshold = 0.008  # 0.8% for 1h
+            elif timeframe == '4h':
+                threshold = 0.015  # 1.5% for 4h  
+            elif timeframe == '5m':
+                threshold = 0.003  # 0.3% for 5m
+            else:
+                threshold = 0.005  # Default 0.5%
 
-            # Output 1: Price Targets [take_profit, stop_loss]
+            # Output 1: Price Targets [take_profit, stop_loss] - use scaled for consistency
             price_targets = np.zeros((len(scaled_data), 2))
-            price_targets[:, 0] = future_price
-            price_targets[:, 1] = scaled_data[:, 3] * 0.98 # Simplified Stop Loss
+            future_price_scaled = pd.Series(scaled_data[:, 3]).shift(-5).fillna(method='ffill')
+            price_targets[:, 0] = future_price_scaled
+            price_targets[:, 1] = scaled_data[:, 3] * 0.98
 
-            # Output 2: Trade Signal [Buy, Sell, Hold]
+            # Output 2: Trade Signal [Buy, Sell, Hold] - FIXED to use raw returns
             trade_signal = np.zeros((len(scaled_data), 3))
-            trade_signal[price_change > 0.01, 0] = 1  # Buy
-            trade_signal[price_change < -0.01, 1] = 1 # Sell
-            trade_signal[np.abs(price_change) <= 0.01, 2] = 1 # Hold
+            trade_signal[percent_return > threshold, 0] = 1   # Buy
+            trade_signal[percent_return < -threshold, 1] = 1  # Sell  
+            trade_signal[np.abs(percent_return) <= threshold, 2] = 1  # Hold
+            
+            # Print class distribution for debugging
+            buy_count = np.sum(trade_signal[:, 0])
+            sell_count = np.sum(trade_signal[:, 1])
+            hold_count = np.sum(trade_signal[:, 2])
+            total = len(trade_signal)
+            print(f"   - Class distribution: Buy={buy_count} ({buy_count/total*100:.1f}%), Sell={sell_count} ({sell_count/total*100:.1f}%), Hold={hold_count} ({hold_count/total*100:.1f}%)")
 
             for i in range(sequence_length, len(scaled_data)):
                 X.append(scaled_data[i - sequence_length:i])
