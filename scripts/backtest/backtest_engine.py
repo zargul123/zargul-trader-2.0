@@ -247,7 +247,7 @@ class BacktestEngine:
         # --- DETAILED TRADE LOGGING (conditional on debug flag) ---
         if self.debug:
             print("\n" + "="*60)
-            print(f"TRADE CLOSED: {position['asset']} - {direction.upper()}")
+            print(f"TRADE CLOSED: {position['asset']} - {position['direction'].upper()}")
             print(f"  - Entry Time:    {position['entry_time']}")
             print(f"  - Exit Time:     {exit_time}")
             print(f"  - Duration:      {exit_time - position['entry_time']}")
