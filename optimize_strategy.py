@@ -161,8 +161,8 @@ def run_optimization(asset, strategy, regime, trials):
         direction="maximize"
     )
     
-    # Pass the asset name to the objective function
-    objective_func = lambda trial: objective(trial, asset, strategy, regime_df, backtest_engine)
+    # Pass the asset name and regime to the objective function
+    objective_func = lambda trial: objective(trial, asset, strategy, regime, regime_df, backtest_engine)
     
     completed_trials = len(study.trials)
     if completed_trials >= trials:
