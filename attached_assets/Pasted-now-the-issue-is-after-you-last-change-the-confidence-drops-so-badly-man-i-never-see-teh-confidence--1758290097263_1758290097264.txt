@@ -1,0 +1,36 @@
+now the issue is after you last change the confidence drops so badly man i never see teh confidence below 60 this is the result 🔧   │
+│    Running backtest for BTC-USD with 'main' strategy.                                                                                   │
+│                                                                                                                                         │
+│    📊 Loading 90 days of 1h data for BTC-USD...                                                                                         │
+│                                                                                                                                         │
+│    📊 Fetching 1h data for BTC-USD...                                                                                                   │
+│    🔍 TwelveData API Request: BTC/USD (1h)                                                                                              │
+│    ⚠️ 'volume' column not found in data. Creating a placeholder column of zeros.                                                       │
+│    ✅ Engineered features using pandas-ta and cleaned NaN values.                                                                       │
+│    ✅ Got social metrics for BTC-USD from LunarCrush.                                                                                   │
+│       - Injected and cleaned features: ['lc_galaxy_score', 'lc_alt_rank']                                                               │
+│    ✅ Final result: 2160 1h candles for BTC-USD                                                                                         │
+│    📅 Data loaded for BTC-USD: 2160 candles from 2025-06-21 14:00:00 to 2025-09-19 13:00:00                                             │
+│                                                                                                                                         │
+│    🔎 Scanning 2160 candles for signals...                                                                                              │
+│    🤖 AI Prediction: short | Confidence: 0.13 | Change: -4.711%                                                                         │
+│       - RiskManager: Confidence (0.13) is below threshold (0.6).                                                                        │
+│    🤖 AI Prediction: short | Confidence: 0.13 | Change: -4.999%                                                                         │
+│       - RiskManager: Confidence (0.13) is below threshold (0.6).                                                                        │
+│    🤖 AI Prediction: short | Confidence: 0.13 | Change: -5.228%                                                                         │
+│       - RiskManager: Confidence (0.13) is below threshold (0.6).                                                                        │
+│    🤖 AI Prediction: short | Confidence: 0.13 | Change: -5.252%                                                                         │
+│       - RiskManager: Confidence (0.13) is below threshold (0.6).                                                                        │
+│    🤖 AI Prediction: short | Confidence: 0.13 | Change: -3.523%                                                                         │
+│       - RiskManager: Confidence (0.13) is below threshold (0.6).                                                                        │
+│    🤖 AI Prediction: short | Confidence: 0.13 | Change: -2.392%                                                                         │
+│       - RiskManager: Confidence (0.13) is below threshold (0.6).                                                                        │
+│    🤖 AI Prediction: short | Confidence: 0.13 | Change: -1.684%                                                                         │
+│       - RiskManager: Confidence (0.13) is below threshold (0.6).                                                                        │
+│    🤖 AI Prediction: short | Confidence: 0.13 | Change: -2.480%                                                                         │
+│       - RiskManager: Confidence (0.13) is below threshold (0.6).                                                                        │
+│    🤖 AI Prediction: short | Confidence: 0.13 | Change: -2.282%                                                                         │
+│       - RiskManager: Confidence (0.13) is below threshold (0.6).                                                                        │
+│    🤖 AI Prediction: short | Confidence: 0.13 | Change: -2.228%                                                                         │
+│       - RiskManager: Confidence (0.13) is below threshold (0.6).                                                                        │
+│    🤖 AI Prediction: short | Confidence: 0.13 | Change: -1.678%                         
