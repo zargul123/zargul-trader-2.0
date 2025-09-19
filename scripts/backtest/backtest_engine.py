@@ -145,7 +145,9 @@ class BacktestEngine:
                     regime = regime_filter.get_regime(
                         df=window_data,
                         adx_threshold=REGIME_CONFIG['adx_trending_threshold'],
-                        entropy_threshold=REGIME_CONFIG['entropy_chaotic_threshold']
+                        entropy_threshold=REGIME_CONFIG['entropy_chaotic_threshold'],
+                        entropy_window=REGIME_CONFIG['entropy_window'],
+                        smoothing_alpha=REGIME_CONFIG['entropy_smoothing_alpha']
                     )
 
                     if prediction and self.risk_manager.should_execute(prediction, symbol, strategy_type, regime, debug=self.debug):
