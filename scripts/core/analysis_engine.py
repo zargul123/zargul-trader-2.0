@@ -312,22 +312,21 @@ class AIAnalyst:
             current_price = df['close'].iloc[-1].item()
             pct_change = ((predicted_price - current_price) / current_price) * 100
             
-            # Determine direction from the class with the highest probability
-            signal_index = np.argmax(calibrated_probs)
-            if signal_index == 0: # Buy
+            # --- NEW, SIMPLIFIED LOGIC: Trust the pct_change signal ---
+            # The price prediction head is more reliable than the classifier head.
+            # We will derive the direction directly from its output.
+            
+            move_threshold = 0.1 # A tiny 0.1% move is enough to be considered a signal
+            
+            if pct_change > move_threshold:
                 direction = 'long'
-                confidence = calibrated_probs[0]
-            elif signal_index == 1: # Sell
+                confidence = calibrated_probs[0] # Confidence for a 'long' signal
+            elif pct_change < -move_threshold:
                 direction = 'short'
-                confidence = calibrated_probs[1]
-            else: # Hold
+                confidence = calibrated_probs[1] # Confidence for a 'short' signal
+            else:
                 direction = 'hold'
-                confidence = calibrated_probs[2]
-
-            # Override direction for tiny moves, but use the hold confidence
-            if abs(pct_change) < 0.05:
-                direction = 'hold'
-                confidence = calibrated_probs[2]
+                confidence = calibrated_probs[2] # Confidence for a 'hold' signal
 
             return {
                 'asset': symbol, 
