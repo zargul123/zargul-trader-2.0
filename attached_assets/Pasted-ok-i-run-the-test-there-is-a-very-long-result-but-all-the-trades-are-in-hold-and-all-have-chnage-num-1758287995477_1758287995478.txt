@@ -1,0 +1,53 @@
+ok i run the test there is a very long result but all the trades are in hold and all have chnage number in negative sharing some   │
+│    results check and tell me whats the problem 🤖 AI Prediction: hold | Confidence: 0.67 | Change: -6.895%                            │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.67 | Change: -7.087%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.67 | Change: -6.774%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.67 | Change: -6.855%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.67 | Change: -7.085%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.67 | Change: -7.337%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.68 | Change: -7.040%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.68 | Change: -7.423%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.69 | Change: -7.647%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.69 | Change: -8.131%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.68 | Change: -8.671%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.67 | Change: -8.910%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.67 | Change: -8.280%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.68 | Change: -7.978%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.68 | Change: -7.978%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.68 | Change: -8.164%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.68 | Change: -8.128%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.69 | Change: -8.048%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.69 | Change: -8.355%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.69 | Change: -8.190%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.69 | Change: -7.740%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.69 | Change: -7.747%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.68 | Change: -7.403%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│    🤖 AI Prediction: hold | Confidence: 0.67 | Change: -6.976%                                                                        │
+│       - RiskManager: Signal is 'hold'.                                                                                                │
+│                                                                                                                                       │
+│    ✅ Backtest scan complete for BTC-USD.                                                                                             │
+│    ⚠️ No trades were executed in this backtest.                                                                                      │
+│    ⚠️ No results found for BTC-USD to generate a report.
