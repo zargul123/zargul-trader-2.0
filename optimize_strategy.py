@@ -92,10 +92,10 @@ def objective(trial, asset, strategy_name, regime, regime_df, backtest_engine):
         # --- 2. Define the search space and apply it to the correct regime ---
         # These parameters will be optimized ONLY for the specified regime
         regime_params = {
-            'min_confidence': trial.suggest_float('min_confidence', 0.55, 0.85, step=0.01),
-            'atr_threshold_multiplier': trial.suggest_float('atr_threshold_multiplier', 0.25, 2.5, step=0.05),
-            'tp_atr_multiplier': trial.suggest_float('tp_atr_multiplier', 0.5, 4.0, step=0.1),
-            'sl_atr_multiplier': trial.suggest_float('sl_atr_multiplier', 0.25, 3.0, step=0.05)
+            'min_confidence': trial.suggest_float('min_confidence', 0.45, 0.85, step=0.01),
+            'atr_threshold_multiplier': trial.suggest_float('atr_threshold_multiplier', 0.5, 2.5, step=0.05),
+            'tp_atr_multiplier': trial.suggest_float('tp_atr_multiplier', 0.8, 4.0, step=0.1),
+            'sl_atr_multiplier': trial.suggest_float('sl_atr_multiplier', 0.5, 3.0, step=0.05)
         }
         
         # Update the temporary config with the trial parameters for the target regime
