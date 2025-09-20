@@ -164,7 +164,7 @@ class AIAnalyst:
         
         # --- Parameters for the labeling strategy ---
         lookahead_window = 5   # Look 5 bars into the future
-        min_move = 0.01        # 1.0% move required for a signal
+        min_move = 0.004        # 0.4% move required for a signal
 
         # Calculate the future percentage change
         future_close = df['close'].shift(-lookahead_window)
@@ -306,9 +306,9 @@ class AIAnalyst:
             # 4. Synthesize pct_change to be consistent with our new labeling rule.
             # The risk engine will use this to confirm the trade meets its own thresholds.
             if direction == 'long':
-                pct_change = 1.0 # Corresponds to the 1% min_move
+                pct_change = 0.4 # Corresponds to the 0.4% min_move
             elif direction == 'short':
-                pct_change = -1.0 # Corresponds to the 1% min_move
+                pct_change = -0.4 # Corresponds to the 0.4% min_move
             else:
                 pct_change = 0.0
 
