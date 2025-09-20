@@ -138,7 +138,8 @@ class DataMaster:
                 {"kind": "macd"},
                 {"kind": "bbands", "length": 20, "std": 2}, # Bollinger Bands for width calculation
                 {"kind": "adx"},
-                {"kind": "mfi", "length": 14} # Money Flow Index
+                {"kind": "mfi", "length": 14}, # Money Flow Index
+                {"kind": "atr"} # Average True Range
             ]
         )
         
@@ -151,6 +152,7 @@ class DataMaster:
             'MACDs_12_26_9': 'macd_signal',
             'ADX_14': 'adx',
             'MFI_14': 'mfi_14',
+            'ATRr_14': 'atr',
             'BBB_20_2.0': 'bollinger_width' # Bollinger Band Width (as percentage)
         }, inplace=True)
 

@@ -414,7 +414,8 @@ TECHNICAL_INDICATORS = [
     'rsi',
     'macd',
     'macd_signal',
-    'adx'
+    'adx',
+    'atr' # CRITICAL: RiskManager needs this, even if not a primary AI feature.
 ] + [f'lc_{metric}' for metric in LUNARCRUSH_CONFIG['metrics_to_use']]
 
 # Market Regime Filter Configuration
