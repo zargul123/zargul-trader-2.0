@@ -156,57 +156,24 @@ class AIAnalyst:
 
     def _create_forward_looking_labels(self, df: pd.DataFrame):
         """
-        Generates labels based on whether a future take-profit or stop-loss is hit first.
-        This teaches the AI to identify profitable trade setups directly.
+        Generates labels based on a simple, robust forward-looking percentage change.
+        This teaches the AI to only signal on significant price moves.
         """
-        print("   - Generating forward-looking labels...")
+        print("   - Generating labels based on significant forward moves...")
         n_outputs = 3  # 0: Buy, 1: Sell, 2: Hold
         
         # --- Parameters for the labeling strategy ---
-        tp_atr_multiplier = 1.5
-        sl_atr_multiplier = 2.0
-        lookahead_window = 20  # How many bars into the future to check
+        lookahead_window = 5   # Look 5 bars into the future
+        min_move = 0.01        # 1.0% move required for a signal
 
-        # Ensure required columns exist
-        if 'atr' not in df.columns or 'high' not in df.columns or 'low' not in df.columns:
-            raise ValueError("DataFrame must contain 'atr', 'high', and 'low' columns for labeling.")
-
-        atr = df['atr'].values
-        high = df['high'].values
-        low = df['low'].values
-        close = df['close'].values
+        # Calculate the future percentage change
+        future_close = df['close'].shift(-lookahead_window)
+        percent_change = (future_close - df['close']) / df['close']
         
+        # Create labels based on the magnitude of the change
         labels = np.full(len(df), 2)  # Default to "Hold"
-
-        for i in range(len(df) - lookahead_window):
-            # --- Long Signal Check ---
-            entry_price_long = close[i]
-            take_profit_long = entry_price_long + (atr[i] * tp_atr_multiplier)
-            stop_loss_long = entry_price_long - (atr[i] * sl_atr_multiplier)
-            
-            # --- Short Signal Check ---
-            entry_price_short = close[i]
-            take_profit_short = entry_price_short - (atr[i] * tp_atr_multiplier)
-            stop_loss_short = entry_price_short + (atr[i] * sl_atr_multiplier)
-
-            # Look into the future for this one candle
-            for j in range(1, lookahead_window + 1):
-                future_high = high[i + j]
-                future_low = low[i + j]
-
-                # Check long outcome
-                if future_high >= take_profit_long and future_low > stop_loss_long:
-                    labels[i] = 0  # Buy signal
-                    break 
-                if future_low <= stop_loss_long:
-                    break # SL hit, no signal
-
-                # Check short outcome
-                if future_low <= take_profit_short and future_high < stop_loss_short:
-                    labels[i] = 1  # Sell signal
-                    break
-                if future_high >= stop_loss_short:
-                    break # SL hit, no signal
+        labels[percent_change >= min_move] = 0  # Buy signal
+        labels[percent_change <= -min_move] = 1 # Sell signal
         
         # Convert to one-hot encoding
         return tf.keras.utils.to_categorical(labels, num_classes=n_outputs)
@@ -336,13 +303,12 @@ class AIAnalyst:
             direction_map = {0: 'long', 1: 'short', 2: 'hold'}
             direction = direction_map[predicted_class]
 
-            # 4. Synthesize pct_change based on our labeling rule's ATR target
-            # This provides a consistent, logical value for the risk engine.
-            current_atr = df['atr'].iloc[-1]
+            # 4. Synthesize pct_change to be consistent with our new labeling rule.
+            # The risk engine will use this to confirm the trade meets its own thresholds.
             if direction == 'long':
-                pct_change = (current_atr * 1.5 / df['close'].iloc[-1]) * 100
+                pct_change = 1.0 # Corresponds to the 1% min_move
             elif direction == 'short':
-                pct_change = -(current_atr * 1.5 / df['close'].iloc[-1]) * 100
+                pct_change = -1.0 # Corresponds to the 1% min_move
             else:
                 pct_change = 0.0
 
