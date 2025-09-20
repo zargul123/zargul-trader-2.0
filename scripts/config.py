@@ -15,14 +15,15 @@ STRATEGIES = {
             'sequence_length': 20,
             'invert_signal': False,
             "Trending": {
-                'atr_threshold_multiplier': 1.5,
-                'long_threshold': 2.5,
-                'short_threshold': 2.5,
-                'min_confidence': 0.60,
-                'sl_atr_multiplier': 1.5,
-                'tp_atr_multiplier': 2.0,
+                'atr_threshold_multiplier': 1.75,
+                'long_threshold': 2.5, # Fallback
+                'short_threshold': 2.5, # Fallback
+                'min_confidence': 0.48,
+                'sl_atr_multiplier': 1.7,
+                'tp_atr_multiplier': 3.7,
             },
             "Ranging": {
+                'enabled': False, # As per optimization, no edge in this regime
                 'atr_threshold_multiplier': 1.0,
                 'long_threshold': 1.0,
                 'short_threshold': 1.0,
