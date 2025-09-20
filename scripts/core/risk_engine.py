@@ -114,12 +114,14 @@ class RiskManager:
         # Cap position size to a max of 10% of portfolio
         return min(position_size, 0.10)
 
-    def should_execute(self, prediction, asset, strategy_name, regime, debug=False):
+    def should_execute(self, prediction, asset, strategy_name, regime, debug=False, strategy_rules_override=None):
         """
         Validates if a trade should be executed based on the regime-specific
-        rules from the STRATEGIES dictionary in config.py.
+        rules. Uses an override if provided, otherwise falls back to the global config.
         """
-        strategy_rules = STRATEGIES.get(asset, {}).get(strategy_name)
+        # If an override is provided (from a backtest/optimizer), use it. Otherwise, use the global STRATEGIES.
+        strategy_rules = strategy_rules_override or STRATEGIES.get(asset, {}).get(strategy_name)
+        
         if not strategy_rules:
             if debug: print(f"   - RiskManager: No rules found for strategy '{strategy_name}' on asset '{asset}'.")
             return False

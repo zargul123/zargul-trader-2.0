@@ -150,7 +150,7 @@ class BacktestEngine:
                         smoothing_alpha=REGIME_CONFIG['entropy_smoothing_alpha']
                     )
 
-                    if prediction and self.risk_manager.should_execute(prediction, symbol, strategy_type, regime, debug=self.debug):
+                    if prediction and self.risk_manager.should_execute(prediction, symbol, strategy_type, regime, debug=self.debug, strategy_rules_override=strategy_config):
                         if self.debug:
                             print(f"🎯 {current_time}: Opening {prediction['direction'].upper()} trade at ${current_price:.2f}")
                         open_position = self._open_trade(prediction, current_time, strategy_config, window_data, regime, temp_risk_config)
