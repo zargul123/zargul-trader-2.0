@@ -34,6 +34,10 @@ def run_raw_backtest(asset, strategy, confidence_override):
                 # Set ATR threshold to near-zero to ensure it always passes
                 temp_config[regime]['atr_threshold_multiplier'] = 0.0001 
         
+        # Also explicitly enable the Chaotic regime for a true raw test
+        if 'Chaotic' in temp_config:
+            temp_config['Chaotic']['enabled'] = True
+        
         # 3. Initialize and run the backtest engine
         engine = BacktestEngine()
         results = engine.run_backtest(
