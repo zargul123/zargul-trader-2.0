@@ -131,22 +131,14 @@ class DataMaster:
         
         # Use the built-in strategy from pandas-ta to get a wide range of indicators
         custom_strategy = ta.Strategy(
-            name="ZargulStrategy",
-            description="A comprehensive set of technical indicators for the Zargul trading bot.",
+            name="ZargulEliteStrategy",
+            description="A focused set of elite technical indicators for the Zargul trading bot.",
             ta=[
                 {"kind": "rsi"},
                 {"kind": "macd"},
-                {"kind": "bbands", "length": 20, "std": 2},
-                {"kind": "cmf"},
-                {"kind": "obv"},
-                {"kind": "vwap"},
-                {"kind": "ema", "length": 20},
-                {"kind": "ema", "length": 50},
-                {"kind": "ema", "length": 200},
-                {"kind": "atr"},
-                {"kind": "stoch"},
+                {"kind": "bbands", "length": 20, "std": 2}, # Bollinger Bands for width calculation
                 {"kind": "adx"},
-                {"kind": "sma", "length": 20, "close": df['volume'], "col_names": ("volume_ma",)},
+                {"kind": "mfi", "length": 14} # Money Flow Index
             ]
         )
         
@@ -157,29 +149,14 @@ class DataMaster:
             'RSI_14': 'rsi',
             'MACD_12_26_9': 'macd',
             'MACDs_12_26_9': 'macd_signal',
-            'BBU_20_2.0': 'bollinger_upper',
-            'BBL_20_2.0': 'bollinger_lower',
-            'CMF_20': 'cmf',
-            'OBV': 'obv',
-            'VWAP_D': 'vwap',
-            'EMA_20': 'ema_20',
-            'EMA_50': 'ema_50',
-            'EMA_200': 'ema_200',
-            'ATRr_14': 'atr',
-            'STOCHk_14_3_3': 'stoch_k',
-            'STOCHd_14_3_3': 'stoch_d',
-            'ADX_14': 'adx'
+            'ADX_14': 'adx',
+            'MFI_14': 'mfi_14',
+            'BBB_20_2.0': 'bollinger_width' # Bollinger Band Width (as percentage)
         }, inplace=True)
 
-        # --- ELITE NORMALIZED & DERIVATIVE FEATURES ---
-        # Ensure volume_ma is not zero to avoid division by zero errors
-        df['vol_spike'] = df['volume'] / df['volume_ma'].replace(0, 1)
-        df['atr_norm'] = (df['atr'] / df['close']) * 100
-        df['macd_norm'] = (df['macd'] / df['close']) * 100
-        df['bollinger_width'] = ((df['bollinger_upper'] - df['bollinger_lower']) / df['close']) * 100
-        df['ema_spread'] = ((df['ema_20'] - df['ema_200']) / df['close']) * 100
-        df['pct_change'] = df['close'].pct_change() * 100
-        df['log_return'] = np.log(df['close'] / df['close'].shift())
+        # --- NEW CYCLICAL & TIME-BASED FEATURES ---
+        df['hour_of_day'] = df.index.hour
+        df['day_of_week'] = df.index.dayofweek
 
         # --- FINAL CLEANUP ---
         # Final check to remove any duplicates that may have been created
@@ -188,7 +165,7 @@ class DataMaster:
         df.bfill(inplace=True)
         df.fillna(0, inplace=True)
         
-        print(f"✅ Engineered features using pandas-ta and cleaned NaN values.")
+        print(f"✅ Engineered ELITE features and cleaned NaN values.")
         return df
 
     def get_data(self, symbol, timeframe='4h', limit=None):

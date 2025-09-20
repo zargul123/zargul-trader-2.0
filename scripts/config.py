@@ -393,15 +393,28 @@ LUNARCRUSH_CONFIG = {
     ]
 }
 
-# Technical indicators to be calculated and fed to the AI
+# TECHNICAL_INDICATORS to be calculated and fed to the AI
+# --- ARCHIVED OLD LIST ---
+# TECHNICAL_INDICATORS = [
+#     # --- Classic Indicators ---
+#     'rsi', 'macd', 'macd_signal', 'bollinger_upper', 'bollinger_lower', 'obv',
+#     'vol_spike', 'cmf', 'vwap', 'ema_20', 'ema_50', 'ema_200', 
+#     'atr', 'stoch_k', 'stoch_d', 'adx', 'volume_ma',
+#     # --- Elite Engineered Features (Normalized & Derivative) ---
+#     'atr_norm', 'macd_norm', 'bollinger_width', 'ema_spread', 
+#     'pct_change', 'log_return' # Ensure ADX is here
+# ] + [f'lc_{metric}' for metric in LUNARCRUSH_CONFIG['metrics_to_use']]
+
+# --- ELITE FEATURE SPRINT V1 ---
 TECHNICAL_INDICATORS = [
-    # --- Classic Indicators ---
-    'rsi', 'macd', 'macd_signal', 'bollinger_upper', 'bollinger_lower', 'obv',
-    'vol_spike', 'cmf', 'vwap', 'ema_20', 'ema_50', 'ema_200', 
-    'atr', 'stoch_k', 'stoch_d', 'adx', 'volume_ma',
-    # --- Elite Engineered Features (Normalized & Derivative) ---
-    'atr_norm', 'macd_norm', 'bollinger_width', 'ema_spread', 
-    'pct_change', 'log_return' # Ensure ADX is here
+    'hour_of_day', 
+    'day_of_week',
+    'bollinger_width',
+    'mfi_14',
+    'rsi',
+    'macd',
+    'macd_signal',
+    'adx'
 ] + [f'lc_{metric}' for metric in LUNARCRUSH_CONFIG['metrics_to_use']]
 
 # Market Regime Filter Configuration
