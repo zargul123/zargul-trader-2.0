@@ -13,7 +13,7 @@ STRATEGIES = {
             'enabled': True,
             'timeframe': '1h',
             'sequence_length': 20,
-            'invert_signal': True,
+            'invert_signal': False,
             "Trending": {
                 'atr_threshold_multiplier': 1.5,
                 'long_threshold': 2.5,
