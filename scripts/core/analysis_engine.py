@@ -124,45 +124,92 @@ class AIAnalyst:
 
     def _create_advanced_model(self, symbol, strategy_name, input_shape, n_outputs):
         """
-        Creates a Keras model with hyperparameters dynamically loaded from the config
-        based on the asset symbol and strategy name.
+        Creates a Keras model with hyperparameters dynamically loaded from the config.
+        This version is a pure classifier, focused only on the trade signal.
         """
-        # --- 1. Load Hyperparameters with a robust fallback system ---
         asset_params = MODEL_HYPERPARAMS.get(symbol, {})
         params = asset_params.get(strategy_name, asset_params.get('main', MODEL_HYPERPARAMS['default']))
         print(f"   - Building model for {symbol} ({strategy_name}) with {params['n_layers']} LSTM layer(s).")
 
-        # --- 2. Build Model Dynamically ---
-        inputs = tf.keras.layers.Input(shape=input_shape)
-        x = inputs
-        
+        model = Sequential()
         for i in range(params['n_layers']):
             units = params[f'units_layer_{i}']
             dropout = params[f'dropout_layer_{i}']
-            return_sequences = (i < params['n_layers'] - 1) # Return sequences for all but the last LSTM layer
+            return_sequences = (i < params['n_layers'] - 1)
             
-            x = tf.keras.layers.Bidirectional(
-                tf.keras.layers.LSTM(units, return_sequences=return_sequences)
-            )(x)
-            x = tf.keras.layers.Dropout(dropout)(x)
+            if i == 0:
+                model.add(Bidirectional(LSTM(units, return_sequences=return_sequences), input_shape=input_shape))
+            else:
+                model.add(Bidirectional(LSTM(units, return_sequences=return_sequences)))
+            model.add(Dropout(dropout))
 
-        # --- 3. Output Layers ---
-        output1 = tf.keras.layers.Dense(2, name='price_targets')(x)
-        output2 = tf.keras.layers.Dense(n_outputs, activation='softmax', name='trade_signal')(x)
-
-        model = tf.keras.models.Model(inputs=inputs, outputs=[output1, output2])
+        model.add(Dense(n_outputs, activation='softmax', name='trade_signal'))
         
         optimizer = tf.keras.optimizers.Adam(learning_rate=params['learning_rate'])
         
         model.compile(
             optimizer=optimizer,
-            loss={
-                'price_targets': 'mse',
-                'trade_signal': 'categorical_crossentropy'
-            },
-            metrics={'trade_signal': 'accuracy'}
+            loss='categorical_crossentropy',
+            metrics=['accuracy']
         )
         return model
+
+    def _create_forward_looking_labels(self, df: pd.DataFrame):
+        """
+        Generates labels based on whether a future take-profit or stop-loss is hit first.
+        This teaches the AI to identify profitable trade setups directly.
+        """
+        print("   - Generating forward-looking labels...")
+        n_outputs = 3  # 0: Buy, 1: Sell, 2: Hold
+        
+        # --- Parameters for the labeling strategy ---
+        tp_atr_multiplier = 1.5
+        sl_atr_multiplier = 2.0
+        lookahead_window = 20  # How many bars into the future to check
+
+        # Ensure required columns exist
+        if 'atr' not in df.columns or 'high' not in df.columns or 'low' not in df.columns:
+            raise ValueError("DataFrame must contain 'atr', 'high', and 'low' columns for labeling.")
+
+        atr = df['atr'].values
+        high = df['high'].values
+        low = df['low'].values
+        close = df['close'].values
+        
+        labels = np.full(len(df), 2)  # Default to "Hold"
+
+        for i in range(len(df) - lookahead_window):
+            # --- Long Signal Check ---
+            entry_price_long = close[i]
+            take_profit_long = entry_price_long + (atr[i] * tp_atr_multiplier)
+            stop_loss_long = entry_price_long - (atr[i] * sl_atr_multiplier)
+            
+            # --- Short Signal Check ---
+            entry_price_short = close[i]
+            take_profit_short = entry_price_short - (atr[i] * tp_atr_multiplier)
+            stop_loss_short = entry_price_short + (atr[i] * sl_atr_multiplier)
+
+            # Look into the future for this one candle
+            for j in range(1, lookahead_window + 1):
+                future_high = high[i + j]
+                future_low = low[i + j]
+
+                # Check long outcome
+                if future_high >= take_profit_long and future_low > stop_loss_long:
+                    labels[i] = 0  # Buy signal
+                    break 
+                if future_low <= stop_loss_long:
+                    break # SL hit, no signal
+
+                # Check short outcome
+                if future_low <= take_profit_short and future_high < stop_loss_short:
+                    labels[i] = 1  # Sell signal
+                    break
+                if future_high >= stop_loss_short:
+                    break # SL hit, no signal
+        
+        # Convert to one-hot encoding
+        return tf.keras.utils.to_categorical(labels, num_classes=n_outputs)
 
     def _train_model(self, symbol, strategy_name):
         start_time = time.time()
@@ -175,40 +222,15 @@ class AIAnalyst:
             # Align DF to canonical feature list to ensure consistent shape
             df_features = self._align_df_features(df)
 
+            # --- NEW: Generate the sophisticated forward-looking labels ---
+            trade_signal = self._create_forward_looking_labels(df_features)
+            
+            # --- The rest of the process remains largely the same ---
             scaler = MinMaxScaler(feature_range=(0, 1))
             scaled_data = scaler.fit_transform(df_features.values)
 
             sequence_length = STRATEGIES[symbol][strategy_name]['sequence_length']
-            X, y_pt, y_sig = [], [], []
-
-            # --- Create Labels for the new dual-output model ---
-            # FIXED: Use RAW percentage returns instead of scaled differences
-            raw_close = df_features.iloc[:, 3].values  # Raw close prices BEFORE scaling
-            future_close = pd.Series(raw_close).shift(-5).fillna(method='ffill').values
-            percent_return = (future_close - raw_close) / raw_close
-            
-            # Use percentage-based thresholds appropriate for timeframe
-            timeframe = STRATEGIES[symbol][strategy_name]['timeframe']
-            if timeframe == '1h':
-                threshold = 0.008  # 0.8% for 1h
-            elif timeframe == '4h':
-                threshold = 0.015  # 1.5% for 4h  
-            elif timeframe == '5m':
-                threshold = 0.003  # 0.3% for 5m
-            else:
-                threshold = 0.005  # Default 0.5%
-
-            # Output 1: Price Targets [take_profit, stop_loss] - use scaled for consistency
-            price_targets = np.zeros((len(scaled_data), 2))
-            future_price_scaled = pd.Series(scaled_data[:, 3]).shift(-5).fillna(method='ffill')
-            price_targets[:, 0] = future_price_scaled
-            price_targets[:, 1] = scaled_data[:, 3] * 0.98
-
-            # Output 2: Trade Signal [Buy, Sell, Hold] - FIXED to use raw returns
-            trade_signal = np.zeros((len(scaled_data), 3))
-            trade_signal[percent_return > threshold, 0] = 1   # Buy
-            trade_signal[percent_return < -threshold, 1] = 1  # Sell  
-            trade_signal[np.abs(percent_return) <= threshold, 2] = 1  # Hold
+            X, y_sig = [], []
             
             # Print class distribution for debugging
             buy_count = np.sum(trade_signal[:, 0])
@@ -219,47 +241,54 @@ class AIAnalyst:
 
             for i in range(sequence_length, len(scaled_data)):
                 X.append(scaled_data[i - sequence_length:i])
-                y_pt.append(price_targets[i])
                 y_sig.append(trade_signal[i])
             
-            X, y_pt, y_sig = np.array(X), np.array(y_pt), np.array(y_sig)
+            X, y_sig = np.array(X), np.array(y_sig)
 
             # Split data for main model training and for calibrator training
-            X_train, X_val, y_pt_train, y_pt_val, y_sig_train, y_sig_val = train_test_split(
-                X, y_pt, y_sig, test_size=0.2, random_state=42
+            X_train, X_val, y_sig_train, y_sig_val = train_test_split(
+                X, y_sig, test_size=0.2, random_state=42, stratify=y_sig # Stratify to maintain class balance
             )
             
-            y_train = {'price_targets': y_pt_train, 'trade_signal': y_sig_train}
-            y_val = {'price_targets': y_pt_val, 'trade_signal': y_sig_val}
+            # --- REMOVED: The y_pt (price_target) logic is no longer needed ---
+            # --- SINGLE OUTPUT: The y_pt logic is removed ---
+            y_train = y_sig_train
+            y_val = y_sig_val
+
+            # --- NEW: Calculate class weights to handle imbalance ---
+            total_samples = len(y_sig_train)
+            # Add a small epsilon to prevent division by zero if a class is missing in a batch
+            epsilon = 1e-7
+            class_weights = {
+                0: total_samples / (3 * (np.sum(y_sig_train[:, 0]) + epsilon)), # Buy
+                1: total_samples / (3 * (np.sum(y_sig_train[:, 1]) + epsilon)), # Sell
+                2: total_samples / (3 * (np.sum(y_sig_train[:, 2]) + epsilon))  # Hold
+            }
+            print(f"   - Applying class weights: {{0: {class_weights[0]:.2f}, 1: {class_weights[1]:.2f}, 2: {class_weights[2]:.2f}}}")
 
             model = self._create_advanced_model(symbol, strategy_name, (X_train.shape[1], X_train.shape[2]), n_outputs=y_sig_train.shape[1])
             es = EarlyStopping(monitor='val_loss', patience=TRAINING_CONFIG['early_stop_patience'], restore_best_weights=True)
             
-            # Use .h5 format to avoid Keras native format issues with ModelCheckpoint
             model_path = f'trained_models/{symbol}_{strategy_name}_model.h5'
             scaler_path = f'trained_models/{symbol}_{strategy_name}_scaler.joblib'
             calibrator_path = f'trained_models/{symbol}_{strategy_name}_calibrator.joblib'
             
-            # Explicitly save in h5 format
-            checkpoint = ModelCheckpoint(model_path, save_best_only=True, monitor='val_trade_signal_accuracy', mode='max', save_format='h5')
+            checkpoint = ModelCheckpoint(model_path, save_best_only=True, monitor='val_accuracy', mode='max', save_format='h5')
 
-            model.fit(X_train, y_train, epochs=TRAINING_CONFIG['epochs'], batch_size=TRAINING_CONFIG['batch_size'], validation_data=(X_val, y_val), callbacks=[es, checkpoint], verbose=1)
+            # --- UPDATED: Pass class_weight to the fit method for a single output ---
+            model.fit(X_train, y_train, epochs=TRAINING_CONFIG['epochs'], batch_size=TRAINING_CONFIG['batch_size'], validation_data=(X_val, y_val), callbacks=[es, checkpoint], verbose=1, class_weight=class_weights)
 
             # --- PLATT SCALING CALIBRATOR TRAINING ---
             print(f"   - Training confidence calibrator for {symbol} ({strategy_name})...")
-            val_predictions_raw = model.predict(X_val)
-            
-            # The input for the calibrator is the softmax output of the trade_signal head
-            calibrator_X = val_predictions_raw[1] 
-            # The target is the actual class index (0, 1, or 2)
-            calibrator_y = np.argmax(y_sig_val, axis=1)
+            # UPDATED: The model now returns a single array of predictions
+            calibrator_X = model.predict(X_val)
+            calibrator_y = np.argmax(y_val, axis=1)
 
             calibrator = LogisticRegression(solver='liblinear')
             calibrator.fit(calibrator_X, calibrator_y)
             print("   - ✅ Calibrator trained.")
 
             # --- SAVE ALL COMPONENTS ---
-            # No need to save the model again as ModelCheckpoint already saved the best version
             dump(scaler, scaler_path)
             dump(calibrator, calibrator_path)
             
@@ -285,61 +314,46 @@ class AIAnalyst:
             
             sequence_length = STRATEGIES[symbol][strategy_name]['sequence_length']
 
-            # Align DF to canonical feature list to ensure consistent shape
             df_aligned = self._align_df_features(df)
             last_sequence_df = df_aligned.tail(sequence_length)
 
             if len(last_sequence_df) < sequence_length: return None
 
             scaled_data = scaler.transform(last_sequence_df.values)
-            # Use the DataFrame's shape for robustness
             input_data = scaled_data.reshape(1, sequence_length, last_sequence_df.shape[1])
             
-            # Returns a list of two arrays: [price_targets, trade_signal]
-            raw_prediction = model.predict(input_data, verbose=0)
-            price_targets_pred = raw_prediction[0][0]
-            trade_signal_pred = raw_prediction[1][0]
+            # --- REWORKED PREDICTION LOGIC ---
+            # 1. Get raw softmax output from the model
+            raw_prediction = model.predict(input_data, verbose=0)[0]
+            
+            # 2. Get calibrated confidence score
+            # The calibrator expects a 2D array
+            calibrated_probs = calibrator.predict_proba([raw_prediction])[0]
+            predicted_class = np.argmax(calibrated_probs)
+            confidence = calibrated_probs[predicted_class]
 
-            # The predicted price is the first element of the price_targets output
-            dummy_row = np.zeros((1, last_sequence_df.shape[1]))
-            dummy_row[0, 3] = price_targets_pred[0] # Predicted take_profit level
-            predicted_price = scaler.inverse_transform(dummy_row)[0, 3]
-            
-            current_price = df['close'].iloc[-1].item()
-            pct_change = ((predicted_price - current_price) / current_price) * 100
-            
-            # --- FINAL FIX: Derive confidence from the reliable pct_change signal ---
-            # The calibrator and the classifier head are unreliable. Confidence should
-            # be proportional to the magnitude of the predicted price move.
-            
-            # 1. Determine direction from pct_change
-            move_threshold = 0.1 # 0.1% move is the minimum to consider a signal
-            if pct_change > move_threshold:
-                direction = 'long'
-            elif pct_change < -move_threshold:
-                direction = 'short'
+            # 3. Map class index to direction
+            direction_map = {0: 'long', 1: 'short', 2: 'hold'}
+            direction = direction_map[predicted_class]
+
+            # 4. Synthesize pct_change based on our labeling rule's ATR target
+            # This provides a consistent, logical value for the risk engine.
+            current_atr = df['atr'].iloc[-1]
+            if direction == 'long':
+                pct_change = (current_atr * 1.5 / df['close'].iloc[-1]) * 100
+            elif direction == 'short':
+                pct_change = -(current_atr * 1.5 / df['close'].iloc[-1]) * 100
             else:
-                direction = 'hold'
-
-            # 2. Calculate confidence based on the size of the move
-            # A 5% move is considered very high confidence (near 1.0)
-            # This function scales the confidence so it grows fast initially and then levels off.
-            max_expected_move = 5.0 
-            confidence = (1 - np.exp(-abs(pct_change) / max_expected_move * 5))
-            
-            # For hold signals, confidence is inverted: a smaller move is a more confident hold.
-            if direction == 'hold':
-                confidence = 1 - confidence
-
+                pct_change = 0.0
 
             return {
                 'asset': symbol, 
                 'timestamp': pd.to_datetime('now', utc=True), 
-                'price': float(predicted_price), 
+                'price': df['close'].iloc[-1].item(), # Use current price as reference
                 'direction': direction, 
                 'confidence': float(confidence), 
                 'pct_change': float(pct_change), 
-                'current_price': current_price,
+                'current_price': df['close'].iloc[-1].item(),
                 'atr': df['atr'].iloc[-1].item() if 'atr' in df.columns and not pd.isna(df['atr'].iloc[-1]) else 0,
                 'strategy': strategy_name
             }
