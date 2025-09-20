@@ -38,8 +38,8 @@ def run_raw_backtest(asset, strategy, confidence_override):
         if 'Chaotic' in temp_config:
             temp_config['Chaotic']['enabled'] = True
         
-        # 3. Initialize and run the backtest engine
-        engine = BacktestEngine()
+        # We pass the specific symbol and strategy to the AI Analyst for fast, focused loading
+        engine = BacktestEngine(debug=True)
         results = engine.run_backtest(
             symbol=asset,
             strategy_type=strategy,
