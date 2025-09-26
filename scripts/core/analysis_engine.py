@@ -308,6 +308,10 @@ class AIAnalyst:
 
             # --- NEW: Generate sophisticated, ATR-aware labels ---
             y_sig_categorical = self._create_forward_looking_labels(df_features)
+            
+            # --- FIX: Remove the non-numeric 'regime' column before scaling ---
+            if 'regime' in df_features.columns:
+                df_features = df_features.drop(columns=['regime'])
             # ----------------------------------------------------
 
             scaler = MinMaxScaler(feature_range=(0, 1))
