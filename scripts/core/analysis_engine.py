@@ -245,29 +245,15 @@ class AIAnalyst:
 
             model.fit(X_train, y_train, epochs=TRAINING_CONFIG['epochs'], batch_size=TRAINING_CONFIG['batch_size'], validation_data=(X_val, y_val), callbacks=[es, checkpoint], verbose=1)
 
-            # --- PLATT SCALING CALIBRATOR TRAINING ---
-            print(f"   - Training confidence calibrator for {symbol} ({strategy_name})...")
-            val_predictions_raw = model.predict(X_val)
-            
-            # The input for the calibrator is the softmax output of the trade_signal head
-            calibrator_X = val_predictions_raw[1] 
-            # The target is the actual class index (0, 1, or 2)
-            calibrator_y = np.argmax(y_sig_val, axis=1)
-
-            calibrator = LogisticRegression(solver='liblinear', class_weight='balanced')
-            calibrator.fit(calibrator_X, calibrator_y)
-            print("   - ✅ Calibrator trained.")
-
-            # --- SAVE ALL COMPONENTS ---
+            # --- SAVE MODEL & SCALER ---
             # No need to save the model again as ModelCheckpoint already saved the best version
             dump(scaler, scaler_path)
-            dump(calibrator, calibrator_path)
             
             self.models[symbol][strategy_name] = model
             self.scalers[symbol][strategy_name] = scaler
-            self.calibrators[symbol][strategy_name] = calibrator
+            self.calibrators[symbol][strategy_name] = None # Calibrator is now permanently disabled
             
-            print(f"✅ Model, scaler, and calibrator for {symbol} ({strategy_name}) trained and saved in {time.time() - start_time:.1f}s.")
+            print(f"✅ Model and scaler for {symbol} ({strategy_name}) trained and saved in {time.time() - start_time:.1f}s.")
         except Exception as e:
             print(f"❌ Training process for {symbol} ({strategy_name}) failed: {e}")
             import traceback
@@ -281,7 +267,6 @@ class AIAnalyst:
         try:
             model = self.models[symbol][strategy_name]
             scaler = self.scalers[symbol][strategy_name]
-            calibrator = self.calibrators[symbol][strategy_name]
             
             sequence_length = STRATEGIES[symbol][strategy_name]['sequence_length']
 
@@ -300,10 +285,8 @@ class AIAnalyst:
             price_targets_pred = raw_prediction[0][0]
             trade_signal_pred = raw_prediction[1][0]
 
-            # --- DIAGNOSTIC: BYPASS CALIBRATOR ---
-            # Use the raw softmax output of the model directly to see if the calibrator is the issue.
-            uncalibrated_probs = trade_signal_pred
-            # calibrated_probs = calibrator.predict_proba(trade_signal_pred.reshape(1, -1))[0]
+            # --- USE RAW MODEL OUTPUT (CALIBRATOR PERMANENTLY DISABLED) ---
+            raw_probs = trade_signal_pred
 
             # The predicted price is the first element of the price_targets output
             dummy_row = np.zeros((1, last_sequence_df.shape[1]))
@@ -314,21 +297,21 @@ class AIAnalyst:
             pct_change = ((predicted_price - current_price) / current_price) * 100
             
             # Determine direction from the class with the highest probability
-            signal_index = np.argmax(uncalibrated_probs)
+            signal_index = np.argmax(raw_probs)
             if signal_index == 0: # Buy
                 direction = 'long'
-                confidence = uncalibrated_probs[0]
+                confidence = raw_probs[0]
             elif signal_index == 1: # Sell
                 direction = 'short'
-                confidence = uncalibrated_probs[1]
+                confidence = raw_probs[1]
             else: # Hold
                 direction = 'hold'
-                confidence = uncalibrated_probs[2]
+                confidence = raw_probs[2]
 
             # Override direction for tiny moves, but use the hold confidence
             if abs(pct_change) < 0.05:
                 direction = 'hold'
-                confidence = calibrated_probs[2]
+                confidence = raw_probs[2]
 
             return {
                 'asset': symbol, 
