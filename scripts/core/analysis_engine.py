@@ -300,9 +300,10 @@ class AIAnalyst:
             price_targets_pred = raw_prediction[0][0]
             trade_signal_pred = raw_prediction[1][0]
 
-            # --- GET CALIBRATED CONFIDENCE ---
-            # Get probabilities [P(buy), P(sell), P(hold)] from the calibrator
-            calibrated_probs = calibrator.predict_proba(trade_signal_pred.reshape(1, -1))[0]
+            # --- DIAGNOSTIC: BYPASS CALIBRATOR ---
+            # Use the raw softmax output of the model directly to see if the calibrator is the issue.
+            uncalibrated_probs = trade_signal_pred
+            # calibrated_probs = calibrator.predict_proba(trade_signal_pred.reshape(1, -1))[0]
 
             # The predicted price is the first element of the price_targets output
             dummy_row = np.zeros((1, last_sequence_df.shape[1]))
@@ -313,16 +314,16 @@ class AIAnalyst:
             pct_change = ((predicted_price - current_price) / current_price) * 100
             
             # Determine direction from the class with the highest probability
-            signal_index = np.argmax(calibrated_probs)
+            signal_index = np.argmax(uncalibrated_probs)
             if signal_index == 0: # Buy
                 direction = 'long'
-                confidence = calibrated_probs[0]
+                confidence = uncalibrated_probs[0]
             elif signal_index == 1: # Sell
                 direction = 'short'
-                confidence = calibrated_probs[1]
+                confidence = uncalibrated_probs[1]
             else: # Hold
                 direction = 'hold'
-                confidence = calibrated_probs[2]
+                confidence = uncalibrated_probs[2]
 
             # Override direction for tiny moves, but use the hold confidence
             if abs(pct_change) < 0.05:
