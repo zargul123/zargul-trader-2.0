@@ -200,6 +200,9 @@ class AIAnalyst:
         return tf.keras.utils.to_categorical(labels, num_classes=n_outputs)
 
     def _train_model(self, symbol, strategy_name):
+        print("="*80)
+        print(">>> RUNNING THE LATEST VERSION OF THE TRAINING CODE (47f4355) <<<")
+        print("="*80)
         start_time = time.time()
         print(f"   - Starting training for {symbol} ({strategy_name})...")
         
