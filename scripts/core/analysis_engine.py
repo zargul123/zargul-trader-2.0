@@ -152,11 +152,8 @@ class AIAnalyst:
         for i in range(len(df) - 40):
             current_regime = regime[i]
             
-            # --- Softer parameters for LABEL GENERATION ONLY ---
-            # We make it easier to find "wins" in historical data to create a richer
-            # dataset for the AI to learn from. These do not affect live trading risk.
             if current_regime == "Trending":
-                tp_mult, sl_mult, window = 2.0, 1.5, 20 # Softer win-condition
+                tp_mult, sl_mult, window = 1.5, 1.0, 20 # WIDER win-condition for richer labels
             elif current_regime == "Ranging":
                 tp_mult, sl_mult, window = 1.0, 1.0, 40
             else:
