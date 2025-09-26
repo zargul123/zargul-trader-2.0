@@ -230,6 +230,72 @@ class AIAnalyst:
         
         return tf.keras.utils.to_categorical(labels, num_classes=n_outputs)
 
+    def _calculate_historical_regimes(self, df: pd.DataFrame) -> pd.Series:
+        """Helper to calculate historical market regimes, mirroring the main filter."""
+        price_returns = df['close'].pct_change().fillna(0)
+        rolling_entropy = price_returns.rolling(window=50).apply(lambda x: -np.sum(pd.cut(x, bins=[-np.inf, -0.005, 0, 0.005, np.inf], labels=False, right=False) / len(x) * np.log2(pd.cut(x, bins=[-np.inf, -0.005, 0, 0.005, np.inf], labels=False, right=False) / len(x) + 1e-9)), raw=True)
+        smoothed_entropy = rolling_entropy.ewm(alpha=0.1).mean()
+        
+        is_chaotic = smoothed_entropy > 1.5
+        is_trending = df['adx'] > 25
+        
+        regimes = pd.Series("Ranging", index=df.index)
+        regimes[is_trending] = "Trending"
+        regimes[is_chaotic] = "Chaotic"
+        return regimes
+
+    def _create_forward_looking_labels(self, df: pd.DataFrame):
+        """
+        FINAL VERSION: Generates sophisticated, regime-aware labels.
+        """
+        print("   - Generating sophisticated, regime-aware labels...")
+        n_outputs = 3  # 0: Buy, 1: Sell, 2: Hold
+        
+        df['regime'] = self._calculate_historical_regimes(df)
+        
+        atr = df['atr'].values
+        high = df['high'].values
+        low = df['low'].values
+        close = df['close'].values
+        regime = df['regime'].values
+        
+        labels = np.full(len(df), 2)  # Default to "Hold"
+
+        for i in range(len(df) - 40): # Ensure lookahead window doesn't go out of bounds
+            current_regime = regime[i]
+            
+            if current_regime == "Trending":
+                tp_mult, sl_mult, window = 2.5, 2.0, 20
+            elif current_regime == "Ranging":
+                tp_mult, sl_mult, window = 1.0, 1.0, 40
+            else: # Chaotic
+                continue
+
+            entry_price = close[i]
+            
+            # Long Signal Check
+            tp_long = entry_price + (atr[i] * tp_mult)
+            sl_long = entry_price - (atr[i] * sl_mult)
+            
+            # Short Signal Check
+            tp_short = entry_price - (atr[i] * tp_mult)
+            sl_short = entry_price + (atr[i] * sl_mult)
+
+            for j in range(1, window + 1):
+                future_high, future_low = high[i + j], low[i + j]
+                
+                if future_high >= tp_long:
+                    labels[i] = 0; break
+                if future_low <= sl_long:
+                    break
+
+                if future_low <= tp_short:
+                    labels[i] = 1; break
+                if future_high >= sl_short:
+                    break
+        
+        return tf.keras.utils.to_categorical(labels, num_classes=n_outputs)
+
     def _train_model(self, symbol, strategy_name):
         start_time = time.time()
         print(f"   - Starting training for {symbol} ({strategy_name})...")
@@ -238,59 +304,28 @@ class AIAnalyst:
             if df is None or df.empty:
                 raise ValueError(f"Cannot train {symbol} ({strategy_name}), no data available.")
 
-            # Align DF to canonical feature list to ensure consistent shape
             df_features = self._align_df_features(df)
+
+            # --- NEW: Generate sophisticated, ATR-aware labels ---
+            y_sig_categorical = self._create_forward_looking_labels(df_features)
+            # ----------------------------------------------------
 
             scaler = MinMaxScaler(feature_range=(0, 1))
             scaled_data = scaler.fit_transform(df_features.values)
 
             sequence_length = STRATEGIES[symbol][strategy_name]['sequence_length']
-            X, y_pt, y_sig = [], [], []
+            X, y_sig = [], []
 
-            # --- Create Labels for the new dual-output model ---
-            # FIXED: Use RAW percentage returns instead of scaled differences
-            raw_close = df_features.iloc[:, 3].values  # Raw close prices BEFORE scaling
-            future_close = pd.Series(raw_close).shift(-5).fillna(method='ffill').values
-            percent_return = (future_close - raw_close) / raw_close
-            
-            # Use percentage-based thresholds appropriate for timeframe
-            timeframe = STRATEGIES[symbol][strategy_name]['timeframe']
-            if timeframe == '1h':
-                threshold = 0.008  # 0.8% for 1h
-            elif timeframe == '4h':
-                threshold = 0.015  # 1.5% for 4h  
-            elif timeframe == '5m':
-                threshold = 0.003  # 0.3% for 5m
-            else:
-                threshold = 0.005  # Default 0.5%
-
-            # Output 1: Price Targets [take_profit, stop_loss] - use scaled for consistency
-            price_targets = np.zeros((len(scaled_data), 2))
-            future_price_scaled = pd.Series(scaled_data[:, 3]).shift(-5).fillna(method='ffill')
-            price_targets[:, 0] = future_price_scaled
-            price_targets[:, 1] = scaled_data[:, 3] * 0.98
-
-            # Output 2: Trade Signal [Buy, Sell, Hold] - FIXED to use raw returns
-            trade_signal = np.zeros((len(scaled_data), 3))
-            trade_signal[percent_return > threshold, 0] = 1   # Buy
-            trade_signal[percent_return < -threshold, 1] = 1  # Sell  
-            trade_signal[np.abs(percent_return) <= threshold, 2] = 1  # Hold
-            
-            # Print class distribution for debugging
-            buy_count = np.sum(trade_signal[:, 0])
-            sell_count = np.sum(trade_signal[:, 1])
-            hold_count = np.sum(trade_signal[:, 2])
-            total = len(trade_signal)
-            print(f"   - Class distribution: Buy={buy_count} ({buy_count/total*100:.1f}%), Sell={sell_count} ({sell_count/total*100:.1f}%), Hold={hold_count} ({hold_count/total*100:.1f}%)")
-
+            # --- Simplified loop for creating sequences ---
             for i in range(sequence_length, len(scaled_data)):
                 X.append(scaled_data[i - sequence_length:i])
-                y_pt.append(price_targets[i])
-                y_sig.append(trade_signal[i])
+                y_sig.append(y_sig_categorical[i])
             
-            X, y_pt, y_sig = np.array(X), np.array(y_pt), np.array(y_sig)
+            X, y_sig = np.array(X), np.array(y_sig)
 
-            # Split data for main model training and for calibrator training
+            # --- Dummy price targets (y_pt) as they are not used by the new labeling but the model expects them ---
+            y_pt = np.zeros((X.shape[0], 2))
+
             X_train, X_val, y_pt_train, y_pt_val, y_sig_train, y_sig_val = train_test_split(
                 X, y_pt, y_sig, test_size=0.2, random_state=42
             )
@@ -301,31 +336,24 @@ class AIAnalyst:
             model = self._create_advanced_model(symbol, strategy_name, (X_train.shape[1], X_train.shape[2]), n_outputs=y_sig_train.shape[1])
             es = EarlyStopping(monitor='val_loss', patience=TRAINING_CONFIG['early_stop_patience'], restore_best_weights=True)
             
-            # Use .h5 format to avoid Keras native format issues with ModelCheckpoint
             model_path = f'trained_models/{symbol}_{strategy_name}_model.h5'
             scaler_path = f'trained_models/{symbol}_{strategy_name}_scaler.joblib'
             calibrator_path = f'trained_models/{symbol}_{strategy_name}_calibrator.joblib'
             
-            # Explicitly save in h5 format
             checkpoint = ModelCheckpoint(model_path, save_best_only=True, monitor='val_trade_signal_accuracy', mode='max', save_format='h5')
 
             model.fit(X_train, y_train, epochs=TRAINING_CONFIG['epochs'], batch_size=TRAINING_CONFIG['batch_size'], validation_data=(X_val, y_val), callbacks=[es, checkpoint], verbose=1)
 
-            # --- PLATT SCALING CALIBRATOR TRAINING ---
             print(f"   - Training confidence calibrator for {symbol} ({strategy_name})...")
             val_predictions_raw = model.predict(X_val)
             
-            # The input for the calibrator is the softmax output of the trade_signal head
             calibrator_X = val_predictions_raw[1] 
-            # The target is the actual class index (0, 1, or 2)
             calibrator_y = np.argmax(y_sig_val, axis=1)
 
             calibrator = LogisticRegression(solver='liblinear')
             calibrator.fit(calibrator_X, calibrator_y)
             print("   - ✅ Calibrator trained.")
 
-            # --- SAVE ALL COMPONENTS ---
-            # No need to save the model again as ModelCheckpoint already saved the best version
             dump(scaler, scaler_path)
             dump(calibrator, calibrator_path)
             
