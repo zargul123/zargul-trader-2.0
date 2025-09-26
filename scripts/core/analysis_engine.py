@@ -254,7 +254,7 @@ class AIAnalyst:
             # The target is the actual class index (0, 1, or 2)
             calibrator_y = np.argmax(y_sig_val, axis=1)
 
-            calibrator = LogisticRegression(solver='liblinear')
+            calibrator = LogisticRegression(solver='liblinear', class_weight='balanced')
             calibrator.fit(calibrator_X, calibrator_y)
             print("   - ✅ Calibrator trained.")
 
