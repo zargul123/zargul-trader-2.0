@@ -153,7 +153,7 @@ class AIAnalyst:
             current_regime = regime[i]
             
             if current_regime == "Trending":
-                tp_mult, sl_mult, window = 1.5, 1.0, 20 # WIDER win-condition for richer labels
+                tp_mult, sl_mult, window = 1.0, 0.8, 20 # BRUTE-FORCE WIDENER for richer labels
             elif current_regime == "Ranging":
                 tp_mult, sl_mult, window = 1.0, 1.0, 40
             else:
