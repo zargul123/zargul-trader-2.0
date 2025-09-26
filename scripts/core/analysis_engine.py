@@ -246,9 +246,10 @@ class AIAnalyst:
 
     def _create_forward_looking_labels(self, df: pd.DataFrame):
         """
-        FINAL VERSION: Generates sophisticated, regime-aware labels.
+        A robust, dual-simulation labeling function that creates unambiguous
+        training examples by independently verifying long and short outcomes.
         """
-        print("   - Generating sophisticated, regime-aware labels...")
+        print("   - Generating robust, dual-simulation labels...")
         n_outputs = 3  # 0: Buy, 1: Sell, 2: Hold
         
         df['regime'] = self._calculate_historical_regimes(df)
@@ -273,30 +274,53 @@ class AIAnalyst:
 
             entry_price = close[i]
             
-            # Long Signal Check
+            # --- Independent Long Simulation ---
             tp_long = entry_price + (atr[i] * tp_mult)
             sl_long = entry_price - (atr[i] * sl_mult)
+            long_win = False
+            long_lose = False
             
-            # Short Signal Check
+            # --- Independent Short Simulation ---
             tp_short = entry_price - (atr[i] * tp_mult)
             sl_short = entry_price + (atr[i] * sl_mult)
+            short_win = False
+            short_lose = False
 
             for j in range(1, window + 1):
                 future_high, future_low = high[i + j], low[i + j]
                 
-                if future_high >= tp_long:
-                    labels[i] = 0; break
-                if future_low <= sl_long:
-                    break
+                # Check long outcome
+                if not long_win and not long_lose:
+                    if future_high >= tp_long: long_win = True
+                    if future_low <= sl_long: long_lose = True
 
-                if future_low <= tp_short:
-                    labels[i] = 1; break
-                if future_high >= sl_short:
-                    break
+                # Check short outcome
+                if not short_win and not short_lose:
+                    if future_low <= tp_short: short_win = True
+                    if future_high >= sl_short: short_lose = True
+            
+            # --- Final Verdict ---
+            if long_win and not short_win: # Clear long signal
+                labels[i] = 0
+            elif short_win and not long_win: # Clear short signal
+                labels[i] = 1
         
-        return tf.keras.utils.to_categorical(labels, num_classes=n_outputs)
+        # --- Crucial Diagnostic Report ---
+        buy_count = np.sum(labels == 0)
+        sell_count = np.sum(labels == 1)
+        hold_count = np.sum(labels == 2)
+        total_count = len(labels)
+        print("\n" + "="*50)
+        print("📊 POST-LABELING DISTRIBUTION REPORT 📊")
+        print(f"   - Buy Signals:  {buy_count} ({(buy_count/total_count)*100:.2f}%) ")
+        print(f"   - Sell Signals: {sell_count} ({(sell_count/total_count)*100:.2f}%) ")
+        print(f"   - Hold Signals: {hold_count} ({(hold_count/total_count)*100:.2f}%) ")
+        print("="*50 + "\n")
+        
+        if buy_count < 10 or sell_count < 10:
+            print("⚠️ CRITICAL WARNING: Insufficient buy or sell signals generated. Model may be unreliable.")
 
-    def _train_model(self, symbol, strategy_name):
+        return tf.keras.utils.to_categorical(labels, num_classes=n_outputs)
         start_time = time.time()
         print(f"   - Starting training for {symbol} ({strategy_name})...")
         try:
