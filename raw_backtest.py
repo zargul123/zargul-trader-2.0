@@ -33,6 +33,9 @@ def run_raw_backtest(asset, strategy, confidence_override):
                 temp_config[regime]['min_confidence'] = confidence_override
                 # Set ATR threshold to near-zero to ensure it always passes
                 temp_config[regime]['atr_threshold_multiplier'] = 0.0001 
+                # --- DEFINITIVE FIX: Also override the static thresholds ---
+                temp_config[regime]['long_threshold'] = 0.0001
+                temp_config[regime]['short_threshold'] = 0.0001 
         
         # Also explicitly enable the Chaotic regime for a true raw test
         if 'Chaotic' in temp_config:
