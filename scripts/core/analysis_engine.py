@@ -231,20 +231,114 @@ class AIAnalyst:
         return tf.keras.utils.to_categorical(labels, num_classes=n_outputs)
 
     def _train_model(self, symbol, strategy_name):
-        # This function now needs to be reverted to its dual-output form
-        # to be compatible with the new labeling logic.
-        # For brevity, we will assume the original dual-output _train_model is restored here.
-        # The key change is the call to the new _create_forward_looking_labels.
-        
-        # --- Restore dual-output model architecture and training ---
-        # (Code for dual-output model training would be re-inserted here)
-        
-        # --- Key change: Call the new labeling function ---
-        # y_sig = self._create_forward_looking_labels(df_features)
-        
-        # (The rest of the original dual-output training logic follows)
-        pass # Placeholder for the full restored training logic
+        start_time = time.time()
+        print(f"   - Starting training for {symbol} ({strategy_name})...")
+        try:
+            df = self.data.get_training_data(symbol, STRATEGIES[symbol][strategy_name]['timeframe'])
+            if df is None or df.empty:
+                raise ValueError(f"Cannot train {symbol} ({strategy_name}), no data available.")
 
+            # Align DF to canonical feature list to ensure consistent shape
+            df_features = self._align_df_features(df)
+
+            scaler = MinMaxScaler(feature_range=(0, 1))
+            scaled_data = scaler.fit_transform(df_features.values)
+
+            sequence_length = STRATEGIES[symbol][strategy_name]['sequence_length']
+            X, y_pt, y_sig = [], [], []
+
+            # --- Create Labels for the new dual-output model ---
+            # FIXED: Use RAW percentage returns instead of scaled differences
+            raw_close = df_features.iloc[:, 3].values  # Raw close prices BEFORE scaling
+            future_close = pd.Series(raw_close).shift(-5).fillna(method='ffill').values
+            percent_return = (future_close - raw_close) / raw_close
+            
+            # Use percentage-based thresholds appropriate for timeframe
+            timeframe = STRATEGIES[symbol][strategy_name]['timeframe']
+            if timeframe == '1h':
+                threshold = 0.008  # 0.8% for 1h
+            elif timeframe == '4h':
+                threshold = 0.015  # 1.5% for 4h  
+            elif timeframe == '5m':
+                threshold = 0.003  # 0.3% for 5m
+            else:
+                threshold = 0.005  # Default 0.5%
+
+            # Output 1: Price Targets [take_profit, stop_loss] - use scaled for consistency
+            price_targets = np.zeros((len(scaled_data), 2))
+            future_price_scaled = pd.Series(scaled_data[:, 3]).shift(-5).fillna(method='ffill')
+            price_targets[:, 0] = future_price_scaled
+            price_targets[:, 1] = scaled_data[:, 3] * 0.98
+
+            # Output 2: Trade Signal [Buy, Sell, Hold] - FIXED to use raw returns
+            trade_signal = np.zeros((len(scaled_data), 3))
+            trade_signal[percent_return > threshold, 0] = 1   # Buy
+            trade_signal[percent_return < -threshold, 1] = 1  # Sell  
+            trade_signal[np.abs(percent_return) <= threshold, 2] = 1  # Hold
+            
+            # Print class distribution for debugging
+            buy_count = np.sum(trade_signal[:, 0])
+            sell_count = np.sum(trade_signal[:, 1])
+            hold_count = np.sum(trade_signal[:, 2])
+            total = len(trade_signal)
+            print(f"   - Class distribution: Buy={buy_count} ({buy_count/total*100:.1f}%), Sell={sell_count} ({sell_count/total*100:.1f}%), Hold={hold_count} ({hold_count/total*100:.1f}%)")
+
+            for i in range(sequence_length, len(scaled_data)):
+                X.append(scaled_data[i - sequence_length:i])
+                y_pt.append(price_targets[i])
+                y_sig.append(trade_signal[i])
+            
+            X, y_pt, y_sig = np.array(X), np.array(y_pt), np.array(y_sig)
+
+            # Split data for main model training and for calibrator training
+            X_train, X_val, y_pt_train, y_pt_val, y_sig_train, y_sig_val = train_test_split(
+                X, y_pt, y_sig, test_size=0.2, random_state=42
+            )
+            
+            y_train = {'price_targets': y_pt_train, 'trade_signal': y_sig_train}
+            y_val = {'price_targets': y_pt_val, 'trade_signal': y_sig_val}
+
+            model = self._create_advanced_model(symbol, strategy_name, (X_train.shape[1], X_train.shape[2]), n_outputs=y_sig_train.shape[1])
+            es = EarlyStopping(monitor='val_loss', patience=TRAINING_CONFIG['early_stop_patience'], restore_best_weights=True)
+            
+            # Use .h5 format to avoid Keras native format issues with ModelCheckpoint
+            model_path = f'trained_models/{symbol}_{strategy_name}_model.h5'
+            scaler_path = f'trained_models/{symbol}_{strategy_name}_scaler.joblib'
+            calibrator_path = f'trained_models/{symbol}_{strategy_name}_calibrator.joblib'
+            
+            # Explicitly save in h5 format
+            checkpoint = ModelCheckpoint(model_path, save_best_only=True, monitor='val_trade_signal_accuracy', mode='max', save_format='h5')
+
+            model.fit(X_train, y_train, epochs=TRAINING_CONFIG['epochs'], batch_size=TRAINING_CONFIG['batch_size'], validation_data=(X_val, y_val), callbacks=[es, checkpoint], verbose=1)
+
+            # --- PLATT SCALING CALIBRATOR TRAINING ---
+            print(f"   - Training confidence calibrator for {symbol} ({strategy_name})...")
+            val_predictions_raw = model.predict(X_val)
+            
+            # The input for the calibrator is the softmax output of the trade_signal head
+            calibrator_X = val_predictions_raw[1] 
+            # The target is the actual class index (0, 1, or 2)
+            calibrator_y = np.argmax(y_sig_val, axis=1)
+
+            calibrator = LogisticRegression(solver='liblinear')
+            calibrator.fit(calibrator_X, calibrator_y)
+            print("   - ✅ Calibrator trained.")
+
+            # --- SAVE ALL COMPONENTS ---
+            # No need to save the model again as ModelCheckpoint already saved the best version
+            dump(scaler, scaler_path)
+            dump(calibrator, calibrator_path)
+            
+            self.models[symbol][strategy_name] = model
+            self.scalers[symbol][strategy_name] = scaler
+            self.calibrators[symbol][strategy_name] = calibrator
+            
+            print(f"✅ Model, scaler, and calibrator for {symbol} ({strategy_name}) trained and saved in {time.time() - start_time:.1f}s.")
+        except Exception as e:
+            print(f"❌ Training process for {symbol} ({strategy_name}) failed: {e}")
+            import traceback
+            traceback.print_exc()
+            raise
 
 
     def predict(self, symbol, df, strategy_name='main'):
