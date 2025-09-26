@@ -331,7 +331,7 @@ class AIAnalyst:
             y_pt = np.zeros((X.shape[0], 2))
 
             X_train, X_val, y_pt_train, y_pt_val, y_sig_train, y_sig_val = train_test_split(
-                X, y_pt, y_sig, test_size=0.2, random_state=42
+                X, y_pt, y_sig, test_size=0.2, random_state=42, stratify=y_sig
             )
             
             y_train = {'price_targets': y_pt_train, 'trade_signal': y_sig_train}
