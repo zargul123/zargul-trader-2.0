@@ -39,7 +39,7 @@ def run_raw_backtest(asset, strategy, confidence_override):
             temp_config['Chaotic']['enabled'] = True
         
         # 3. Initialize and run the backtest engine
-        engine = BacktestEngine()
+        engine = BacktestEngine(debug=True)
         results = engine.run_backtest(
             symbol=asset,
             strategy_type=strategy,
