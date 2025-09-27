@@ -117,8 +117,8 @@ def objective(trial, asset, strategy_name, regime, regime_df, backtest_engine):
         results = backtest_engine.run_backtest(
             symbol=asset,
             strategy_type=strategy_name,
-            days=0,
-            data_df=regime_df,
+            days=90, # Use a fixed, recent 90-day window for efficient optimization
+            data_df=None, # Pass None to use the live data fetching for the specified window
             temp_strategy_config=temp_strategy_config,
             temp_risk_config=None
         )
