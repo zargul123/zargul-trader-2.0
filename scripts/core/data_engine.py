@@ -212,15 +212,62 @@ class DataMaster:
         if days is None:
             days = TRAINING_CONFIG['training_days']
 
-        # get_data() already adds all technical indicators. No need to call it again.
-        df = self.get_data(symbol, timeframe)
+        print(f"\n" + "="*60)
+        print(f"🧠 Acquiring FULL training data for {symbol} ({days} days)...")
+        print("="*60)
 
-        if df is None or df.empty:
-            print("="*60)
-            print(f"⚠️ WARNING: Real data failed for {symbol}. Training will proceed with FAKE data.")
-            print("="*60)
-            # This part needs to be implemented if you want synthetic data generation
+        all_dfs = []
+        end_date = None
+        target_start_date = datetime.now() - timedelta(days=days)
+
+        while True:
+            params = {'end_date': end_date.strftime('%Y-%m-%d %H:%M:%S')} if end_date else {}
+            
+            data = self._twelvedata_request(symbol, timeframe, params)
+            df = self._parse_twelvedata_response(data, symbol)
+
+            if df.empty:
+                print("   - No more data available from API.")
+                break
+
+            all_dfs.append(df)
+            oldest_date = df.index[0]
+            print(f"   - Fetched chunk of {len(df)} candles, ending on {df.index[-1].date()}. Oldest record: {oldest_date.date()}")
+
+            if oldest_date <= target_start_date:
+                print(f"   - Reached target start date of {target_start_date.date()}.")
+                break
+            
+            end_date = oldest_date - timedelta(seconds=1) # Set end_date for the next older chunk
+            time.sleep(1) # Be respectful of API rate limits
+
+        if not all_dfs:
+            print(f"❌ CRITICAL: Could not download any training data for {symbol}.")
             return pd.DataFrame()
+
+        # Stitch, sort, and clean the final DataFrame
+        full_df = pd.concat(all_dfs)
+        full_df = full_df.sort_index()
+        full_df = full_df[~full_df.index.duplicated(keep='first')]
         
-        df = df.last(f'{days}D')
-        return df
+        print(f"   - Successfully stitched {len(all_dfs)} chunks into one DataFrame.")
+        
+        # Add all indicators and social metrics to the full dataset
+        full_df = self._add_technical_indicators(full_df)
+        try:
+            social_metrics = self.social_analyzer.get_social_metrics(symbol, ttl_hash=get_ttl_hash())
+            if social_metrics:
+                for metric in LUNARCRUSH_CONFIG['metrics_to_use']:
+                    if metric in social_metrics:
+                        full_df[f'lc_{metric}'] = social_metrics[metric]
+                social_cols = [f'lc_{m}' for m in LUNARCRUSH_CONFIG['metrics_to_use'] if f'lc_{m}' in full_df.columns]
+                full_df[social_cols] = full_df[social_cols].ffill().bfill().fillna(0)
+        except Exception as e:
+            print(f"⚠️ Could not inject social metrics for training data: {e}")
+            for metric in LUNARCRUSH_CONFIG['metrics_to_use']:
+                full_df[f'lc_{metric}'] = 0
+
+        # Trim to the exact number of days required
+        final_df = full_df.last(f'{days}D')
+        print(f"✅ Final training dataset ready: {len(final_df)} candles from {final_df.index[0].date()} to {final_df.index[-1].date()}")
+        return final_df
