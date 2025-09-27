@@ -33,6 +33,24 @@ class AttentionLayer(tf.keras.layers.Layer):
     def get_config(self):
         return super().get_config()
 
+def _simulate_long_trade(future_highs, future_lows, take_profit, stop_loss):
+    """Simulates a long trade, returning 1 for win, -1 for loss, 0 for no outcome."""
+    for high, low in zip(future_highs, future_lows):
+        if high >= take_profit:
+            return 1  # Win
+        if low <= stop_loss:
+            return -1  # Loss
+    return 0 # No outcome within the window
+
+def _simulate_short_trade(future_highs, future_lows, take_profit, stop_loss):
+    """Simulates a short trade, returning 1 for win, -1 for loss, 0 for no outcome."""
+    for high, low in zip(future_highs, future_lows):
+        if low <= take_profit:
+            return 1  # Win
+        if high >= stop_loss:
+            return -1  # Loss
+    return 0 # No outcome within the window
+
 class AIAnalyst:
     def __init__(self, train_all=False, symbol=None, strategy_type=None):
         self.models = {s: {} for s in ASSETS}
@@ -163,50 +181,78 @@ class AIAnalyst:
 
     def _train_model(self, symbol, strategy_name):
         start_time = time.time()
-        print(f"   - Starting training for {symbol} ({strategy_name})...")
+        print(f"   - Starting training for {symbol} ({strategy_name}) with ADVANCED ATR-based labeling...")
         try:
             df = self.data.get_training_data(symbol, STRATEGIES[symbol][strategy_name]['timeframe'])
-            if df is None or df.empty:
-                raise ValueError(f"Cannot train {symbol} ({strategy_name}), no data available.")
+            if df is None or df.empty or 'atr' not in df.columns:
+                raise ValueError(f"Cannot train {symbol}, no data or ATR column available.")
 
-            # Align DF to canonical feature list to ensure consistent shape
             df_features = self._align_df_features(df)
-
-            scaler = MinMaxScaler(feature_range=(0, 1))
-            scaled_data = scaler.fit_transform(df_features.values)
-
-            sequence_length = STRATEGIES[symbol][strategy_name]['sequence_length']
-            X, y_pt, y_sig = [], [], []
-
-            # --- Create Labels for the new dual-output model ---
-            # FIXED: Use RAW percentage returns instead of scaled differences
-            raw_close = df_features.iloc[:, 3].values  # Raw close prices BEFORE scaling
-            future_close = pd.Series(raw_close).shift(-5).fillna(method='ffill').values
-            percent_return = (future_close - raw_close) / raw_close
             
-            # Use percentage-based thresholds appropriate for timeframe
-            timeframe = STRATEGIES[symbol][strategy_name]['timeframe']
-            if timeframe == '1h':
-                threshold = 0.008  # 0.8% for 1h
-            elif timeframe == '4h':
-                threshold = 0.015  # 1.5% for 4h  
-            elif timeframe == '5m':
-                threshold = 0.003  # 0.3% for 5m
-            else:
-                threshold = 0.005  # Default 0.5%
-
-            # Output 1: Price Targets [take_profit, stop_loss] - use scaled for consistency
-            price_targets = np.zeros((len(scaled_data), 2))
-            future_price_scaled = pd.Series(scaled_data[:, 3]).shift(-5).fillna(method='ffill')
-            price_targets[:, 0] = future_price_scaled
-            price_targets[:, 1] = scaled_data[:, 3] * 0.98
-
-            # Output 2: Trade Signal [Buy, Sell, Hold] - FIXED to use raw returns
-            trade_signal = np.zeros((len(scaled_data), 3))
-            trade_signal[percent_return > threshold, 0] = 1   # Buy
-            trade_signal[percent_return < -threshold, 1] = 1  # Sell  
-            trade_signal[np.abs(percent_return) <= threshold, 2] = 1  # Hold
+            # --- V3 LABELING: ALIGN AI TRAINING WITH STRATEGY EXECUTION ---
+            print("   - Generating strategy-aligned labels...")
             
+            # Get the actual TP/SL multipliers the strategy uses
+            # We use 'Trending' as the baseline for creating labels
+            strategy_rules = STRATEGIES[symbol][strategy_name].get('Trending', {})
+            tp_atr_mult = strategy_rules.get('tp_atr_multiplier', 2.0)
+            sl_atr_mult = strategy_rules.get('sl_atr_multiplier', 1.5)
+            
+            labels = []
+            future_window = 20 # How many future candles to check for an outcome
+
+            # Use numpy arrays for speed
+            highs = df_features['high'].values
+            lows = df_features['low'].values
+            closes = df_features['close'].values
+            atrs = df_features['atr'].values
+
+            for i in range(len(df_features) - future_window):
+                current_close = closes[i]
+                current_atr = atrs[i]
+
+                if current_atr == 0: # Cannot create a label if ATR is zero
+                    labels.append(0) # Hold
+                    continue
+
+                # Define targets for both long and short trades from this candle
+                long_target = current_close + (tp_atr_mult * current_atr)
+                long_stop = current_close - (sl_atr_mult * current_atr)
+                short_target = current_close - (tp_atr_mult * current_atr)
+                short_stop = current_close + (sl_atr_mult * current_atr)
+
+                # Look into the future to see what would have happened
+                future_highs = highs[i+1 : i+1+future_window]
+                future_lows = lows[i+1 : i+1+future_window]
+
+                long_outcome = _simulate_long_trade(future_highs, future_lows, long_target, long_stop)
+                short_outcome = _simulate_short_trade(future_highs, future_lows, short_target, short_stop)
+
+                # Determine the final label
+                if long_outcome == 1: # Long trade won
+                    labels.append(1) # Buy
+                elif short_outcome == 1: # Short trade won
+                    labels.append(-1) # Sell
+                else:
+                    labels.append(0) # Hold / No clear outcome
+
+            # --- END V3 LABELING ---
+
+            # Convert labels to one-hot encoding
+            trade_signal = np.zeros((len(df_features), 3))
+            for i, label in enumerate(labels):
+                if label == 1:
+                    trade_signal[i, 0] = 1 # Buy
+                elif label == -1:
+                    trade_signal[i, 1] = 1 # Sell
+                else:
+                    trade_signal[i, 2] = 1 # Hold
+            
+            # We lose 'future_window' rows at the end, so pad with 'Hold'
+            for i in range(len(df_features) - future_window, len(df_features)):
+                 trade_signal[i, 2] = 1
+
+
             # Print class distribution for debugging
             buy_count = np.sum(trade_signal[:, 0])
             sell_count = np.sum(trade_signal[:, 1])
@@ -214,16 +260,23 @@ class AIAnalyst:
             total = len(trade_signal)
             print(f"   - Class distribution: Buy={buy_count} ({buy_count/total*100:.1f}%), Sell={sell_count} ({sell_count/total*100:.1f}%), Hold={hold_count} ({hold_count/total*100:.1f}%)")
 
+            scaler = MinMaxScaler(feature_range=(0, 1))
+            scaled_data = scaler.fit_transform(df_features.values)
+            sequence_length = STRATEGIES[symbol][strategy_name]['sequence_length']
+            
+            X, y_sig = [], []
             for i in range(sequence_length, len(scaled_data)):
                 X.append(scaled_data[i - sequence_length:i])
-                y_pt.append(price_targets[i])
                 y_sig.append(trade_signal[i])
             
-            X, y_pt, y_sig = np.array(X), np.array(y_pt), np.array(y_sig)
+            X, y_sig = np.array(X), np.array(y_sig)
 
-            # Split data for main model training and for calibrator training
+            # We no longer need the price_targets output, but will keep the architecture for now
+            # Create dummy y_pt targets
+            y_pt = np.zeros((len(y_sig), 2))
+
             X_train, X_val, y_pt_train, y_pt_val, y_sig_train, y_sig_val = train_test_split(
-                X, y_pt, y_sig, test_size=0.2, random_state=42
+                X, y_pt, y_sig, test_size=0.2, random_state=42, stratify=y_sig
             )
             
             y_train = {'price_targets': y_pt_train, 'trade_signal': y_sig_train}
@@ -232,24 +285,23 @@ class AIAnalyst:
             model = self._create_advanced_model(symbol, strategy_name, (X_train.shape[1], X_train.shape[2]), n_outputs=y_sig_train.shape[1])
             es = EarlyStopping(monitor='val_loss', patience=TRAINING_CONFIG['early_stop_patience'], restore_best_weights=True)
             
-            # Use .h5 format to avoid Keras native format issues with ModelCheckpoint
             model_path = f'trained_models/{symbol}_{strategy_name}_model.h5'
             scaler_path = f'trained_models/{symbol}_{strategy_name}_scaler.joblib'
-            calibrator_path = f'trained_models/{symbol}_{strategy_name}_calibrator.joblib'
             
-            # Explicitly save in h5 format
             checkpoint = ModelCheckpoint(model_path, save_best_only=True, monitor='val_trade_signal_accuracy', mode='max', save_format='h5')
 
             model.fit(X_train, y_train, epochs=TRAINING_CONFIG['epochs'], batch_size=TRAINING_CONFIG['batch_size'], validation_data=(X_val, y_val), callbacks=[es, checkpoint], verbose=1)
 
-            # --- SAVE MODEL & SCALER ---
-            # No need to save the model again as ModelCheckpoint already saved the best version
             dump(scaler, scaler_path)
-            
             self.models[symbol][strategy_name] = model
             self.scalers[symbol][strategy_name] = scaler
             
             print(f"✅ Model and scaler for {symbol} ({strategy_name}) trained and saved in {time.time() - start_time:.1f}s.")
+        except Exception as e:
+            print(f"❌ Training process for {symbol} ({strategy_name}) failed: {e}")
+            import traceback
+            traceback.print_exc()
+            raise
         except Exception as e:
             print(f"❌ Training process for {symbol} ({strategy_name}) failed: {e}")
             import traceback
