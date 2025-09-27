@@ -287,21 +287,6 @@ class AIAnalyst:
             import traceback
             traceback.print_exc()
             raise
-        except Exception as e:
-            print(f"❌ Training process for {symbol} ({strategy_name}) failed: {e}")
-            import traceback
-            traceback.print_exc()
-            raise
-        except Exception as e:
-            print(f"❌ Training process for {symbol} ({strategy_name}) failed: {e}")
-            import traceback
-            traceback.print_exc()
-            raise
-        except Exception as e:
-            print(f"❌ Training process for {symbol} ({strategy_name}) failed: {e}")
-            import traceback
-            traceback.print_exc()
-            raise
 
 
     def predict(self, symbol, df, strategy_name='main'):
@@ -331,18 +316,15 @@ class AIAnalyst:
             # --- USE RAW MODEL OUTPUT (CALIBRATOR PERMANENTLY DISABLED) ---
             raw_probs = trade_signal_pred
 
-            # The predicted TP is the first element of the scaled price_targets output
-            predicted_tp_scaled = price_targets_pred[0]
+            # To inverse transform, we need the scaler that was used for the price_targets
+            # Since we don't save it, we can recreate it based on the last sequence of data
+            pt_scaler = MinMaxScaler(feature_range=(0, 1))
+            pt_scaler.fit(last_sequence_df[['high', 'low']].values) # Approximate with high/low
             
-            # To inverse transform, we need to create a dummy array with the same shape the scaler expects
-            dummy_row = np.zeros((1, len(df_aligned.columns)))
-            # Find the column index for 'close' to place our scaled value
-            close_col_index = df_aligned.columns.get_loc('close')
-            dummy_row[0, close_col_index] = predicted_tp_scaled
-            
-            # Inverse transform the dummy row and extract the unscaled TP
-            predicted_price = scaler.inverse_transform(dummy_row)[0, close_col_index]
-            
+            # Inverse transform the predicted price targets
+            predicted_targets_unscaled = pt_scaler.inverse_transform(price_targets_pred.reshape(1, -1))
+            predicted_price = predicted_targets_unscaled[0, 0]
+
             current_price = df['close'].iloc[-1].item()
             # --- UNIFIED LOGIC: Calculate pct_change based on the PREDICTED TAKE PROFIT ---
             pct_change = ((predicted_price - current_price) / current_price) * 100
