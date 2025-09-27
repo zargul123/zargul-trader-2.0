@@ -181,7 +181,7 @@ class AIAnalyst:
 
     def _train_model(self, symbol, strategy_name):
         start_time = time.time()
-        print(f"   - Starting training for {symbol} ({strategy_name}) with ADVANCED ATR-based labeling...")
+        print(f"   - Starting training for {symbol} ({strategy_name}) with UNIFIED ATR-based labeling...")
         try:
             df = self.data.get_training_data(symbol, STRATEGIES[symbol][strategy_name]['timeframe'])
             if df is None or df.empty or 'atr' not in df.columns:
@@ -189,74 +189,63 @@ class AIAnalyst:
 
             df_features = self._align_df_features(df)
             
-            # --- V3 LABELING: ALIGN AI TRAINING WITH STRATEGY EXECUTION ---
-            print("   - Generating strategy-aligned labels...")
+            # --- UNIFIED LABELING: ALIGN BOTH MODEL OUTPUTS WITH STRATEGY ---
+            print("   - Generating unified, strategy-aligned labels...")
             
-            # Get the actual TP/SL multipliers the strategy uses
-            # We use 'Trending' as the baseline for creating labels
             strategy_rules = STRATEGIES[symbol][strategy_name].get('Trending', {})
             tp_atr_mult = strategy_rules.get('tp_atr_multiplier', 2.0)
             sl_atr_mult = strategy_rules.get('sl_atr_multiplier', 1.5)
             
-            labels = []
-            future_window = 20 # How many future candles to check for an outcome
+            future_window = 20
 
-            # Use numpy arrays for speed
             highs = df_features['high'].values
             lows = df_features['low'].values
             closes = df_features['close'].values
             atrs = df_features['atr'].values
 
+            # Prepare arrays for labels
+            signal_labels = np.zeros(len(df_features))
+            price_target_labels = np.zeros((len(df_features), 2))
+
             for i in range(len(df_features) - future_window):
                 current_close = closes[i]
                 current_atr = atrs[i]
 
-                if current_atr == 0: # Cannot create a label if ATR is zero
-                    labels.append(0) # Hold
+                if current_atr == 0:
+                    signal_labels[i] = 0 # Hold
+                    price_target_labels[i, 0] = current_close # TP = current price
+                    price_target_labels[i, 1] = current_close # SL = current price
                     continue
 
-                # Define targets for both long and short trades from this candle
+                # --- Brain 1: Trade Signal (Long/Short/Hold) ---
                 long_target = current_close + (tp_atr_mult * current_atr)
                 long_stop = current_close - (sl_atr_mult * current_atr)
                 short_target = current_close - (tp_atr_mult * current_atr)
                 short_stop = current_close + (sl_atr_mult * current_atr)
 
-                # Look into the future to see what would have happened
                 future_highs = highs[i+1 : i+1+future_window]
                 future_lows = lows[i+1 : i+1+future_window]
 
                 long_outcome = _simulate_long_trade(future_highs, future_lows, long_target, long_stop)
                 short_outcome = _simulate_short_trade(future_highs, future_lows, short_target, short_stop)
 
-                # Determine the final label
-                if long_outcome == 1: # Long trade won
-                    labels.append(1) # Buy
-                elif short_outcome == 1: # Short trade won
-                    labels.append(-1) # Sell
+                if long_outcome == 1:
+                    signal_labels[i] = 1  # Buy
+                elif short_outcome == 1:
+                    signal_labels[i] = -1 # Sell
                 else:
-                    labels.append(0) # Hold / No clear outcome
+                    signal_labels[i] = 0  # Hold
+                
+                # --- Brain 2: Price Targets (TP/SL) ---
+                price_target_labels[i, 0] = long_target  # Target is the potential TP
+                price_target_labels[i, 1] = long_stop   # Other target is the potential SL
 
-            # --- END V3 LABELING ---
+            # Convert signal labels to one-hot encoding
+            trade_signal = tf.keras.utils.to_categorical(signal_labels, num_classes=3, dtype='int')
 
-            # Convert labels to one-hot encoding
-            trade_signal = np.zeros((len(df_features), 3))
-            for i, label in enumerate(labels):
-                if label == 1:
-                    trade_signal[i, 0] = 1 # Buy
-                elif label == -1:
-                    trade_signal[i, 1] = 1 # Sell
-                else:
-                    trade_signal[i, 2] = 1 # Hold
-            
-            # We lose 'future_window' rows at the end, so pad with 'Hold'
-            for i in range(len(df_features) - future_window, len(df_features)):
-                 trade_signal[i, 2] = 1
-
-
-            # Print class distribution for debugging
-            buy_count = np.sum(trade_signal[:, 0])
-            sell_count = np.sum(trade_signal[:, 1])
-            hold_count = np.sum(trade_signal[:, 2])
+            buy_count = np.sum(trade_signal[:, 1]) + np.sum(trade_signal[:,2])
+            sell_count = np.sum(trade_signal[:, 0])
+            hold_count = len(trade_signal) - buy_count - sell_count
             total = len(trade_signal)
             print(f"   - Class distribution: Buy={buy_count} ({buy_count/total*100:.1f}%), Sell={sell_count} ({sell_count/total*100:.1f}%), Hold={hold_count} ({hold_count/total*100:.1f}%)")
 
@@ -264,16 +253,18 @@ class AIAnalyst:
             scaled_data = scaler.fit_transform(df_features.values)
             sequence_length = STRATEGIES[symbol][strategy_name]['sequence_length']
             
-            X, y_sig = [], []
+            X, y_pt, y_sig = [], [], []
             for i in range(sequence_length, len(scaled_data)):
                 X.append(scaled_data[i - sequence_length:i])
                 y_sig.append(trade_signal[i])
-            
-            X, y_sig = np.array(X), np.array(y_sig)
+                # We need to scale the price targets as well for the model
+                # We create a temporary scaler for this specific purpose
+                temp_scaler = MinMaxScaler(feature_range=(0,1))
+                temp_scaler.fit(df_features[['close', 'atr']].iloc[i-sequence_length:i].values)
+                scaled_targets = temp_scaler.transform([[price_target_labels[i,0], price_target_labels[i,1]]])
+                y_pt.append(scaled_targets[0])
 
-            # We no longer need the price_targets output, but will keep the architecture for now
-            # Create dummy y_pt targets
-            y_pt = np.zeros((len(y_sig), 2))
+            X, y_pt, y_sig = np.array(X), np.array(y_pt), np.array(y_sig)
 
             X_train, X_val, y_pt_train, y_pt_val, y_sig_train, y_sig_val = train_test_split(
                 X, y_pt, y_sig, test_size=0.2, random_state=42, stratify=y_sig
@@ -297,6 +288,11 @@ class AIAnalyst:
             self.scalers[symbol][strategy_name] = scaler
             
             print(f"✅ Model and scaler for {symbol} ({strategy_name}) trained and saved in {time.time() - start_time:.1f}s.")
+        except Exception as e:
+            print(f"❌ Training process for {symbol} ({strategy_name}) failed: {e}")
+            import traceback
+            traceback.print_exc()
+            raise
         except Exception as e:
             print(f"❌ Training process for {symbol} ({strategy_name}) failed: {e}")
             import traceback
@@ -336,12 +332,20 @@ class AIAnalyst:
             # --- USE RAW MODEL OUTPUT (CALIBRATOR PERMANENTLY DISABLED) ---
             raw_probs = trade_signal_pred
 
-            # The predicted price is the first element of the price_targets output
-            dummy_row = np.zeros((1, last_sequence_df.shape[1]))
-            dummy_row[0, 3] = price_targets_pred[0] # Predicted take_profit level
-            predicted_price = scaler.inverse_transform(dummy_row)[0, 3]
+            # The predicted TP is the first element of the scaled price_targets output
+            predicted_tp_scaled = price_targets_pred[0]
+            
+            # To inverse transform, we need to create a dummy array with the same shape the scaler expects
+            dummy_row = np.zeros((1, len(df_aligned.columns)))
+            # Find the column index for 'close' to place our scaled value
+            close_col_index = df_aligned.columns.get_loc('close')
+            dummy_row[0, close_col_index] = predicted_tp_scaled
+            
+            # Inverse transform the dummy row and extract the unscaled TP
+            predicted_price = scaler.inverse_transform(dummy_row)[0, close_col_index]
             
             current_price = df['close'].iloc[-1].item()
+            # --- UNIFIED LOGIC: Calculate pct_change based on the PREDICTED TAKE PROFIT ---
             pct_change = ((predicted_price - current_price) / current_price) * 100
             
             # Determine direction from the class with the highest probability
