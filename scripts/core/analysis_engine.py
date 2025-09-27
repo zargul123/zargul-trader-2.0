@@ -189,13 +189,11 @@ class AIAnalyst:
 
             df_features = self._align_df_features(df)
             
-            # --- UNIFIED LABELING: ALIGN BOTH MODEL OUTPUTS WITH STRATEGY ---
             print("   - Generating unified, strategy-aligned labels...")
             
             strategy_rules = STRATEGIES[symbol][strategy_name].get('Trending', {})
             tp_atr_mult = strategy_rules.get('tp_atr_multiplier', 2.0)
             sl_atr_mult = strategy_rules.get('sl_atr_multiplier', 1.5)
-            
             future_window = 20
 
             highs = df_features['high'].values
@@ -203,7 +201,6 @@ class AIAnalyst:
             closes = df_features['close'].values
             atrs = df_features['atr'].values
 
-            # Prepare arrays for labels
             signal_labels = np.zeros(len(df_features))
             price_target_labels = np.zeros((len(df_features), 2))
 
@@ -213,56 +210,53 @@ class AIAnalyst:
 
                 if current_atr == 0:
                     signal_labels[i] = 0 # Hold
-                    price_target_labels[i, 0] = current_close # TP = current price
-                    price_target_labels[i, 1] = current_close # SL = current price
+                    price_target_labels[i, 0] = current_close
+                    price_target_labels[i, 1] = current_close
                     continue
 
-                # --- Brain 1: Trade Signal (Long/Short/Hold) ---
                 long_target = current_close + (tp_atr_mult * current_atr)
                 long_stop = current_close - (sl_atr_mult * current_atr)
-                short_target = current_close - (tp_atr_mult * current_atr)
-                short_stop = current_close + (sl_atr_mult * current_atr)
-
+                
                 future_highs = highs[i+1 : i+1+future_window]
                 future_lows = lows[i+1 : i+1+future_window]
 
                 long_outcome = _simulate_long_trade(future_highs, future_lows, long_target, long_stop)
-                short_outcome = _simulate_short_trade(future_highs, future_lows, short_target, short_stop)
-
+                
                 if long_outcome == 1:
                     signal_labels[i] = 1  # Buy
-                elif short_outcome == 1:
+                elif long_outcome == -1:
                     signal_labels[i] = -1 # Sell
                 else:
                     signal_labels[i] = 0  # Hold
                 
-                # --- Brain 2: Price Targets (TP/SL) ---
-                price_target_labels[i, 0] = long_target  # Target is the potential TP
-                price_target_labels[i, 1] = long_stop   # Other target is the potential SL
+                price_target_labels[i, 0] = long_target
+                price_target_labels[i, 1] = long_stop
 
-            # Convert signal labels to one-hot encoding
-            trade_signal = tf.keras.utils.to_categorical(signal_labels, num_classes=3, dtype='int')
+            # Correctly one-hot encode the signal labels
+            trade_signal = np.zeros((len(signal_labels), 3))
+            trade_signal[np.where(signal_labels == 1), 0] = 1
+            trade_signal[np.where(signal_labels == -1), 1] = 1
+            trade_signal[np.where(signal_labels == 0), 2] = 1
 
-            buy_count = np.sum(trade_signal[:, 1]) + np.sum(trade_signal[:,2])
-            sell_count = np.sum(trade_signal[:, 0])
-            hold_count = len(trade_signal) - buy_count - sell_count
+            buy_count = np.sum(trade_signal[:, 0])
+            sell_count = np.sum(trade_signal[:, 1])
+            hold_count = np.sum(trade_signal[:, 2])
             total = len(trade_signal)
             print(f"   - Class distribution: Buy={buy_count} ({buy_count/total*100:.1f}%), Sell={sell_count} ({sell_count/total*100:.1f}%), Hold={hold_count} ({hold_count/total*100:.1f}%)")
 
             scaler = MinMaxScaler(feature_range=(0, 1))
             scaled_data = scaler.fit_transform(df_features.values)
+            
+            pt_scaler = MinMaxScaler(feature_range=(0, 1))
+            scaled_price_targets = pt_scaler.fit_transform(price_target_labels)
+
             sequence_length = STRATEGIES[symbol][strategy_name]['sequence_length']
             
             X, y_pt, y_sig = [], [], []
             for i in range(sequence_length, len(scaled_data)):
                 X.append(scaled_data[i - sequence_length:i])
                 y_sig.append(trade_signal[i])
-                # We need to scale the price targets as well for the model
-                # We create a temporary scaler for this specific purpose
-                temp_scaler = MinMaxScaler(feature_range=(0,1))
-                temp_scaler.fit(df_features[['close', 'atr']].iloc[i-sequence_length:i].values)
-                scaled_targets = temp_scaler.transform([[price_target_labels[i,0], price_target_labels[i,1]]])
-                y_pt.append(scaled_targets[0])
+                y_pt.append(scaled_price_targets[i])
 
             X, y_pt, y_sig = np.array(X), np.array(y_pt), np.array(y_sig)
 
@@ -288,6 +282,11 @@ class AIAnalyst:
             self.scalers[symbol][strategy_name] = scaler
             
             print(f"✅ Model and scaler for {symbol} ({strategy_name}) trained and saved in {time.time() - start_time:.1f}s.")
+        except Exception as e:
+            print(f"❌ Training process for {symbol} ({strategy_name}) failed: {e}")
+            import traceback
+            traceback.print_exc()
+            raise
         except Exception as e:
             print(f"❌ Training process for {symbol} ({strategy_name}) failed: {e}")
             import traceback
