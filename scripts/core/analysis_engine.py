@@ -316,14 +316,20 @@ class AIAnalyst:
             # --- USE RAW MODEL OUTPUT (CALIBRATOR PERMANENTLY DISABLED) ---
             raw_probs = trade_signal_pred
 
-            # To inverse transform, we need the scaler that was used for the price_targets
-            # Since we don't save it, we can recreate it based on the last sequence of data
-            pt_scaler = MinMaxScaler(feature_range=(0, 1))
-            pt_scaler.fit(last_sequence_df[['high', 'low']].values) # Approximate with high/low
+            # To inverse transform, we need to create a dummy array of the correct shape
+            dummy_row = np.zeros((1, scaled_data.shape[1]))
+            # Place the scaled TP and SL predictions into the 'high' and 'low' columns
+            # as they are the most likely to contain the min/max range of the scaler.
+            high_col_index = df_aligned.columns.get_loc('high')
+            low_col_index = df_aligned.columns.get_loc('low')
+            dummy_row[0, high_col_index] = price_targets_pred[0] # Predicted TP
+            dummy_row[0, low_col_index] = price_targets_pred[1]  # Predicted SL
             
-            # Inverse transform the predicted price targets
-            predicted_targets_unscaled = pt_scaler.inverse_transform(price_targets_pred.reshape(1, -1))
-            predicted_price = predicted_targets_unscaled[0, 0]
+            # Inverse transform the entire row using the main data scaler
+            unscaled_row = scaler.inverse_transform(dummy_row)
+            
+            # Extract the unscaled TP price
+            predicted_price = unscaled_row[0, high_col_index]
 
             current_price = df['close'].iloc[-1].item()
             # --- UNIFIED LOGIC: Calculate pct_change based on the PREDICTED TAKE PROFIT ---
