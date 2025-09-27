@@ -263,7 +263,6 @@ class AIAnalyst:
         try:
             model = self.models[symbol][strategy_name]
             scaler = self.scalers[symbol][strategy_name]
-            calibrator = self.calibrators[symbol][strategy_name]
             
             sequence_length = STRATEGIES[symbol][strategy_name]['sequence_length']
 
