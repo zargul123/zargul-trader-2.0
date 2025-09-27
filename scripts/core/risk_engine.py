@@ -158,9 +158,10 @@ class RiskManager:
         if atr_multiplier and atr > 0 and current_price > 0:
             required_move_abs = atr * atr_multiplier
             predicted_move_abs = abs(current_price * (pct_change / 100))
-            
+
             if debug:
-                print(f"   - ℹ️  ATR CHECK | Required Move: ${required_move_abs:.4f} | Predicted Move: ${predicted_move_abs:.4f}")
+                result = "PASS" if predicted_move_abs >= required_move_abs else "FAIL"
+                print(f"   - 🚦 ATR THRESHOLD | Predicted: ${predicted_move_abs:.4f} | Required: ${required_move_abs:.4f} | Result: {result}")
 
             if predicted_move_abs < required_move_abs:
                 if debug: print(f"   - ❌ REJECT: Predicted move does not meet ATR-based threshold for '{strategy_name}'.")
