@@ -37,7 +37,6 @@ class AIAnalyst:
     def __init__(self, train_all=False, symbol=None, strategy_type=None):
         self.models = {s: {} for s in ASSETS}
         self.scalers = {s: {} for s in ASSETS}
-        self.calibrators = {s: {} for s in ASSETS}
         self.prediction_functions = {s: {} for s in ASSETS}
         self.train_all = train_all
         self.data = DataMaster()
@@ -104,20 +103,18 @@ class AIAnalyst:
             for strategy_name in strategies_to_load:
                 model_path = f'trained_models/{symbol}_{strategy_name}_model.h5'
                 scaler_path = f'trained_models/{symbol}_{strategy_name}_scaler.joblib'
-                calibrator_path = f'trained_models/{symbol}_{strategy_name}_calibrator.joblib'
 
-                if self.train_all or not all(os.path.exists(p) for p in [model_path, scaler_path, calibrator_path]):
-                    print(f"🔧 No pre-trained model/scaler/calibrator for {symbol} ({strategy_name}) or retraining requested.")
+                if self.train_all or not all(os.path.exists(p) for p in [model_path, scaler_path]):
+                    print(f"🔧 No pre-trained model/scaler for {symbol} ({strategy_name}) or retraining requested.")
                     try:
                         self._train_model(symbol, strategy_name)
                     except Exception as e:
                         print(f"❌ Training failed for {symbol} ({strategy_name}): {e}")
                 else:
-                    print(f"🧠 Loading pre-trained model, scaler, and calibrator for {symbol} ({strategy_name})...")
+                    print(f"🧠 Loading pre-trained model and scaler for {symbol} ({strategy_name})...")
                     try:
                         self.models[symbol][strategy_name] = load_model(model_path)
                         self.scalers[symbol][strategy_name] = load(scaler_path)
-                        self.calibrators[symbol][strategy_name] = load(calibrator_path)
                         print(f"   - ✅ Components for {symbol} ({strategy_name}) loaded successfully.")
                     except Exception as e:
                         print(f"❌ Failed to load components for {symbol} ({strategy_name}): {e}")
@@ -251,7 +248,6 @@ class AIAnalyst:
             
             self.models[symbol][strategy_name] = model
             self.scalers[symbol][strategy_name] = scaler
-            self.calibrators[symbol][strategy_name] = None # Calibrator is now permanently disabled
             
             print(f"✅ Model and scaler for {symbol} ({strategy_name}) trained and saved in {time.time() - start_time:.1f}s.")
         except Exception as e:
@@ -267,6 +263,7 @@ class AIAnalyst:
         try:
             model = self.models[symbol][strategy_name]
             scaler = self.scalers[symbol][strategy_name]
+            calibrator = self.calibrators[symbol][strategy_name]
             
             sequence_length = STRATEGIES[symbol][strategy_name]['sequence_length']
 
