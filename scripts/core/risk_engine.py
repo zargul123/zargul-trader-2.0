@@ -146,12 +146,12 @@ class RiskManager:
 
         # 1. Confidence Check
         if confidence < rules['min_confidence']:
-            if debug: print(f"   - RiskManager: Confidence ({confidence:.2f}) is below regime threshold ({rules['min_confidence']}).")
+            if debug: print(f"   - ❌ REJECT: Confidence ({confidence:.2f}) is below regime threshold ({rules['min_confidence']}).")
             return False
 
         # 2. Direction Check
         if direction == 'hold':
-            if debug: print("   - RiskManager: Signal is 'hold'.")
+            if debug: print("   - ❌ REJECT: Signal is 'hold'.")
             return False
 
         # 3. Dynamic ATR Threshold Check (Primary Logic)
@@ -159,22 +159,23 @@ class RiskManager:
             required_move_abs = atr * atr_multiplier
             predicted_move_abs = abs(current_price * (pct_change / 100))
             
-            if debug: print(f"   - RiskManager (ATR Check): Required Move: ${required_move_abs:.4f}, Predicted Move: ${predicted_move_abs:.4f}")
+            if debug:
+                print(f"   - ℹ️  ATR CHECK | Required Move: ${required_move_abs:.4f} | Predicted Move: ${predicted_move_abs:.4f}")
 
             if predicted_move_abs < required_move_abs:
-                if debug: print(f"   - RiskManager: Predicted move does not meet ATR-based threshold for '{strategy_name}'.")
+                if debug: print(f"   - ❌ REJECT: Predicted move does not meet ATR-based threshold for '{strategy_name}'.")
                 return False
         
         # 4. Static Percentage Threshold Check (Fallback Logic)
         else:
-            if debug: print("   - RiskManager (Static Check): Using fallback percentage thresholds.")
+            if debug: print("   - ℹ️  STATIC CHECK | Using fallback percentage thresholds.")
             if direction == 'long' and pct_change < rules['long_threshold']:
-                if debug: print(f"   - RiskManager: Predicted change ({pct_change:.2f}%) is below long threshold ({rules['long_threshold']}%).")
+                if debug: print(f"   - ❌ REJECT: Predicted change ({pct_change:.2f}%) is below long threshold ({rules['long_threshold']}%).")
                 return False
             if direction == 'short' and pct_change > -rules['short_threshold']:
-                if debug: print(f"   - RiskManager: Predicted change ({pct_change:.2f}%) is above short threshold ({-rules['short_threshold']}%).")
+                if debug: print(f"   - ❌ REJECT: Predicted change ({pct_change:.2f}%) is above short threshold ({-rules['short_threshold']}%).")
                 return False
             
         # If all checks pass
-        if debug: print(f"   - RiskManager: Signal for {direction.upper()} {prediction['asset']} passed all checks.")
+        if debug: print(f"   - ✅ PASS: Signal for {direction.upper()} {prediction['asset']} passed all checks.")
         return True
