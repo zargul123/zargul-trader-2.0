@@ -92,23 +92,13 @@ def objective(trial, asset, strategy_name, regime, regime_df, backtest_engine):
         # --- 2. Define the search space and apply it to the correct regime ---
         # These parameters will be optimized ONLY for the specified regime
 
-        # --- TEMPORARY TIGHT SEARCH FOR BTC-USD MAIN TRENDING ---
-        # This is a focused search around known profitable zones for the new model.
-        if asset == 'BTC-USD' and strategy_name == 'main' and regime == 'Trending':
-            regime_params = {
-                'min_confidence': trial.suggest_float('min_confidence', 0.45, 0.70, step=0.01),
-                'atr_threshold_multiplier': trial.suggest_float('atr_threshold_multiplier', 0.8, 2.0, step=0.05),
-                'tp_atr_multiplier': trial.suggest_float('tp_atr_multiplier', 2.5, 4.5, step=0.1),
-                'sl_atr_multiplier': trial.suggest_float('sl_atr_multiplier', 1.2, 2.2, step=0.05)
-            }
-        else:
-            # Original, wider search space for all other strategies and assets
-            regime_params = {
-                'min_confidence': trial.suggest_float('min_confidence', 0.45, 0.85, step=0.01),
-                'atr_threshold_multiplier': trial.suggest_float('atr_threshold_multiplier', 0.5, 2.5, step=0.05),
-                'tp_atr_multiplier': trial.suggest_float('tp_atr_multiplier', 0.8, 4.0, step=0.1),
-                'sl_atr_multiplier': trial.suggest_float('sl_atr_multiplier', 0.5, 3.0, step=0.05)
-            }
+        # This is the "Smartly-Tightened" search space based on backtest log analysis.
+        regime_params = {
+            'min_confidence': trial.suggest_float('min_confidence', 0.75, 0.95, step=0.01),
+            'atr_threshold_multiplier': trial.suggest_float('atr_threshold_multiplier', 1.0, 3.5, step=0.1),
+            'tp_atr_multiplier': trial.suggest_float('tp_atr_multiplier', 2.5, 4.5, step=0.1),
+            'sl_atr_multiplier': trial.suggest_float('sl_atr_multiplier', 1.2, 2.2, step=0.05)
+        }
         
         # Update the temporary config with the trial parameters for the target regime
         temp_strategy_config[regime].update(regime_params)
@@ -117,7 +107,7 @@ def objective(trial, asset, strategy_name, regime, regime_df, backtest_engine):
         results = backtest_engine.run_backtest(
             symbol=asset,
             strategy_type=strategy_name,
-            days=90, # Use a fixed, recent 90-day window for efficient optimization
+            days=365, # Use a fixed, recent 365-day window for robust optimization
             data_df=None, # Pass None to use the live data fetching for the specified window
             temp_strategy_config=temp_strategy_config,
             temp_risk_config=None
