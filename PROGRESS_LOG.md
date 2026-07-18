@@ -71,3 +71,21 @@ Saved to optimized_strategies.json + BTC-USD_main_Trending.db (full study).
 - Next diagnostic: raw-signal exam (filters off) on the same unseen window to test whether the MODEL itself has any out-of-sample edge, independent of strategy params.
 
 This counts as honest attempt #1 of the 3 agreed before shelving.
+
+## 2026-07-19 — Phase 4b: Raw-signal exam on unseen window — ALSO NEGATIVE
+
+**Command:** `raw_backtest.py --asset BTC-USD --strategy main --confidence 0.50 --days 90` (exam model, filters off)
+**Window:** 2,160 unseen candles (2026-04-19 → 2026-07-18)
+
+| Metric | Value |
+|---|---|
+| Trades | 301 |
+| Win rate | 43.52% |
+| Sharpe | **-6.06** |
+| Profit factor | 0.49 |
+
+**Verdict (per pre-agreed table, Sharpe < 0):** the MODEL itself is the memorizer — its out-of-sample signal carries no edge. Note: 43.5% win rate matches the ~42.9% a pure coin-flip signal would produce against the asymmetric TP(2.8×ATR)/SL(2.1×ATR) barriers — out-of-sample predictions are statistically indistinguishable from noise.
+
+**Root-cause hypothesis for attempt 2:** training-time validation is a random split over heavily overlapping sequences → leakage → val acc 80.7% was fiction. The model was never actually forced to generalize, and we had no honest signal during training to notice.
+
+**Attempt 2 direction (deep door):** (1) chronological train/val split so training metrics tell the truth; (2) anti-memorization measures (stronger regularization / simpler capacity / feature pruning); (3) fast honest loop: 11-min bake + 3-min raw hold-out exam as the compass.
