@@ -21,3 +21,22 @@ Running record of every training run, backtest, and milestone.
 - Saved: trained_models/BTC-USD_main_model.h5 (999 KB) + scaler. No calibrator (removed by design, Sep 27 fix)
 
 **Next:** Phase 2 — raw signal backtest (`raw_backtest.py --asset BTC-USD --strategy main --confidence 0.50`)
+
+## 2026-07-18 — Phase 2: Raw signal backtest (PASSED)
+
+**Command:** `raw_backtest.py --asset BTC-USD --strategy main --confidence 0.50`
+**Window:** 5,000 1h candles, 2025-12-22 → 2026-07-18 (risk filters disabled)
+
+| Metric | Value |
+|---|---|
+| Total trades | 899 |
+| Win rate | 67.52% |
+| Sharpe ratio | **4.30** |
+| Max drawdown | 3% |
+| Profit factor | 1.71 |
+| Avg win / loss | +0.86% / -1.05% |
+
+**Verdict:** Fresh model produces a strongly positive raw signal. "0 trades" and calibrator-blocker issues confirmed resolved.
+**Caveat (recorded honestly):** window overlaps training data (in-sample) — results are optimistic by construction. True out-of-sample validation deferred to Phase 4 hold-out test + paper trading.
+
+**Next:** Phase 3 — regime-specific optimization (Trending first), tightened search space per commit 0304127.
