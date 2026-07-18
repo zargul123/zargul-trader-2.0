@@ -1,0 +1,13 @@
+{
+  "BTC-USD": {
+    "main": {
+      "Trending": {
+        "min_confidence": 0.75,
+        "atr_threshold_multiplier": 2.7,
+        "tp_atr_multiplier": 2.8,
+        "sl_atr_multiplier": 2.1,
+        "score": 3.922
+      }
+    }
+  }
+}

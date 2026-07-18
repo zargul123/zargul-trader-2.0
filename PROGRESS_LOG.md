@@ -40,3 +40,20 @@ Running record of every training run, backtest, and milestone.
 **Caveat (recorded honestly):** window overlaps training data (in-sample) — results are optimistic by construction. True out-of-sample validation deferred to Phase 4 hold-out test + paper trading.
 
 **Next:** Phase 3 — regime-specific optimization (Trending first), tightened search space per commit 0304127.
+
+## 2026-07-19 — Phase 3: Trending-regime optimization (COMPLETE)
+
+**Command:** `optimize_strategy.py --asset BTC-USD --strategy main --regime Trending --trials 100`
+**Journey:** 100 trials over 2 sessions (2 system crashes survived via the Optuna sqlite save-game; final 3 trials lost to a brief internet outage — harmless). Memory-exhaustion root cause of the crashes fixed mid-run (pandas_ta cores=0, commit ccc511d).
+
+**Champion (trial 57), score 3.922 (0.7×Sharpe + 0.3×ProfitFactor):**
+| Parameter | Old config | Optimized |
+|---|---|---|
+| min_confidence | 0.60 | **0.75** |
+| atr_threshold_multiplier | 1.5 | **2.7** |
+| tp_atr_multiplier | 2.0 | **2.8** |
+| sl_atr_multiplier | 1.5 | **2.1** |
+
+Saved to optimized_strategies.json + BTC-USD_main_Trending.db (full study).
+**Note:** effective backtest window was ~5,000 candles (~7 months) due to the single-request cap in the backtest data path — pagination upgrade for backtests planned before Phase 4.
+**Next:** lock champion into config.py (pending user approval) → git tag → Phase 4 hold-out validation.
