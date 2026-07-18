@@ -154,6 +154,11 @@ class DataMaster:
             ]
         )
         
+        # Compute indicators in-process. The default multiprocessing Pool
+        # spawns workers that each re-import the full TF/sklearn stack on
+        # Windows, exhausting RAM ("paging file is too small") and crashing
+        # trials. Single-core is faster here anyway for ~5k-row frames.
+        df.ta.cores = 0
         df.ta.strategy(custom_strategy)
 
         # --- Rename columns to match the old format BEFORE calculating elite features ---
