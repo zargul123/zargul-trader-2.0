@@ -57,19 +57,30 @@ class DataMaster:
             base_params.update(params)
         
         print(f"🔍 TwelveData API Request: {mapped_symbol} ({timeframe})")
-        
-        try:
-            response = self.session.get(f"{TWELVEDATA_CONFIG['base_url']}/time_series", params=base_params, timeout=TWELVEDATA_CONFIG['timeout'])
-            response.raise_for_status()
-            data = response.json()
-            return data
-            
-        except requests.exceptions.RequestException as e:
-            print(f"⚠️ TwelveData request failed for {symbol}: {e}")
-            return None
-        except json.JSONDecodeError:
-            print(f"⚠️ TwelveData JSON decode error for {symbol}")
-            return None
+
+        # Free tier allows 8 requests/minute. On a 429 rate-limit response,
+        # wait for the window to reset and retry instead of giving up —
+        # giving up silently truncates training data.
+        for attempt in range(TWELVEDATA_CONFIG.get('max_retries', 3) + 1):
+            try:
+                response = self.session.get(f"{TWELVEDATA_CONFIG['base_url']}/time_series", params=base_params, timeout=TWELVEDATA_CONFIG['timeout'])
+                if response.status_code == 429:
+                    wait_s = 65
+                    print(f"⏳ Rate limit (429) for {symbol}. Waiting {wait_s}s, then retry {attempt + 1}/{TWELVEDATA_CONFIG.get('max_retries', 3)}...")
+                    time.sleep(wait_s)
+                    continue
+                response.raise_for_status()
+                return response.json()
+
+            except requests.exceptions.RequestException as e:
+                print(f"⚠️ TwelveData request failed for {symbol}: {e}")
+                return None
+            except json.JSONDecodeError:
+                print(f"⚠️ TwelveData JSON decode error for {symbol}")
+                return None
+
+        print(f"⚠️ TwelveData rate limit persisted after retries for {symbol}.")
+        return None
 
     def _parse_twelvedata_response(self, data, symbol):
         if not data or 'values' not in data:
@@ -239,7 +250,7 @@ class DataMaster:
                 break
             
             end_date = oldest_date - timedelta(seconds=1) # Set end_date for the next older chunk
-            time.sleep(1) # Be respectful of API rate limits
+            time.sleep(8) # Free tier: 8 requests/minute — pace chunks ~8s apart
 
         if not all_dfs:
             print(f"❌ CRITICAL: Could not download any training data for {symbol}.")
