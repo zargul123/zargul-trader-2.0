@@ -228,13 +228,23 @@ class DataMaster:
         if days is None:
             days = TRAINING_CONFIG['training_days']
 
+        # Optional hold-out cutoff for out-of-sample validation: when the
+        # ZARGUL_TRAIN_CUTOFF env var is set (e.g. "2026-04-01"), training
+        # data ends at that date instead of now, so later candles stay
+        # unseen. Absent the env var, behavior is unchanged.
+        cutoff = None
+        cutoff_str = os.environ.get('ZARGUL_TRAIN_CUTOFF')
+        if cutoff_str:
+            cutoff = datetime.strptime(cutoff_str, '%Y-%m-%d')
+            print(f"✂️ HOLD-OUT MODE: training data cut off at {cutoff.date()}.")
+
         print(f"\n" + "="*60)
         print(f"🧠 Acquiring FULL training data for {symbol} ({days} days)...")
         print("="*60)
 
         all_dfs = []
-        end_date = None
-        target_start_date = datetime.now() - timedelta(days=days)
+        end_date = cutoff
+        target_start_date = (cutoff or datetime.now()) - timedelta(days=days)
 
         while True:
             params = {'end_date': end_date.strftime('%Y-%m-%d %H:%M:%S')} if end_date else {}
@@ -284,6 +294,8 @@ class DataMaster:
                 full_df[f'lc_{metric}'] = 0
 
         # Trim to the exact number of days required
+        if cutoff is not None:
+            full_df = full_df[full_df.index <= cutoff]
         final_df = full_df.last(f'{days}D')
         print(f"✅ Final training dataset ready: {len(final_df)} candles from {final_df.index[0].date()} to {final_df.index[-1].date()}")
         return final_df

@@ -42,8 +42,14 @@ class BacktestEngine:
             records_per_day = 1 # Default for daily
             
         limit = int(days * records_per_day)
-        
-        df = self.data.get_data(symbol, timeframe, limit=limit)
+
+        if limit > 5000:
+            # A single TwelveData request caps at 5,000 candles, silently
+            # shrinking long windows (e.g. "365 days" of 1h -> ~208 days).
+            # Use the paginated training downloader for anything larger.
+            df = self.data.get_training_data(symbol, timeframe, days=days)
+        else:
+            df = self.data.get_data(symbol, timeframe, limit=limit)
         
         if df is None or df.empty:
             print(f"⚠️ Could not load data for {symbol}.")
