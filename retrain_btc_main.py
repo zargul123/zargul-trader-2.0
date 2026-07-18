@@ -2,6 +2,9 @@ import sys
 import os
 import glob
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # Add project root to path to allow script imports
 sys.path.insert(0, os.getcwd())
 
