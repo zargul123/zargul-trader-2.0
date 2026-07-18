@@ -15,12 +15,14 @@ STRATEGIES = {
             'sequence_length': 20,
             'invert_signal': False,
             "Trending": {
-                'atr_threshold_multiplier': 1.5,
+                # Optimized 2026-07-19: Optuna trial 57/100, score 3.922
+                # (full study: BTC-USD_main_Trending.db / optimized_strategies.json)
+                'atr_threshold_multiplier': 2.7,
                 'long_threshold': 2.5,
                 'short_threshold': 2.5,
-                'min_confidence': 0.60,
-                'sl_atr_multiplier': 1.5,
-                'tp_atr_multiplier': 2.0,
+                'min_confidence': 0.75,
+                'sl_atr_multiplier': 2.1,
+                'tp_atr_multiplier': 2.8,
             },
             "Ranging": {
                 'atr_threshold_multiplier': 1.0,
