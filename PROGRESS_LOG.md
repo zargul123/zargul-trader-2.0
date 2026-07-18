@@ -57,3 +57,17 @@ Running record of every training run, backtest, and milestone.
 Saved to optimized_strategies.json + BTC-USD_main_Trending.db (full study).
 **Note:** effective backtest window was ~5,000 candles (~7 months) due to the single-request cap in the backtest data path — pagination upgrade for backtests planned before Phase 4.
 **Next:** lock champion into config.py (pending user approval) → git tag → Phase 4 hold-out validation.
+
+## 2026-07-19 — Phase 4: HOLD-OUT EXAM — FAILED (attempt 1 of 3)
+
+**Setup:** model retrained with ZARGUL_TRAIN_CUTOFF=2026-04-01 (textbook: Apr 2023 → Apr 1 2026, 26,277 candles, 96 epochs, val acc 80.7%). Exam: simple_backtest, locked champion params, 2,160 unseen candles (2026-04-19 → 2026-07-18).
+
+**Result:** 170 trades, win rate 43.53%, **Sharpe -5.77**, profit factor 0.50, max DD 2%.
+**Verdict per pre-agreed table (<0):** curve-fit confirmed for this configuration. In-sample scores (raw 4.30, optimized 3.922) did not survive unseen data.
+
+**Notes for diagnosis:**
+- Confound: champion params were tuned on the FULL-history model; exam used a different bake ("new lock, old key"). Model-vs-params contribution not yet separated.
+- Val accuracy 80.7% during training vs 43.5% real win rate suggests the random (non-chronological) validation split leaks overlapping sequences — training metrics are not trustworthy generalization signals.
+- Next diagnostic: raw-signal exam (filters off) on the same unseen window to test whether the MODEL itself has any out-of-sample edge, independent of strategy params.
+
+This counts as honest attempt #1 of the 3 agreed before shelving.
