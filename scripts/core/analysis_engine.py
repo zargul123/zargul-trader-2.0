@@ -6,7 +6,11 @@ import pandas as pd
 import tensorflow as tf
 from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import LSTM, Dense, Dropout, Conv1D, Bidirectional
-from tensorflow.keras.optimizers import AdamW
+try:
+    from tensorflow.keras.optimizers import AdamW
+except ImportError:
+    # TensorFlow 2.10 (DirectML build for AMD GPUs) ships AdamW under .experimental
+    from tensorflow.keras.optimizers.experimental import AdamW
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.linear_model import LogisticRegression
