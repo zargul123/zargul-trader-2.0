@@ -2,6 +2,10 @@ import os
 import sys
 import json
 import argparse
+
+from dotenv import load_dotenv
+load_dotenv()
+
 import optuna
 import pandas as pd
 import numpy as np
