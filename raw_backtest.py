@@ -13,7 +13,7 @@ sys.path.insert(0, os.getcwd())
 from scripts.backtest.backtest_engine import BacktestEngine
 from scripts.config import ASSETS, STRATEGIES
 
-def run_raw_backtest(asset, strategy, confidence_override):
+def run_raw_backtest(asset, strategy, confidence_override, days=1095):
     """
     Runs a backtest that overrides ALL risk parameters to test the raw
     AI signal without interference from the risk engine's thresholds.
@@ -49,7 +49,7 @@ def run_raw_backtest(asset, strategy, confidence_override):
         results = engine.run_backtest(
             symbol=asset,
             strategy_type=strategy,
-            days=1095, # Use 3 years of data for a robust test
+            days=days, # Default 1095 (3 years); pass --days 90 to test only a recent hold-out window
             temp_strategy_config=temp_config
         )
 
@@ -81,6 +81,7 @@ if __name__ == "__main__":
     parser.add_argument('--asset', type=str, required=True, choices=ASSETS, help="Asset to test")
     parser.add_argument('--strategy', type=str, required=True, choices=strategy_choices, help="Strategy to test")
     parser.add_argument('--confidence', type=float, required=True, help="Confidence threshold to override (e.g., 0.40)")
+    parser.add_argument('--days', type=int, default=1095, help="Backtest window in days (default 1095)")
     args = parser.parse_args()
 
-    run_raw_backtest(args.asset, args.strategy, args.confidence)
+    run_raw_backtest(args.asset, args.strategy, args.confidence, args.days)
