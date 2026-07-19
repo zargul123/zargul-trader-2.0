@@ -126,3 +126,20 @@ This counts as honest attempt #1 of the 3 agreed before shelving.
 
 **Test:** tp 2.8→4.0, sl 2.1→2.5, same honest model, hidden window. Result: 190 trades, win 46.32%, Sharpe **-3.54** (vs -3.17 baseline), PF 0.64. Avg win rose (+0.82) as theorized but not enough; wider stop raised avg loss (-1.11). Conclusion: the 1h edge cannot pay for itself at any exit geometry — timeframe escalation confirmed as the right move. Config reverted to 2.8/2.1 (git revert of f7c8775).
 **Decision per pre-agreed gate:** GO Path A — 4h btc-swing with honest anti-memorization brain.
+
+## 2026-07-19 — PATH A: 4h btc-swing HOLD-OUT EXAM — **PASSED** 🟢 (first honest positive)
+
+**Setup:** btc-swing (4h, seq 90) retrained with honest brain (32u/0.45 drop, commit 8d20d06), cutoff 2026-04-01. Raw exam on hidden window (540 4h candles, ~Apr 20 → Jul 19), confidence 0.50.
+
+| Metric | Value |
+|---|---|
+| Trades | 42 |
+| Win rate | **61.90%** |
+| Sharpe | **+3.53** |
+| Profit factor | 1.47 |
+| Avg win / loss | +2.11% / -2.33% |
+| Max drawdown | 4% |
+
+**Why it worked where 1h failed:** targets ~2%+ dwarf the ~0.25% round-trip cost; slower patterns generalize; honest training prevented memorization. Per pre-agreed verdict table (≥2.0): exceptional → proceed toward paper trading.
+
+**Honest caveats:** n=42 trades — wide error bars; single 90-day window/season. Before locking: confirmation exam on a DIFFERENT hidden quarter (cutoff 2026-01-01, exam Jan–Mar) to rule out luck-of-the-quarter.
