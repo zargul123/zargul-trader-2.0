@@ -121,3 +121,8 @@ This counts as honest attempt #1 of the 3 agreed before shelving.
 → The 1h timeframe with current features cannot clear the cost hurdle.
 
 **Next (per agreed escalation): 4h timeframe** — ATR barriers ~2-3× larger, so fixed costs shrink from ~30% of the target to ~10%; user's own experience ("swing was giving good results") points the same way.
+
+## 2026-07-19 — EXPERIMENT B (wider 1h exits): FAILED, reverted
+
+**Test:** tp 2.8→4.0, sl 2.1→2.5, same honest model, hidden window. Result: 190 trades, win 46.32%, Sharpe **-3.54** (vs -3.17 baseline), PF 0.64. Avg win rose (+0.82) as theorized but not enough; wider stop raised avg loss (-1.11). Conclusion: the 1h edge cannot pay for itself at any exit geometry — timeframe escalation confirmed as the right move. Config reverted to 2.8/2.1 (git revert of f7c8775).
+**Decision per pre-agreed gate:** GO Path A — 4h btc-swing with honest anti-memorization brain.
