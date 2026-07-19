@@ -298,11 +298,15 @@ MODEL_HYPERPARAMS = {
             'units_layer_2': 248,
             'dropout_layer_2': 0.4932229889671592
         },
-        'btc-swing': { # Placeholder: Using main's params as a default
+        'btc-swing': {
+            # Path A (2026-07-19): honest anti-memorization brain, same
+            # rationale as main (32 units cannot store ~6.5k 4h sequences;
+            # 0.45 dropout forces robust features). Old 251-unit values came
+            # from the leaky optimize_model study.
             'n_layers': 1,
-            'learning_rate': 0.009886643874520377,
-            'units_layer_0': 251,
-            'dropout_layer_0': 0.35025264979998394
+            'learning_rate': 0.001394224585333133,
+            'units_layer_0': 32,
+            'dropout_layer_0': 0.45
         }
     },
     'ETH-USD': {

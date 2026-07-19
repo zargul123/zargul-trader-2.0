@@ -1,6 +1,7 @@
 import sys
 import os
 import glob
+import argparse
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -10,16 +11,20 @@ sys.path.insert(0, os.getcwd())
 
 from scripts.core.analysis_engine import AIAnalyst
 
-# --- Configuration ---
-SYMBOL_TO_TRAIN = "BTC-USD"
-STRATEGY_TO_TRAIN = "main"
-# -------------------
-
 # On Windows, multiprocessing (used by pandas_ta indicator calculation)
 # re-imports this script in child processes. Without this guard, every
 # child re-runs the whole retraining flow: deleting model files again and
 # hammering the TwelveData API until it returns 429 rate-limit errors.
+# Argument parsing also lives inside the guard so spawned workers never
+# touch sys.argv during import.
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="Focused retraining of a single model.")
+    parser.add_argument('--symbol', type=str, default="BTC-USD", help="Asset to retrain (default BTC-USD)")
+    parser.add_argument('--strategy', type=str, default="main", help="Strategy to retrain (default main)")
+    args = parser.parse_args()
+    SYMBOL_TO_TRAIN = args.symbol
+    STRATEGY_TO_TRAIN = args.strategy
+
     print(f'--- FOCUSED RETRAINING SCRIPT ---')
     print(f'Targeting: {SYMBOL_TO_TRAIN} ({STRATEGY_TO_TRAIN})')
 
