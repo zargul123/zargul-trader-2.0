@@ -143,3 +143,10 @@ This counts as honest attempt #1 of the 3 agreed before shelving.
 **Why it worked where 1h failed:** targets ~2%+ dwarf the ~0.25% round-trip cost; slower patterns generalize; honest training prevented memorization. Per pre-agreed verdict table (≥2.0): exceptional → proceed toward paper trading.
 
 **Honest caveats:** n=42 trades — wide error bars; single 90-day window/season. Before locking: confirmation exam on a DIFFERENT hidden quarter (cutoff 2026-01-01, exam Jan–Mar) to rule out luck-of-the-quarter.
+
+## 2026-07-19 — 4h CONFIRMATION EXAM (Jan cutoff, 6-month hidden window): NOT CONFIRMED
+
+**Setup:** btc-swing rebaked with cutoff 2026-01-01; raw exam on 1,140 hidden 4h candles (Jan 10 → Jul 19).
+**Result:** 106 trades, win rate 44.34%, Sharpe **-0.87**, PF 0.90, avg win +2.64 / avg loss -2.33, max DD 6%.
+**Verdict (per bar stated before the run):** the Apr–Jul +3.53 is NOT confirmed. Economics held (payoff ratio > 1, costs negligible); win rate collapsed. Open question: hostile Jan–Mar season vs. lucky April window.
+**Next:** dump per-trade history from raw_backtest (small script change), rerun, split results by month/regime to decide between the two stories before spending attempt 3.
