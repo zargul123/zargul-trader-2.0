@@ -248,14 +248,20 @@ class AIAnalyst:
             total = len(trade_signal)
             print(f"   - Class distribution: Buy={buy_count} ({buy_count/total*100:.1f}%), Sell={sell_count} ({sell_count/total*100:.1f}%), Hold={hold_count} ({hold_count/total*100:.1f}%)")
 
+            # Fit scalers on the TRAINING portion only (oldest 80% of rows).
+            # Fitting on everything let information from the validation
+            # period leak into the inputs, flattering validation metrics.
+            fit_rows = int(len(df_features) * 0.8)
             scaler = MinMaxScaler(feature_range=(0, 1))
-            scaled_data = scaler.fit_transform(df_features.values)
-            
+            scaler.fit(df_features.values[:fit_rows])
+            scaled_data = scaler.transform(df_features.values)
+
             pt_scaler = MinMaxScaler(feature_range=(0, 1))
-            scaled_price_targets = pt_scaler.fit_transform(price_target_labels)
+            pt_scaler.fit(price_target_labels[:fit_rows])
+            scaled_price_targets = pt_scaler.transform(price_target_labels)
 
             sequence_length = STRATEGIES[symbol][strategy_name]['sequence_length']
-            
+
             X, y_pt, y_sig = [], [], []
             for i in range(sequence_length, len(scaled_data)):
                 X.append(scaled_data[i - sequence_length:i])
@@ -264,9 +270,20 @@ class AIAnalyst:
 
             X, y_pt, y_sig = np.array(X), np.array(y_pt), np.array(y_sig)
 
-            X_train, X_val, y_pt_train, y_pt_val, y_sig_train, y_sig_val = train_test_split(
-                X, y_pt, y_sig, test_size=0.2, random_state=42, stratify=y_sig
-            )
+            # CHRONOLOGICAL split (replaces shuffled train_test_split):
+            # sequences overlap 19/20 hours with their neighbors, so a random
+            # split places near-duplicates of validation sequences in the
+            # training set and validation accuracy measures memorization.
+            # Train on the oldest 80%, validate on the newest 20%, with a
+            # sequence_length purge gap so no candle is shared across the
+            # boundary. Validation now measures genuine generalization, and
+            # the ModelCheckpoint below keeps the best GENERALIZING epoch.
+            split_idx = int(len(X) * 0.8)
+            val_start = split_idx + sequence_length
+            X_train, X_val = X[:split_idx], X[val_start:]
+            y_pt_train, y_pt_val = y_pt[:split_idx], y_pt[val_start:]
+            y_sig_train, y_sig_val = y_sig[:split_idx], y_sig[val_start:]
+            print(f"   - Chronological split: {len(X_train)} train / {len(X_val)} val sequences ({sequence_length}-seq purge gap).")
             
             y_train = {'price_targets': y_pt_train, 'trade_signal': y_sig_train}
             y_val = {'price_targets': y_pt_val, 'trade_signal': y_sig_val}
