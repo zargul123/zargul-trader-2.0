@@ -17,15 +17,12 @@ STRATEGIES = {
             "Trending": {
                 # Optimized 2026-07-19: Optuna trial 57/100, score 3.922
                 # (full study: BTC-USD_main_Trending.db / optimized_strategies.json)
-                # EXPERIMENT B (2026-07-19): tp 2.8->4.0, sl 2.1->2.5 — test
-                # whether wider exit geometry beats the ~0.25% round-trip cost
-                # drag on 1h. Revert to 2.8/2.1 if hold-out Sharpe stays < 0.
                 'atr_threshold_multiplier': 2.7,
                 'long_threshold': 2.5,
                 'short_threshold': 2.5,
                 'min_confidence': 0.75,
-                'sl_atr_multiplier': 2.5,
-                'tp_atr_multiplier': 4.0,
+                'sl_atr_multiplier': 2.1,
+                'tp_atr_multiplier': 2.8,
             },
             "Ranging": {
                 'atr_threshold_multiplier': 1.0,
