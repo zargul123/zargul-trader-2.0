@@ -1,0 +1,40 @@
+C:\Users\hp\miniconda3\envs\tfdml\lib\site-packages\pandas_ta\__init__.py:7: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import get_distribution, DistributionNotFound
+================================================================================
+🚀 STARTING RAW SIGNAL BACKTEST 🚀
+Asset: BTC-USD | Strategy: main | Confidence Override: 0.5
+================================================================================
+   - Overriding risk parameters for raw signal analysis...
+
+🤖 Initializing AI Analyst...
+🧠 Loading pre-trained model and scaler for BTC-USD (main)...
+   - ✅ Components for BTC-USD (main) loaded successfully.
+
+🔧 Running backtest for BTC-USD with 'main' strategy.
+
+📊 Loading 90 days of 1h data for BTC-USD...
+
+📊 Fetching 1h data for BTC-USD...
+🔍 TwelveData API Request: BTC/USD (1h)
+⚠️ 'volume' column not found in data. Creating a placeholder column of zeros.
+✅ Engineered ELITE features and cleaned NaN values.
+❌ LunarCrush API request failed for btc: 402 Client Error: Payment Required for url: https://lunarcrush.com/api4/public/coins/btc/v1
+✅ Final result: 2160 1h candles for BTC-USD
+📅 Data loaded for BTC-USD: 2160 candles from 2026-04-20 11:00:00 to 2026-07-19 10:00:00
+
+🔎 Scanning 2160 candles for signals...
+
+✅ Backtest scan complete for BTC-USD.
+
+================================================================================
+✨ RAW BACKTEST COMPLETE ✨
+total_trades      209.00
+winning_trades    102.00
+losing_trades     107.00
+win_rate           48.80
+sharpe_ratio       -3.41
+max_drawdown        0.02
+profit_factor       0.65
+avg_win             0.68
+avg_loss           -0.99
+================================================================================

@@ -1,0 +1,56 @@
+C:\Users\hp\miniconda3\envs\tfdml\lib\site-packages\pandas_ta\__init__.py:7: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import get_distribution, DistributionNotFound
+C:\Users\hp\Downloads\zargul trader\SAFE COPY OF LATEST ZARGUL 2\zargul-trader-2.0-LATEST-Sep29-FROM-GITHUB\scripts\core\data_engine.py:299: FutureWarning: last is deprecated and will be removed in a future version. Please create a mask and filter using `.loc` instead
+  final_df = full_df.last(f'{days}D')
+
+============================================================
+🧠 Acquiring FULL training data for BTC-USD (1095 days)...
+============================================================
+🔍 TwelveData API Request: BTC/USD (4h)
+   - Fetched chunk of 5000 candles, ending on 2026-07-19. Oldest record: 2024-04-07
+🔍 TwelveData API Request: BTC/USD (4h)
+   - Fetched chunk of 5000 candles, ending on 2024-04-07. Oldest record: 2021-12-25
+   - Reached target start date of 2023-07-20.
+   - Successfully stitched 2 chunks into one DataFrame.
+⚠️ 'volume' column not found in data. Creating a placeholder column of zeros.
+✅ Engineered ELITE features and cleaned NaN values.
+❌ LunarCrush API request failed for btc: 402 Client Error: Payment Required for url: https://lunarcrush.com/api4/public/coins/btc/v1
+✅ Final training dataset ready: 6570 candles from 2023-07-20 to 2026-07-19
+Data: 6570 candles 2023-07-20 -> 2026-07-19
+Calibration: 5372 candles (<2026) | Test: 1198 candles (2026)
+ADX>const 25: calib 55% | 2026 55% of candles
+
+==========================================================================================
+edge ±0.50% | calib entropy p50=1.938 p85=1.978
+  thr=p70 (1.964) -> 2026 %Chaotic by month: 01:  2.2% 02:  0.0% 03: 53.2% 04: 47.2% 05: 16.7% 06: 35.0% 07: 96.4%
+  thr=p80 (1.973) -> 2026 %Chaotic by month: 01:  0.0% 02:  0.0% 03: 41.4% 04: 41.7% 05: 11.3% 06: 27.8% 07: 64.3%
+  thr=p85 (1.978) -> 2026 %Chaotic by month: 01:  0.0% 02:  0.0% 03: 31.7% 04: 38.3% 05:  8.1% 06: 23.3% 07: 30.4%
+  thr=p90 (1.984) -> 2026 %Chaotic by month: 01:  0.0% 02:  0.0% 03: 21.0% 04: 35.6% 05:  2.2% 06: 18.9% 07: 24.1%
+
+==========================================================================================
+edge ±0.75% | calib entropy p50=1.830 p85=1.937
+  thr=p70 (1.892) -> 2026 %Chaotic by month: 01:  0.0% 02: 70.2% 03: 88.2% 04: 13.9% 05:  0.0% 06: 29.4% 07: 20.5%
+  thr=p80 (1.925) -> 2026 %Chaotic by month: 01:  0.0% 02: 58.3% 03: 69.4% 04: 10.6% 05:  0.0% 06:  9.4% 07:  0.0%
+  thr=p85 (1.937) -> 2026 %Chaotic by month: 01:  0.0% 02: 51.8% 03: 65.6% 04:  8.9% 05:  0.0% 06:  6.7% 07:  0.0%
+  thr=p90 (1.948) -> 2026 %Chaotic by month: 01:  0.0% 02: 42.9% 03: 48.4% 04:  0.6% 05:  0.0% 06:  2.8% 07:  0.0%
+
+==========================================================================================
+edge ±1.00% | calib entropy p50=1.654 p85=1.834
+  thr=p70 (1.762) -> 2026 %Chaotic by month: 01:  0.0% 02: 65.5% 03: 71.5% 04: 12.2% 05:  0.0% 06: 40.0% 07: 16.1%
+  thr=p80 (1.810) -> 2026 %Chaotic by month: 01:  0.0% 02: 60.7% 03: 48.4% 04:  8.3% 05:  0.0% 06: 26.7% 07:  3.6%
+  thr=p85 (1.834) -> 2026 %Chaotic by month: 01:  0.0% 02: 58.3% 03: 42.5% 04:  0.0% 05:  0.0% 06: 21.1% 07:  0.0%
+  thr=p90 (1.878) -> 2026 %Chaotic by month: 01:  0.0% 02: 51.8% 03: 37.6% 04:  0.0% 05:  0.0% 06: 13.3% 07:  0.0%
+
+==========================================================================================
+edge ±1.25% | calib entropy p50=1.511 p85=1.721
+  thr=p70 (1.639) -> 2026 %Chaotic by month: 01:  0.0% 02: 67.9% 03: 47.3% 04:  0.0% 05:  0.0% 06: 28.9% 07:  9.8%
+  thr=p80 (1.694) -> 2026 %Chaotic by month: 01:  0.0% 02: 60.1% 03: 43.5% 04:  0.0% 05:  0.0% 06: 23.9% 07:  0.0%
+  thr=p85 (1.721) -> 2026 %Chaotic by month: 01:  0.0% 02: 57.1% 03: 40.3% 04:  0.0% 05:  0.0% 06: 21.1% 07:  0.0%
+  thr=p90 (1.765) -> 2026 %Chaotic by month: 01:  0.0% 02: 52.4% 03: 35.5% 04:  0.0% 05:  0.0% 06: 17.2% 07:  0.0%
+
+==========================================================================================
+edge ±1.50% | calib entropy p50=1.398 p85=1.629
+  thr=p70 (1.536) -> 2026 %Chaotic by month: 01:  0.0% 02: 63.7% 03: 47.3% 04:  0.0% 05:  0.0% 06: 39.4% 07: 17.9%
+  thr=p80 (1.590) -> 2026 %Chaotic by month: 01:  0.0% 02: 54.8% 03: 44.6% 04:  0.0% 05:  0.0% 06: 21.7% 07:  0.0%
+  thr=p85 (1.629) -> 2026 %Chaotic by month: 01:  0.0% 02: 49.4% 03: 42.5% 04:  0.0% 05:  0.0% 06: 17.2% 07:  0.0%
+  thr=p90 (1.675) -> 2026 %Chaotic by month: 01:  0.0% 02: 40.5% 03: 39.2% 04:  0.0% 05:  0.0% 06: 10.6% 07:  0.0%
