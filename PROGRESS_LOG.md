@@ -188,3 +188,7 @@ This counts as honest attempt #1 of the 3 agreed before shelving.
 **PHASE 2 — New ship:** new folder + NEW git repo (user's rule: strategy change = new program, port only important code). Port: data engine, indicators, recalibrated regime vane, risk engine, backtest engine + honest-lab tools, journal, dashboard. LSTM machinery stays in this museum repo.
 **PHASE 3 — Guru Signal Library:** 3-5 documented legends' rule-sets (Turtle/Donchian, Bollinger squeeze, Wilder, Minervini template, Connors RSI-2) as formulas — no training, no bake variance. Each gets honest hold-out stat cards + regime splits. (Seed exists: guru_strategies.json / guru_wisdom.py from user's v1.)
 **PHASE 4 — Living cockpit:** daily brief (trend/momentum/vol/regime/news headlines), signal alerts with stat cards, SL/TP/size calculator, journal tracking system + user decisions; 4-8 week live-signal review with same honesty. News = live context first; historical-news training only maybe later.
+
+## 2026-07-19 — Phase 1 verdict, ETH: NEGATIVE
+
+ETH-USD swing, honest brain, cutoff 2025-07-01 (trained 2022-07→2025-07, 50s bake). Full-year exam (2,280 hidden 4h candles): 350 trades, win 46.00%, Sharpe **-0.72**, PF 0.92, avg +3.40/-3.14. Closest to break-even of all full-year tests, but fails the pre-agreed ≥0 gate. One exam remains: SOL.
