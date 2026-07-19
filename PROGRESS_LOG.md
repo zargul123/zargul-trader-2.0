@@ -161,3 +161,11 @@ This counts as honest attempt #1 of the 3 agreed before shelving.
 2. War-March inverts the model (1/15 wins, -32.6%)
 3. No working selector: confidence flat; regime filter mis-calibrated on 4h
 4. NEXT SESSION MISSION: recalibrate regime detection for the 4h timeframe (offline threshold sweep against the tagged trade history / candle data), gate = does it separate Feb-like from Mar-like months without killing trade count. If yes → honest swing-strategy calibration → paper trading path.
+
+## 2026-07-19 — Weather-vane mission: recalibrated 4h regime filter VALIDATED on trade history
+
+**Root cause found:** entropy bins (±0.5% return buckets) are 1h-scaled; 4h moves exceed them constantly → entropy saturates ~2.0 → 92% "Chaotic". Bigger bins tested and rejected (they flag strong-trend Feb as chaos).
+**Winning dial (pre-declared family, calibrated ONLY on 2023-2025):** keep ±0.5% bins, raise entropy threshold to the calibration p70 = 1.964 (vs old 1.5).
+**2026 monthly test (never used for tuning):** Jan 2% / Feb 0% flagged; war-Mar 53% / Apr 47% flagged. On the real 106 trades: vane keeps 82 (+1.91%) and blocks 24 that lost -15.13% → window flips from -13.2% to +1.9%.
+**Circuit breaker: tested and REJECTED** — losses cluster but recoveries follow immediately; pausing misses them (breaker alone -19.5%, worse than nothing). The one positive variant (2-loss/7d, +5.2%) is best-of-4-on-test-window = untrustworthy; not adopted.
+**Honest status:** vane turns storm-loss into survival, not yet wealth (kept trades: 46% win, ~breakeven+). Next: implement per-timeframe regime config (4h entropy_threshold 1.964) + fresh-window validation (2025 hold-out with dial recalibrated on 2023-2024 only) before any paper-trading decision.
