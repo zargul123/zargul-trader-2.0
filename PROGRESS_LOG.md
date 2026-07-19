@@ -98,3 +98,12 @@ This counts as honest attempt #1 of the 3 agreed before shelving.
 
 **Read:** real improvement over the memorizer (-6.06 → -3.41; 43.5% → 48.8% win) — the model now carries a small genuine signal, but not enough to overcome loss asymmetry. Still < 0.
 **Next (per agreed sequence):** iteration 2 — simpler capacity / stronger dropout in MODEL_HYPERPARAMS (current values came from the leaky optimize_model study and are untrustworthy anyway).
+
+## 2026-07-19 — ATTEMPT 2, iteration 2: small brain + high dropout (MARGINAL GAIN, KEY CLUE FOUND)
+
+**Change (commit d56e308):** units 89→32, dropout 0.24→0.45.
+**Raw exam (same hidden window):** 229 trades, win rate **50.22%**, Sharpe **-3.17**, PF 0.68, avg win +0.70% vs avg loss -1.04%.
+
+**Key observation:** win rate is now well above the ~42.9% coin-flip baseline — the model carries genuine out-of-sample signal. The remaining money-leak is payoff asymmetry: wins average smaller than losses DESPITE TP (2.8×ATR) being farther than SL (2.1×ATR). Prime suspect: trailing stop (activates at 0.5% profit, trails 0.3%) capping winners at ~0.7% while losers run to full SL.
+
+**Next:** inspect backtest engine exit logic (read-only), then a no-retrain experiment: same exam with trailing stop disabled to isolate the payoff leak.
