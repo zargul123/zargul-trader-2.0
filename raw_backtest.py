@@ -63,6 +63,12 @@ def run_raw_backtest(asset, strategy, confidence_override, days=1095):
             print("No results were generated.")
         print("="*80)
 
+        # 5. Dump per-trade history for post-hoc analysis (month/regime splits)
+        if engine.trade_history:
+            trades_file = f"raw_trades_{asset}_{strategy}_{days}d.csv"
+            pd.DataFrame(engine.trade_history).to_csv(trades_file, index=False)
+            print(f"🧾 Trade-by-trade history saved to {trades_file}")
+
     except KeyError:
         print(f"❌ ERROR: Strategy '{strategy}' not found for asset '{asset}' in config.py.")
     except Exception as e:
