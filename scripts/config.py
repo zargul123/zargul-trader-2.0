@@ -330,15 +330,14 @@ MODEL_HYPERPARAMS = {
             'units_layer_2': 206,
             'dropout_layer_2': 0.15479272548181033
         },
-        'swing': { # Placeholder: Using main's params as a default
-            'n_layers': 3,
-            'learning_rate': 0.009847271267492321,
-            'units_layer_0': 52,
-            'dropout_layer_0': 0.4547476109205212,
-            'units_layer_1': 36,
-            'dropout_layer_1': 0.26953065823496686,
-            'units_layer_2': 206,
-            'dropout_layer_2': 0.15479272548181033
+        'swing': {
+            # Phase 1 verdict test (2026-07-19): honest anti-memorization
+            # brain, matching btc-swing. Old 3-layer values were leaky-study
+            # placeholders copied from main.
+            'n_layers': 1,
+            'learning_rate': 0.001394224585333133,
+            'units_layer_0': 32,
+            'dropout_layer_0': 0.45
         }
     },
     'SOL-USD': {
@@ -354,11 +353,14 @@ MODEL_HYPERPARAMS = {
             'units_layer_0': 151,
             'dropout_layer_0': 0.13198466453039642
         },
-        'swing': { # Placeholder: Using main's params as a default
+        'swing': {
+            # Phase 1 verdict test (2026-07-19): honest anti-memorization
+            # brain, matching btc-swing. Old values were leaky-study
+            # placeholders copied from main.
             'n_layers': 1,
-            'learning_rate': 0.009906324714275988,
-            'units_layer_0': 151,
-            'dropout_layer_0': 0.13198466453039642
+            'learning_rate': 0.001394224585333133,
+            'units_layer_0': 32,
+            'dropout_layer_0': 0.45
         }
     },
     'default': { # Fallback for any other assets
