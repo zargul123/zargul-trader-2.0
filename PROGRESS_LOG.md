@@ -169,3 +169,13 @@ This counts as honest attempt #1 of the 3 agreed before shelving.
 **2026 monthly test (never used for tuning):** Jan 2% / Feb 0% flagged; war-Mar 53% / Apr 47% flagged. On the real 106 trades: vane keeps 82 (+1.91%) and blocks 24 that lost -15.13% → window flips from -13.2% to +1.9%.
 **Circuit breaker: tested and REJECTED** — losses cluster but recoveries follow immediately; pausing misses them (breaker alone -19.5%, worse than nothing). The one positive variant (2-loss/7d, +5.2%) is best-of-4-on-test-window = untrustworthy; not adopted.
 **Honest status:** vane turns storm-loss into survival, not yet wealth (kept trades: 46% win, ~breakeven+). Next: implement per-timeframe regime config (4h entropy_threshold 1.964) + fresh-window validation (2025 hold-out with dial recalibrated on 2023-2024 only) before any paper-trading decision.
+
+## 2026-07-19 — FULL-YEAR FRESH VALIDATION: vane FAILED, and the deeper truth surfaced
+
+**Setup:** model cutoff 2025-07-01 (never saw the test year); exam Jul 2025 → Jul 2026, 357 trades; vane dial p70 calibrated only on pre-Jul-2025 data (1.967).
+**Result:** vane OFF -97.7% (43.1% win) | vane ON -72.0% (44.0% win) — fails the pre-declared bar (clearly better AND positive).
+**Killer detail:** vane blocked Nov-2025 (+22.6%, best cluster of the year) while keeping Feb-2026 (-34.8%). Same Feb where the Jan-cutoff bake made +20%: **month-level performance flips sign between bakes.**
+
+**Honest conclusion:** the btc-swing model family (current features/labeling) shows no stable out-of-sample edge across a full year. Earlier positives (Apr-window +3.53; Jan/Feb months) were bake-specific variance, not repeatable skill. The 6-month vane success was partly luck of that window.
+
+**Status vs. agreed framework:** attempt 2's ladder (honest training → small brain → timeframe escalation → regime vane) is exhausted. Attempt 3 (last before shelving) would require fundamentally new inputs: v3 features / different labeling horizon / historical sentiment — not parameter tweaks.
