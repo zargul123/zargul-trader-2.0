@@ -179,3 +179,12 @@ This counts as honest attempt #1 of the 3 agreed before shelving.
 **Honest conclusion:** the btc-swing model family (current features/labeling) shows no stable out-of-sample edge across a full year. Earlier positives (Apr-window +3.53; Jan/Feb months) were bake-specific variance, not repeatable skill. The 6-month vane success was partly luck of that window.
 
 **Status vs. agreed framework:** attempt 2's ladder (honest training → small brain → timeframe escalation → regime vane) is exhausted. Attempt 3 (last before shelving) would require fundamentally new inputs: v3 features / different labeling horizon / historical sentiment — not parameter tweaks.
+
+## 2026-07-19 — MASTER PLAN AGREED (user + Claude + Kimi adviser synthesis)
+
+**User's true goal (stated explicitly):** a personal signals system — helps him work charts, gives signals with SL/TP/size, ~40% wrong acceptable, auto-execution NOT required. Formulas OR training both acceptable as signal sources.
+
+**PHASE 1 — Complete the verdict (now):** honest-brain config for ETH/SOL swing → bake each with cutoff 2025-07-01 → full-year exam each. Gate: any asset ≥ 0 → paper-trade candidate; all < 0 → AI-prediction chapter formally closed with git tag.
+**PHASE 2 — New ship:** new folder + NEW git repo (user's rule: strategy change = new program, port only important code). Port: data engine, indicators, recalibrated regime vane, risk engine, backtest engine + honest-lab tools, journal, dashboard. LSTM machinery stays in this museum repo.
+**PHASE 3 — Guru Signal Library:** 3-5 documented legends' rule-sets (Turtle/Donchian, Bollinger squeeze, Wilder, Minervini template, Connors RSI-2) as formulas — no training, no bake variance. Each gets honest hold-out stat cards + regime splits. (Seed exists: guru_strategies.json / guru_wisdom.py from user's v1.)
+**PHASE 4 — Living cockpit:** daily brief (trend/momentum/vol/regime/news headlines), signal alerts with stat cards, SL/TP/size calculator, journal tracking system + user decisions; 4-8 week live-signal review with same honesty. News = live context first; historical-news training only maybe later.
