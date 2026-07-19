@@ -192,3 +192,19 @@ This counts as honest attempt #1 of the 3 agreed before shelving.
 ## 2026-07-19 — Phase 1 verdict, ETH: NEGATIVE
 
 ETH-USD swing, honest brain, cutoff 2025-07-01 (trained 2022-07→2025-07, 50s bake). Full-year exam (2,280 hidden 4h candles): 350 trades, win 46.00%, Sharpe **-0.72**, PF 0.92, avg +3.40/-3.14. Closest to break-even of all full-year tests, but fails the pre-agreed ≥0 gate. One exam remains: SOL.
+
+## 2026-07-19 — PHASE 1 COMPLETE: THE PREDICTION CHAPTER CLOSES
+
+SOL-USD swing, honest brain, cutoff 2025-07-01. Full-year exam: 351 trades, win 44.16%, Sharpe **-0.66**, PF 0.93.
+
+**FINAL VERDICT MATRIX (all full-year hidden exams, honest training):**
+| Asset/TF | Sharpe |
+|---|---|
+| BTC 1h | -3.17 |
+| BTC 4h | -2.25 |
+| ETH 4h | -0.72 |
+| SOL 4h | -0.66 |
+
+Per the gate agreed in advance by user + both advisers: **the AI-prediction chapter is formally closed.** No further LSTM/prediction attempts in this repo. What this year of work produced and keeps: a complete honest laboratory (chronological validation, hold-out cutoffs, 15-minute bake+exam loop, per-trade X-rays, regime recalibration methodology), a fully documented negative result across 3 assets, and the discipline that prevented a single dollar from being risked on fiction.
+
+**Tomorrow: Phase 2 — the new ship.** New repo, ported organs (data engine, indicators, vane, risk engine, backtest lab, journal, dashboard), and the Guru Signal Library mission: formula-based signals with honest stat cards, serving the user's true goal — a personal signals cockpit.
