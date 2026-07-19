@@ -218,7 +218,8 @@ class BacktestEngine:
             'stop_loss': levels['stop_loss'],
             'take_profit': levels['take_profit'],
             'strategy_name': strategy_config.get('name', 'Unnamed'),
-            'confidence': prediction['confidence']
+            'confidence': prediction['confidence'],
+            'regime': regime
         }
         return position
 
@@ -249,7 +250,8 @@ class BacktestEngine:
             'pnl': pnl_net * 100, # As percentage
             'status': 'closed',
             'outcome': outcome,
-            'confidence': position['confidence']
+            'confidence': position['confidence'],
+            'regime': position.get('regime')
         }
         self.trade_history.append(trade)
         result_emoji = "✅" if pnl_net > 0 else "❌"
