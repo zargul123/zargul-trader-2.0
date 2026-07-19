@@ -89,3 +89,12 @@ This counts as honest attempt #1 of the 3 agreed before shelving.
 **Root-cause hypothesis for attempt 2:** training-time validation is a random split over heavily overlapping sequences → leakage → val acc 80.7% was fiction. The model was never actually forced to generalize, and we had no honest signal during training to notice.
 
 **Attempt 2 direction (deep door):** (1) chronological train/val split so training metrics tell the truth; (2) anti-memorization measures (stronger regularization / simpler capacity / feature pruning); (3) fast honest loop: 11-min bake + 3-min raw hold-out exam as the compass.
+
+## 2026-07-19 — ATTEMPT 2, iteration 1: chronological validation (IMPROVED, NOT PASSED)
+
+**Surgery (commit 21abcb1):** chronological 80/20 split + 20-seq purge gap + train-only scaler fit.
+**Bake:** cutoff 2026-04-01; early-stopped at 19 epochs (vs 96 — honest validation detects the generalization ceiling fast). Honest val acc ~50.1% (naive baseline 42.5%; the old 80.7% was leak fiction).
+**Raw exam (unseen Apr 20 → Jul 19):** 209 trades, win rate 48.80%, Sharpe **-3.41**, PF 0.65.
+
+**Read:** real improvement over the memorizer (-6.06 → -3.41; 43.5% → 48.8% win) — the model now carries a small genuine signal, but not enough to overcome loss asymmetry. Still < 0.
+**Next (per agreed sequence):** iteration 2 — simpler capacity / stronger dropout in MODEL_HYPERPARAMS (current values came from the leaky optimize_model study and are untrustworthy anyway).
