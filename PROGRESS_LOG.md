@@ -107,3 +107,17 @@ This counts as honest attempt #1 of the 3 agreed before shelving.
 **Key observation:** win rate is now well above the ~42.9% coin-flip baseline — the model carries genuine out-of-sample signal. The remaining money-leak is payoff asymmetry: wins average smaller than losses DESPITE TP (2.8×ATR) being farther than SL (2.1×ATR). Prime suspect: trailing stop (activates at 0.5% profit, trails 0.3%) capping winners at ~0.7% while losers run to full SL.
 
 **Next:** inspect backtest engine exit logic (read-only), then a no-retrain experiment: same exam with trailing stop disabled to isolate the payoff leak.
+
+## 2026-07-19 — ATTEMPT 2, diagnostics complete: the 1h picture is now fully understood
+
+**Correction:** trailing-stop suspect cleared — backtest engine has no trailing logic; exits are pure SL/TP barrier checks.
+**Strategy exam (locked 0.75-confidence params + honest model): 0 trades** — the honest model's confidence lives at ~0.47-0.62; the 0.75 threshold was calibrated to the old memorizer's inflated certainty ("new lock, old key").
+**Confidence ladder (raw, hidden window):** 0.50→50.2%/-3.17 | 0.55→50.9%/-3.06 | 0.60→50.0%/-3.09 | 0.65→42%/-2.45 (n=19). **Flat: confidence does not rank trade quality OOS.**
+
+**Complete 1h diagnosis:**
+1. Model has a real but thin directional edge (~50% wins vs 42.9% coin-flip baseline)
+2. Economics killed by costs: ~0.25% round trip vs ~1% ATR barriers (avg win +0.70 < avg loss -1.04)
+3. No internal mechanism (confidence) to select better trades
+→ The 1h timeframe with current features cannot clear the cost hurdle.
+
+**Next (per agreed escalation): 4h timeframe** — ATR barriers ~2-3× larger, so fixed costs shrink from ~30% of the target to ~10%; user's own experience ("swing was giving good results") points the same way.
