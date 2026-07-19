@@ -280,10 +280,13 @@ TRAINING_CONFIG = {
 MODEL_HYPERPARAMS = {
     'BTC-USD': {
         'main': {
+            # Attempt 2 iter 2 (2026-07-19): shrink capacity 89->32 and raise
+            # dropout 0.24->0.45 to force generalization over memorization.
+            # Previous values came from the leaky optimize_model study.
             'n_layers': 1,
             'learning_rate': 0.001394224585333133,
-            'units_layer_0': 89,
-            'dropout_layer_0': 0.24254440958679202
+            'units_layer_0': 32,
+            'dropout_layer_0': 0.45
         },
         'scalp': {
             'n_layers': 3,
