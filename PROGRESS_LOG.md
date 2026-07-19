@@ -150,3 +150,14 @@ This counts as honest attempt #1 of the 3 agreed before shelving.
 **Result:** 106 trades, win rate 44.34%, Sharpe **-0.87**, PF 0.90, avg win +2.64 / avg loss -2.33, max DD 6%.
 **Verdict (per bar stated before the run):** the Apr–Jul +3.53 is NOT confirmed. Economics held (payoff ratio > 1, costs negligible); win rate collapsed. Open question: hostile Jan–Mar season vs. lucky April window.
 **Next:** dump per-trade history from raw_backtest (small script change), rerun, split results by month/regime to decide between the two stories before spending attempt 3.
+
+## 2026-07-19 — Regime X-ray: the filter cries wolf on 4h
+
+**Regime split of the 106 hidden-window trades:** Chaotic 98 (win 45.9%, -5.2%), Trending 6 (16.7%, -7.5%), Ranging 2. The filter tags ~92% of 4h candles Chaotic — including brilliant Feb (+20%) and catastrophic war-March (-32.6%) alike. As configured (entropy 1.5 / window 50 / ADX 25 — tuned for 1h), it cannot separate good months from deadly ones and would have blocked nearly all trading.
+**User context:** Mar–Apr 2026 markets were war-distorted — the exact condition a working regime filter should catch.
+
+**End-of-day battlefield map:**
+1. 4h honest model: real edge in normal months (Jan +12.1, Feb +20.0, Jun +5.2 — all under 'Chaotic' tags)
+2. War-March inverts the model (1/15 wins, -32.6%)
+3. No working selector: confidence flat; regime filter mis-calibrated on 4h
+4. NEXT SESSION MISSION: recalibrate regime detection for the 4h timeframe (offline threshold sweep against the tagged trade history / candle data), gate = does it separate Feb-like from Mar-like months without killing trade count. If yes → honest swing-strategy calibration → paper trading path.
